@@ -1,0 +1,46 @@
+{
+    "env": {
+        "browser": true,
+        "node": true,
+        "es6": true
+    },
+    "parserOptions": {
+        "ecmaVersion": 6,
+        "sourceType": "module"
+    },
+    "ecmaFeatures": {
+        "arrowFunctions": true,
+        "binaryLiterals": true,
+        "blockBindings": true,
+        "classes": true,
+        "defaultParams": true,
+        "destructuring": true,
+        "forOf": true,
+        "generators": true,
+        "modules": true,
+        "objectLiteralComputedProperties": true,
+        "objectLiteralDuplicateProperties": true,
+        "objectLiteralShorthandMethods": true,
+        "objectLiteralShorthandProperties": true,
+        "octalLiterals": true,
+        "regexUFlag": true,
+        "regexYFlag": true,
+        "spread": true,
+        "superInFunctions": false,
+        "templateStrings": true,
+        "unicodeCodePointEscapes": true,
+        "globalReturn": true,
+        "jsx": true
+    },
+    "rules": {
+        "eqeqeq": 2,
+        "strict": 0,
+        "no-empty": 1,
+        "no-alert": 2,
+        "no-eval": 2,
+        "quotes": [1, "single", "avoid-escape"],
+        "no-trailing-spaces": [2, { "skipBlankLines": true }],
+        "eol-last": 0,
+        "yoda": [2, "never", { "exceptRange": true }]
+    }
+}

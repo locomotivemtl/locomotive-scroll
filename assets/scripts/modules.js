@@ -1,0 +1,1 @@
+/* jshint esnext: true */
