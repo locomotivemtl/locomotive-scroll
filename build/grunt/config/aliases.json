@@ -1,0 +1,41 @@
+{
+    "default": [
+        "build"
+    ],
+
+    "sync": [
+        "browserSync",
+        "browserify:dev",
+        "watch",
+        "notify:watch"
+    ],
+
+    "build": [
+        "sass",
+        "postcss",
+        "cssmin",
+        "browserify:prod",
+        "concat:prod",
+        "uglify",
+        "svg_sprite",
+        "notify:build"
+    ],
+
+    "w": [
+        "browserify:dev",
+        "watch",
+        "notify:watch"
+    ],
+
+    "c": [
+        "csscomb"
+    ],
+
+    "j": [
+        "eslint"
+    ],
+
+    "p": [
+        "phplint"
+    ]
+}
