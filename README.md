@@ -1,12 +1,17 @@
-# locomotive-smooth-scroll
+# Locomotive Smooth Scroll
 
 ![experimental](https://img.shields.io/badge/stability-experimental-orange.svg)
 
-
+## Data attributes
+Data | Value | Description
+--- | --- | ---
+data-speed | number | Speed of transform
+data-position | top/bottom | Trigger from top/bottom of the window instead of the default from bottom to top
+data-target | #id | Trigger from another element
+data-horizontal | true | Use transformX instead of transformY
 
 ## Dependencies
-
-locomotive-smooth-scroll uses [smoothscrollbar](https://github.com/idiotWu/smooth-scrollbar) for the scroll managment.
+Locomotive Smooth Scroll is build on top of [smooth-scrollbar](https://github.com/idiotWu/smooth-scrollbar).
 
 ## Getting started
 
