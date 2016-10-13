@@ -32,6 +32,7 @@ export default class extends AbstractModule {
             let elementSpeed = $element.data('speed') / 10;
             let elementPosition = $element.data('position');
             let elementTarget = $element.data('target');
+            let elementHorizontal = $element.data('horizontal');
             let $target = (elementTarget) ? $(elementTarget) : $element;
             let elementOffset = $target.offset().top;
             let elementLimit = elementOffset + $target.outerHeight();
@@ -43,7 +44,8 @@ export default class extends AbstractModule {
                 limit: elementLimit,
                 middle: elementMiddle,
                 speed: elementSpeed,
-                position: elementPosition
+                position: elementPosition,
+                horizontal: elementHorizontal
             }
         });
     }
@@ -63,6 +65,7 @@ export default class extends AbstractModule {
             let elementMiddle = this.elements[i].middle;
             let elementSpeed = this.elements[i].speed;
             let elementPosition = this.elements[i].position;
+            let elementHorizontal = this.elements[i].horizontal;
 
             if (elementPosition === 'top') {
                 scrollBottom = scrollbarTop;
@@ -82,7 +85,11 @@ export default class extends AbstractModule {
                         transformDistance = (scrollbarMiddle - elementMiddle) * -elementSpeed;
                     }
 
-                    this.transformElement($element, transformDistance);
+                    if (elementHorizontal !== undefined) {
+                        this.transformX($element, transformDistance);
+                    } else {
+                        this.transformY($element, transformDistance);
+                    }
                 }
             // If first load
             } else if(option === 'first') {
@@ -93,7 +100,11 @@ export default class extends AbstractModule {
                         transformDistance = ((elementOffset - this.windowMiddle)  - elementMiddle) * -elementSpeed;
                     }
 
-                    this.transformElement($element, transformDistance);
+                    if (elementHorizontal !== undefined) {
+                        this.transformX($element, transformDistance);
+                    } else {
+                        this.transformY($element, transformDistance);
+                    }
                 }
             // Else element not in view
             } else {
@@ -102,13 +113,23 @@ export default class extends AbstractModule {
         }
     }
 
-    // Transform element
+    // Transform element vertical
     // ==========================================================================
-    transformElement($element, transformDistance) {
+    transformY($element, transformDistance) {
         $element.css({
             '-webkit-transform': 'translate3d(0, '+ transformDistance +'px, 0)',
             '-ms-transform': 'translate3d(0, '+ transformDistance +'px, 0)',
             'transform': 'translate3d(0, '+ transformDistance +'px, 0)'
+        });
+    }
+
+    // Transform element horizontal
+    // ==========================================================================
+    transformX($element, transformDistance) {
+        $element.css({
+            '-webkit-transform': 'translate3d('+ transformDistance +'px, 0, 0)',
+            '-ms-transform': 'translate3d('+ transformDistance +'px, 0, 0)',
+            'transform': 'translate3d('+ transformDistance +'px, 0, 0)'
         });
     }
 
