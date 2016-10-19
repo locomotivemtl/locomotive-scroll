@@ -37,6 +37,7 @@ export default class extends AbstractModule {
             let elementOffset = $target.offset().top;
             let elementLimit = elementOffset + $target.outerHeight();
             let elementMiddle = ((elementLimit - elementOffset) / 2) + elementOffset;
+            let elementPersist = $element.data('persist');
 
             this.elements[i] = {
                 $element: $element,
@@ -45,7 +46,8 @@ export default class extends AbstractModule {
                 middle: elementMiddle,
                 speed: elementSpeed,
                 position: elementPosition,
-                horizontal: elementHorizontal
+                horizontal: elementHorizontal,
+                persist: elementPersist
             }
         });
     }
@@ -66,6 +68,7 @@ export default class extends AbstractModule {
             let elementSpeed = this.elements[i].speed;
             let elementPosition = this.elements[i].position;
             let elementHorizontal = this.elements[i].horizontal;
+            let elementPersist = this.elements[i].persist;
 
             if (elementPosition === 'top') {
                 scrollBottom = scrollbarTop;
@@ -109,6 +112,13 @@ export default class extends AbstractModule {
             // Else element not in view
             } else {
                 $element.removeClass('is-inview');
+            }
+
+            //manage persist
+            if(elementPersist != undefined){
+                if(!$element.hasClass('is-visible')){
+                    $element.addClass('is-visible');
+                }
             }
         }
     }
