@@ -1,5 +1,5 @@
 /* jshint esnext: true */
-import { $document } from './utils/environment';
+import { $document, $body } from './utils/environment';
 import { getNodeData } from './utils/html';
 
 // Basic modules
@@ -88,5 +88,9 @@ class App {
     $document.trigger({
         type: 'initModules.App',
         firstBlood: true
+    });
+
+    $document.on('SmoothScroll.isReady', (event) => {
+        $body.addClass('is-loaded');
     });
 })();
