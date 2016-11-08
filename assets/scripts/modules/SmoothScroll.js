@@ -10,6 +10,7 @@ export default class extends AbstractModule {
         super(options);
 
         this.scrollbar;
+        this.persist = false;
         this.selector = '.js-parallax';
 
         this.build();
@@ -60,6 +61,12 @@ export default class extends AbstractModule {
             let elementHorizontal = $element.data('horizontal');
             let $target = (elementTarget) ? $(elementTarget) : $element;
             let elementOffset = $target.offset().top + this.scrollbar.scrollTop;
+
+            // if (!elementTarget && $element.data('transform')) {
+            //     let transform = $element.data('transform');
+            //     elementOffset -= parseFloat(transform.y);
+            // }
+
             let elementLimit = elementOffset + $target.outerHeight();
             let elementMiddle = ((elementLimit - elementOffset) / 2) + elementOffset;
             let elementPersist = $element.data('persist');
@@ -115,7 +122,7 @@ export default class extends AbstractModule {
             // Add class if inview, remove if not
             if (inview) {
                 $element.addClass('is-inview');
-            } else {
+            } else if (!persist) {
                 $element.removeClass('is-inview');
             }
 
@@ -172,6 +179,27 @@ export default class extends AbstractModule {
             '-ms-transform': 'translate3d('+ x +', '+ y +', '+ z +')',
             'transform': 'translate3d('+ x +', '+ y +', '+ z +')'
         });
+        // $element.css({
+        //     '-webkit-transform': 'translate3d('+ x +', '+ y +', '+ z +')',
+        //     '-ms-transform': 'translate3d('+ x +', '+ y +', '+ z +')',
+        //     'transform': 'translate3d('+ x +', '+ y +', '+ z +')'
+        // }).data('transform',{
+        //     x : x,
+        //     y : y,
+        //     z : z
+        // });
+        // Remember
+
+        // $element.find(this.selector).each((i, e) => {
+        //     let $this = $(e);
+        //     if (!$this.data('transform')) {
+        //         $this.data('transform', {
+        //             x : x,
+        //             y : y,
+        //             z : z
+        //         })
+        //     }
+        // })
     }
 
     // Scroll to
