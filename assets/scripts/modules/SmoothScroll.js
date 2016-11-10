@@ -122,7 +122,7 @@ export default class extends AbstractModule {
             // Add class if inview, remove if not
             if (inview) {
                 $element.addClass('is-inview');
-            } else if (!persist) {
+            } else if (!this.persist) {
                 $element.removeClass('is-inview');
             }
 
