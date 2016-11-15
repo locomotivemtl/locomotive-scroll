@@ -30,5 +30,10 @@ body{
         &.is-show{
             opacity: 1;
         }
+        &.is-red{
+            transition: opacity 1s ease-out, background-color 1s ease-out 0.3s;
+            opacity: 1;
+            background-color: red;
+        }
     }
 }

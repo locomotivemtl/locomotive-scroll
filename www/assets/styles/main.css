@@ -40,3 +40,10 @@ body.has-smooth-scroll {
 .o-scroll_example div.is-show {
   opacity: 1;
 }
+
+.o-scroll_example div.is-red {
+  -webkit-transition: opacity 1s ease-out, background-color 1s ease-out 0.3s;
+  transition: opacity 1s ease-out, background-color 1s ease-out 0.3s;
+  opacity: 1;
+  background-color: red;
+}

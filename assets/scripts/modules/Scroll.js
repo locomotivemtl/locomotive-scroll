@@ -47,7 +47,7 @@ export default class {
 
     // Request Animation Frame
     // ==========================================================================
-    raf(first){
+    raf(){
 
         this.checkElementsAnimation();
 
@@ -83,23 +83,29 @@ export default class {
             let $element = $(el);
             let elementOffset = $element.offset().top;
             let elementLimit = elementOffset + $element.outerHeight();
-            let elementPersist = $element.data('persist');
 
+            let elementPersist = $element.data('persist');
             if(elementPersist != undefined){
                 elementPersist = true;
             }else{
                 elementPersist = false;
             }
 
+            let elementInViewClass = $element.data('inview-class');
+            if(elementInViewClass === undefined){
+                elementInViewClass = 'is-show';
+            }
+
             this.animatedElements[i] = {
                 $element: $element,
                 offset: Math.round(elementOffset),
                 persist: elementPersist,
-                limit: elementLimit
+                limit: elementLimit,
+                inViewClass: elementInViewClass
             }
         });
 
-        requestAnimationFrame(()=>this.raf(false));
+        requestAnimationFrame(()=>this.raf());
 
     }
 
@@ -121,6 +127,7 @@ export default class {
         let elementLimit = $el.limit;
         let elementPersist = $el.persist;
         let elementPosition = $el.position;
+        let elementInViewClass = $el.inViewClass;
 
 
         // Define if the element is inview
@@ -128,12 +135,12 @@ export default class {
 
         // Add class if inview, remove if not
         if (inview) {
-            $element.addClass('is-show');
+            $element.addClass(elementInViewClass);
             if(elementPersist){
                 arrayElements.splice(i,1);
             }
         } else if (!elementPersist) {
-            $element.removeClass('is-show');
+            $element.removeClass(elementInViewClass);
         }
     }
 

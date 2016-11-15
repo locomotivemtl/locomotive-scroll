@@ -34,6 +34,7 @@ export default class extends Scroll {
         this.set();
 
         this.raf('first');
+
         // On scroll
         this.scrollbar.addListener(() => this.raf(false));
 
@@ -62,11 +63,15 @@ export default class extends Scroll {
             let elementLimit = elementOffset + $target.outerHeight();
 
             let elementPersist = $element.data('persist');
-
             if(elementPersist != undefined){
                 elementPersist = true;
             }else{
                 elementPersist = false;
+            }
+
+            let elementInViewClass = $element.data('inview-class');
+            if(elementInViewClass === undefined){
+                elementInViewClass = 'is-show';
             }
 
             let elementSpeed = $element.data('speed');
@@ -85,14 +90,16 @@ export default class extends Scroll {
                     speed: elementSpeed,
                     position: elementPosition,
                     horizontal: elementHorizontal,
-                    persist: elementPersist
+                    persist: elementPersist,
+                    inViewClass: elementInViewClass
                 }
             }else{
                 this.animatedElements[i] = {
                     $element: $element,
                     offset: Math.round(elementOffset),
                     persist: elementPersist,
-                    limit: elementLimit
+                    limit: elementLimit,
+                    inViewClass: elementInViewClass
                 }
             }
 
