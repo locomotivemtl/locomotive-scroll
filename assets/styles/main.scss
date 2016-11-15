@@ -3,10 +3,11 @@ html{
 }
 
 body{
-    height: 100%;
-    overflow: hidden;
-
     margin: 0;
+    &.has-smooth-scroll{
+        height: 100%;
+        overflow: hidden;
+    }
 }
 
 @import 'scrollbar.scss';
@@ -16,4 +17,18 @@ body{
 // example
 .o-scroll_example{
     height: 200vh;
+    font-size: 0;
+    text-align: center;
+    div{
+        display: inline-block;
+        width: 40vw;
+        margin: 30px;
+        height: 500px;
+        background-color: blue;
+        opacity: 0;
+        transition: opacity 1s ease-out;
+        &.is-show{
+            opacity: 1;
+        }
+    }
 }

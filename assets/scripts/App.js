@@ -1,6 +1,7 @@
 /* jshint esnext: true */
 import { $document, $body } from './utils/environment';
 import { getNodeData } from './utils/html';
+import globals from './utils/globals';
 
 // Basic modules
 import * as modules from './modules';
@@ -11,10 +12,26 @@ class App {
         this.currentModules = [];
 
         $document.on('initModules.App', (event) => {
-            this.deleteModules()
-                .initModules();
+            if(event.firstBlood){
+                this.initGlobals()
+                    .initModules();
+            }else{
+                this.deleteModules()
+                    .initModules();
+            }
+
         });
     }
+
+    /**
+     * Execute global functions and settings
+     * @return {Object}
+     */
+    initGlobals() {
+        globals();
+        return this;
+    }
+
 
     /**
      * Destroy all existing modules

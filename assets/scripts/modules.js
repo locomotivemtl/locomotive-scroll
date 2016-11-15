@@ -1,2 +1,2 @@
 /* jshint esnext: true */
-export {default as SmoothScroll} from './modules/SmoothScroll';
+// export {default as SmoothScroll} from './modules/SmoothScroll';

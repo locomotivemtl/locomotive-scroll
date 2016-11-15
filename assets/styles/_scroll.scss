@@ -1,5 +1,7 @@
 .o-scroll{
-    height: 100%;
-    position: relative;
-    overflow: hidden;
+    .has-smooth-scroll &{
+        height: 100%;
+        position: relative;
+        overflow: hidden;
+    }
 }

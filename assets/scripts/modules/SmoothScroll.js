@@ -1,87 +1,104 @@
 // ==========================================================================
 // Locomotive smooth scroll
 // ==========================================================================
-import AbstractModule from './AbstractModule';
+import Scroll from './Scroll';
 import Scrollbar from 'smooth-scrollbar';
-import { $document } from '../utils/environment';
+import { $window , $document , $body} from '../utils/environment';
 
-export default class extends AbstractModule {
+export default class extends Scroll {
     constructor (options) {
         super(options);
 
-        this.scrollbar;
-        this.persist = false;
-        this.selector = '.js-parallax';
-
-        this.build();
     }
 
     // Set
     // ==========================================================================
     set() {
-        this.windowHeight = this.$window.height();
-        this.windowMiddle = this.windowHeight / 2;
+
         this.scrollbarLimit = this.scrollbar.limit.y + this.windowHeight;
-        // Create elements object
-        this.addElements();
-        // First load
-        this.checkElements(true);
     }
 
-    // Build
+    // Init
     // ==========================================================================
-    build() {
-        setTimeout(() => {
-            this.scrollbar = Scrollbar.init(this.$el[0]);
-            this.elements = {};
-            this.set();
+    init() {
+        this.scrollbar;
 
-            // On scroll
-            this.scrollbar.addListener(() => this.checkElements());
-            // Rebuild event
-            $document.on('SmoothScroll.rebuild', () => this.updateElements());
-            // Scrollto button event
-            $('.js-scrollto').on('click.SmoothScroll', (event) => this.scrollTo(event));
+        //Add class to the body to know if smooth-scroll is init or not (to manage overflows on containers)
+        $body.addClass('has-smooth-scroll');
 
-            // Setup done
-            $document.trigger({
-                type: 'SmoothScroll.isReady'
-            });
-        }, 100);
+        this.parallaxElements = [];
+
+        this.addElements();
+
+        this.scrollbar = Scrollbar.init(this.$el[0]);
+        this.set();
+
+        this.raf('first');
+        // On scroll
+        this.scrollbar.addListener(() => this.raf(false));
+
+        // Rebuild event
+        $document.on('SmoothScroll.rebuild', () => this.updateElements());
+
+        // Scrollto button event
+        $('.js-scrollto').on('click.SmoothScroll', (event) => this.scrollTo(event));
+
+        // Setup done
+        $document.trigger({
+            type: 'SmoothScroll.isReady'
+        });
+
     }
 
     // Add elements
     // ==========================================================================
     addElements() {
+
         $(this.selector).each((i, el) => {
             let $element = $(el);
-            let elementSpeed = $element.data('speed') / 10;
-            let elementPosition = $element.data('position');
             let elementTarget = $element.data('target');
-            let elementHorizontal = $element.data('horizontal');
             let $target = (elementTarget) ? $(elementTarget) : $element;
-            let elementOffset = $target.offset().top + this.scrollbar.scrollTop;
-
-            // if (!elementTarget && $element.data('transform')) {
-            //     let transform = $element.data('transform');
-            //     elementOffset -= parseFloat(transform.y);
-            // }
-
+            let elementOffset = $target.offset().top;
             let elementLimit = elementOffset + $target.outerHeight();
-            let elementMiddle = ((elementLimit - elementOffset) / 2) + elementOffset;
+
             let elementPersist = $element.data('persist');
 
-            this.elements[i] = {
-                $element: $element,
-                offset: elementOffset,
-                limit: elementLimit,
-                middle: elementMiddle,
-                speed: elementSpeed,
-                position: elementPosition,
-                horizontal: elementHorizontal,
-                persist: elementPersist
+            if(elementPersist != undefined){
+                elementPersist = true;
+            }else{
+                elementPersist = false;
             }
+
+            let elementSpeed = $element.data('speed');
+
+            //For parallax animated elements
+            if(elementSpeed != undefined){
+                elementSpeed = elementSpeed / 10;
+                let elementPosition = $element.data('position');
+                let elementHorizontal = $element.data('horizontal');
+                let elementMiddle = ((elementLimit - elementOffset) / 2) + elementOffset;
+                this.parallaxElements[i] = {
+                    $element: $element,
+                    offset: elementOffset,
+                    limit: elementLimit,
+                    middle: elementMiddle,
+                    speed: elementSpeed,
+                    position: elementPosition,
+                    horizontal: elementHorizontal,
+                    persist: elementPersist
+                }
+            }else{
+                this.animatedElements[i] = {
+                    $element: $element,
+                    offset: Math.round(elementOffset),
+                    persist: elementPersist,
+                    limit: elementLimit
+                }
+            }
+
         });
+
+
     }
 
     // Update elements
@@ -92,39 +109,67 @@ export default class extends AbstractModule {
         $document.trigger('SmoothScroll.update');
     }
 
+    // Override RAF AbstractScroll by the transform value
+    // ==========================================================================
+    raf(option) {
+
+        //toggle class in-view
+        this.checkElements(option);
+
+        this.checkElementsAnimation();
+
+        let scrollbarTop = this.scrollbar.scrollTop;
+
+        if(scrollbarTop > this.scroll.y){
+            if(this.scroll.way != 'down'){
+                this.scroll.way = 'down';
+            }
+        }else if(scrollbarTop < this.scroll.y){
+            if(this.scroll.way != 'up'){
+                this.scroll.way = 'up';
+            }
+        }
+
+        if(this.scroll.y != scrollbarTop){
+            this.scroll.y = scrollbarTop;
+        }
+
+        window.App.scroll = this.scroll;
+
+
+    }
+
     // Check elements
     // ==========================================================================
-    checkElements(first) {
+    checkElements(option){
         let scrollbarTop = this.scrollbar.scrollTop;
         let scrollbarLimit = this.scrollbarLimit;
         let scrollbarBottom = scrollbarTop + this.windowHeight;
         let scrollbarMiddle = scrollbarTop + this.windowMiddle;
 
-        for(let i in this.elements) {
+        let first = option;
+
+        for(let i in this.parallaxElements) {
             let transformDistance;
             let scrollBottom = scrollbarBottom;
-            let $element = this.elements[i].$element;
-            let elementOffset = this.elements[i].offset;
-            let elementLimit = this.elements[i].limit;
-            let elementMiddle = this.elements[i].middle;
-            let elementSpeed = this.elements[i].speed;
-            let elementPosition = this.elements[i].position;
-            let elementHorizontal = this.elements[i].horizontal;
-            let elementPersist = this.elements[i].persist;
+            let $element = this.parallaxElements[i].$element;
+            let elementOffset = this.parallaxElements[i].offset;
+            let elementLimit = this.parallaxElements[i].limit;
+            let elementMiddle = this.parallaxElements[i].middle;
+            let elementSpeed = this.parallaxElements[i].speed;
+            let elementPosition = this.parallaxElements[i].position;
+            let elementHorizontal = this.parallaxElements[i].horizontal;
+            let elementPersist = this.parallaxElements[i].persist;
+
+            let inview = (scrollBottom >= elementOffset && this.scroll.y <= elementLimit);
 
             if (elementPosition === 'top') {
                 scrollBottom = scrollbarTop;
+                inview = (scrollBottom + this.windowHeight >= elementOffset && this.scroll.y <= elementLimit);
             }
 
-            // Define if the element is inview
-            let inview = (scrollBottom >= elementOffset && scrollbarTop <= elementLimit);
+            this.toggleClasses(this.parallaxElements[i], i, this.parallaxElements);
 
-            // Add class if inview, remove if not
-            if (inview) {
-                $element.addClass('is-inview');
-            } else if (!this.persist) {
-                $element.removeClass('is-inview');
-            }
 
             if (first && !inview && elementSpeed) {
                 // Different calculation if first call and the item is not in view
@@ -134,19 +179,33 @@ export default class extends AbstractModule {
             }
 
             // If element is in view
-            if (inview && elementSpeed) {
+            if (inview && elementSpeed && !first) {
                 switch (elementPosition) {
                     case 'top':
-                        transformDistance = (scrollbarTop - elementOffset) * -elementSpeed;
-                    break;
+                        transformDistance = scrollbarTop * -elementSpeed;
+                        break;
 
                     case 'bottom':
                         transformDistance = (scrollbarLimit - scrollBottom) * elementSpeed;
-                    break;
+                        break;
 
                     default:
                         transformDistance = (scrollbarMiddle - elementMiddle) * -elementSpeed;
-                    break;
+                        break;
+                }
+            }else if(option === 'first') {
+                if (elementSpeed) {
+                    var transformDistance;
+
+                    if (elementPosition !== 'top') {
+                        transformDistance = ((elementOffset - this.windowMiddle)  - elementMiddle) * -elementSpeed;
+                    }
+
+                    if (elementHorizontal !== undefined) {
+                        this.transform($element, transformDistance , 0 , 0);
+                    } else {
+                        this.transform($element, transformDistance , 0 , 0);
+                    }
                 }
             }
 
@@ -179,27 +238,7 @@ export default class extends AbstractModule {
             '-ms-transform': 'translate3d('+ x +', '+ y +', '+ z +')',
             'transform': 'translate3d('+ x +', '+ y +', '+ z +')'
         });
-        // $element.css({
-        //     '-webkit-transform': 'translate3d('+ x +', '+ y +', '+ z +')',
-        //     '-ms-transform': 'translate3d('+ x +', '+ y +', '+ z +')',
-        //     'transform': 'translate3d('+ x +', '+ y +', '+ z +')'
-        // }).data('transform',{
-        //     x : x,
-        //     y : y,
-        //     z : z
-        // });
-        // Remember
 
-        // $element.find(this.selector).each((i, e) => {
-        //     let $this = $(e);
-        //     if (!$this.data('transform')) {
-        //         $this.data('transform', {
-        //             x : x,
-        //             y : y,
-        //             z : z
-        //         })
-        //     }
-        // })
     }
 
     // Scroll to
@@ -222,6 +261,7 @@ export default class extends AbstractModule {
     // ==========================================================================
     destroy() {
         this.$el.off('.SmoothScroll');
-        this.elements = {};
+        this.animatedElements = [];
+        this.parallaxElements = [];
     }
 }

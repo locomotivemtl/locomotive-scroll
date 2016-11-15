@@ -1,82 +1,20 @@
 /*
- * ! Locomotive Boilerplate - 2016-11-11 
+ * ! Locomotive Boilerplate - 2016-11-15 
  */
 html {
   height: 100%;
 }
 
 body {
-  height: 100%;
-  overflow: hidden;
   margin: 0;
 }
 
-[data-scrollbar], [scrollbar], scrollbar {
-  display: block;
-  position: relative;
-}
-
-[data-scrollbar] .scroll-content, [scrollbar] .scroll-content, scrollbar .scroll-content {
-  -webkit-transform: translateZ(0);
-  transform: translateZ(0);
-  will-change: transform;
-  width: 100%;
-}
-
-[data-scrollbar].sticky .scrollbar-track, [scrollbar].sticky .scrollbar-track, scrollbar.sticky .scrollbar-track {
-  background: rgba(222, 222, 222, 0.75);
-}
-
-[data-scrollbar] .scrollbar-track, [scrollbar] .scrollbar-track, scrollbar .scrollbar-track {
-  position: absolute;
-  opacity: 0;
-  z-index: 1;
-  -webkit-transition: opacity .5s ease-out,background .5s ease-out;
-  transition: opacity .5s ease-out,background .5s ease-out;
-  background: none;
-}
-
-[data-scrollbar] .scrollbar-track.show, [data-scrollbar] .scrollbar-track:hover, [scrollbar] .scrollbar-track.show, [scrollbar] .scrollbar-track:hover, scrollbar .scrollbar-track.show, scrollbar .scrollbar-track:hover {
-  opacity: 1;
-}
-
-[data-scrollbar] .scrollbar-track:hover, [scrollbar] .scrollbar-track:hover, scrollbar .scrollbar-track:hover {
-  background: rgba(222, 222, 222, 0.75);
-}
-
-[data-scrollbar] .scrollbar-track-x, [scrollbar] .scrollbar-track-x, scrollbar .scrollbar-track-x {
-  bottom: 0;
-  left: 0;
-  width: 100%;
-  height: 8px;
-}
-
-[data-scrollbar] .scrollbar-track-y, [scrollbar] .scrollbar-track-y, scrollbar .scrollbar-track-y {
-  top: 0;
-  right: 0;
-  width: 8px;
+body.has-smooth-scroll {
   height: 100%;
+  overflow: hidden;
 }
 
-[data-scrollbar] .scrollbar-thumb, [scrollbar] .scrollbar-thumb, scrollbar .scrollbar-thumb {
-  position: absolute;
-  top: 0;
-  left: 0;
-  width: 8px;
-  height: 8px;
-  background: rgba(0, 0, 0, 0.5);
-  border-radius: 4px;
-}
-
-[data-scrollbar] .overscroll-glow, [scrollbar] .overscroll-glow, scrollbar .overscroll-glow {
-  position: absolute;
-  top: 0;
-  left: 0;
-  width: 100%;
-  height: 100%;
-}
-
-.o-scroll {
+.has-smooth-scroll .o-scroll {
   height: 100%;
   position: relative;
   overflow: hidden;
@@ -84,4 +22,21 @@ body {
 
 .o-scroll_example {
   height: 200vh;
+  font-size: 0;
+  text-align: center;
+}
+
+.o-scroll_example div {
+  display: inline-block;
+  width: 40vw;
+  margin: 30px;
+  height: 500px;
+  background-color: blue;
+  opacity: 0;
+  -webkit-transition: opacity 1s ease-out;
+  transition: opacity 1s ease-out;
+}
+
+.o-scroll_example div.is-show {
+  opacity: 1;
 }
