@@ -1,0 +1,19 @@
+html{
+    height: 100%;
+}
+
+body{
+    height: 100%;
+    overflow: hidden;
+
+    margin: 0;
+}
+
+@import 'scrollbar.scss';
+@import 'scroll.scss';
+
+
+// example
+.o-scroll_example{
+    height: 200vh;
+}
