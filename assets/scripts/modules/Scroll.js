@@ -34,8 +34,6 @@ export default class {
         //Set the scrollable container for the smoothscroll module
         this.$el = $('.js-scroll');
 
-
-
         this.animatedElements = [];
 
         this.init();
@@ -78,7 +76,7 @@ export default class {
 
         window.App.scroll = this.scroll;
 
-        requestAnimationFrame(()=>this.raf());
+        this.rafId = requestAnimationFrame(()=>this.raf());
     }
 
     // Add animated elements
@@ -86,7 +84,9 @@ export default class {
     addElements() {
         $(this.selector).each((i, el) => {
             let $element = $(el);
-            let elementOffset = $element.offset().top;
+            let elementTarget = $element.data('target');
+            let $target = (elementTarget) ? $(elementTarget) : $element;
+            let elementOffset = $target.offset().top;
             let elementLimit = elementOffset + $element.outerHeight();
 
             let elementPersist = $element.data('persist');
@@ -110,7 +110,7 @@ export default class {
             }
         });
 
-        requestAnimationFrame(()=>this.raf());
+        this.rafId = requestAnimationFrame(()=>this.raf());
 
     }
 

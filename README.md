@@ -9,7 +9,7 @@ data-speed | number | Speed of transform
 data-persist | false | Determine if the "In View" class is added one or each times
 data-inview-class | is-show | CSS Class when the element is in view.
 data-position | top/bottom | Trigger from top/bottom of the window instead of the default from bottom to top
-data-target | #id | Trigger from another element
+data-target | #id, .class | Trigger from another element
 data-horizontal | true | Use transformX instead of transformY
 
 ## Dependencies
@@ -41,4 +41,5 @@ Run `grunt sync`
 ## Todo
 -	Manage responsive (disable smooth scrolling on mobile)
 -	Manage a parts of data attributes with general options (example: set persist for all)
--	Function to get the percentage (distance) of my element on the viewport
+-   Function to get the percentage (distance) of my element on the viewport
+-   Find a solution to have really slow element
