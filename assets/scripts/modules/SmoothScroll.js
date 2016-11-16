@@ -5,6 +5,11 @@ import Scroll from './Scroll';
 import Scrollbar from 'smooth-scrollbar';
 import { $window , $document , $body} from '../utils/environment';
 
+// Todo
+// - function to get the percentage (distance) of my element on the viewport
+// - Manage responsive (resize/update)
+
+
 export default class extends Scroll {
     constructor (options) {
         super(options);

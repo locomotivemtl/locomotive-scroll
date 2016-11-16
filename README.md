@@ -37,3 +37,8 @@ Run `grunt sync`
 
 [locomtl]:   https://locomotive.ca
 [smoothscrollbar]:   https://github.com/idiotWu/smooth-scrollbar
+
+## Todo
+-	Manage responsive (disable smooth scrolling on mobile)
+-	Manage a parts of data attributes with general options (example: set persist for all)
+-	Function to get the percentage (distance) of my element on the viewport

@@ -5,6 +5,11 @@ import { $document, $window, $html, $body } from '../utils/environment';
  * Abstract scroll
  */
 
+// Todo
+// - Destroy RAF
+// - Manage a parts of data attributes with general options (example: set persist for all)
+// - function to get the percentage (distance) of my element on the viewport
+// - Manage responsive init smoothscrolling or not
 
 export default class {
     constructor(options) {
