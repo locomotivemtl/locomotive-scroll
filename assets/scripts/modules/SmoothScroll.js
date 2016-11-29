@@ -1,279 +1,353 @@
-// ==========================================================================
-// Locomotive smooth scroll
-// ==========================================================================
+import { $window , $document , $body} from '../utils/environment';
 import Scroll from './Scroll';
 import Scrollbar from 'smooth-scrollbar';
-import { $window , $document , $body} from '../utils/environment';
+import Resize from 'throttled-resize';
 
-// Todo
-// - function to get the percentage (distance) of my element on the viewport
-// - Manage responsive (resize/update)
+import { isNumeric } from '../utils/is';
 
-
+/**
+ * Smooth scrolling using `smooth-scrollbar`.
+ * Based on `Scroll` class, which allows animations of elements on the page
+ * according to scroll position.
+ *
+ * @todo  Method to get the distance (as percentage) of an element in the viewport
+ * @todo  Manage responsive (resize/update)
+ */
 export default class extends Scroll {
-    constructor (options) {
-        super(options);
+    constructor() {
+        super();
 
-    }
-
-    // Set
-    // ==========================================================================
-    set() {
-
-        this.scrollbarLimit = this.scrollbar.limit.y + this.windowHeight;
-    }
-
-    // Init
-    // ==========================================================================
-    init() {
         this.scrollbar;
+    }
 
-        //Add class to the body to know if smooth-scroll is init or not (to manage overflows on containers)
+    /**
+     * Initialize scrolling animations
+     */
+    init() {
+        // Add class to the body to know if SmoothScroll is initialized (to manage overflow on containers)
         $body.addClass('has-smooth-scroll');
+
+        this.scrollbar = Scrollbar.init(this.$el[0]);
+
+        this.setScrollbarLimit();
 
         this.parallaxElements = [];
 
         this.addElements();
 
-        this.scrollbar = Scrollbar.init(this.$el[0]);
-        this.set();
-
-        this.raf('first');
+        this.renderAnimations(true);
 
         // On scroll
-        this.scrollbar.addListener(() => this.raf(false));
+        this.scrollbar.addListener(() => this.renderAnimations(false));
 
         // Rebuild event
-        $document.on('SmoothScroll.rebuild', () => this.updateElements());
+        $document.on('rebuild.SmoothScroll', () =>{
+            this.scrollbar.scrollTo(0,0,1000);
+            this.updateElements();
+        });
+
+        // Update event
+        $document.on('update.SmoothScroll', () => this.updateElements());
+
+        // Render event
+        $document.on('render.SmoothScroll', () => this.renderAnimations(false));
 
         // Scrollto button event
-        $('.js-scrollto').on('click.SmoothScroll', (event) => this.scrollTo(event));
+        $('.js-scrollto').on('click.SmoothScroll', (event) => {
+            event.preventDefault();
+            this.scrollTo($(event.currentTarget));
+        });
 
         // Setup done
         $document.trigger({
-            type: 'SmoothScroll.isReady'
+            type: 'isReady.SmoothScroll'
         });
 
+        // Resize event
+        var resize = new Resize();
+        resize.on('resize:end', () => this.updateElements());
     }
 
-    // Add elements
-    // ==========================================================================
+    /**
+     * Reset existing elements and find all animatable elements.
+     * Called on page load and any subsequent updates.
+     */
     addElements() {
+        this.animatedElements = [];
+        this.parallaxElements = [];
 
-        $(this.selector).each((i, el) => {
-            let $element = $(el);
+        var $elements = $(this.selector);
+        var i = 0;
+        var len = $elements.length;
+
+        for (; i < len; i ++) {
+            let $element = $elements.eq(i);
+            let elementSpeed = isNumeric($element.data('speed')) ? parseInt($element.data('speed')) / 10 : false
+            let elementPosition = $element.data('position');
             let elementTarget = $element.data('target');
-            let $target = (elementTarget) ? $(elementTarget) : $element;
-            let elementOffset = $target.offset().top;
-            let elementLimit = elementOffset + $target.outerHeight();
+            let elementHorizontal = $element.data('horizontal');
 
-            let elementPersist = $element.data('persist');
-            if(elementPersist != undefined){
-                elementPersist = true;
-            }else{
-                elementPersist = false;
-            }
+            let $target = (elementTarget) ? $(elementTarget) : $element;
+            let elementOffset = $target.offset().top + this.scrollbar.scrollTop;
+            let elementLimit = elementOffset + $target.outerHeight();
+            let elementOffsetMenu = $target.offset().top + (this.windowHeight - 180);
+
+            // If elements stays visible after scrolling past it
+            let elementPersist = (typeof $element.data('persist') === 'string')
 
             let elementInViewClass = $element.data('inview-class');
-            if(elementInViewClass === undefined){
+            if (typeof elementInViewClass === 'undefined') {
                 elementInViewClass = 'is-show';
             }
 
-            let elementSpeed = $element.data('speed');
+            if (!elementTarget && $element.data('transform')) {
+                elementOffset -= parseFloat($element.data('transform').y);
+            }
 
-            //For parallax animated elements
-            if(elementSpeed != undefined){
-                elementSpeed = elementSpeed / 10;
+            var newElement = {};
+
+            // For parallax animated elements
+            if (elementSpeed !== false) {
                 let elementPosition = $element.data('position');
                 let elementHorizontal = $element.data('horizontal');
                 let elementMiddle = ((elementLimit - elementOffset) / 2) + elementOffset;
-                this.parallaxElements[i] = {
+
+                newElement = {
                     $element: $element,
-                    offset: elementOffset,
+                    horizontal: elementHorizontal,
+                    inViewClass: elementInViewClass,
                     limit: elementLimit,
                     middle: elementMiddle,
-                    speed: elementSpeed,
+                    offset: elementOffset,
+                    persist: elementPersist,
                     position: elementPosition,
-                    horizontal: elementHorizontal,
-                    persist: elementPersist,
-                    inViewClass: elementInViewClass
-                }
-            }else{
-                this.animatedElements[i] = {
+                    speed: elementSpeed
+                };
+                this.parallaxElements.push(newElement);
+            } else {
+                newElement = {
                     $element: $element,
-                    offset: Math.round(elementOffset),
-                    persist: elementPersist,
+                    inViewClass: elementInViewClass,
                     limit: elementLimit,
-                    inViewClass: elementInViewClass
-                }
+                    offset: Math.round(elementOffset),
+                    offsetMenu: elementOffsetMenu,
+                    persist: elementPersist
+                };
+
+                this.animatedElements.push(newElement);
             }
-
-        });
-
-
+        };
     }
 
-    // Update elements
-    // ==========================================================================
-    updateElements() {
-        this.scrollbar.update();
-        this.set();
-        $document.trigger('SmoothScroll.update');
-    }
+    /**
+     * Render the class/transform animations, and update the global scroll positionning.
+     *
+     * @param  {boolean} isFirstCall Determines if this is the first occurence of method being called
+     * @return {void}
+     */
+    renderAnimations(isFirstCall) {
+        var scrollbarTop = this.scrollbar.scrollTop;
 
-    // Override RAF AbstractScroll by the transform value
-    // ==========================================================================
-    raf(option) {
-
-        //toggle class in-view
-        this.checkElements(option);
-
-        this.checkElementsAnimation();
-
-        let scrollbarTop = this.scrollbar.scrollTop;
-
-        if(scrollbarTop > this.scroll.y){
-            if(this.scroll.way != 'down'){
-                this.scroll.way = 'down';
+        if (scrollbarTop > this.scroll.y) {
+            if (this.scroll.direction !== 'down') {
+                this.scroll.direction = 'down';
             }
-        }else if(scrollbarTop < this.scroll.y){
-            if(this.scroll.way != 'up'){
-                this.scroll.way = 'up';
+        } else if (scrollbarTop < this.scroll.y) {
+            if (this.scroll.direction !== 'up') {
+                this.scroll.direction = 'up';
             }
         }
 
-        if(this.scroll.y != scrollbarTop){
+        if (this.scroll.y !== scrollbarTop) {
             this.scroll.y = scrollbarTop;
         }
 
+        this.transformElements(isFirstCall);
+        this.animateElements();
+
         window.App.scroll = this.scroll;
-
-
     }
 
-    // Check elements
-    // ==========================================================================
-    checkElements(option){
-        let scrollbarTop = this.scrollbar.scrollTop;
-        let scrollbarLimit = this.scrollbarLimit;
-        let scrollbarBottom = scrollbarTop + this.windowHeight;
-        let scrollbarMiddle = scrollbarTop + this.windowMiddle;
-
-        let first = option;
-
-        for(let i in this.parallaxElements) {
-            let transformDistance;
-            let scrollBottom = scrollbarBottom;
-            let $element = this.parallaxElements[i].$element;
-            let elementOffset = this.parallaxElements[i].offset;
-            let elementLimit = this.parallaxElements[i].limit;
-            let elementMiddle = this.parallaxElements[i].middle;
-            let elementSpeed = this.parallaxElements[i].speed;
-            let elementPosition = this.parallaxElements[i].position;
-            let elementHorizontal = this.parallaxElements[i].horizontal;
-            let elementPersist = this.parallaxElements[i].persist;
-
-            let inview = (scrollBottom >= elementOffset && this.scroll.y <= elementLimit);
-
-            if (elementPosition === 'top') {
-                scrollBottom = scrollbarTop;
-                inview = (scrollBottom + this.windowHeight >= elementOffset && this.scroll.y <= elementLimit);
-            }
-
-            this.toggleClasses(this.parallaxElements[i], i, this.parallaxElements);
-
-
-            if (first && !inview && elementSpeed) {
-                // Different calculation if first call and the item is not in view
-                if (elementPosition !== 'top') {
-                    // transformDistance = ((elementOffset - this.windowMiddle)  - elementMiddle) * -elementSpeed;
-                }
-            }
-
-            // If element is in view
-            if (inview && elementSpeed && !first) {
-                switch (elementPosition) {
-                    case 'top':
-                        transformDistance = scrollbarTop * -elementSpeed;
-                        break;
-
-                    case 'bottom':
-                        transformDistance = (scrollbarLimit - scrollBottom) * elementSpeed;
-                        break;
-
-                    default:
-                        transformDistance = (scrollbarMiddle - elementMiddle) * -elementSpeed;
-                        break;
-                }
-            }else if(option === 'first') {
-                if (elementSpeed) {
-                    var transformDistance;
-
-                    if (elementPosition !== 'top') {
-                        transformDistance = ((elementOffset - this.windowMiddle)  - elementMiddle) * -elementSpeed;
-                    }
-
-                    if (elementHorizontal !== undefined) {
-                        this.transform($element, transformDistance , 0 , 0);
-                    } else {
-                        this.transform($element, transformDistance , 0 , 0);
-                    }
-                }
-            }
-
-            if (transformDistance) {
-                // Transform horizontal OR vertical, default vertical
-                (elementHorizontal !== undefined) ? this.transform($element, transformDistance+'px') : this.transform($element, 0, transformDistance+'px');
-            }
-        }
-    }
-
-    // Transform element
-    // ==========================================================================
     /**
-     * [transform description]
-     * @param  {[type]} $element Jquery element.
-     * @param  {mixed}  x        Translate value
-     * @param  {mixed}  y        Translate value
-     * @param  {mixed}  z        Translate value
+     * Scroll to a desired target.
+     *
+     * @param  {object|int} target Either a jQuery element or a `y` position
      * @return {void}
      */
-    transform($element, x, y, z) {
-        // Defaults
-        x = x || 0;
-        y = y || 0;
-        z = z || 0;
+    scrollTo(target) {
+        var targetOffset = 0;
+        if (target instanceof jQuery && target.length > 0) {
+            var targetData;
 
-        // Translate
-        $element.css({
-            '-webkit-transform': 'translate3d('+ x +', '+ y +', '+ z +')',
-            '-ms-transform': 'translate3d('+ x +', '+ y +', '+ z +')',
-            'transform': 'translate3d('+ x +', '+ y +', '+ z +')'
-        });
+            if (target.data('target')) {
+                targetData = target.data('target');
+            } else {
+                targetData = target.attr('href');
+            }
 
-    }
-
-    // Scroll to
-    // ==========================================================================
-    scrollTo(event) {
-        if(!$.isNumeric(event)){
-            event.preventDefault();
-
-            let $target = $($(event.currentTarget).attr('href'));
-            var targetOffset = $target.offset().top + this.scrollbar.scrollTop;
-        }
-        else{
-            targetOffset = event;
+            targetOffset = $(targetData).offset().top + this.scrollbar.scrollTop;
+        } else {
+            targetOffset = target;
         }
 
         this.scrollbar.scrollTo(0, targetOffset, 900);
     }
 
-    // Destroy
-    // ==========================================================================
+    /**
+     * Set the scroll bar limit
+     */
+    setScrollbarLimit() {
+        this.scrollbarLimit = this.scrollbar.limit.y + this.windowHeight;
+    }
+
+    /**
+     * Apply CSS transform properties on an element.
+     *
+     * @param  {object}  $element Targetted jQuery element
+     * @param  {int}     x        Translate value
+     * @param  {int}     y        Translate value
+     * @param  {int}     z        Translate value
+     * @return {void}
+     */
+    transformElement($element, x, y, z) {
+        // Defaults
+        x = x || 0;
+        y = y || 0;
+        z = z || 0;
+
+        // Translate and store the positionning as `data`
+        $element.css({
+            '-webkit-transform': 'translate3d('+ x +', '+ y +', '+ z +')',
+            '-ms-transform': 'translate3d('+ x +', '+ y +', '+ z +')',
+            'transform': 'translate3d('+ x +', '+ y +', '+ z +')'
+        }).data('transform',{
+            x : x,
+            y : y,
+            z : z
+        });
+
+        // Affect child elements with the same positionning
+        var children = $element.find(this.selector);
+        var i = 0;
+        var len = children.length;
+        for (; i < len; i++) {
+            let $child = $(children[i]);
+            if (!$child.data('transform')) {
+                $child.data('transform', {
+                    x : x,
+                    y : y,
+                    z : z
+                })
+            }
+        };
+    }
+
+    /**
+     * Loop through all parallax-able elements and apply transform method(s).
+     *
+     * @param  {boolean} isFirstCall Determines if this is the first occurence of method being called
+     * @return {void}
+     */
+    transformElements(isFirstCall) {
+        if (this.parallaxElements.length > 0) {
+            var scrollbarBottom = this.scrollbar.scrollTop + this.windowHeight;
+            var scrollbarMiddle = this.scrollbar.scrollTop + this.windowMiddle;
+
+            var i = 0;
+            var len = this.parallaxElements.length;
+            var removeIndexes = [];
+
+            for (; i < len; i++) {
+                let curEl = this.parallaxElements[i];
+                let scrollBottom = (curEl.position === 'top') ? this.scrollbar.scrollTop : scrollbarBottom;
+                let transformDistance = false;
+
+                // Define if the element is in view
+                let inView = (scrollBottom >= curEl.offset && this.scrollbar.scrollTop <= curEl.limit);
+
+                // // Add class if in view, remove if not
+                // if (inView) {
+                //     curEl.$element.addClass('is-inview');
+
+                //     if (typeof curEl.persist !== 'undefined') {
+                //         curEl.$element.addClass('is-visible');
+                //     }
+                // } else {
+                //     curEl.$element.removeClass('is-inview');
+                // }
+
+                // this.toggleClasses(curEl, i);
+                console.log(curEl.persist)
+
+                // If the element's visibility must not be manipulated any further, remove it from the list
+                if (curEl.persist) {
+                    removeIndexes.push(i);
+                }
+
+                if (isFirstCall && !inView && curEl.speed) {
+                    // Different calculations if it is the first call and the
+                    // item is not in the view
+                    if (curEl.position !== 'top') {
+                        transformDistance = ((curEl.offset - this.windowMiddle)  - curEl.middle) * -curEl.speed;
+                    }
+                }
+
+                // If element is in view
+                if (inView && curEl.speed) {
+                    switch (curEl.position) {
+                        case 'top':
+                            transformDistance = (this.scrollbar.scrollTop - curEl.offset) * -curEl.speed;
+                        break;
+
+                        case 'bottom':
+                            transformDistance = (this.scrollbarLimit - scrollBottom) * curEl.speed;
+                        break;
+
+                        default:
+                            transformDistance = (scrollbarMiddle - curEl.middle) * -curEl.speed;
+                        break;
+                    }
+                }
+
+                // Transform horizontal OR vertical. Defaults to vertical
+                if (isNumeric(transformDistance)) {
+                    (curEl.horizontal) ?
+                        this.transformElement(curEl.$element, transformDistance + 'px') :
+                        this.transformElement(curEl.$element, 0, transformDistance + 'px');
+                }
+            }
+
+            // Remove persisted elements after looping through elements
+            console.log(removeIndexes)
+            // len = removeIndexes.length;
+            // i = 0;
+            // for (; i < len; i++) {
+            //     this.parallaxElements.splice(removeIndexes[i], 1);
+            // }
+        }
+    }
+
+    /**
+     * Update elements and recalculate all the positions on the page
+     */
+    updateElements()
+    {
+        this.scrollbar.update();
+        // Reset container and scrollbar data.
+        this.windowHeight = $window.height();
+        this.windowMiddle = this.windowHeight / 2;
+        this.setScrollbarLimit();
+        this.addElements();
+        this.transformElements(true);
+    }
+
+    /**
+     * Destroy
+     */
     destroy() {
+        super.destroy();
         this.$el.off('.SmoothScroll');
-        this.animatedElements = [];
-        this.parallaxElements = [];
+        this.parallaxElements = undefined;
+        this.scrollbar.destroy();
     }
 }

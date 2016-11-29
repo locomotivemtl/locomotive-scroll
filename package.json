@@ -27,6 +27,7 @@
     "grunt-svg-sprite": "1.3.6",
     "load-grunt-config": "0.19.2",
     "postcss-banner": "3.0.0",
-    "smooth-scrollbar": "^7.2.8"
+    "smooth-scrollbar": "^7.2.8",
+    "throttled-resize": "^1.0.1"
   }
 }

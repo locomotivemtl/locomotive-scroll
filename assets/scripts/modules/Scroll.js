@@ -1,30 +1,25 @@
 /* jshint esnext: true */
-import { $document, $window, $html, $body } from '../utils/environment';
+import { $window } from '../utils/environment';
+import Resize from 'throttled-resize';
 
 /**
- * Abstract scroll
+ * Manage animation of elements on the page according to scroll position.
+ *
+ * @todo  Destroy RAF
+ * @todo  Manage some options (normally from data attributes) with constructor options (ex.: set persist for all)
+ * @todo  Method to get the distance (as percentage) of an element in the viewport
+ * @todo  Manage responsive (init/resize/update)
  */
-
-// Todo
-// - Destroy RAF
-// - Manage a parts of data attributes with general options (example: set persist for all)
-// - function to get the percentage (distance) of my element on the viewport
-// - Manage responsive init smoothscrolling or not
-
 export default class {
-    constructor(options) {
+    constructor() {
 
         this.scroll = {
-            y:0,
-            x:0,
-            way:''
+            x: 0,
+            y: 0,
+            direction: ''
         }
 
-        window.App.scroll = {
-            y:0,
-            x:0,
-            way:''
-        }
+        window.App.scroll = this.scroll;
 
         this.windowHeight = $window.height();
         this.windowMiddle = this.windowHeight / 2;
@@ -32,72 +27,54 @@ export default class {
         this.selector = '.js-anim';
 
         //Set the scrollable container for the smoothscroll module
-        this.$el = $('.js-scroll');
+        this.$el = $('#js-scroll');
 
         this.animatedElements = [];
 
+        this.requestId = undefined;
+
         this.init();
-
     }
 
-    // Init
-    // ==========================================================================
+    /**
+     * Initialize scrolling animations
+     */
     init(){
-
-        // Create elements object
         this.addElements();
+
+        var resize = new Resize();
+        resize.on('resize:end', () => this.updateElements());
     }
 
-    // Request Animation Frame
-    // ==========================================================================
-    raf(){
-
-        this.checkElementsAnimation();
-
-        if(window.pageYOffset > this.scroll.y){
-            if(this.scroll.way != 'down'){
-                this.scroll.way = 'down';
-            }
-        }else if(window.pageYOffset < this.scroll.y){
-            if(this.scroll.way != 'up'){
-                this.scroll.way = 'up';
-            }
-        }
-
-        if(this.scroll.y != window.pageYOffset){
-            this.scroll.y = window.pageYOffset;
-        }
-        if(this.scroll.x != window.pageXOffset){
-            this.scroll.x = window.pageXOffset;
-        }
-        if(this.scroll.way != window.pageYOffset){
-
-        }
-
-        window.App.scroll = this.scroll;
-
-        this.rafId = requestAnimationFrame(()=>this.raf());
-    }
-
-    // Add animated elements
-    // ==========================================================================
+    /**
+     * Find all animatable elements.
+     * Called on page load and any subsequent updates.
+     */
     addElements() {
-        $(this.selector).each((i, el) => {
-            let $element = $(el);
+        this.animatedElements = [];
+
+        var $elements = $(this.selector);
+        var i = 0;
+        var len = $elements.length;
+
+        for (; i < len; i ++) {
+            let $element = $elements.eq(i);
             let elementTarget = $element.data('target');
             let $target = (elementTarget) ? $(elementTarget) : $element;
             let elementOffset = $target.offset().top;
+            let elementOffsetMenu = $target.offset().top + (this.windowHeight - 180);
             let elementLimit = elementOffset + $element.outerHeight();
 
+            // If elements stays visible after scrolling past it
             let elementPersist = $element.data('persist');
-            if(elementPersist != undefined){
-                elementPersist = true;
-            }else{
+            if (typeof elementPersist !== 'undefined') {
                 elementPersist = false;
+            } else {
+                elementPersist = true;
             }
 
             let elementInViewClass = $element.data('inview-class');
-            if(elementInViewClass === undefined){
+            if (typeof elementInViewClass === 'undefined') {
                 elementInViewClass = 'is-show';
             }
 
@@ -106,56 +83,103 @@ export default class {
                 offset: Math.round(elementOffset),
                 persist: elementPersist,
                 limit: elementLimit,
-                inViewClass: elementInViewClass
+                inViewClass: elementInViewClass,
+                offsetMenu: elementOffsetMenu
             }
-        });
+        };
 
-        this.rafId = requestAnimationFrame(()=>this.raf());
-
+        this.requestId = window.requestAnimationFrame(() => this.renderAnimations());
     }
 
-    // Check elements animation
-    // ==========================================================================
-    checkElementsAnimation() {
+    /**
+     * Loop through all animatable elements and apply animation method(s).
+     */
+    animateElements() {
+        var len = this.animatedElements.length;
+        var i = 0;
+        var removeIndexes = [];
+        for (; i < len; i++) {
+            let element = this.animatedElements[i];
+            this.toggleClasses(element, i);
 
-        for(let i in this.animatedElements) {
-            this.toggleClasses(this.animatedElements[i], i, this.animatedElements);
+            // If the element's visibility must not be manipulated any further, remove it from the list
+            if (element.persist) {
+                removeIndexes.push(i);
+            }
+        }
+
+        // Remove persisted elements after looping through elements
+        // len = removeIndexes.length;
+        // i = 0;
+        // for (; i < len; i++) {
+        //     this.animatedElements.splice(removeIndexes[i], 1);
+        // }
+    }
+
+    /**
+     * Render the class animations, and update the global scroll positionning.
+     */
+    renderAnimations() {
+        if (window.pageYOffset > this.scroll.y) {
+            if (this.scroll.direction !== 'down') {
+                this.scroll.direction = 'down';
+            }
+        } else if (window.pageYOffset < this.scroll.y) {
+            if (this.scroll.direction !== 'up') {
+                this.scroll.direction = 'up';
+            }
+        }
+
+        if (this.scroll.y !== window.pageYOffset) {
+            this.scroll.y = window.pageYOffset;
+        }
+        if (this.scroll.x !== window.pageXOffset) {
+            this.scroll.x = window.pageXOffset;
+        }
+
+        this.animateElements();
+
+        this.requestId = window.requestAnimationFrame(() => this.renderAnimations());
+    }
+
+    /**
+     * Toggle classes on an element if it's visible.
+     *
+     * @param  {object} element       Current element to test
+     * @param  {int}    index         Index of the element within it's container
+     * @return {void}
+     */
+    toggleClasses(element, index) {
+        if (typeof element !== 'undefined') {
+            // Find the bottom edge of the scroll container
+            var scrollBottom = this.scroll.y + this.windowHeight;
+
+            // Define if the element is inView
+            var inView = (scrollBottom >= element.offset && this.scroll.y <= element.limit);
+
+            // Add class if inView, remove if not
+            if (inView) {
+                element.$element.addClass(element.inViewClass);
+            } else if (!element.persist) {
+                element.$element.removeClass(element.inViewClass);
+            }
         }
     }
 
-    // Toggles classes if is in view
-    // ==========================================================================
-    toggleClasses($el, i, arrayElements){
-        let scrollBottom = this.scroll.y + this.windowHeight;
-        let $element = $el.$element;
-        let elementOffset = $el.offset;
-        let elementLimit = $el.limit;
-        let elementPersist = $el.persist;
-        let elementPosition = $el.position;
-        let elementInViewClass = $el.inViewClass;
-
-
-        // Define if the element is inview
-        let inview = (scrollBottom >= elementOffset && this.scroll.y <= elementLimit);
-
-        // Add class if inview, remove if not
-        if (inview) {
-            $element.addClass(elementInViewClass);
-            if(elementPersist){
-                arrayElements.splice(i,1);
-            }
-        } else if (!elementPersist) {
-            $element.removeClass(elementInViewClass);
-        }
+    /**
+     * Update elements and recalculate all the positions on the page
+     */
+    updateElements() {
+        this.addElements();
     }
 
-
-    // Destroy
-    // ==========================================================================
+    /**
+     * Destroy
+     */
     destroy() {
-        this.$el.off('.SmoothScroll');
-        this.animatedElements = [];
+        this.$el.off('.Scroll');
+        window.cancelAnimationFrame(this.requestId);
+        this.requestId = undefined;
+        this.animatedElements = undefined;
     }
-
-
 }
