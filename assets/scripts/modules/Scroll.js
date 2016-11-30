@@ -98,10 +98,9 @@ export default class {
         var removeIndexes = [];
         for (; i < len; i++) {
             let element = this.animatedElements[i];
-            this.toggleClasses(element, i);
 
             // If the element's visibility must not be manipulated any further, remove it from the list
-            if (element.persist) {
+            if (this.toggleElementClasses(element, i)) {
                 removeIndexes.push(i);
             }
         }
@@ -143,11 +142,13 @@ export default class {
     /**
      * Toggle classes on an element if it's visible.
      *
-     * @param  {object} element       Current element to test
-     * @param  {int}    index         Index of the element within it's container
-     * @return {void}
+     * @param  {object}      element Current element to test
+     * @param  {int}         index   Index of the element within it's container
+     * @return {boolean}             Wether the item must be removed from its container
      */
-    toggleClasses(element, index) {
+    toggleElementClasses(element, index) {
+        var removeFromContainer = false;
+
         if (typeof element !== 'undefined') {
             // Find the bottom edge of the scroll container
             var scrollBottom = this.scroll.y + this.windowHeight;
@@ -158,10 +159,16 @@ export default class {
             // Add class if inView, remove if not
             if (inView) {
                 element.$element.addClass(element.inViewClass);
+
+                if (element.persist){
+                    removeFromContainer = true;
+                }
             } else if (!element.persist) {
                 element.$element.removeClass(element.inViewClass);
             }
         }
+
+        return removeFromContainer;
     }
 
     /**

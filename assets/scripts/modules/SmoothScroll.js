@@ -92,7 +92,7 @@ export default class extends Scroll {
             let elementLimit = elementOffset + $target.outerHeight();
 
             // If elements stays visible after scrolling past it
-            let elementPersist = (typeof $element.data('persist') === 'string')
+            let elementPersist = (typeof $element.data('persist') === 'string');
 
             let elementInViewClass = $element.data('inview-class');
             if (typeof elementInViewClass === 'undefined') {
@@ -281,7 +281,7 @@ export default class extends Scroll {
                     curEl.$element.removeClass('is-inview');
                 }
 
-                this.toggleClasses(curEl, i);
+                this.toggleElementClasses(curEl, i);
 
                 if (isFirstCall && !inView && curEl.speed) {
                     // Different calculations if it is the first call and the item is not in the view
