@@ -259,36 +259,36 @@ export default class extends Scroll {
 
             for (; i < len; i++) {
                 let curEl = this.parallaxElements[i];
-                let scrollBottom = (curEl.position === 'top') ? this.scrollbar.scrollTop : scrollbarBottom;
+                // Old
+                let scrollBottom = scrollbarBottom;
+                // New
+                // let scrollBottom = (curEl.position === 'top') ? this.scrollbar.scrollTop : scrollbarBottom;
+
                 let transformDistance = false;
 
                 // Define if the element is in view
-                let inView = (scrollBottom >= curEl.offset && this.scrollbar.scrollTop <= curEl.limit);
+                // Old
+                let inView = (scrollBottom >= curEl.offset && this.scroll.y <= curEl.limit);
+                // New
+                // let inView = (scrollBottom >= curEl.offset && this.scrollbar.scrollTop <= curEl.limit);
 
-                // // Add class if in view, remove if not
-                // if (inView) {
-                //     curEl.$element.addClass('is-inview');
+                // Add class if in view, remove if not
+                if (inView) {
+                    curEl.$element.addClass('is-inview');
 
-                //     if (typeof curEl.persist !== 'undefined') {
-                //         curEl.$element.addClass('is-visible');
-                //     }
-                // } else {
-                //     curEl.$element.removeClass('is-inview');
-                // }
-
-                // this.toggleClasses(curEl, i);
-                console.log(curEl.persist)
-
-                // If the element's visibility must not be manipulated any further, remove it from the list
-                if (curEl.persist) {
-                    removeIndexes.push(i);
+                    if (curEl.persist === true) {
+                        curEl.$element.addClass('is-visible');
+                    }
+                } else {
+                    curEl.$element.removeClass('is-inview');
                 }
 
+                this.toggleClasses(curEl, i);
+
                 if (isFirstCall && !inView && curEl.speed) {
-                    // Different calculations if it is the first call and the
-                    // item is not in the view
+                    // Different calculations if it is the first call and the item is not in the view
                     if (curEl.position !== 'top') {
-                        transformDistance = ((curEl.offset - this.windowMiddle)  - curEl.middle) * -curEl.speed;
+                        transformDistance = (curEl.offset - this.windowMiddle - curEl.middle) * -curEl.speed;
                     }
                 }
 
@@ -296,7 +296,10 @@ export default class extends Scroll {
                 if (inView && curEl.speed) {
                     switch (curEl.position) {
                         case 'top':
-                            transformDistance = (this.scrollbar.scrollTop - curEl.offset) * -curEl.speed;
+                            // Old
+                            transformDistance = this.scrollbar.scrollTop * -curEl.speed;
+                            // New
+                            // transformDistance = (this.scrollbar.scrollTop - curEl.offset) * -curEl.speed;
                         break;
 
                         case 'bottom':
@@ -316,14 +319,6 @@ export default class extends Scroll {
                         this.transformElement(curEl.$element, 0, transformDistance + 'px');
                 }
             }
-
-            // Remove persisted elements after looping through elements
-            console.log(removeIndexes)
-            // len = removeIndexes.length;
-            // i = 0;
-            // for (; i < len; i++) {
-            //     this.parallaxElements.splice(removeIndexes[i], 1);
-            // }
         }
     }
 
@@ -333,7 +328,6 @@ export default class extends Scroll {
     updateElements()
     {
         this.scrollbar.update();
-        // Reset container and scrollbar data.
         this.windowHeight = $window.height();
         this.windowMiddle = this.windowHeight / 2;
         this.setScrollbarLimit();

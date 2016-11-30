@@ -109,11 +109,11 @@ export default class {
         }
 
         // Remove persisted elements after looping through elements
-        // len = removeIndexes.length;
-        // i = 0;
-        // for (; i < len; i++) {
-        //     this.animatedElements.splice(removeIndexes[i], 1);
-        // }
+        len = removeIndexes.length;
+        i = 0;
+        for (; i < len; i++) {
+            this.animatedElements.splice(removeIndexes[i], 1);
+        }
     }
 
     /**
