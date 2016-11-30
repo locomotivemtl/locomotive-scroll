@@ -11,8 +11,8 @@ import { isNumeric } from '../utils/is';
  * according to scroll position.
  *
  * @todo  Method to get the distance (as percentage) of an element in the viewport
- * @todo  Manage responsive (resize/update)
  */
+
 export default class extends Scroll {
     constructor() {
         super();
@@ -92,7 +92,9 @@ export default class extends Scroll {
             let elementLimit = elementOffset + $target.outerHeight();
 
             // If elements stays visible after scrolling past it
-            let elementPersist = (typeof $element.data('persist') === 'string');
+            let elementRepeat = (typeof $element.data('repeat') === 'string');
+
+            console.log(elementRepeat);
 
             let elementInViewClass = $element.data('inview-class');
             if (typeof elementInViewClass === 'undefined') {
@@ -118,7 +120,7 @@ export default class extends Scroll {
                     limit: elementLimit,
                     middle: elementMiddle,
                     offset: elementOffset,
-                    persist: elementPersist,
+                    repeat: elementRepeat,
                     position: elementPosition,
                     speed: elementSpeed
                 };
@@ -129,7 +131,7 @@ export default class extends Scroll {
                     inViewClass: elementInViewClass,
                     limit: elementLimit,
                     offset: Math.round(elementOffset),
-                    persist: elementPersist
+                    repeat: elementRepeat
                 };
 
                 this.animatedElements.push(newElement);
@@ -274,7 +276,7 @@ export default class extends Scroll {
                 if (inView) {
                     curEl.$element.addClass('is-inview');
 
-                    if (curEl.persist === true) {
+                    if (curEl.repeat === false) {
                         curEl.$element.addClass('is-visible');
                     }
                 } else {

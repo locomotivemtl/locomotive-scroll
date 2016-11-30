@@ -6,9 +6,8 @@ import Resize from 'throttled-resize';
  * Manage animation of elements on the page according to scroll position.
  *
  * @todo  Destroy RAF
- * @todo  Manage some options (normally from data attributes) with constructor options (ex.: set persist for all)
+ * @todo  Manage some options (normally from data attributes) with constructor options (ex.: set repeat for all)
  * @todo  Method to get the distance (as percentage) of an element in the viewport
- * @todo  Manage responsive (init/resize/update)
  */
 export default class {
     constructor() {
@@ -65,11 +64,11 @@ export default class {
             let elementLimit = elementOffset + $element.outerHeight();
 
             // If elements stays visible after scrolling past it
-            let elementPersist = $element.data('persist');
-            if (typeof elementPersist !== 'undefined') {
-                elementPersist = false;
+            let elementRepeat = $element.data('repeat');
+            if (typeof elementRepeat !== 'undefined') {
+                elementRepeat = false;
             } else {
-                elementPersist = true;
+                elementRepeat = true;
             }
 
             let elementInViewClass = $element.data('inview-class');
@@ -80,7 +79,7 @@ export default class {
             this.animatedElements[i] = {
                 $element: $element,
                 offset: Math.round(elementOffset),
-                persist: elementPersist,
+                repeat: elementRepeat,
                 limit: elementLimit,
                 inViewClass: elementInViewClass
             }
@@ -105,7 +104,7 @@ export default class {
             }
         }
 
-        // Remove persisted elements after looping through elements
+        // Remove repeated elements after looping through elements
         len = removeIndexes.length;
         i = 0;
         for (; i < len; i++) {
@@ -160,10 +159,10 @@ export default class {
             if (inView) {
                 element.$element.addClass(element.inViewClass);
 
-                if (element.persist){
+                if (!element.repeat){
                     removeFromContainer = true;
                 }
-            } else if (!element.persist) {
+            } else if (element.repeat) {
                 element.$element.removeClass(element.inViewClass);
             }
         }
