@@ -90,7 +90,6 @@ export default class extends Scroll {
             let $target = (elementTarget) ? $(elementTarget) : $element;
             let elementOffset = $target.offset().top + this.scrollbar.scrollTop;
             let elementLimit = elementOffset + $target.outerHeight();
-            let elementOffsetMenu = $target.offset().top + (this.windowHeight - 180);
 
             // If elements stays visible after scrolling past it
             let elementPersist = (typeof $element.data('persist') === 'string')
@@ -130,7 +129,6 @@ export default class extends Scroll {
                     inViewClass: elementInViewClass,
                     limit: elementLimit,
                     offset: Math.round(elementOffset),
-                    offsetMenu: elementOffsetMenu,
                     persist: elementPersist
                 };
 

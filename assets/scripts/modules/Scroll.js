@@ -62,7 +62,6 @@ export default class {
             let elementTarget = $element.data('target');
             let $target = (elementTarget) ? $(elementTarget) : $element;
             let elementOffset = $target.offset().top;
-            let elementOffsetMenu = $target.offset().top + (this.windowHeight - 180);
             let elementLimit = elementOffset + $element.outerHeight();
 
             // If elements stays visible after scrolling past it
@@ -83,8 +82,7 @@ export default class {
                 offset: Math.round(elementOffset),
                 persist: elementPersist,
                 limit: elementLimit,
-                inViewClass: elementInViewClass,
-                offsetMenu: elementOffsetMenu
+                inViewClass: elementInViewClass
             }
         };
 
