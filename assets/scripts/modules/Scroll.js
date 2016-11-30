@@ -5,7 +5,6 @@ import Resize from 'throttled-resize';
 /**
  * Manage animation of elements on the page according to scroll position.
  *
- * @todo  Destroy RAF
  * @todo  Manage some options (normally from data attributes) with constructor options (ex.: set repeat for all)
  * @todo  Method to get the distance (as percentage) of an element in the viewport
  */
@@ -25,7 +24,7 @@ export default class {
 
         this.selector = '.js-anim';
 
-        //Set the scrollable container for the smoothscroll module
+        // Set the scrollable container for the smoothscroll module
         this.$el = $('#js-scroll');
 
         this.animatedElements = [];
@@ -63,21 +62,23 @@ export default class {
             let elementOffset = $target.offset().top;
             let elementLimit = elementOffset + $element.outerHeight();
 
-            // If elements stays visible after scrolling past it
+            // If elements loses its animation after scrolling past it
             let elementRepeat = (typeof $element.data('repeat') === 'string');
-            console.log(elementRepeat);
 
             let elementInViewClass = $element.data('inview-class');
             if (typeof elementInViewClass === 'undefined') {
                 elementInViewClass = 'is-show';
             }
 
-            this.animatedElements[i] = {
-                $element: $element,
-                offset: Math.round(elementOffset),
-                repeat: elementRepeat,
-                limit: elementLimit,
-                inViewClass: elementInViewClass
+            // Don't add element if it already has its in view class and doesn't repeat
+            if (elementRepeat || !$element.hasClass(elementInViewClass)) {
+                this.animatedElements[i] = {
+                    $element: $element,
+                    offset: Math.round(elementOffset),
+                    repeat: elementRepeat,
+                    limit: elementLimit,
+                    inViewClass: elementInViewClass
+                }
             }
         };
 
@@ -100,10 +101,9 @@ export default class {
             }
         }
 
-        // Remove repeated elements after looping through elements
-        len = removeIndexes.length;
-        i = 0;
-        for (; i < len; i++) {
+        // Remove animated elements after looping through elements
+        i = removeIndexes.length;
+        while (i--) {
             this.animatedElements.splice(removeIndexes[i], 1);
         }
     }

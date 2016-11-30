@@ -12,7 +12,6 @@ import { isNumeric } from '../utils/is';
  *
  * @todo  Method to get the distance (as percentage) of an element in the viewport
  */
-
 export default class extends Scroll {
     constructor() {
         super();
