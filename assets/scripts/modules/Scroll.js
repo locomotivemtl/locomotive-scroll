@@ -64,12 +64,8 @@ export default class {
             let elementLimit = elementOffset + $element.outerHeight();
 
             // If elements stays visible after scrolling past it
-            let elementRepeat = $element.data('repeat');
-            if (typeof elementRepeat !== 'undefined') {
-                elementRepeat = false;
-            } else {
-                elementRepeat = true;
-            }
+            let elementRepeat = (typeof $element.data('repeat') === 'string');
+            console.log(elementRepeat);
 
             let elementInViewClass = $element.data('inview-class');
             if (typeof elementInViewClass === 'undefined') {

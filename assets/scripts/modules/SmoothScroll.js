@@ -94,8 +94,6 @@ export default class extends Scroll {
             // If elements stays visible after scrolling past it
             let elementRepeat = (typeof $element.data('repeat') === 'string');
 
-            console.log(elementRepeat);
-
             let elementInViewClass = $element.data('inview-class');
             if (typeof elementInViewClass === 'undefined') {
                 elementInViewClass = 'is-show';
