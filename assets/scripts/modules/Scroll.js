@@ -48,6 +48,12 @@ export default class {
         $document.on('update.Scroll', (event, options) => this.updateElements(options));
         // Render event
         $document.on('render.Scroll', () => this.renderAnimations(false));
+
+        // Rebuild event
+        $document.on('rebuild.Scroll', () =>{
+            this.scrollTo(0);
+            this.updateElements();
+        });
     }
 
     /**

@@ -40,8 +40,7 @@ export default class extends Scroll {
         this.scrollbar.addListener(() => this.renderAnimations(false));
 
         // Rebuild event
-        $document.on('rebuild.SmoothScroll', () =>{
-            this.scrollbar.scrollTo(0,0,1000);
+        $document.on('rebuild.Scroll', () =>{
             this.updateElements();
         });
 
