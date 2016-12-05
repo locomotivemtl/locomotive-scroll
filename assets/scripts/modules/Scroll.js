@@ -1,5 +1,5 @@
 /* jshint esnext: true */
-import { $window } from '../utils/environment';
+import { $window , $document , $body} from '../utils/environment';
 import Resize from 'throttled-resize';
 
 /**
@@ -42,6 +42,12 @@ export default class {
 
         var resize = new Resize();
         resize.on('resize:end', () => this.updateElements());
+
+        $document.on('scrollTo.Scroll',(options)=>this.scrollTo(options.value));
+        // Update event
+        $document.on('update.Scroll', (event, options) => this.updateElements(options));
+        // Render event
+        $document.on('render.Scroll', () => this.renderAnimations(false));
     }
 
     /**
@@ -164,6 +170,33 @@ export default class {
         }
 
         return removeFromContainer;
+    }
+
+    /**
+     * Scroll to a desired target.
+     *
+     * @param  {object|int} target Either a jQuery element or a `y` position
+     * @return {void}
+     */
+    scrollTo(target) {
+        var targetOffset = 0;
+        if (target instanceof jQuery && target.length > 0) {
+            var targetData;
+
+            if (target.data('target')) {
+                targetData = target.data('target');
+            } else {
+                targetData = target.attr('href');
+            }
+
+            targetOffset = $(targetData).offset().top + this.scrollbar.scrollTop;
+        } else {
+            targetOffset = target;
+        }
+
+        $body.animate({
+            scrollTop:targetOffset
+        }, 'slow');
     }
 
     /**

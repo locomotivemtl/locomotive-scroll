@@ -46,10 +46,10 @@ export default class extends Scroll {
         });
 
         // Update event
-        $document.on('update.SmoothScroll', () => this.updateElements());
+        $document.on('update.Scroll', () => this.updateElements());
 
         // Render event
-        $document.on('render.SmoothScroll', () => this.renderAnimations(false));
+        $document.on('render.Scroll', () => this.renderAnimations(false));
 
         // Scrollto button event
         $('.js-scrollto').on('click.SmoothScroll', (event) => {
@@ -338,6 +338,7 @@ export default class extends Scroll {
     destroy() {
         super.destroy();
         this.$el.off('.SmoothScroll');
+        this.$el.off('.Scroll');
         this.parallaxElements = undefined;
         this.scrollbar.destroy();
     }
