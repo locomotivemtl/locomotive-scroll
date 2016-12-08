@@ -69,7 +69,7 @@ export default class {
             let elementTarget = $element.data('target');
             let elementPosition = $element.data('position');
             let $target = (elementTarget) ? $(elementTarget) : $element;
-            let elementOffset = $target.position().top;
+            let elementOffset = $target.offset().top;
             let elementLimit = elementOffset + $target.outerHeight();
 
             // If elements loses its animation after scrolling past it
