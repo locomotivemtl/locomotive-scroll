@@ -9,7 +9,9 @@ import Resize from 'throttled-resize';
  * @todo  Method to get the distance (as percentage) of an element in the viewport
  */
 export default class {
-    constructor() {
+    constructor(options) {
+        this.$container = $(options.container);
+        this.$selector = $(options.selector);
 
         this.scroll = {
             x: 0,
@@ -22,11 +24,6 @@ export default class {
         this.windowHeight = $window.height();
         this.windowMiddle = this.windowHeight / 2;
 
-        this.selector = '.js-anim';
-
-        // Set the scrollable container for the smoothscroll module
-        this.$el = $('#js-scroll');
-
         this.animatedElements = [];
 
         this.requestId = undefined;
@@ -37,21 +34,21 @@ export default class {
     /**
      * Initialize scrolling animations
      */
-    init(){
+    init() {
         this.addElements();
+        this.animateElements();
 
         var resize = new Resize();
         resize.on('resize:end', () => this.updateElements());
 
-        $document.on('scrollTo.Scroll',(options)=>this.scrollTo(options.value));
+        this.$container.on('scrollTo.Scroll',(options)=>this.scrollTo(options.value));
         // Update event
-        $document.on('update.Scroll', (event, options) => this.updateElements(options));
+        this.$container.on('update.Scroll', (event, options) => this.updateElements(options));
         // Render event
-        $document.on('render.Scroll', () => this.renderAnimations(false));
+        this.$container.on('scroll.Scroll', () => this.renderAnimations(false));
 
         // Rebuild event
         $document.on('rebuild.Scroll', () =>{
-            this.scrollTo(0);
             this.updateElements();
         });
     }
@@ -63,16 +60,17 @@ export default class {
     addElements() {
         this.animatedElements = [];
 
-        var $elements = $(this.selector);
+        var $elements = this.$selector;
         var i = 0;
         var len = $elements.length;
 
         for (; i < len; i ++) {
             let $element = $elements.eq(i);
             let elementTarget = $element.data('target');
+            let elementPosition = $element.data('position');
             let $target = (elementTarget) ? $(elementTarget) : $element;
-            let elementOffset = $target.offset().top;
-            let elementLimit = elementOffset + $element.outerHeight();
+            let elementOffset = $target.position().top;
+            let elementLimit = elementOffset + $target.outerHeight();
 
             // If elements loses its animation after scrolling past it
             let elementRepeat = (typeof $element.data('repeat') === 'string');
@@ -88,13 +86,12 @@ export default class {
                     $element: $element,
                     offset: Math.round(elementOffset),
                     repeat: elementRepeat,
+                    position: elementPosition,
                     limit: elementLimit,
                     inViewClass: elementInViewClass
                 }
             }
         };
-
-        this.requestId = window.requestAnimationFrame(() => this.renderAnimations());
     }
 
     /**
@@ -134,16 +131,10 @@ export default class {
             }
         }
 
-        if (this.scroll.y !== window.pageYOffset) {
-            this.scroll.y = window.pageYOffset;
-        }
-        if (this.scroll.x !== window.pageXOffset) {
-            this.scroll.x = window.pageXOffset;
-        }
+        this.scroll.y = window.pageYOffset;
+        this.scroll.x = window.pageXOffset;
 
         this.animateElements();
-
-        this.requestId = window.requestAnimationFrame(() => this.renderAnimations());
     }
 
     /**
@@ -158,10 +149,17 @@ export default class {
 
         if (typeof element !== 'undefined') {
             // Find the bottom edge of the scroll container
-            var scrollBottom = this.scroll.y + this.windowHeight;
+            var scrollTop = this.scroll.y;
+            var scrollBottom = scrollTop + this.windowHeight;
 
             // Define if the element is inView
-            var inView = (scrollBottom >= element.offset && this.scroll.y <= element.limit);
+            var inView;
+
+            if (element.position == 'top') {
+                inView = (scrollTop >= element.offset && scrollTop <= element.limit);
+            } else {
+                inView = (scrollBottom >= element.offset && scrollTop <= element.limit);
+            }
 
             // Add class if inView, remove if not
             if (inView) {
@@ -216,7 +214,7 @@ export default class {
      * Destroy
      */
     destroy() {
-        this.$el.off('.Scroll');
+        this.$container.off('.Scroll');
         window.cancelAnimationFrame(this.requestId);
         this.requestId = undefined;
         this.animatedElements = undefined;

@@ -268,17 +268,6 @@ export default class extends Scroll {
                 // New
                 // let inView = (scrollBottom >= curEl.offset && this.scrollbar.scrollTop <= curEl.limit);
 
-                // Add class if in view, remove if not
-                if (inView) {
-                    curEl.$element.addClass('is-inview');
-
-                    if (curEl.repeat === false) {
-                        curEl.$element.addClass('is-visible');
-                    }
-                } else {
-                    curEl.$element.removeClass('is-inview');
-                }
-
                 this.toggleElementClasses(curEl, i);
 
                 if (isFirstCall && !inView && curEl.speed) {

@@ -3,7 +3,11 @@ import Scroll from '../modules/Scroll';
 
 export default function() {
 
-    const smoothScroll = new SmoothScroll();
-    // const scroll = new Scroll();
+    // const smoothScroll = new SmoothScroll();
+    const scroll = new Scroll({
+        container: document,
+        selector: '.js-scroll',
+        persist: true
+    });
 
 }
