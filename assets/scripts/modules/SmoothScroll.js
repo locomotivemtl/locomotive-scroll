@@ -13,8 +13,11 @@ import { isNumeric } from '../utils/is';
  * @todo  Method to get the distance (as percentage) of an element in the viewport
  */
 export default class extends Scroll {
-    constructor() {
-        super();
+    constructor(options) {
+        super(options);
+
+        this.$container = $(options.container);
+        this.$selector = $(options.selector);
 
         this.scrollbar;
     }
@@ -26,7 +29,7 @@ export default class extends Scroll {
         // Add class to the body to know if SmoothScroll is initialized (to manage overflow on containers)
         $body.addClass('has-smooth-scroll');
 
-        this.scrollbar = Scrollbar.init(this.$el[0]);
+        this.scrollbar = Scrollbar.init(this.$container[0]);
 
         this.setScrollbarLimit();
 
@@ -74,7 +77,7 @@ export default class extends Scroll {
         this.animatedElements = [];
         this.parallaxElements = [];
 
-        var $elements = $(this.selector);
+        var $elements = this.$selector;
         var i = 0;
         var len = $elements.length;
 
