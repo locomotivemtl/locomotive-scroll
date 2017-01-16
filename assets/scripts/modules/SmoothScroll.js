@@ -16,9 +16,6 @@ export default class extends Scroll {
     constructor(options) {
         super(options);
 
-        this.$container = $(options.container);
-        this.$selector = $(options.selector);
-
         this.scrollbar;
     }
 
@@ -26,6 +23,10 @@ export default class extends Scroll {
      * Initialize scrolling animations
      */
     init() {
+
+        this.$container = $(this.container);
+        this.$selector = $(this.selector);
+
         // Add class to the body to know if SmoothScroll is initialized (to manage overflow on containers)
         $body.addClass('has-smooth-scroll');
 
@@ -315,6 +316,8 @@ export default class extends Scroll {
      */
     updateElements()
     {
+        this.$container = $(this.container);
+        this.$selector = $(this.selector);
         this.scrollbar.update();
         this.windowHeight = $window.height();
         this.windowMiddle = this.windowHeight / 2;

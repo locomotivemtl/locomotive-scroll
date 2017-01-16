@@ -10,8 +10,8 @@ import Resize from 'throttled-resize';
  */
 export default class {
     constructor(options) {
-        this.$container = $(options.container);
-        this.$selector = $(options.selector);
+        this.container = options.container;
+        this.selector = $options.selector;
 
         this.scroll = {
             x: 0,
@@ -35,6 +35,10 @@ export default class {
      * Initialize scrolling animations
      */
     init() {
+
+        this.$container = $(this.container);
+        this.$selector = $(this.selector);
+
         this.addElements();
         this.animateElements();
 
@@ -207,6 +211,8 @@ export default class {
      * Update elements and recalculate all the positions on the page
      */
     updateElements() {
+        this.$container = $(this.container);
+        this.$selector = $(this.selector);
         this.addElements();
     }
 
