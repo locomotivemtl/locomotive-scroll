@@ -211,7 +211,6 @@ export default class {
      * Update elements and recalculate all the positions on the page
      */
     updateElements() {
-        this.$container = $(this.container);
         this.$selector = $(this.selector);
         this.addElements();
     }

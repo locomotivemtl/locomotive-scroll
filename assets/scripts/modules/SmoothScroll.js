@@ -316,7 +316,7 @@ export default class extends Scroll {
      */
     updateElements()
     {
-        this.$container = $(this.container);
+
         this.$selector = $(this.selector);
         this.scrollbar.update();
         this.windowHeight = $window.height();
