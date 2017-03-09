@@ -10,8 +10,9 @@ import Resize from 'throttled-resize';
  */
 export default class {
     constructor(options) {
+
         this.container = options.container;
-        this.selector = $options.selector;
+        this.selector = options.selector;
 
         this.scroll = {
             x: 0,
@@ -75,6 +76,8 @@ export default class {
             let $target = (elementTarget) ? $(elementTarget) : $element;
             let elementOffset = $target.offset().top;
             let elementLimit = elementOffset + $target.outerHeight();
+            let elementSticky = (typeof $element.data('sticky') === 'string');
+            let elementStickyTarget = $element.data('sticky-target');
 
             // If elements loses its animation after scrolling past it
             let elementRepeat = (typeof $element.data('repeat') === 'string');
@@ -82,6 +85,28 @@ export default class {
             let elementInViewClass = $element.data('inview-class');
             if (typeof elementInViewClass === 'undefined') {
                 elementInViewClass = 'is-show';
+            }
+
+            if(elementSticky){
+                if(elementStickyTarget === undefined){
+                    elementLimit = $('#js-scroll').height();
+                }else{
+                    elementLimit = $(elementStickyTarget).offset().top - $element.height();
+                }
+            }
+
+            if(elementSticky){
+
+                // reset offset
+                $element.removeClass(elementInViewClass);
+                $element.removeClass('-after');
+
+                $element.css({
+                    '-webkit-transform': `translate3d( 0 , 0 , 0 )`,
+                    '-ms-transform': `translate3d( 0 , 0 , 0 )`,
+                    'transform': `translate3d( 0 , 0 , 0 )`
+                });
+
             }
 
             // Don't add element if it already has its in view class and doesn't repeat
@@ -92,7 +117,8 @@ export default class {
                     repeat: elementRepeat,
                     position: elementPosition,
                     limit: elementLimit,
-                    inViewClass: elementInViewClass
+                    inViewClass: elementInViewClass,
+                    sticky : elementSticky
                 }
             }
         };
@@ -161,16 +187,40 @@ export default class {
 
             if (element.position == 'top') {
                 inView = (scrollTop >= element.offset && scrollTop <= element.limit);
-            } else {
+            }
+            else if(element.sticky){
+                inView = (scrollTop >= element.offset && scrollTop <= element.limit);
+            }
+            else {
                 inView = (scrollBottom >= element.offset && scrollTop <= element.limit);
+            }
+
+            if(element.sticky){
+                if(scrollTop > element.limit){
+                    element.$element.addClass('-after');
+                }else{
+                    element.$element.removeClass('-after');
+                }
+                if(scrollTop < element.offset){
+                    element.$element.removeClass(element.inViewClass);
+                }
+
             }
 
             // Add class if inView, remove if not
             if (inView) {
                 element.$element.addClass(element.inViewClass);
 
-                if (!element.repeat){
+                if (!element.repeat && !element.sticky) {
                     removeFromContainer = true;
+                }
+                if(element.sticky){
+                    let y = this.scroll.y - element.offset;
+                    element.$element.css({
+                        '-webkit-transform': `translate3d( 0 , ${y}px , 0 )`,
+                        '-ms-transform': `translate3d( 0 , ${y}px , 0 )`,
+                        'transform': `translate3d( 0 , ${y}px , 0 )`
+                    });
                 }
             } else if (element.repeat) {
                 element.$element.removeClass(element.inViewClass);

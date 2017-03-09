@@ -10,12 +10,12 @@ export default function() {
         // smoothScroll
     }*/
 
-    // const smoothScroll = new SmoothScroll({
-    //     container: '.o-scroll',
-    //     selector: '.js-scroll',
-    // });
-    const scroll = new Scroll({
-        container: document,
+    const smoothScroll = new SmoothScroll({
+        container: '.o-scroll',
         selector: '.js-scroll',
     });
+    // const scroll = new Scroll({
+    //     container: document,
+    //     selector: '.js-scroll',
+    // });
 }

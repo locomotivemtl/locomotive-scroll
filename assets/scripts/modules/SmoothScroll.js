@@ -16,6 +16,9 @@ export default class extends Scroll {
     constructor(options) {
         super(options);
 
+        this.container = options.container;
+        this.selector = options.selector;
+
         this.scrollbar;
     }
 
@@ -30,7 +33,9 @@ export default class extends Scroll {
         // Add class to the body to know if SmoothScroll is initialized (to manage overflow on containers)
         $body.addClass('has-smooth-scroll');
 
-        this.scrollbar = Scrollbar.init(this.$container[0]);
+        this.scrollbar = Scrollbar.init(this.$container[0],{
+            syncCallbacks: true
+        });
 
         this.setScrollbarLimit();
 
@@ -88,6 +93,8 @@ export default class extends Scroll {
             let elementPosition = $element.data('position');
             let elementTarget = $element.data('target');
             let elementHorizontal = $element.data('horizontal');
+            let elementSticky = (typeof $element.data('sticky') === 'string');
+            let elementStickyTarget = $element.data('sticky-target');
 
             let $target = (elementTarget) ? $(elementTarget) : $element;
             let elementOffset = $target.offset().top + this.scrollbar.scrollTop;
@@ -105,19 +112,28 @@ export default class extends Scroll {
                 elementOffset -= parseFloat($element.data('transform').y);
             }
 
+            if(elementSticky){
+                if(elementStickyTarget === undefined){
+                    elementLimit = this.scrollbar.size.container.height;
+                    elementOffset = 0;
+                }else{
+                    elementLimit = $(elementStickyTarget).offset().top - $element.height() + this.scrollbar.scrollTop;
+                }
+            }
+
             var newElement = {};
 
             // For parallax animated elements
             if (elementSpeed !== false) {
                 let elementPosition = $element.data('position');
-                let elementHorizontal = $element.data('horizontal');
+                 let elementHorizontal = $element.data('horizontal');
                 let elementMiddle = ((elementLimit - elementOffset) / 2) + elementOffset;
 
                 newElement = {
                     $element: $element,
                     horizontal: elementHorizontal,
                     inViewClass: elementInViewClass,
-                    limit: elementLimit,
+                   limit: elementLimit,
                     middle: elementMiddle,
                     offset: elementOffset,
                     repeat: elementRepeat,
@@ -131,10 +147,16 @@ export default class extends Scroll {
                     inViewClass: elementInViewClass,
                     limit: elementLimit,
                     offset: Math.round(elementOffset),
-                    repeat: elementRepeat
+                    repeat: elementRepeat,
+                    sticky : elementSticky
                 };
 
                 this.animatedElements.push(newElement);
+
+                if(elementSticky){
+                    //launch the toggle function to set the position of the sticky element
+                    this.toggleElementClasses(newElement);
+                }
             }
         };
     }

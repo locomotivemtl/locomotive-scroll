@@ -26,15 +26,21 @@ body{
         margin: 30px;
         height: 500px;
         background-color: blue;
-        opacity: 0;
-        transition: opacity 1s ease-out;
-        &.is-show{
-            opacity: 1;
+        &.-sticky{
+            background-color:green;
         }
-        &.is-red{
-            transition: opacity 1s ease-out, background-color 1s ease-out 0.3s;
-            opacity: 1;
-            background-color: red;
-        }
+    }
+}
+
+.js-anim{
+    opacity: 0;
+    transition: opacity 1s ease-out;
+    &.is-show{
+        opacity: 1;
+    }
+    &.is-red{
+        transition: opacity 1s ease-out, background-color 1s ease-out 0.3s;
+        opacity: 1;
+        background-color: red;
     }
 }
