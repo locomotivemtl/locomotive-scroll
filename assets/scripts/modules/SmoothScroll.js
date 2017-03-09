@@ -115,7 +115,6 @@ export default class extends Scroll {
             if(elementSticky){
                 if(elementStickyTarget === undefined){
                     elementLimit = this.scrollbar.size.container.height;
-                    elementOffset = 0;
                 }else{
                     elementLimit = $(elementStickyTarget).offset().top - $element.height() + this.scrollbar.scrollTop;
                 }
