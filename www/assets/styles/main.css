@@ -1,5 +1,5 @@
 /*
- * ! Locomotive Boilerplate - 2017-03-09 
+ * ! Locomotive Boilerplate - 2017-03-16 
  */
 html {
   height: 100%;
@@ -20,8 +20,11 @@ body.has-smooth-scroll {
   overflow: hidden;
 }
 
+.scroll-content {
+  overflow: auto;
+}
+
 .o-scroll_example {
-  height: 200vh;
   font-size: 0;
   text-align: center;
 }
@@ -33,10 +36,13 @@ body.has-smooth-scroll {
   margin: 30px;
   height: 500px;
   background-color: blue;
+  z-index: 10;
+  position: relative;
 }
 
 .o-scroll_example div.-sticky {
   background-color: green;
+  z-index: 100;
 }
 
 .js-anim {

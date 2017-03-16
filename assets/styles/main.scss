@@ -13,10 +13,12 @@ body{
 @import 'scrollbar.scss';
 @import 'scroll.scss';
 
+.scroll-content{
+    overflow: auto;
+}
 
 // example
 .o-scroll_example{
-    height: 200vh;
     font-size: 0;
     text-align: center;
     div{
@@ -26,8 +28,11 @@ body{
         margin: 30px;
         height: 500px;
         background-color: blue;
+        z-index: 10;
+        position: relative;
         &.-sticky{
             background-color:green;
+            z-index: 100;
         }
     }
 }
