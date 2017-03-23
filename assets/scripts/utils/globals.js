@@ -10,10 +10,15 @@ export default function() {
         // smoothScroll
     }*/
 
+    let wheelReversed = (typeof $('body').data('wheel-reversed') === 'string');
     const smoothScroll = new SmoothScroll({
         container: '.o-scroll',
         selector: '.js-scroll',
+        reversed: wheelReversed
     });
+
+
+
     // const scroll = new Scroll({
     //     container: document,
     //     selector: '.js-scroll',

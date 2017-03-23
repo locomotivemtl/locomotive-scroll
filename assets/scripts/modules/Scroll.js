@@ -29,6 +29,10 @@ export default class {
 
         this.requestId = undefined;
 
+        this.prepare(options);
+    }
+
+    prepare(options){
         this.init();
     }
 

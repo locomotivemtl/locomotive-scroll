@@ -1,5 +1,5 @@
 /*
- * ! Locomotive Boilerplate - 2017-03-16 
+ * ! Locomotive Boilerplate - 2017-03-23 
  */
 html {
   height: 100%;
@@ -11,6 +11,7 @@ body {
 
 body.has-smooth-scroll {
   height: 100%;
+  width: 100%;
   overflow: hidden;
 }
 
@@ -22,6 +23,10 @@ body.has-smooth-scroll {
 
 .scroll-content {
   overflow: auto;
+}
+
+body[data-wheel-reversed] .scroll-content {
+  width: 200vw;
 }
 
 .o-scroll_example {

@@ -16,10 +16,12 @@ export default class extends Scroll {
     constructor(options) {
         super(options);
 
-        this.container = options.container;
-        this.selector = options.selector;
+    }
 
+    prepare(options){
+        this.isReversed = options.reversed;
         this.scrollbar;
+        this.init();
     }
 
     /**
@@ -47,6 +49,7 @@ export default class extends Scroll {
 
         // On scroll
         this.scrollbar.addListener(() => this.renderAnimations(false));
+        this.setWheelDirection(this.isReversed);
 
         // Rebuild event
         $document.on('rebuild.Scroll', () =>{
@@ -340,11 +343,17 @@ export default class extends Scroll {
 
         this.$selector = $(this.selector);
         this.scrollbar.update();
+
+        this.setWheelDirection(this.isReversed);
         this.windowHeight = $window.height();
         this.windowMiddle = this.windowHeight / 2;
         this.setScrollbarLimit();
         this.addElements();
         this.transformElements(true);
+    }
+
+    setWheelDirection(isReversed){
+        this.scrollbar.reverseWheel(isReversed);
     }
 
     /**

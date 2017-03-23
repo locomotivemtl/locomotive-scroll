@@ -6,6 +6,7 @@ body{
     margin: 0;
     &.has-smooth-scroll{
         height: 100%;
+        width: 100%;
         overflow: hidden;
     }
 }
@@ -15,6 +16,9 @@ body{
 
 .scroll-content{
     overflow: auto;
+    body[data-wheel-reversed] &{
+       width: 200vw;
+    }
 }
 
 // example
