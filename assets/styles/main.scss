@@ -2,30 +2,38 @@ html{
     height: 100%;
 }
 
-body{
+body {
     margin: 0;
-    &.has-smooth-scroll{
+    .has-smooth-scroll & {
         height: 100%;
         width: 100%;
         overflow: hidden;
     }
 }
 
-@import 'scrollbar.scss';
-@import 'scroll.scss';
+.o-scroll{
+    .has-smooth-scroll & {
+        height: 100%;
+        position: relative;
+        overflow: hidden;
+    }
+}
 
-.scroll-content{
+
+.scroll-content {
     overflow: auto;
-    body[data-wheel-reversed] &{
-       width: 200vw;
+
+    body[data-wheel-reversed] & {
+        width: 200vw;
     }
 }
 
 // example
-.o-scroll_example{
+.o-scroll_example {
     font-size: 0;
     text-align: center;
-    div{
+
+    div {
         font-size: 1rem;
         display: inline-block;
         width: 40vw;
@@ -34,20 +42,22 @@ body{
         background-color: blue;
         z-index: 10;
         position: relative;
-        &.-sticky{
-            background-color:green;
+
+        &.-sticky {
+            background-color: green;
             z-index: 100;
         }
     }
 }
 
-.js-anim{
+.js-animate {
     opacity: 0;
     transition: opacity 1s ease-out;
-    &.is-show{
+
+    &.is-show {
         opacity: 1;
     }
-    &.is-red{
+    &.is-red {
         transition: opacity 1s ease-out, background-color 1s ease-out 0.3s;
         opacity: 1;
         background-color: red;

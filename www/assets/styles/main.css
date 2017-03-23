@@ -9,7 +9,7 @@ body {
   margin: 0;
 }
 
-body.has-smooth-scroll {
+.has-smooth-scroll body {
   height: 100%;
   width: 100%;
   overflow: hidden;
@@ -50,17 +50,17 @@ body[data-wheel-reversed] .scroll-content {
   z-index: 100;
 }
 
-.js-anim {
+.js-animate {
   opacity: 0;
   -webkit-transition: opacity 1s ease-out;
   transition: opacity 1s ease-out;
 }
 
-.js-anim.is-show {
+.js-animate.is-show {
   opacity: 1;
 }
 
-.js-anim.is-red {
+.js-animate.is-red {
   -webkit-transition: opacity 1s ease-out, background-color 1s ease-out 0.3s;
   transition: opacity 1s ease-out, background-color 1s ease-out 0.3s;
   opacity: 1;

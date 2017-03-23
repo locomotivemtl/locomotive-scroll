@@ -1,9 +1,24 @@
-import { $window , $document , $body} from '../utils/environment';
+/* jshint esnext: true */
+import { $window, $document, $html, APP_NAME } from '../utils/environment';
 import Scroll from './Scroll';
-import Scrollbar from 'smooth-scrollbar';
-import Resize from 'throttled-resize';
 
+import debounce from '../utils/debounce';
+import Scrollbar from 'smooth-scrollbar';
 import { isNumeric } from '../utils/is';
+
+const DATA_KEY  = `${APP_NAME}.Scrolling`;
+const EVENT_KEY = `.${DATA_KEY}`;
+
+const Event = {
+    CLICK: `click${EVENT_KEY}`,
+    ISREADY: `isReady${EVENT_KEY}`,
+    REBUILD: `rebuild${EVENT_KEY}`,
+    RENDER: `render${EVENT_KEY}`,
+    RESIZE: `resize${EVENT_KEY}`,
+    SCROLL: `scroll${EVENT_KEY}`,
+    SCROLLTO: `scrollTo${EVENT_KEY}`,
+    UPDATE: `update${EVENT_KEY}`
+};
 
 /**
  * Smooth scrolling using `smooth-scrollbar`.
@@ -16,66 +31,64 @@ export default class extends Scroll {
     constructor(options) {
         super(options);
 
-    }
-
-    prepare(options){
-        this.isReversed = options.reversed;
-        this.scrollbar;
-        this.init();
+        this.isReversed = options.reversed || false;
+        this.parallaxElements = [];
     }
 
     /**
      * Initialize scrolling animations
      */
     init() {
-
-        this.$container = $(this.container);
-        this.$selector = $(this.selector);
-
-        // Add class to the body to know if SmoothScroll is initialized (to manage overflow on containers)
-        $body.addClass('has-smooth-scroll');
+        // Add class to the document to know if SmoothScroll is initialized (to manage overflow on containers)
+        $html.addClass('has-smooth-scroll');
 
         this.scrollbar = Scrollbar.init(this.$container[0],{
             syncCallbacks: true
         });
 
+        this.scrollbarStatus = undefined;
+
         this.setScrollbarLimit();
 
-        this.parallaxElements = [];
+        this.setWheelDirection(this.isReversed);
 
         this.addElements();
 
         this.renderAnimations(true);
 
         // On scroll
-        this.scrollbar.addListener(() => this.renderAnimations(false));
-        this.setWheelDirection(this.isReversed);
+        this.scrollbar.addListener((status) => this.renderAnimations(false, status));
 
         // Rebuild event
-        $document.on('rebuild.Scroll', () =>{
+        this.$container.on(Event.REBUILD, () => {
+            this.scrollbar.scrollTo(0, 0, 0);
             this.updateElements();
         });
 
         // Update event
-        $document.on('update.Scroll', () => this.updateElements());
+        this.$container.on(Event.UPDATE, (event, options) => this.updateElements(options));
 
         // Render event
-        $document.on('render.Scroll', () => this.renderAnimations(false));
+        this.$container.on(Event.RENDER, () => this.renderAnimations(false));
 
         // Scrollto button event
-        $('.js-scrollto').on('click.SmoothScroll', (event) => {
+        this.$container.on(Event.CLICK, '.js-scrollto', (event) => {
             event.preventDefault();
-            this.scrollTo($(event.currentTarget));
+            this.scrollTo({
+                sourceElem: $(event.currentTarget)
+            });
         });
+        this.$container.on(Event.SCROLLTO, (event) => this.scrollTo(event.options));
 
         // Setup done
-        $document.trigger({
-            type: 'isReady.SmoothScroll'
+        $document.triggerHandler({
+            type: Event.ISREADY
         });
 
         // Resize event
-        var resize = new Resize();
-        resize.on('resize:end', () => this.updateElements());
+        $window.on(Event.RESIZE, debounce(() => {
+            this.updateElements()
+        }, 20));
     }
 
     /**
@@ -86,9 +99,9 @@ export default class extends Scroll {
         this.animatedElements = [];
         this.parallaxElements = [];
 
-        var $elements = this.$selector;
-        var i = 0;
-        var len = $elements.length;
+        const $elements = $(this.selector);
+        const len = $elements.length;
+        let i = 0;
 
         for (; i < len; i ++) {
             let $element = $elements.eq(i);
@@ -115,47 +128,47 @@ export default class extends Scroll {
                 elementOffset -= parseFloat($element.data('transform').y);
             }
 
-            if(elementSticky){
-                if(elementStickyTarget === undefined){
+            if (elementSticky) {
+                if (typeof elementStickyTarget === 'undefined') {
                     elementLimit = $('.scroll-content').height();
-                }else{
+                } else {
                     elementLimit = $(elementStickyTarget).offset().top - $element.height() + this.scrollbar.scrollTop;
                 }
             }
 
-            var newElement = {};
+            const newElement = {
+                $element: $element,
+                inViewClass: elementInViewClass,
+                limit: elementLimit,
+                offset: Math.round(elementOffset),
+                repeat: elementRepeat
+            };
 
             // For parallax animated elements
             if (elementSpeed !== false) {
                 let elementPosition = $element.data('position');
-                 let elementHorizontal = $element.data('horizontal');
+                let elementHorizontal = $element.data('horizontal');
                 let elementMiddle = ((elementLimit - elementOffset) / 2) + elementOffset;
 
-                newElement = {
-                    $element: $element,
-                    horizontal: elementHorizontal,
-                    inViewClass: elementInViewClass,
-                   limit: elementLimit,
-                    middle: elementMiddle,
-                    offset: elementOffset,
-                    repeat: elementRepeat,
-                    position: elementPosition,
-                    speed: elementSpeed
-                };
+                newElement.horizontal = elementHorizontal;
+                newElement.middle = elementMiddle;
+                newElement.offset = elementOffset;
+                newElement.position = elementPosition;
+                newElement.speed = elementSpeed
+
                 this.parallaxElements.push(newElement);
             } else {
-                newElement = {
-                    $element: $element,
-                    inViewClass: elementInViewClass,
-                    limit: elementLimit,
-                    offset: Math.round(elementOffset),
-                    repeat: elementRepeat,
-                    sticky : elementSticky
-                };
+                newElement.sticky = elementSticky;
 
                 this.animatedElements.push(newElement);
 
-                if(elementSticky){
+                // @todo Useful?
+                // Don't add element if it already has its in view class and doesn't repeat
+                // if (elementRepeat || !$element.hasClass(elementInViewClass)) {
+                //     this.animatedElements.push(newElement);
+                // }
+
+                if (elementSticky) {
                     //launch the toggle function to set the position of the sticky element
                     this.toggleElementClasses(newElement);
                 }
@@ -167,10 +180,16 @@ export default class extends Scroll {
      * Render the class/transform animations, and update the global scroll positionning.
      *
      * @param  {boolean} isFirstCall Determines if this is the first occurence of method being called
+     * @param  {object}  status      Optional status object received when method is
+     *                               called by smooth-scrollbar instance listener.
      * @return {void}
      */
-    renderAnimations(isFirstCall) {
-        var scrollbarTop = this.scrollbar.scrollTop;
+    renderAnimations(isFirstCall, status) {
+        if (typeof status === 'object') {
+            this.scrollbarStatus = status;
+        }
+
+        const scrollbarTop = this.scrollbar.scrollTop;
 
         if (scrollbarTop > this.scroll.y) {
             if (this.scroll.direction !== 'down') {
@@ -188,33 +207,53 @@ export default class extends Scroll {
 
         this.transformElements(isFirstCall);
         this.animateElements();
-
-        window.App.scroll = this.scroll;
     }
 
     /**
      * Scroll to a desired target.
      *
-     * @param  {object|int} target Either a jQuery element or a `y` position
+     * @param  {object} options
      * @return {void}
      */
-    scrollTo(target) {
-        var targetOffset = 0;
-        if (target instanceof jQuery && target.length > 0) {
-            var targetData;
+    scrollTo(options) {
+        const $targetElem = options.targetElem;
+        const $sourceElem = options.sourceElem;
+        let targetOffset = isNumeric(options.targetOffset) ? parseInt(options.targetOffset) : 0;
+        const delay = isNumeric(options.delay) ? parseInt(options.delay) : 0;
+        const speed = isNumeric(options.speed) ? parseInt(options.speed) : 800;
+        const toTop = options.toTop;
+        const toBottom = options.toBottom;
 
-            if (target.data('target')) {
-                targetData = target.data('target');
-            } else {
-                targetData = target.attr('href');
-            }
-
-            targetOffset = $(targetData).offset().top + this.scrollbar.scrollTop;
-        } else {
-            targetOffset = target;
+        if (typeof $targetElem === 'undefined' && typeof $sourceElem === 'undefined' && typeof targetOffset === 'undefined') {
+            console.warn('You must specify at least one parameter.')
+            return false;
         }
 
-        this.scrollbar.scrollTo(0, targetOffset, 900);
+        if (typeof $targetElem !== 'undefined' && $targetElem instanceof jQuery && $targetElem.length > 0) {
+            targetOffset = $targetElem.offset().top + this.scrollbar.scrollTop + targetOffset;
+        }
+
+        if (typeof $sourceElem !== 'undefined' && $sourceElem instanceof jQuery && $sourceElem.length > 0) {
+            let targetData = '';
+
+            if ($sourceElem.data('target')) {
+                targetData = $sourceElem.data('target');
+            } else {
+                targetData = $sourceElem.attr('href');
+            }
+
+            targetOffset = $(targetData).offset().top + this.scrollbar.scrollTop + targetOffset;
+        }
+
+        if (toTop === true) {
+            targetOffset = 0;
+        } else if (toBottom === true) {
+            targetOffset = this.scrollbar.limit.y;
+        }
+
+        setTimeout(() => {
+            this.scrollbar.scrollTo(0, targetOffset, speed);
+        }, delay);
     }
 
     /**
@@ -241,9 +280,9 @@ export default class extends Scroll {
 
         // Translate and store the positionning as `data`
         $element.css({
-            '-webkit-transform': 'translate3d('+ x +', '+ y +', '+ z +')',
-            '-ms-transform': 'translate3d('+ x +', '+ y +', '+ z +')',
-            'transform': 'translate3d('+ x +', '+ y +', '+ z +')'
+            '-webkit-transform': `translate3d(${x}px, ${y}px, ${z}px)`,
+            '-ms-transform': `translate3d(${x}px, ${y}px, ${z}px)`,
+            'transform': `translate3d(${x}px, ${y}px, ${z}px)`
         }).data('transform',{
             x : x,
             y : y,
@@ -251,16 +290,16 @@ export default class extends Scroll {
         });
 
         // Affect child elements with the same positionning
-        var children = $element.find(this.selector);
-        var i = 0;
-        var len = children.length;
+        const children = $element.find(this.selector);
+        const len = children.length;
+        let i = 0;
         for (; i < len; i++) {
             let $child = $(children[i]);
             if (!$child.data('transform')) {
                 $child.data('transform', {
-                    x : x,
-                    y : y,
-                    z : z
+                    x: x,
+                    y: y,
+                    z: z
                 })
             }
         };
@@ -274,12 +313,12 @@ export default class extends Scroll {
      */
     transformElements(isFirstCall) {
         if (this.parallaxElements.length > 0) {
-            var scrollbarBottom = this.scrollbar.scrollTop + this.windowHeight;
-            var scrollbarMiddle = this.scrollbar.scrollTop + this.windowMiddle;
+            const scrollbarBottom = this.scrollbar.scrollTop + this.windowHeight;
+            const scrollbarMiddle = this.scrollbar.scrollTop + this.windowMiddle;
 
-            var i = 0;
-            var len = this.parallaxElements.length;
-            var removeIndexes = [];
+            let i = 0;
+            const len = this.parallaxElements.length;
+            const removeIndexes = [];
 
             for (; i < len; i++) {
                 let curEl = this.parallaxElements[i];
@@ -337,21 +376,29 @@ export default class extends Scroll {
 
     /**
      * Update elements and recalculate all the positions on the page
+     *
+     * @param {object} options
      */
-    updateElements()
-    {
+    updateElements(options) {
+        options = options || {};
 
-        this.$selector = $(this.selector);
         this.scrollbar.update();
-
-        this.setWheelDirection(this.isReversed);
         this.windowHeight = $window.height();
         this.windowMiddle = this.windowHeight / 2;
         this.setScrollbarLimit();
+        this.setWheelDirection(this.isReversed);
         this.addElements();
         this.transformElements(true);
+
+        if (typeof options.callback === 'function') {
+            options.callback();
+        }
     }
 
+    /**
+     * Set smooth-scrollbar scrolling direction for wheel event
+     * @param {Boolean} isReversed
+     */
     setWheelDirection(isReversed){
         this.scrollbar.reverseWheel(isReversed);
     }
@@ -361,9 +408,8 @@ export default class extends Scroll {
      */
     destroy() {
         super.destroy();
-        this.$el.off('.SmoothScroll');
-        this.$el.off('.Scroll');
-        this.parallaxElements = undefined;
+        $html.removeClass('has-smooth-scroll');
+        this.parallaxElements = [];
         this.scrollbar.destroy();
     }
 }

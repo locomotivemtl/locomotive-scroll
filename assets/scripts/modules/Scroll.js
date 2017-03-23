@@ -1,6 +1,29 @@
 /* jshint esnext: true */
-import { $window , $document , $body} from '../utils/environment';
-import Resize from 'throttled-resize';
+import { $window, $document, APP_NAME } from '../utils/environment';
+
+import debounce from '../utils/debounce';
+import { isNumeric } from '../utils/is';
+
+const DATA_KEY  = `${APP_NAME}.Scrolling`;
+const EVENT_KEY = `.${DATA_KEY}`;
+
+const Event = {
+    CLICK: `click${EVENT_KEY}`,
+    ISREADY: `isReady${EVENT_KEY}`,
+    REBUILD: `rebuild${EVENT_KEY}`,
+    RENDER: `render${EVENT_KEY}`,
+    RESIZE: `resize${EVENT_KEY}`,
+    SCROLL: `scroll${EVENT_KEY}`,
+    SCROLLTO: `scrollTo${EVENT_KEY}`,
+    UPDATE: `update${EVENT_KEY}`
+};
+
+const Defaults = {
+    $container: $document,
+    onScroll: function(){},
+    selector: '.js-animate',
+    reversed: false
+};
 
 /**
  * Manage animation of elements on the page according to scroll position.
@@ -10,9 +33,12 @@ import Resize from 'throttled-resize';
  */
 export default class {
     constructor(options) {
+        this.$container = options.$container || Defaults.$container;
+        this.selector = options.selector || Defaults.selector;
 
-        this.container = options.container;
-        this.selector = options.selector;
+        this.callbacks = {
+            onScroll: typeof options.onScroll === 'function' ? options.onScroll : Defaults.onScroll
+        };
 
         this.scroll = {
             x: 0,
@@ -20,46 +46,59 @@ export default class {
             direction: ''
         }
 
-        window.App.scroll = this.scroll;
-
         this.windowHeight = $window.height();
         this.windowMiddle = this.windowHeight / 2;
 
         this.animatedElements = [];
 
         this.requestId = undefined;
-
-        this.prepare(options);
-    }
-
-    prepare(options){
-        this.init();
     }
 
     /**
      * Initialize scrolling animations
      */
     init() {
-
-        this.$container = $(this.container);
-        this.$selector = $(this.selector);
-
         this.addElements();
-        this.animateElements();
 
-        var resize = new Resize();
-        resize.on('resize:end', () => this.updateElements());
+        this.renderAnimations();
 
-        this.$container.on('scrollTo.Scroll',(options)=>this.scrollTo(options.value));
-        // Update event
-        this.$container.on('update.Scroll', (event, options) => this.updateElements(options));
-        // Render event
-        this.$container.on('scroll.Scroll', () => this.renderAnimations(false));
+        // On scroll
+        this.$container.on(Event.SCROLL, debounce(() => {
+            this.renderAnimations();
+        }, 10));
 
         // Rebuild event
-        $document.on('rebuild.Scroll', () =>{
+        this.$container.on(Event.REBUILD, () => {
+            this.scrollTo({
+                targetOffset: 0
+            });
             this.updateElements();
         });
+
+        // Update event
+        this.$container.on(Event.UPDATE, (event, options) => this.updateElements(options));
+
+        // Render event
+        this.$container.on(Event.RENDER, () => this.renderAnimations());
+
+        // Scrollto button event
+        this.$container.on(Event.CLICK, '.js-scrollto', (event) => {
+            event.preventDefault();
+            this.scrollTo({
+                sourceElem: $(event.currentTarget)
+            });
+        });
+        this.$container.on(Event.SCROLLTO, (event) => this.scrollTo(event.options));
+
+        // Setup done
+        $document.triggerHandler({
+            type: Event.ISREADY
+        });
+
+        // Resize event
+        $window.on(Event.RESIZE, debounce(() => {
+            this.updateElements()
+        }, 20));
     }
 
     /**
@@ -69,9 +108,9 @@ export default class {
     addElements() {
         this.animatedElements = [];
 
-        var $elements = this.$selector;
-        var i = 0;
-        var len = $elements.length;
+        const $elements = $(this.selector);
+        const len = $elements.length;
+        let i = 0;
 
         for (; i < len; i ++) {
             let $element = $elements.eq(i);
@@ -91,29 +130,25 @@ export default class {
                 elementInViewClass = 'is-show';
             }
 
-            if(elementSticky){
-                if(elementStickyTarget === undefined){
-                    elementLimit = $('#js-scroll').height();
-                }else{
+            if (elementSticky) {
+                if (typeof elementStickyTarget === 'undefined') {
+                    elementLimit = this.$container.height();
+                } else {
                     elementLimit = $(elementStickyTarget).offset().top - $element.height();
                 }
-            }
 
-            if(elementSticky){
-
-                // reset offset
+                // Reset offset
                 $element.removeClass(elementInViewClass);
                 $element.removeClass('-after');
 
                 $element.css({
-                    '-webkit-transform': `translate3d( 0 , 0 , 0 )`,
-                    '-ms-transform': `translate3d( 0 , 0 , 0 )`,
-                    'transform': `translate3d( 0 , 0 , 0 )`
+                    '-webkit-transform': 'translate3d(0, 0, 0)',
+                    '-ms-transform': 'translate3d(0, 0, 0)',
+                    'transform': 'translate3d(0, 0, 0)'
                 });
-
             }
 
-            // Don't add element if it already has its in view class and doesn't repeat
+            // Don't add element if it already has its inview class and doesn't repeat
             if (elementRepeat || !$element.hasClass(elementInViewClass)) {
                 this.animatedElements[i] = {
                     $element: $element,
@@ -122,7 +157,7 @@ export default class {
                     position: elementPosition,
                     limit: elementLimit,
                     inViewClass: elementInViewClass,
-                    sticky : elementSticky
+                    sticky: elementSticky
                 }
             }
         };
@@ -132,9 +167,9 @@ export default class {
      * Loop through all animatable elements and apply animation method(s).
      */
     animateElements() {
-        var len = this.animatedElements.length;
-        var i = 0;
-        var removeIndexes = [];
+        const len = this.animatedElements.length;
+        const removeIndexes = [];
+        let i = 0;
         for (; i < len; i++) {
             let element = this.animatedElements[i];
 
@@ -165,8 +200,14 @@ export default class {
             }
         }
 
-        this.scroll.y = window.pageYOffset;
-        this.scroll.x = window.pageXOffset;
+        if (this.scroll.y !== window.pageYOffset) {
+            this.scroll.y = window.pageYOffset;
+        }
+        if (this.scroll.x !== window.pageXOffset) {
+            this.scroll.x = window.pageXOffset;
+        }
+
+        this.callbacks.onScroll(this.scroll)
 
         this.animateElements();
     }
@@ -179,36 +220,34 @@ export default class {
      * @return {boolean}             Wether the item must be removed from its container
      */
     toggleElementClasses(element, index) {
-        var removeFromContainer = false;
+        let removeFromContainer = false;
 
         if (typeof element !== 'undefined') {
             // Find the bottom edge of the scroll container
-            var scrollTop = this.scroll.y;
-            var scrollBottom = scrollTop + this.windowHeight;
+            const scrollTop = this.scroll.y;
+            const scrollBottom = scrollTop + this.windowHeight;
 
             // Define if the element is inView
-            var inView;
+            let inView = false;
 
-            if (element.position == 'top') {
+            if (element.position === 'top') {
                 inView = (scrollTop >= element.offset && scrollTop <= element.limit);
-            }
-            else if(element.sticky){
+            } else if (element.sticky) {
                 inView = (scrollTop >= element.offset && scrollTop <= element.limit);
-            }
-            else {
+            } else {
                 inView = (scrollBottom >= element.offset && scrollTop <= element.limit);
             }
 
-            if(element.sticky){
-                if(scrollTop > element.limit){
+            if (element.sticky) {
+                if (scrollTop > element.limit) {
                     element.$element.addClass('-after');
-                }else{
+                } else {
                     element.$element.removeClass('-after');
                 }
-                if(scrollTop < element.offset){
+
+                if (scrollTop < element.offset) {
                     element.$element.removeClass(element.inViewClass);
                 }
-
             }
 
             // Add class if inView, remove if not
@@ -218,12 +257,14 @@ export default class {
                 if (!element.repeat && !element.sticky) {
                     removeFromContainer = true;
                 }
-                if(element.sticky){
+
+                if (element.sticky) {
                     let y = this.scroll.y - element.offset;
+
                     element.$element.css({
-                        '-webkit-transform': `translate3d( 0 , ${y}px , 0 )`,
-                        '-ms-transform': `translate3d( 0 , ${y}px , 0 )`,
-                        'transform': `translate3d( 0 , ${y}px , 0 )`
+                        '-webkit-transform': `translate3d(0, ${y}px, 0)`,
+                        '-ms-transform': `translate3d(0, ${y}px, 0)`,
+                        'transform': `translate3d(0, ${y}px, 0)`
                     });
                 }
             } else if (element.repeat) {
@@ -237,35 +278,56 @@ export default class {
     /**
      * Scroll to a desired target.
      *
-     * @param  {object|int} target Either a jQuery element or a `y` position
+     * @param  {object} options
      * @return {void}
      */
-    scrollTo(target) {
-        var targetOffset = 0;
-        if (target instanceof jQuery && target.length > 0) {
-            var targetData;
+    scrollTo(options) {
+        const $targetElem = options.targetElem;
+        const $sourceElem = options.sourceElem;
+        let targetOffset = isNumeric(options.targetOffset) ? parseInt(options.targetOffset) : 0;
+        const speed = isNumeric(options.speed) ? parseInt(options.speed) : 800;
+        const delay = isNumeric(options.delay) ? parseInt(options.delay) : 0;
+        const toTop = options.toTop;
+        const toBottom = options.toBottom;
 
-            if (target.data('target')) {
-                targetData = target.data('target');
-            } else {
-                targetData = target.attr('href');
-            }
-
-            targetOffset = $(targetData).offset().top + this.scrollbar.scrollTop;
-        } else {
-            targetOffset = target;
+        if (typeof $targetElem === 'undefined' && typeof $sourceElem === 'undefined' && typeof targetOffset === 'undefined') {
+            console.warn('You must specify at least one parameter.')
+            return false;
         }
 
-        $body.animate({
-            scrollTop:targetOffset
-        }, 'slow');
+        if (typeof $targetElem !== 'undefined' && $targetElem instanceof jQuery && $targetElem.length > 0) {
+            targetOffset = $targetElem.offset().top + targetOffset;
+        }
+
+        if (typeof $sourceElem !== 'undefined' && $sourceElem instanceof jQuery && $sourceElem.length > 0) {
+            let targetData = '';
+
+            if ($sourceElem.data('target')) {
+                targetData = $sourceElem.data('target');
+            } else {
+                targetData = $sourceElem.attr('href');
+            }
+
+            targetOffset = $(targetData).offset().top + targetOffset;
+        }
+
+        if (toTop === true) {
+            targetOffset = 0;
+        } else if (toBottom === true) {
+            targetOffset = $document.height();
+        }
+
+        setTimeout(() => {
+            $('html, body').animate({
+                scrollTop: targetOffset
+            }, speed);
+        }, delay);
     }
 
     /**
      * Update elements and recalculate all the positions on the page
      */
     updateElements() {
-        this.$selector = $(this.selector);
         this.addElements();
     }
 
@@ -273,7 +335,8 @@ export default class {
      * Destroy
      */
     destroy() {
-        this.$container.off('.Scroll');
+        $window.off(EVENT_KEY);
+        this.$container.off(EVENT_KEY);
         window.cancelAnimationFrame(this.requestId);
         this.requestId = undefined;
         this.animatedElements = undefined;
