@@ -25,13 +25,13 @@ export default class extends AbstractModule {
             if ($html.hasClass('is-smooth-scroll-compatible')) {
                 return new SmoothScroll({
                     $container: this.$el,
-                    selector: '.js-scroll',
+                    selector: '.js-animate',
                     reversed: (typeof $('body').data('wheel-reversed') === 'string')
                 });
             } else {
                 return new Scroll({
                     $container: $window,
-                    selector: '.js-scroll'
+                    selector: '.js-animate'
                 });
             }
         })();

@@ -367,8 +367,8 @@ export default class extends Scroll {
                 // Transform horizontal OR vertical. Defaults to vertical
                 if (isNumeric(transformDistance)) {
                     (curEl.horizontal) ?
-                        this.transformElement(curEl.$element, transformDistance + 'px') :
-                        this.transformElement(curEl.$element, 0, transformDistance + 'px');
+                        this.transformElement(curEl.$element, transformDistance) :
+                        this.transformElement(curEl.$element, 0, transformDistance);
                 }
             }
         }
