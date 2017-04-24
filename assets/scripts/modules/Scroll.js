@@ -1,3 +1,6 @@
+// ==========================================================================
+// Locomotive Scroll
+// ==========================================================================
 /* jshint esnext: true */
 import { $window, $document, APP_NAME } from '../utils/environment';
 
@@ -18,10 +21,13 @@ const Event = {
     UPDATE: `update${EVENT_KEY}`
 };
 
-const Defaults = {
-    $container: $document,
+export const Defaults = {
+    container: $document,
+    mobileContainer: $document,
     onScroll: function(){},
     selector: '.js-animate',
+    smooth: false,
+    smoothMobile: false,
     reversed: false
 };
 
@@ -33,7 +39,7 @@ const Defaults = {
  */
 export default class {
     constructor(options) {
-        this.$container = options.$container || Defaults.$container;
+        this.$container = options.container || Defaults.container;
         this.selector = options.selector || Defaults.selector;
 
         this.callbacks = {
@@ -203,15 +209,15 @@ export default class {
      * Render the class animations, and update the global scroll positionning.
      */
     renderAnimations() {
-        if (window.pageYOffset > this.scroll.y) {
-            if (this.scroll.direction !== 'down') {
-                this.scroll.direction = 'down';
-            }
-        } else if (window.pageYOffset < this.scroll.y) {
-            if (this.scroll.direction !== 'up') {
-                this.scroll.direction = 'up';
-            }
-        }
+        // if (window.pageYOffset > this.scroll.y) {
+        //     if (this.scroll.direction !== 'down') {
+        //         this.scroll.direction = 'down';
+        //     }
+        // } else if (window.pageYOffset < this.scroll.y) {
+        //     if (this.scroll.direction !== 'up') {
+        //         this.scroll.direction = 'up';
+        //     }
+        // }
 
         if (this.scroll.y !== window.pageYOffset) {
             this.scroll.y = window.pageYOffset;

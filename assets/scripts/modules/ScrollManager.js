@@ -1,38 +1,47 @@
+// ==========================================================================
+// Locomotive Scroll Manager
+// ==========================================================================
 /* jshint esnext: true */
 import { $document, $window, $html, $body, APP_NAME } from '../utils/environment';
-import AbstractModule from './AbstractModule';
-import Scroll from './Scroll';
+import Scroll, { Defaults } from './Scroll';
 import SmoothScroll from './SmoothScroll';
 
 /**
  * Basic module that detects which scrolling module we'll be using
  */
-export default class extends AbstractModule {
+export default class {
     constructor(options) {
-        super(options);
+        this.options = options;
+        this.smooth = options.smooth || Defaults.smooth;
+        this.smoothMobile = options.smoothMobile || Defaults.smoothMobile;
+        this.mobileContainer = options.mobileContainer || Defaults.mobileContainer;
+        this.isMobile = false;
+
+        this.init();
 
         // Add a callback when reaching top or bottom
-        options.onScroll = function(scrollStatus) {
-            $html.toggleClass('has-scrolled', (scrollStatus.y > 0));
-        };
+        // options.onScroll = function(scrollStatus) {
+        //     $html.toggleClass('has-scrolled', (scrollStatus.y > 0));
+        // };
     }
 
     init() {
         $html[0].scrollTop = 0;
         $body[0].scrollTop = 0;
 
+        if (!this.smoothMobile) {
+            this.isMobile = (/Android|iPhone|iPad|iPod|BlackBerry|IEMobile|Opera Mini/i.test(navigator.userAgent));
+        }
+
         this.instance = (() => {
-            if ($html.hasClass('is-smooth-scroll-compatible')) {
-                return new SmoothScroll({
-                    $container: this.$el,
-                    selector: '.js-animate',
-                    reversed: (typeof $('body').data('wheel-reversed') === 'string')
-                });
+            if (this.smooth === true && !this.isMobile) {
+                return new SmoothScroll(this.options);
             } else {
-                return new Scroll({
-                    $container: $window,
-                    selector: '.js-animate'
-                });
+                if (this.mobileContainer) {
+                    this.options.container = this.mobileContainer
+                }
+
+                return new Scroll(this.options);
             }
         })();
 

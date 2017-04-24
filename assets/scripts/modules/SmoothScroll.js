@@ -1,6 +1,9 @@
+// ==========================================================================
+// Locomotive Smooth Scroll
+// ==========================================================================
 /* jshint esnext: true */
 import { $window, $document, $html, APP_NAME } from '../utils/environment';
-import Scroll from './Scroll';
+import Scroll, { Defaults } from './Scroll';
 
 import debounce from '../utils/debounce';
 import Scrollbar from 'smooth-scrollbar';
@@ -31,7 +34,7 @@ export default class extends Scroll {
     constructor(options) {
         super(options);
 
-        this.isReversed = options.reversed || false;
+        this.isReversed = options.reversed || Defaults.reversed;
         this.parallaxElements = [];
     }
 
@@ -203,15 +206,15 @@ export default class extends Scroll {
 
         const scrollbarTop = this.scrollbar.scrollTop;
 
-        if (scrollbarTop > this.scroll.y) {
-            if (this.scroll.direction !== 'down') {
-                this.scroll.direction = 'down';
-            }
-        } else if (scrollbarTop < this.scroll.y) {
-            if (this.scroll.direction !== 'up') {
-                this.scroll.direction = 'up';
-            }
-        }
+        // if (scrollbarTop > this.scroll.y) {
+        //     if (this.scroll.direction !== 'down') {
+        //         this.scroll.direction = 'down';
+        //     }
+        // } else if (scrollbarTop < this.scroll.y) {
+        //     if (this.scroll.direction !== 'up') {
+        //         this.scroll.direction = 'up';
+        //     }
+        // }
 
         if (this.scroll.y !== scrollbarTop) {
             this.scroll.y = scrollbarTop;

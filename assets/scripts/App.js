@@ -1,24 +1,18 @@
-/* jshint esnext: true */
-import { $document } from './utils/environment';
-
-import { getNodeData } from './utils/html';
-
-import ScrollManager from './modules/ScrollManager';
-
-// IIFE for loading the application
 // ==========================================================================
+// App
+// ==========================================================================
+/* jshint esnext: true */
+import LocomotiveScroll from './modules/ScrollManager';
+
 (function() {
-    // Current element
-    const el = document.getElementById('js-scroll');
 
-    // All data- attributes considered as options
-    const options = getNodeData(el);
+    // Init Locomotive Scroll
+    const smoothScroll = new LocomotiveScroll({
+        container: $('#js-scroll'),
+        selector: '.js-animate',
+        smooth: true,
+        smoothMobile: false,
+        mobileContainer: $('document')
+    });
 
-    // Add current DOM element and jQuery element
-    options.el = el;
-    options.$el = $(el);
-
-    // Create module
-    const scrollManager = new ScrollManager(options);
-    scrollManager.init();
 })();
