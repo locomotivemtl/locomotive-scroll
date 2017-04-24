@@ -6,11 +6,14 @@
 Data | Value | Description
 --- | --- | ---
 data-speed | number | Speed of transform
-data-persist | false | Determine if the "In View" class is added one or each times
+data-repeat | false | Determine if the "In View" class is added one or each times
 data-inview-class | is-show | CSS Class when the element is in view.
 data-position | top/bottom | Trigger from top/bottom of the window instead of the default from bottom to top
 data-target | #id, .class | Trigger from another element
-data-horizontal | true | Use transformX instead of transformY
+data-horizontal | false | Use transformX instead of transformY
+data-sticky | false | Set $element sticky when it's in viewport
+data-sticky-target | #id | Stop the element stick when the target is in viewport
+data-callback | eventName.Namespace:{option1: value} | trigger event, with options and "leave" or "enter" when $element is in viewport
 
 ## Dependencies
 Locomotive Smooth Scroll is build on top of [smooth-scrollbar](https://github.com/idiotWu/smooth-scrollbar).
@@ -40,6 +43,5 @@ Run `grunt sync`
 
 ## Todo
 -	Manage responsive (disable smooth scrolling on mobile)
--	Manage a parts of data attributes with general options (example: set persist for all)
 -   Function to get the percentage (distance) of my element on the viewport
 -   Find a solution to have really slow element

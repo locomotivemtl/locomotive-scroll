@@ -111,10 +111,21 @@ export default class extends Scroll {
             let elementHorizontal = $element.data('horizontal');
             let elementSticky = (typeof $element.data('sticky') === 'string');
             let elementStickyTarget = $element.data('sticky-target');
-
             let $target = (elementTarget) ? $(elementTarget) : $element;
             let elementOffset = $target.offset().top + this.scrollbar.scrollTop;
             let elementLimit = elementOffset + $target.outerHeight();
+
+            //Manage callback
+            let elementCallbackString = (typeof $element.data('callback') === 'string') ? $element.data('callback') : null;
+            let elementCallback = null;
+
+            if(elementCallbackString != null){
+                let event = elementCallbackString.substr(0, elementCallbackString.indexOf(':'));
+                let optionsString = elementCallbackString.substr(elementCallbackString.indexOf('{'),elementCallbackString.length - event.length);
+                optionsString = optionsString.replace(/([a-z][^:]*)(?=\s*:)/g, '"$1"');
+                let options = JSON.parse(optionsString.toString());
+                elementCallback = {event:event, options:options};
+            }
 
             // If elements stays visible after scrolling past it
             let elementRepeat = (typeof $element.data('repeat') === 'string');
@@ -141,7 +152,8 @@ export default class extends Scroll {
                 inViewClass: elementInViewClass,
                 limit: elementLimit,
                 offset: Math.round(elementOffset),
-                repeat: elementRepeat
+                repeat: elementRepeat,
+                callback: elementCallback
             };
 
             // For parallax animated elements
@@ -170,7 +182,7 @@ export default class extends Scroll {
 
                 if (elementSticky) {
                     //launch the toggle function to set the position of the sticky element
-                    this.toggleElementClasses(newElement);
+                    this.toggleElement(newElement);
                 }
             }
         };
@@ -335,7 +347,7 @@ export default class extends Scroll {
                 // New
                 // let inView = (scrollBottom >= curEl.offset && this.scrollbar.scrollTop <= curEl.limit);
 
-                this.toggleElementClasses(curEl, i);
+                this.toggleElement(curEl, i);
 
                 if (isFirstCall && !inView && curEl.speed) {
                     // Different calculations if it is the first call and the item is not in the view

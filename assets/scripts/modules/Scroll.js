@@ -122,6 +122,18 @@ export default class {
             let elementSticky = (typeof $element.data('sticky') === 'string');
             let elementStickyTarget = $element.data('sticky-target');
 
+            //Manage callback
+            let elementCallbackString = (typeof $element.data('callback') === 'string') ? $element.data('callback') : null;
+            let elementCallback = null;
+
+            if(elementCallbackString != null){
+                let event = elementCallbackString.substr(0, elementCallbackString.indexOf(':'));
+                let optionsString = elementCallbackString.substr(elementCallbackString.indexOf('{'),elementCallbackString.length - event.length);
+                optionsString = optionsString.replace(/([a-z][^:]*)(?=\s*:)/g, '"$1"');
+                let options = JSON.parse(optionsString.toString());
+                elementCallback = {event:event, options:options};
+            }
+
             // If elements loses its animation after scrolling past it
             let elementRepeat = (typeof $element.data('repeat') === 'string');
 
@@ -157,7 +169,8 @@ export default class {
                     position: elementPosition,
                     limit: elementLimit,
                     inViewClass: elementInViewClass,
-                    sticky: elementSticky
+                    sticky: elementSticky,
+                    callback: elementCallback
                 }
             }
         };
@@ -174,7 +187,7 @@ export default class {
             let element = this.animatedElements[i];
 
             // If the element's visibility must not be manipulated any further, remove it from the list
-            if (this.toggleElementClasses(element, i)) {
+            if (this.toggleElement(element, i)) {
                 removeIndexes.push(i);
             }
         }
@@ -219,7 +232,7 @@ export default class {
      * @param  {int}         index   Index of the element within it's container
      * @return {boolean}             Wether the item must be removed from its container
      */
-    toggleElementClasses(element, index) {
+    toggleElement(element, index) {
         let removeFromContainer = false;
 
         if (typeof element !== 'undefined') {
@@ -252,7 +265,10 @@ export default class {
 
             // Add class if inView, remove if not
             if (inView) {
-                element.$element.addClass(element.inViewClass);
+                if(!element.$element.hasClass(element.inViewClass)){
+                    element.$element.addClass(element.inViewClass);
+                    this.triggerCallback(element,'enter');
+                }
 
                 if (!element.repeat && !element.sticky) {
                     removeFromContainer = true;
@@ -267,12 +283,39 @@ export default class {
                         'transform': `translate3d(0, ${y}px, 0)`
                     });
                 }
-            } else if (element.repeat) {
-                element.$element.removeClass(element.inViewClass);
+            } else {
+                if (element.repeat) {
+                    if(element.$element.hasClass(element.inViewClass)){
+                        element.$element.removeClass(element.inViewClass);
+                        this.triggerCallback(element,'leave');
+                    }
+                }
             }
         }
 
         return removeFromContainer;
+    }
+
+    /**
+     * check if the element have a callback, and trigger the event set in the data-callback
+     *
+     * @param  {object}      element Current element to test
+     * @return void
+     */
+    triggerCallback(element,way){
+
+        if(element.callback != undefined){
+            $document.trigger({
+                type: element.callback.event,
+                options: element.callback.options,
+                way: way
+            });
+            //add this where you want dude (in your module btw)
+            // $document.on(element.callback.event,(e)=>{
+            //     console.log(e.options, e.way);
+            // });
+            /////////////////////////////////////////////
+        }
     }
 
     /**
