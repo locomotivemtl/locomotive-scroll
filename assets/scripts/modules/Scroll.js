@@ -311,7 +311,7 @@ export default class {
                 way: way
             });
             //add this where you want dude (in your module btw)
-            // $document.on(element.callback.event,(e)=>{
+            // $document.on(eventName.Namespace,(e)=>{
             //     console.log(e.options, e.way);
             // });
             /////////////////////////////////////////////
