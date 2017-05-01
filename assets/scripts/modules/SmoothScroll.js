@@ -144,7 +144,7 @@ export default class extends Scroll {
 
             if (elementSticky) {
                 if (typeof elementStickyTarget === 'undefined') {
-                    elementLimit = $('.scroll-content').height();
+                    elementLimit = Infinity;
                 } else {
                     elementLimit = $(elementStickyTarget).offset().top - $element.height() + this.scrollbar.scrollTop;
                 }
