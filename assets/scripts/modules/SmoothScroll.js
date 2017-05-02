@@ -114,7 +114,7 @@ export default class extends Scroll {
             let elementHorizontal = $element.data('horizontal');
             let elementSticky = (typeof $element.data('sticky') === 'string');
             let elementStickyTarget = $element.data('sticky-target');
-            let $target = (elementTarget) ? $(elementTarget) : $element;
+            let $target = (elementTarget && $(elementTarget).length) ? $(elementTarget) : $element;
             let elementOffset = $target.offset().top + this.scrollbar.scrollTop;
             let elementLimit = elementOffset + $target.outerHeight();
 
