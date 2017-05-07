@@ -120,16 +120,16 @@ export default class {
 
         for (; i < len; i ++) {
             let $element = $elements.eq(i);
-            let elementTarget = $element.data('target');
-            let elementPosition = $element.data('position');
+            let elementTarget = $element.attr('data-target');
+            let elementPosition = $element.attr('data-position');
             let $target = (elementTarget) ? $(elementTarget) : $element;
             let elementOffset = $target.offset().top;
             let elementLimit = elementOffset + $target.outerHeight();
-            let elementSticky = (typeof $element.data('sticky') === 'string');
-            let elementStickyTarget = $element.data('sticky-target');
+            let elementSticky = (typeof $element.attr('data-sticky') === 'string');
+            let elementStickyTarget = $element.attr('data-sticky-target');
 
             //Manage callback
-            let elementCallbackString = (typeof $element.data('callback') === 'string') ? $element.data('callback') : null;
+            let elementCallbackString = (typeof $element.attr('data-callback') === 'string') ? $element.attr('data-callback') : null;
             let elementCallback = null;
 
             if(elementCallbackString != null){
@@ -141,9 +141,9 @@ export default class {
             }
 
             // If elements loses its animation after scrolling past it
-            let elementRepeat = (typeof $element.data('repeat') === 'string');
+            let elementRepeat = (typeof $element.attr('data-repeat') === 'string');
 
-            let elementInViewClass = $element.data('inview-class');
+            let elementInViewClass = $element.attr('data-inview-class');
             if (typeof elementInViewClass === 'undefined') {
                 elementInViewClass = 'is-show';
             }
@@ -351,8 +351,8 @@ export default class {
         if (typeof $sourceElem !== 'undefined' && $sourceElem instanceof jQuery && $sourceElem.length > 0) {
             let targetData = '';
 
-            if ($sourceElem.data('target')) {
-                targetData = $sourceElem.data('target');
+            if ($sourceElem.attr('data-target')) {
+                targetData = $sourceElem.attr('data-target');
             } else {
                 targetData = $sourceElem.attr('href');
             }

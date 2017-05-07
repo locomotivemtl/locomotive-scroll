@@ -108,18 +108,18 @@ export default class extends Scroll {
 
         for (; i < len; i ++) {
             let $element = $elements.eq(i);
-            let elementSpeed = isNumeric($element.data('speed')) ? parseInt($element.data('speed')) / 10 : false
-            let elementPosition = $element.data('position');
-            let elementTarget = $element.data('target');
-            let elementHorizontal = $element.data('horizontal');
-            let elementSticky = (typeof $element.data('sticky') === 'string');
-            let elementStickyTarget = $element.data('sticky-target');
+            let elementSpeed = isNumeric($element.attr('data-speed')) ? parseInt($element.attr('data-speed')) / 10 : false
+            let elementPosition = $element.attr('data-position');
+            let elementTarget = $element.attr('data-target');
+            let elementHorizontal = $element.attr('data-horizontal');
+            let elementSticky = (typeof $element.attr('data-sticky') === 'string');
+            let elementStickyTarget = $element.attr('data-sticky-target');
             let $target = (elementTarget && $(elementTarget).length) ? $(elementTarget) : $element;
             let elementOffset = $target.offset().top + this.scrollbar.scrollTop;
             let elementLimit = elementOffset + $target.outerHeight();
 
             //Manage callback
-            let elementCallbackString = (typeof $element.data('callback') === 'string') ? $element.data('callback') : null;
+            let elementCallbackString = (typeof $element.attr('data-callback') === 'string') ? $element.attr('data-callback') : null;
             let elementCallback = null;
 
             if(elementCallbackString != null){
@@ -131,15 +131,15 @@ export default class extends Scroll {
             }
 
             // If elements stays visible after scrolling past it
-            let elementRepeat = (typeof $element.data('repeat') === 'string');
+            let elementRepeat = (typeof $element.attr('data-repeat') === 'string');
 
-            let elementInViewClass = $element.data('inview-class');
+            let elementInViewClass = $element.attr('data-inview-class');
             if (typeof elementInViewClass === 'undefined') {
                 elementInViewClass = 'is-show';
             }
 
-            if (!elementTarget && $element.data('transform')) {
-                elementOffset -= parseFloat($element.data('transform').y);
+            if (!elementTarget && $element.attr('data-transform')) {
+                elementOffset -= parseFloat($element.attr('data-transform').y);
             }
 
             if (elementSticky) {
@@ -161,8 +161,8 @@ export default class extends Scroll {
 
             // For parallax animated elements
             if (elementSpeed !== false) {
-                let elementPosition = $element.data('position');
-                let elementHorizontal = $element.data('horizontal');
+                let elementPosition = $element.attr('data-position');
+                let elementHorizontal = $element.attr('data-horizontal');
                 let elementMiddle = ((elementLimit - elementOffset) / 2) + elementOffset;
 
                 newElement.horizontal = elementHorizontal;
@@ -251,8 +251,8 @@ export default class extends Scroll {
         if (typeof $sourceElem !== 'undefined' && $sourceElem instanceof jQuery && $sourceElem.length > 0) {
             let targetData = '';
 
-            if ($sourceElem.data('target')) {
-                targetData = $sourceElem.data('target');
+            if ($sourceElem.attr('data-target')) {
+                targetData = $sourceElem.attr('data-target');
             } else {
                 targetData = $sourceElem.attr('href');
             }
