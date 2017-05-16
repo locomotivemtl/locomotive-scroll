@@ -39,8 +39,8 @@ export const Defaults = {
  */
 export default class {
     constructor(options) {
-        this.$container = options.container || Defaults.container;
-        this.selector = options.selector || Defaults.selector;
+        this.$container = options.container.length || Defaults.container;
+        this.selector = options.selector.length || Defaults.selector;
 
         this.callbacks = {
             onScroll: typeof options.onScroll === 'function' ? options.onScroll : Defaults.onScroll
