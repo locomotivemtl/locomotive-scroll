@@ -40,7 +40,6 @@ export default class {
                 if (this.mobileContainer) {
                     this.options.container = this.mobileContainer
                 }
-
                 return new Scroll(this.options);
             }
         })();

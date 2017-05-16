@@ -43,8 +43,6 @@ export default class {
         this.$container = (options.container) ? options.container : Defaults.container;
         this.selector = (options.selector) ? options.selector : Defaults.selector;
 
-        console.log(this.selector);
-
         this.callbacks = {
             onScroll: typeof options.onScroll === 'function' ? options.onScroll : Defaults.onScroll
         };

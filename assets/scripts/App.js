@@ -10,9 +10,9 @@ import LocomotiveScroll from './modules/ScrollManager';
     const smoothScroll = new LocomotiveScroll({
         container: $('#js-scroll'),
         selector: '.js-animate',
-        smooth: true,
+        smooth: false,
         smoothMobile: false,
-        mobileContainer: $('document')
+        mobileContainer: $(document)
     });
 
 })();
