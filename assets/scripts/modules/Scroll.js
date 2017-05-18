@@ -122,7 +122,7 @@ export default class {
             let $element = $elements.eq(i);
             let elementTarget = $element.attr('data-target');
             let elementPosition = $element.attr('data-position');
-            let $target = (elementTarget) ? $(elementTarget) : $element;
+            let $target = (elementTarget && $(elementTarget).length) ? $(elementTarget) : $element;
             let elementOffset = $target.offset().top;
             let elementLimit = elementOffset + $target.outerHeight();
             let elementSticky = (typeof $element.attr('data-sticky') === 'string');
