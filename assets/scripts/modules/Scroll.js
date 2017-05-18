@@ -2,15 +2,14 @@
 // Locomotive Scroll
 // ==========================================================================
 /* jshint esnext: true */
-import { $window, $document, APP_NAME } from '../utils/environment';
+import { $window, $document } from '../utils/environment';
 
 import debounce from '../utils/debounce';
 import { isNumeric } from '../utils/is';
 
-const DATA_KEY  = `${APP_NAME}.Scrolling`;
-const EVENT_KEY = `.${DATA_KEY}`;
+export const EVENT_KEY = `.LocomotiveScroll`;
 
-const Event = {
+export const Event = {
     CLICK: `click${EVENT_KEY}`,
     ISREADY: `isReady${EVENT_KEY}`,
     REBUILD: `rebuild${EVENT_KEY}`,

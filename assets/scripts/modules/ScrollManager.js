@@ -2,8 +2,8 @@
 // Locomotive Scroll Manager
 // ==========================================================================
 /* jshint esnext: true */
-import { $document, $window, $html, $body, APP_NAME } from '../utils/environment';
-import Scroll, { Defaults } from './Scroll';
+import { $document, $window, $html, $body } from '../utils/environment';
+import Scroll, { Defaults, Event } from './Scroll';
 import SmoothScroll from './SmoothScroll';
 
 /**
@@ -50,7 +50,7 @@ export default class {
 
         if ($scrollToOnLoadEl.length === 1) {
             $document.triggerHandler({
-                type: 'scrollTo.Scrolling',
+                type: 'Event.SCROLLTO',
                 options: {
                     targetElem: $scrollToOnLoadEl
                 }

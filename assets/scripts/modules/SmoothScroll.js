@@ -2,26 +2,12 @@
 // Locomotive Smooth Scroll
 // ==========================================================================
 /* jshint esnext: true */
-import { $window, $document, $html, APP_NAME } from '../utils/environment';
-import Scroll, { Defaults } from './Scroll';
+import { $window, $document, $html } from '../utils/environment';
+import Scroll, { Defaults, Event } from './Scroll';
 
 import debounce from '../utils/debounce';
 import Scrollbar from 'smooth-scrollbar';
 import { isNumeric } from '../utils/is';
-
-const DATA_KEY  = `${APP_NAME}.Scrolling`;
-const EVENT_KEY = `.${DATA_KEY}`;
-
-const Event = {
-    CLICK: `click${EVENT_KEY}`,
-    ISREADY: `isReady${EVENT_KEY}`,
-    REBUILD: `rebuild${EVENT_KEY}`,
-    RENDER: `render${EVENT_KEY}`,
-    RESIZE: `resize${EVENT_KEY}`,
-    SCROLL: `scroll${EVENT_KEY}`,
-    SCROLLTO: `scrollTo${EVENT_KEY}`,
-    UPDATE: `update${EVENT_KEY}`
-};
 
 /**
  * Smooth scrolling using `smooth-scrollbar`.
