@@ -311,7 +311,7 @@ export default class {
     triggerCallback(element,way){
 
         if(element.callback != undefined){
-            $document.trigger({
+            element.$element.trigger({
                 type: element.callback.event,
                 options: element.callback.options,
                 way: way
