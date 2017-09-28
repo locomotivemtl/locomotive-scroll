@@ -378,6 +378,7 @@ export default class {
      */
     updateElements() {
         this.addElements();
+        this.animateElements();
     }
 
     /**
