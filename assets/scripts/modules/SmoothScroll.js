@@ -67,6 +67,7 @@ export default class extends Scroll {
                 sourceElem: $(event.currentTarget)
             });
         });
+
         this.$container.on(Event.SCROLLTO, (event) => this.scrollTo(event.options));
 
         // Setup done
@@ -94,7 +95,7 @@ export default class extends Scroll {
 
         for (; i < len; i ++) {
             let $element = $elements.eq(i);
-            let elementSpeed = isNumeric($element.attr('data-speed')) ? parseInt($element.attr('data-speed')) / 10 : false
+            let elementSpeed = isNumeric($element.attr('data-speed')) ? $element.attr('data-speed') / 10 : false;
             let elementPosition = $element.attr('data-position');
             let elementTarget = $element.attr('data-target');
             let elementHorizontal = $element.attr('data-horizontal');
@@ -221,7 +222,7 @@ export default class extends Scroll {
         const $sourceElem = options.sourceElem;
         let targetOffset = isNumeric(options.targetOffset) ? parseInt(options.targetOffset) : 0;
         const delay = isNumeric(options.delay) ? parseInt(options.delay) : 0;
-        const speed = isNumeric(options.speed) ? parseInt(options.speed) : 800;
+        const speed = isNumeric(options.speed) ? parseInt(options.speed) : 900;
         const toTop = options.toTop;
         const toBottom = options.toBottom;
 
@@ -394,6 +395,8 @@ export default class extends Scroll {
         if (typeof options.callback === 'function') {
             options.callback();
         }
+
+        this.renderAnimations(false, status);
     }
 
     /**
