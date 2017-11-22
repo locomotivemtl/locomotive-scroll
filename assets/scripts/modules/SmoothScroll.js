@@ -61,14 +61,15 @@ export default class extends Scroll {
         this.$container.on(Event.RENDER, () => this.renderAnimations(false));
 
         // Scrollto button event
-        $document.on(Event.CLICK, '.js-scrollto', (event) => {
+        this.$container.on(Event.CLICK, '.js-scrollto', (event) => {
             event.preventDefault();
 
             let $target = $(event.currentTarget);
+            let offset = $target.data('offset');
 
             this.scrollTo({
                 sourceElem: $target,
-                offsetElem: $($target.data('offset'))
+                offsetElem: offset
             });
         });
 
@@ -254,7 +255,7 @@ export default class extends Scroll {
     scrollTo(options) {
         const $targetElem = options.targetElem;
         const $sourceElem = options.sourceElem;
-        const $offsetElem = options.offsetElem;
+        const offsetElem = options.offsetElem;
         let targetOffset = isNumeric(options.targetOffset) ? parseInt(options.targetOffset) : 0;
         const delay = isNumeric(options.delay) ? parseInt(options.delay) : 0;
         const speed = isNumeric(options.speed) ? parseInt(options.speed) : 900;
@@ -283,8 +284,8 @@ export default class extends Scroll {
             targetOffset = $(targetData).offset().top + this.scrollbar.scrollTop + targetOffset;
         }
 
-        if (typeof $offsetElem !== 'undefined') {
-            offset = $offsetElem.outerHeight();
+        if (typeof offsetElem !== 'undefined') {
+            offset = $(offsetElem).outerHeight();
             targetOffset = targetOffset - offset;
         }
 
