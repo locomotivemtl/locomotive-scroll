@@ -133,11 +133,41 @@ export default class {
             let elementCallback = null;
 
             if(elementCallbackString != null){
-                let event = elementCallbackString.substr(0, elementCallbackString.indexOf(':'));
-                let optionsString = elementCallbackString.substr(elementCallbackString.indexOf('{'),elementCallbackString.length - event.length);
-                optionsString = optionsString.replace(/([a-z][^:]*)(?=\s*:)/g, '"$1"');
-                let options = JSON.parse(optionsString.toString());
-                elementCallback = {event:event, options:options};
+                let event = elementCallbackString.substr(0, elementCallbackString.indexOf('('));
+                let optionsString = elementCallbackString.substr(elementCallbackString.indexOf('('),elementCallbackString.length - event.length);
+
+                optionsString = optionsString.replace('(','');
+                optionsString = optionsString.replace(')','');
+
+                let options = optionsString.split('|');
+
+                let obj = {};
+
+                for (var j = 0; j < options.length; j++) {
+
+                    let option = options[j].split(':');
+                    option[0] = option[0].replace(' ','');
+
+                    let val;
+                    //check if value is a boolean
+                    if(option[1] === "true") {
+                        val = true;
+                    }
+                    else if(option[1] === "false") {
+                        val = false;
+                    }
+                    //check if value is numeric
+                    else if(/^\d+$/.test(option[1])) {
+                        val = parseInt(option[1]);
+                    }
+                    //check if value is a String
+                    else {
+                        val = option[1];
+                    }
+                    obj[option[0]] = val;
+                }
+
+                elementCallback = {event:event, options:obj};
             }
 
             // If elements loses its animation after scrolling past it
