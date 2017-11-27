@@ -88,10 +88,14 @@ export default class {
         this.$container.on(Event.RENDER, () => this.renderAnimations());
 
         // Scrollto button event
-        this.$container.on(Event.CLICK, '.js-scrollto', (event) => {
+        $document.on(Event.CLICK, '.js-scrollto', (event) => {
             event.preventDefault();
+
+            let $target = $(event.currentTarget);
+
             this.scrollTo({
-                sourceElem: $(event.currentTarget)
+                sourceElem: $target,
+                offsetElem: $($target.data('offset'))
             });
         });
         this.$container.on(Event.SCROLLTO, (event) => this.scrollTo(event.options));
@@ -363,11 +367,13 @@ export default class {
     scrollTo(options) {
         const $targetElem = options.targetElem;
         const $sourceElem = options.sourceElem;
+        const $offsetElem = options.offsetElem;
         let targetOffset = isNumeric(options.targetOffset) ? parseInt(options.targetOffset) : 0;
         const speed = isNumeric(options.speed) ? parseInt(options.speed) : 800;
         const delay = isNumeric(options.delay) ? parseInt(options.delay) : 0;
         const toTop = options.toTop;
         const toBottom = options.toBottom;
+        let offset = 0;
 
         if (typeof $targetElem === 'undefined' && typeof $sourceElem === 'undefined' && typeof targetOffset === 'undefined') {
             console.warn('You must specify at least one parameter.')
@@ -388,6 +394,11 @@ export default class {
             }
 
             targetOffset = $(targetData).offset().top + targetOffset;
+        }
+
+        if (typeof $offsetElem !== 'undefined') {
+            offset = $offsetElem.outerHeight();
+            targetOffset = targetOffset - offset;
         }
 
         if (toTop === true) {
