@@ -13,7 +13,7 @@ data-target | #id, .class | Trigger from another element
 data-horizontal | false | Use transformX instead of transformY
 data-sticky | false | Set $element sticky when it's in viewport
 data-sticky-target | #id | Stop the element stick when the target is in viewport
-data-callback | eventName.Namespace:{option1: value} | trigger event, with options and "leave" or "enter" when $element is in viewport
+data-callback | test.Scroll(test:0|key:value|isTriggered:true) | trigger event, with options way wich return "leave" or "enter" when $element is in viewport
 
 ## Dependencies
 Locomotive Smooth Scroll is build on top of [smooth-scrollbar](https://github.com/idiotWu/smooth-scrollbar).
@@ -42,6 +42,5 @@ Run `grunt sync`
 [smoothscrollbar]:   https://github.com/idiotWu/smooth-scrollbar
 
 ## Todo
--	Manage responsive (disable smooth scrolling on mobile)
 -   Function to get the percentage (distance) of my element on the viewport
 -   Find a solution to have really slow element
