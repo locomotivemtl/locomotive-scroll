@@ -12,7 +12,9 @@ import LocomotiveScroll from './modules/ScrollManager';
         selector: '.js-animate',
         smooth: true,
         smoothMobile: false,
-        mobileContainer: $(document)
+        mobileContainer: $(document),
+        getWay: false,
+        getSpeed: false
     });
 
 })();

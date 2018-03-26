@@ -27,7 +27,9 @@ export const Defaults = {
     selector: '.js-animate',
     smooth: false,
     smoothMobile: false,
-    reversed: false
+    reversed: false,
+    getWay: false,
+    getSpeed: false
 };
 
 /**

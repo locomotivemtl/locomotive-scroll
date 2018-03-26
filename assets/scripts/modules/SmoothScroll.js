@@ -21,7 +21,18 @@ export default class extends Scroll {
         super(options);
 
         this.isReversed = options.reversed || Defaults.reversed;
+        this.getWay = options.getWay || Defaults.getWay;
+        this.getSpeed = options.getSpeed || Defaults.getSpeed;
+
         this.parallaxElements = [];
+
+
+        if(this.getSpeed) {
+            this.time = Date.now();
+            this.now = Date.now();
+            this.scroll.speed = 0;
+        }
+
     }
 
     /**
@@ -228,15 +239,34 @@ export default class extends Scroll {
 
         const scrollbarTop = this.scrollbar.scrollTop;
 
-        // if (scrollbarTop > this.scroll.y) {
-        //     if (this.scroll.direction !== 'down') {
-        //         this.scroll.direction = 'down';
-        //     }
-        // } else if (scrollbarTop < this.scroll.y) {
-        //     if (this.scroll.direction !== 'up') {
-        //         this.scroll.direction = 'up';
-        //     }
-        // }
+        if(this.getWay){
+            if (scrollbarTop > this.scroll.y) {
+                if (this.scroll.direction !== 'down') {
+                    this.scroll.direction = 'down';
+                }
+            } else if (scrollbarTop < this.scroll.y) {
+                if (this.scroll.direction !== 'up') {
+                    this.scroll.direction = 'up';
+                }
+            }
+        }
+
+        if(this.getSpeed) {
+            if (this.scroll.y !== scrollbarTop) {
+                let dist = this.scroll.y - scrollbarTop;
+
+                let now = Date.now() - this.now;
+
+                this.scroll.speed = 5 * dist/now;
+                this.scroll.y = scrollbarTop;
+            }else {
+                this.scroll.speed = 0;
+            }
+
+            this.now = Date.now();
+
+            // console.log(this.scroll.speed);
+        }
 
         if (this.scroll.y !== scrollbarTop) {
             this.scroll.y = scrollbarTop;

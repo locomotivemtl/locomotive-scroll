@@ -1,7 +1,7 @@
 module.exports = {
     options: {
         open      : false,
-        proxy     : 'locomotive-smooth-scroll.dev',
+        proxy     : 'locomotive-scroll.test',
         port      : 3000,
         watchTask : true,
         notify    : false
