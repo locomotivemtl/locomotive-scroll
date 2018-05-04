@@ -288,6 +288,8 @@ export default class {
 
             if (element.position === 'top') {
                 inView = (scrollTop >= element.offset && scrollTop <= element.limit);
+            } else if (element.position === 'below') {
+                inView = (scrollTop > element.limit);
             } else if (element.sticky) {
                 inView = (scrollTop >= element.offset && scrollTop <= element.limit);
             } else {
