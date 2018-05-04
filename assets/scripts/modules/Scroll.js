@@ -194,7 +194,7 @@ export default class {
 
                 // Reset offset
                 $element.removeClass(elementInViewClass);
-                $element.removeClass('-after');
+                $element.removeClass('is-unstuck');
 
                 $element.css({
                     '-webkit-transform': 'translate3d(0, 0, 0)',
@@ -298,9 +298,9 @@ export default class {
 
             if (element.sticky) {
                 if (scrollTop > element.limit) {
-                    element.$element.addClass('-after');
+                    element.$element.addClass('is-unstuck');
                 } else {
-                    element.$element.removeClass('-after');
+                    element.$element.removeClass('is-unstuck');
                 }
 
                 if (scrollTop < element.offset) {
