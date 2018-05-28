@@ -28,8 +28,6 @@ export default class extends Scroll {
 
 
         if(this.getSpeed) {
-            this.time = Date.now();
-            this.now = Date.now();
             this.scroll.speed = 0;
         }
 
@@ -253,19 +251,11 @@ export default class extends Scroll {
 
         if(this.getSpeed) {
             if (this.scroll.y !== scrollbarTop) {
-                let dist = this.scroll.y - scrollbarTop;
-
-                let now = Date.now() - this.now;
-
-                this.scroll.speed = 5 * dist/now;
+                this.scroll.speed = this.scrollbar.movement.y;
                 this.scroll.y = scrollbarTop;
             }else {
                 this.scroll.speed = 0;
             }
-
-            this.now = Date.now();
-
-            // console.log(this.scroll.speed);
         }
 
         if (this.scroll.y !== scrollbarTop) {
