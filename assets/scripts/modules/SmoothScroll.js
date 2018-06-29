@@ -118,6 +118,7 @@ export default class extends Scroll {
             let $target = (elementTarget && $(elementTarget).length) ? $(elementTarget) : $element;
             let elementOffset = $target.offset().top + this.scrollbar.scrollTop;
             let elementLimit = elementOffset + $target.outerHeight();
+            let elementViewportOffset = $element.attr('data-viewport-offset');
 
             //Manage callback
             let elementCallbackString = (typeof $element.attr('data-callback') === 'string') ? $element.attr('data-callback') : null;
@@ -187,7 +188,8 @@ export default class extends Scroll {
                 limit: elementLimit,
                 offset: Math.round(elementOffset),
                 repeat: elementRepeat,
-                callback: elementCallback
+                callback: elementCallback,
+                viewportOffset: elementViewportOffset
             };
 
             // For parallax animated elements
