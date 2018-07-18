@@ -14,7 +14,7 @@ data-horizontal | false | Use transformX instead of transformY
 data-sticky | false | Set $element sticky when it's in viewport
 data-sticky-target | #id | Stop the element stick when the target is in viewport
 data-callback | test.Scroll(test:0|key:value|isTriggered:true) | trigger event, with options way wich return "leave" or "enter" when $element is in viewport
-data-viewport-offset | 0% | value between 0 to 1 (0.3 to start at 30% of the bottom of the viewport), useful to trigger a sequence of callbacks 
+data-viewport-offset | i,j | value between 0 to 1 (0.3 to start at 30% of the bottom of the viewport), useful to trigger a sequence of callbacks. (i : value wich start at the bottom, j : start at the top, j is optional)
 
 ## Dependencies
 Locomotive Smooth Scroll is build on top of [smooth-scrollbar](https://github.com/idiotWu/smooth-scrollbar).

@@ -134,8 +134,7 @@ export default class {
             let elementLimit = elementOffset + $target.outerHeight();
             let elementSticky = (typeof $element.attr('data-sticky') === 'string');
             let elementStickyTarget = $element.attr('data-sticky-target');
-            let elementViewportOffset = $element.attr('data-viewport-offset');
-
+            let elementViewportOffset = $element.attr('data-viewport-offset').split(',');
 
             //Manage callback
             let elementCallbackString = (typeof $element.attr('data-callback') === 'string') ? $element.attr('data-callback') : null;
@@ -296,8 +295,15 @@ export default class {
             } else if (element.sticky) {
                 inView = (scrollTop >= element.offset && scrollTop <= element.limit);
             }else if(element.viewportOffset != undefined) {
-                let scrollViewportOffset = scrollBottom - (this.windowHeight * element.viewportOffset);
-                inView = (scrollViewportOffset > element.offset && scrollViewportOffset < element.limit);
+                if(element.viewportOffset.length > 1) {
+                    let scrollViewportOffsetTop = scrollTop + (this.windowHeight * element.viewportOffset[1]);
+                    let scrollViewportOffsetBottom = scrollBottom - (this.windowHeight * element.viewportOffset[0]);
+                    inView = (scrollViewportOffsetBottom > element.offset && scrollViewportOffsetTop < element.limit);
+                
+                } else {
+                    let scrollViewportOffset = scrollBottom - (this.windowHeight * element.viewportOffset[0]);
+                    inView = (scrollViewportOffset > element.offset && scrollViewportOffset < element.limit);
+                }
             }
              else {
                 inView = (scrollBottom >= element.offset && scrollTop <= element.limit);
