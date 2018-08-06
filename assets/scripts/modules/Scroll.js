@@ -134,8 +134,11 @@ export default class {
             let elementLimit = elementOffset + $target.outerHeight();
             let elementSticky = (typeof $element.attr('data-sticky') === 'string');
             let elementStickyTarget = $element.attr('data-sticky-target');
-            let elementViewportOffset = $element.attr('data-viewport-offset').split(',');
-
+            
+            let elementViewportOffset = null;
+            if(typeof $element.attr('data-viewport-offset') === 'string') {
+               elementViewportOffset = $element.attr('data-viewport-offset').split(',');
+            }
             //Manage callback
             let elementCallbackString = (typeof $element.attr('data-callback') === 'string') ? $element.attr('data-callback') : null;
             let elementCallback = null;

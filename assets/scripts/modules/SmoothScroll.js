@@ -118,8 +118,12 @@ export default class extends Scroll {
             let $target = (elementTarget && $(elementTarget).length) ? $(elementTarget) : $element;
             let elementOffset = $target.offset().top + this.scrollbar.scrollTop;
             let elementLimit = elementOffset + $target.outerHeight();
-            let elementViewportOffset = $element.attr('data-viewport-offset').split(',');
 
+            let elementViewportOffset = null;
+            if(typeof $element.attr('data-viewport-offset') === 'string') {
+               elementViewportOffset = $element.attr('data-viewport-offset').split(',');
+            }
+            
             //Manage callback
             let elementCallbackString = (typeof $element.attr('data-callback') === 'string') ? $element.attr('data-callback') : null;
             let elementCallback = null;
