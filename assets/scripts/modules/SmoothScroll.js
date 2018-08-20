@@ -123,7 +123,7 @@ export default class extends Scroll {
             if(typeof $element.attr('data-viewport-offset') === 'string') {
                elementViewportOffset = $element.attr('data-viewport-offset').split(',');
             }
-            
+
             //Manage callback
             let elementCallbackString = (typeof $element.attr('data-callback') === 'string') ? $element.attr('data-callback') : null;
             let elementCallback = null;
@@ -360,19 +360,19 @@ export default class extends Scroll {
         });
 
         // Affect child elements with the same positionning
-        const children = $element.find(this.selector);
-        const len = children.length;
-        let i = 0;
-        for (; i < len; i++) {
-            let $child = $(children[i]);
-            if (!$child.data('transform')) {
-                $child.data('transform', {
-                    x: x,
-                    y: y,
-                    z: z
-                })
-            }
-        };
+        // const children = $element.find(this.selector);
+        // const len = children.length;
+        // let i = 0;
+        // for (; i < len; i++) {
+        //     let $child = $(children[i]);
+        //     if (!$child.data('transform')) {
+        //         $child.data('transform', {
+        //             x: x,
+        //             y: y,
+        //             z: z
+        //         })
+        //     }
+        // };
     }
 
     /**
