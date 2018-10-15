@@ -71,9 +71,9 @@ export default class {
         this.renderAnimations();
 
         // On scroll
-        this.$container.on(Event.SCROLL, debounce(() => {
+        this.$container.on(Event.SCROLL, () => {
             this.renderAnimations();
-        }, 10));
+        });
 
         // Rebuild event
         this.$container.on(Event.REBUILD, () => {
