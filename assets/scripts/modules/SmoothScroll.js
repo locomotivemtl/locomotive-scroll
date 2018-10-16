@@ -59,7 +59,7 @@ export default class extends Scroll {
 
         // Rebuild event
         this.$container.on(Event.REBUILD, () => {
-            this.scrollbar.scrollTo(0, 0, 0);
+            this.scrollbar.scrollTo(0, 0, 1);
             this.updateElements();
         });
 
