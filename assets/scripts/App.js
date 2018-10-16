@@ -2,12 +2,12 @@
 // App
 // ==========================================================================
 /* jshint esnext: true */
-import LocomotiveScroll from './modules/ScrollManager';
+import ScrollManager from './scroll/vendors/ScrollManager';
 
 (function() {
 
     // Init Locomotive Scroll
-    const smoothScroll = new LocomotiveScroll({
+    const smoothScroll = new ScrollManager({
         container: $('#js-scroll'),
         selector: '.js-animate',
         smooth: true,
