@@ -1,10 +1,9 @@
 {
-    "private": true,
-    "name": "@locomotivemtl/boilerplate",
-    "title": "Locomotive Boilerplate",
+    "name": "locomotive-scroll",
+    "title": "Locomotive Scroll",
     "version": "1.0.0",
     "author": "Locomotive <info@locomotive.ca>",
-    "dependencies":{
+    "dependencies": {
         "smooth-scrollbar": "locomotivemtl/smooth-scrollbar#develop"
     },
     "devDependencies": {

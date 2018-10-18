@@ -2,25 +2,25 @@
 // Locomotive Scroll
 // ==========================================================================
 /* jshint esnext: true */
-import { $window, $document } from '../utils/environment';
+import { $window, $document } from '../../utils/environment';
 
-import debounce from '../utils/debounce';
-import { isNumeric } from '../utils/is';
+import debounce from '../../utils/debounce';
+import { isNumeric } from '../../utils/is';
 
-export const EVENT_KEY = `.LocomotiveScroll`;
+export const EVENT_KEY = `LocomotiveScroll`;
 
-export const Event = {
-    CLICK: `click${EVENT_KEY}`,
-    ISREADY: `isReady${EVENT_KEY}`,
-    REBUILD: `rebuild${EVENT_KEY}`,
-    RENDER: `render${EVENT_KEY}`,
-    RESIZE: `resize${EVENT_KEY}`,
-    SCROLL: `scroll${EVENT_KEY}`,
-    SCROLLTO: `scrollTo${EVENT_KEY}`,
-    UPDATE: `update${EVENT_KEY}`
+export const EVENT = {
+    CLICK: `click.${EVENT_KEY}`,
+    ISREADY: `isReady.${EVENT_KEY}`,
+    REBUILD: `rebuild.${EVENT_KEY}`,
+    RENDER: `render.${EVENT_KEY}`,
+    RESIZE: `resize.${EVENT_KEY}`,
+    SCROLL: `scroll.${EVENT_KEY}`,
+    SCROLLTO: `scrollTo.${EVENT_KEY}`,
+    UPDATE: `update.${EVENT_KEY}`
 };
 
-export const Defaults = {
+export const DEFAULTS = {
     container: $document,
     mobileContainer: $document,
     onScroll: function(){},
@@ -41,11 +41,11 @@ export const Defaults = {
 export default class {
     constructor(options) {
 
-        this.$container = (options.container) ? options.container : Defaults.container;
-        this.selector = (options.selector) ? options.selector : Defaults.selector;
+        this.$container = (options.container) ? options.container : DEFAULTS.container;
+        this.selector = (options.selector) ? options.selector : DEFAULTS.selector;
 
         this.callbacks = {
-            onScroll: typeof options.onScroll === 'function' ? options.onScroll : Defaults.onScroll
+            onScroll: typeof options.onScroll === 'function' ? options.onScroll : DEFAULTS.onScroll
         };
 
         this.scroll = {
@@ -71,12 +71,12 @@ export default class {
         this.renderAnimations();
 
         // On scroll
-        this.$container.on(Event.SCROLL, () => {
+        this.$container.on(EVENT.SCROLL, () => {
             this.renderAnimations();
         });
 
         // Rebuild event
-        this.$container.on(Event.REBUILD, () => {
+        this.$container.on(EVENT.REBUILD, () => {
             this.scrollTo({
                 targetOffset: 0
             });
@@ -84,13 +84,13 @@ export default class {
         });
 
         // Update event
-        this.$container.on(Event.UPDATE, (event, options) => this.updateElements(options));
+        this.$container.on(EVENT.UPDATE, (event, options) => this.updateElements(options));
 
         // Render event
-        this.$container.on(Event.RENDER, () => this.renderAnimations());
+        this.$container.on(EVENT.RENDER, () => this.renderAnimations());
 
         // Scrollto button event
-        this.$container.on(Event.CLICK, '.js-scrollto', (event) => {
+        this.$container.on(EVENT.CLICK, '.js-scrollto', (event) => {
             event.preventDefault();
 
             let $target = $(event.currentTarget);
@@ -101,15 +101,15 @@ export default class {
                 offsetElem: offset
             });
         });
-        this.$container.on(Event.SCROLLTO, (event) => this.scrollTo(event.options));
+        this.$container.on(EVENT.SCROLLTO, (event) => this.scrollTo(event.options));
 
         // Setup done
         $document.triggerHandler({
-            type: Event.ISREADY
+            type: EVENT.ISREADY
         });
 
         // Resize event
-        $window.on(Event.RESIZE, debounce(() => {
+        $window.on(EVENT.RESIZE, debounce(() => {
             this.updateElements()
         }, 20));
     }
@@ -134,7 +134,7 @@ export default class {
             let elementLimit = elementOffset + $target.outerHeight();
             let elementSticky = (typeof $element.attr('data-sticky') === 'string');
             let elementStickyTarget = $element.attr('data-sticky-target');
-            
+
             let elementViewportOffset = null;
             if(typeof $element.attr('data-viewport-offset') === 'string') {
                elementViewportOffset = $element.attr('data-viewport-offset').split(',');
@@ -302,7 +302,7 @@ export default class {
                     let scrollViewportOffsetTop = scrollTop + (this.windowHeight * element.viewportOffset[1]);
                     let scrollViewportOffsetBottom = scrollBottom - (this.windowHeight * element.viewportOffset[0]);
                     inView = (scrollViewportOffsetBottom > element.offset && scrollViewportOffsetTop < element.limit);
-                
+
                 } else {
                     let scrollViewportOffset = scrollBottom - (this.windowHeight * element.viewportOffset[0]);
                     inView = (scrollViewportOffset > element.offset && scrollViewportOffset < element.limit);
@@ -450,8 +450,8 @@ export default class {
      * Destroy
      */
     destroy() {
-        $window.off(EVENT_KEY);
-        this.$container.off(EVENT_KEY);
+        $window.off(`.${EVENT_KEY}`);
+        this.$container.off(`.${EVENT_KEY}`);
         window.cancelAnimationFrame(this.requestId);
         this.requestId = undefined;
         this.animatedElements = undefined;

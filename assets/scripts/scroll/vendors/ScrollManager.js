@@ -2,9 +2,9 @@
 // Locomotive Scroll Manager
 // ==========================================================================
 /* jshint esnext: true */
-import { $document, $window, $html, $body } from '../utils/environment';
-import Scroll, { Defaults, Event } from './Scroll';
-import SmoothScroll from './SmoothScroll';
+import { $document, $window, $html, $body } from '../../utils/environment';
+import Scroll, { DEFAULTS, EVENT } from '../Scroll';
+import SmoothScroll from '../SmoothScroll';
 
 /**
  * Basic module that detects which scrolling module we'll be using
@@ -12,17 +12,12 @@ import SmoothScroll from './SmoothScroll';
 export default class {
     constructor(options) {
         this.options = options;
-        this.smooth = options.smooth || Defaults.smooth;
-        this.smoothMobile = options.smoothMobile || Defaults.smoothMobile;
-        this.mobileContainer = options.mobileContainer || Defaults.mobileContainer;
+        this.smooth = options.smooth || DEFAULTS.smooth;
+        this.smoothMobile = options.smoothMobile || DEFAULTS.smoothMobile;
+        this.mobileContainer = options.mobileContainer || DEFAULTS.mobileContainer;
         this.isMobile = false;
 
         this.init();
-
-        // Add a callback when reaching top or bottom
-        // options.onScroll = function(scrollStatus) {
-        //     $html.toggleClass('has-scrolled', (scrollStatus.y > 0));
-        // };
     }
 
     init() {

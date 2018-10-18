@@ -2,12 +2,12 @@
 // Locomotive Smooth Scroll
 // ==========================================================================
 /* jshint esnext: true */
-import { $window, $document, $html } from '../utils/environment';
-import Scroll, { Defaults, Event } from './Scroll';
+import { $window, $document, $html } from '../../utils/environment';
+import Scroll, { DEFAULTS, EVENT } from '../Scroll';
 
-import debounce from '../utils/debounce';
+import debounce from '../../utils/debounce';
 import Scrollbar from 'smooth-scrollbar';
-import { isNumeric } from '../utils/is';
+import { isNumeric } from '../../utils/is';
 
 /**
  * Smooth scrolling using `smooth-scrollbar`.
@@ -20,9 +20,9 @@ export default class extends Scroll {
     constructor(options) {
         super(options);
 
-        this.isReversed = options.reversed || Defaults.reversed;
-        this.getWay = options.getWay || Defaults.getWay;
-        this.getSpeed = options.getSpeed || Defaults.getSpeed;
+        this.isReversed = options.reversed || DEFAULTS.reversed;
+        this.getWay = options.getWay || DEFAULTS.getWay;
+        this.getSpeed = options.getSpeed || DEFAULTS.getSpeed;
 
         this.parallaxElements = [];
 
@@ -58,19 +58,19 @@ export default class extends Scroll {
         this.scrollbar.addListener((status) => this.renderAnimations(false, status));
 
         // Rebuild event
-        this.$container.on(Event.REBUILD, () => {
-            this.scrollbar.scrollTo(0, 0, 0);
+        this.$container.on(EVENT.REBUILD, () => {
+            this.scrollbar.scrollTo(0, 0, 1);
             this.updateElements();
         });
 
         // Update event
-        this.$container.on(Event.UPDATE, (event, options) => this.updateElements(options));
+        this.$container.on(EVENT.UPDATE, (event, options) => this.updateElements(options));
 
         // Render event
-        this.$container.on(Event.RENDER, () => this.renderAnimations(false));
+        this.$container.on(EVENT.RENDER, () => this.renderAnimations(false));
 
         // Scrollto button event
-        this.$container.on(Event.CLICK, '.js-scrollto', (event) => {
+        this.$container.on(EVENT.CLICK, '.js-scrollto', (event) => {
             event.preventDefault();
 
             let $target = $(event.currentTarget);
@@ -82,15 +82,15 @@ export default class extends Scroll {
             });
         });
 
-        this.$container.on(Event.SCROLLTO, (event) => this.scrollTo(event.options));
+        this.$container.on(EVENT.SCROLLTO, (event) => this.scrollTo(event.options));
 
         // Setup done
         $document.triggerHandler({
-            type: Event.ISREADY
+            type: EVENT.ISREADY
         });
 
         // Resize event
-        $window.on(Event.RESIZE, debounce(() => {
+        $window.on(EVENT.RESIZE, debounce(() => {
             this.updateElements()
         }, 20));
     }
