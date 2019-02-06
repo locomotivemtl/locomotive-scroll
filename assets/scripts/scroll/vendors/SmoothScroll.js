@@ -44,7 +44,7 @@ export default class extends Scroll {
             firefoxMultiplier: 30
         });
 
-        this.ease = 0.25;
+        this.inertia = 0.25;
 
         this.instance.scroll = {
             x: 0,
@@ -54,7 +54,7 @@ export default class extends Scroll {
         // @todo : to optimize
         this.instance.on((e) => {
 
-            this.instance.scroll.y-= e.deltaY * this.ease;
+            this.instance.scroll.y-= e.deltaY * this.inertia;
 
             if(this.instance.scroll.y < 0) this.instance.scroll.y = 0;
             if(this.instance.scroll.y > this.scrollLimit) this.instance.scroll.y = this.scrollLimit;
@@ -343,7 +343,7 @@ export default class extends Scroll {
      * Set the scroll bar limit
      */
     setScrollLimit() {
-        this.scrollLimit = this.$container[0].innherHeight + this.windowHeight;
+        this.scrollLimit = this.$container[0].clientHeight - this.windowHeight;
     }
 
     /**

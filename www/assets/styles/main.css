@@ -9,7 +9,6 @@ body {
     overflow: hidden; }
 
 .has-smooth-scroll .o-scroll {
-  height: 100%;
   position: relative; }
 
 .scroll-content {
