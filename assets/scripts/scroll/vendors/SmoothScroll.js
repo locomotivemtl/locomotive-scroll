@@ -71,6 +71,7 @@ export default class extends Scroll {
 
         // Rebuild event
         this.$container.on(EVENT.REBUILD, () => {
+            // @todo
             // this.scrollbar.scrollTo(0, 0, 1);
             this.updateElements();
         });
@@ -372,20 +373,6 @@ export default class extends Scroll {
             z : z
         });
 
-        // Affect child elements with the same positionning
-        // const children = $element.find(this.selector);
-        // const len = children.length;
-        // let i = 0;
-        // for (; i < len; i++) {
-        //     let $child = $(children[i]);
-        //     if (!$child.data('transform')) {
-        //         $child.data('transform', {
-        //             x: x,
-        //             y: y,
-        //             z: z
-        //         })
-        //     }
-        // };
     }
 
     /**
@@ -485,6 +472,6 @@ export default class extends Scroll {
         super.destroy();
         $html.removeClass('has-smooth-scroll');
         this.parallaxElements = [];
-        this.scrollbar.destroy();
+        this.instance.destroy();
     }
 }
