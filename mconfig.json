@@ -1,0 +1,33 @@
+{
+  "url": "locomotive-scroll.test",
+  "src": "./assets/",
+  "dest": "./www/",
+  "build": "./build/",
+  "styles": {
+    "src": "./assets/styles/",
+    "dest": "./www/assets/styles/",
+    "main": "main"
+  },
+  "scripts": {
+    "src": "./assets/scripts/",
+    "dest": "./www/assets/scripts/",
+    "main": "app",
+    "vendors": {
+      "src": "./assets/scripts/vendors/",
+      "main": "vendors"
+    }
+  },
+  "svgs": {
+    "src": "./assets/images/sprite/",
+    "dest": "./www/assets/images/"
+  },
+  "views": {
+    "src": "./wwww/"
+  },
+  "modules": {
+    "build": "gulp",
+    "style": "sass",
+    "script": "js",
+    "view": false
+  }
+}

@@ -66,6 +66,7 @@ export default class {
      * Initialize scrolling animations
      */
     init() {
+
         this.addElements();
 
         this.renderAnimations();
@@ -112,6 +113,7 @@ export default class {
         $window.on(EVENT.RESIZE, debounce(() => {
             this.updateElements()
         }, 20));
+
     }
 
     /**
@@ -372,7 +374,7 @@ export default class {
                 way: way
             });
             //add this where you want dude (in your module btw)
-            // $document.on(eventName.Namespace,(e)=>{
+            // $document.on(event.Namespace,(e)=>{
             //     console.log(e.options, e.way);
             // });
             /////////////////////////////////////////////

@@ -6,7 +6,7 @@ import { $window, $document, $html } from '../../utils/environment';
 import Scroll, { DEFAULTS, EVENT } from '../Scroll';
 
 import debounce from '../../utils/debounce';
-import Scrollbar from 'smooth-scrollbar';
+import VirtualScroll from 'virtual-scroll';
 import { isNumeric } from '../../utils/is';
 
 /**
@@ -14,7 +14,6 @@ import { isNumeric } from '../../utils/is';
  * Based on `Scroll` class, which allows animations of elements on the page
  * according to scroll position.
  *
- * @todo  Method to get the distance (as percentage) of an element in the viewport
  */
 export default class extends Scroll {
     constructor(options) {
@@ -25,7 +24,6 @@ export default class extends Scroll {
         this.getSpeed = options.getSpeed || DEFAULTS.getSpeed;
 
         this.parallaxElements = [];
-
 
         if(this.getSpeed) {
             this.scroll.speed = 0;
@@ -40,26 +38,40 @@ export default class extends Scroll {
         // Add class to the document to know if SmoothScroll is initialized (to manage overflow on containers)
         $html.addClass('has-smooth-scroll');
 
-        this.scrollbar = Scrollbar.init(this.$container[0],{
-            syncCallbacks: true
+        this.instance = new VirtualScroll({
+            mouseMultiplier: 1,
+            touchMultiplier: 1.5,
+            firefoxMultiplier: 30
         });
 
-        this.scrollbarStatus = undefined;
+        this.ease = 0.25;
 
-        this.setScrollbarLimit();
+        this.instance.scroll = {
+            x: 0,
+            y: 0
+        }
 
-        this.setWheelDirection(this.isReversed);
+        // @todo : to optimize
+        this.instance.on((e) => {
+
+            this.instance.scroll.y-= e.deltaY * this.ease;
+
+            if(this.instance.scroll.y < 0) this.instance.scroll.y = 0;
+            if(this.instance.scroll.y > this.scrollLimit) this.instance.scroll.y = this.scrollLimit;
+
+            this.renderAnimations(false)
+        });
+
+        this.setScrollLimit();
+
+        // @todo
+        // this.setWheelDirection(this.isReversed);
 
         this.addElements();
 
-        this.renderAnimations(true);
-
-        // On scroll
-        this.scrollbar.addListener((status) => this.renderAnimations(false, status));
-
         // Rebuild event
         this.$container.on(EVENT.REBUILD, () => {
-            this.scrollbar.scrollTo(0, 0, 1);
+            // this.scrollbar.scrollTo(0, 0, 1);
             this.updateElements();
         });
 
@@ -82,7 +94,8 @@ export default class extends Scroll {
             });
         });
 
-        this.$container.on(EVENT.SCROLLTO, (event) => this.scrollTo(event.options));
+        // @todo scrollto
+        // this.$container.on(EVENT.SCROLLTO, (event) => this.scrollTo(event.options));
 
         // Setup done
         $document.triggerHandler({
@@ -109,14 +122,14 @@ export default class extends Scroll {
 
         for (; i < len; i ++) {
             let $element = $elements.eq(i);
-            let elementSpeed = isNumeric($element.attr('data-speed')) ? $element.attr('data-speed') / 10 : false;
+            let elementSpeed = $element.attr('data-speed') ? $element.attr('data-speed') / 10 : false;
             let elementPosition = $element.attr('data-position');
             let elementTarget = $element.attr('data-target');
             let elementHorizontal = $element.attr('data-horizontal');
             let elementSticky = (typeof $element.attr('data-sticky') === 'string');
             let elementStickyTarget = $element.attr('data-sticky-target');
             let $target = (elementTarget && $(elementTarget).length) ? $(elementTarget) : $element;
-            let elementOffset = $target.offset().top + this.scrollbar.scrollTop;
+            let elementOffset = $target.offset().top + this.instance.scroll.y;
             let elementLimit = elementOffset + $target.outerHeight();
 
             let elementViewportOffset = null;
@@ -182,7 +195,7 @@ export default class extends Scroll {
                 if (typeof elementStickyTarget === 'undefined') {
                     elementLimit = Infinity;
                 } else {
-                    elementLimit = $(elementStickyTarget).offset().top - $element.height() + this.scrollbar.scrollTop;
+                    elementLimit = $(elementStickyTarget).offset().top - $element.height() + this.instance.scroll.y;
                 }
             }
 
@@ -214,12 +227,6 @@ export default class extends Scroll {
 
                 this.animatedElements.push(newElement);
 
-                // @todo Useful?
-                // Don't add element if it already has its in view class and doesn't repeat
-                // if (elementRepeat || !$element.hasClass(elementInViewClass)) {
-                //     this.animatedElements.push(newElement);
-                // }
-
                 if (elementSticky) {
                     //launch the toggle function to set the position of the sticky element
                     this.toggleElement(newElement);
@@ -236,12 +243,18 @@ export default class extends Scroll {
      *                               called by smooth-scrollbar instance listener.
      * @return {void}
      */
-    renderAnimations(isFirstCall, status) {
-        if (typeof status === 'object') {
-            this.scrollbarStatus = status;
-        }
+    renderAnimations(isFirstCall, e) {
 
-        const scrollbarTop = this.scrollbar.scrollTop;
+        const scrollbarTop = this.instance.scroll.y;
+
+        // console.log(e.y);
+
+        // need to move the container
+        this.$container.css({
+            '-webkit-transform': `translate3d(0, ${-scrollbarTop}px, 0)`,
+            '-ms-transform': `translate3d(0, ${-scrollbarTop}px, 0)`,
+            'transform': `translate3d(0, ${-scrollbarTop}px, 0)`
+        });
 
         if(this.getWay){
             if (scrollbarTop > this.scroll.y) {
@@ -295,7 +308,7 @@ export default class extends Scroll {
         }
 
         if (typeof $targetElem !== 'undefined' && $targetElem instanceof jQuery && $targetElem.length > 0) {
-            targetOffset = $targetElem.offset().top + this.scrollbar.scrollTop + targetOffset;
+            targetOffset = $targetElem.offset().top + this.instance.scroll.y + targetOffset;
         }
 
         if (typeof $sourceElem !== 'undefined' && $sourceElem instanceof jQuery && $sourceElem.length > 0) {
@@ -307,7 +320,7 @@ export default class extends Scroll {
                 targetData = $sourceElem.attr('href');
             }
 
-            targetOffset = $(targetData).offset().top + this.scrollbar.scrollTop + targetOffset;
+            targetOffset = $(targetData).offset().top + this.instance.scroll.y + targetOffset;
         }
 
         if (typeof offsetElem !== 'undefined') {
@@ -322,15 +335,15 @@ export default class extends Scroll {
         }
 
         setTimeout(() => {
-            this.scrollbar.scrollTo(0, targetOffset, speed);
+            this.instance.scrollTo(0, targetOffset, speed);
         }, delay);
     }
 
     /**
      * Set the scroll bar limit
      */
-    setScrollbarLimit() {
-        this.scrollbarLimit = this.scrollbar.limit.y + this.windowHeight;
+    setScrollLimit() {
+        this.scrollLimit = this.$container[0].innherHeight + this.windowHeight;
     }
 
     /**
@@ -383,8 +396,8 @@ export default class extends Scroll {
      */
     transformElements(isFirstCall) {
         if (this.parallaxElements.length > 0) {
-            const scrollbarBottom = this.scrollbar.scrollTop + this.windowHeight;
-            const scrollbarMiddle = this.scrollbar.scrollTop + this.windowMiddle;
+            const scrollbarBottom = this.instance.scroll.y + this.windowHeight;
+            const scrollbarMiddle = this.instance.scroll.y + this.windowMiddle;
 
             let i = 0;
             const len = this.parallaxElements.length;
@@ -392,18 +405,12 @@ export default class extends Scroll {
 
             for (; i < len; i++) {
                 let curEl = this.parallaxElements[i];
-                // Old
                 let scrollBottom = scrollbarBottom;
-                // New
-                // let scrollBottom = (curEl.position === 'top') ? this.scrollbar.scrollTop : scrollbarBottom;
 
                 let transformDistance = false;
 
                 // Define if the element is in view
-                // Old
                 let inView = (scrollBottom >= curEl.offset && this.scroll.y <= curEl.limit);
-                // New
-                // let inView = (scrollBottom >= curEl.offset && this.scrollbar.scrollTop <= curEl.limit);
 
                 this.toggleElement(curEl, i);
 
@@ -418,14 +425,11 @@ export default class extends Scroll {
                 if (inView && curEl.speed) {
                     switch (curEl.position) {
                         case 'top':
-                            // Old
-                            transformDistance = this.scrollbar.scrollTop * -curEl.speed;
-                            // New
-                            // transformDistance = (this.scrollbar.scrollTop - curEl.offset) * -curEl.speed;
+                            transformDistance = this.instance.scroll.y * -curEl.speed;
                         break;
 
                         case 'bottom':
-                            transformDistance = (this.scrollbarLimit - scrollBottom) * curEl.speed;
+                            transformDistance = (this.scrollLimit - scrollBottom) * curEl.speed;
                         break;
 
                         default:
@@ -452,19 +456,18 @@ export default class extends Scroll {
     updateElements(options) {
         options = options || {};
 
-        this.scrollbar.update();
+        // @todo
+        // this.scrollbar.update();
         this.windowHeight = $window.height();
         this.windowMiddle = this.windowHeight / 2;
-        this.setScrollbarLimit();
-        this.setWheelDirection(this.isReversed);
+        this.setScrollLimit();
+
+        // @todo
+        // this.setWheelDirection(this.isReversed);
         this.addElements();
         this.transformElements(true);
 
-        if (typeof options.callback === 'function') {
-            options.callback();
-        }
-
-        this.renderAnimations(false, status);
+        this.renderAnimations(false);
     }
 
     /**

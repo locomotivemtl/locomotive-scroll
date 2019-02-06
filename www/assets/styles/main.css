@@ -1,1 +1,53 @@
-html{height:100%}body{margin:0}.has-smooth-scroll body{height:100%;width:100%;overflow:hidden}.has-smooth-scroll .o-scroll{height:100%;position:relative;overflow:hidden}.scroll-content{overflow:auto}body[data-wheel-reversed] .scroll-content{width:200vw}.o-scroll_example{font-size:0;text-align:center}.o-scroll_example div{font-size:1rem;display:inline-block;width:40vw;margin:30px;height:500px;background-color:#00f;z-index:10;position:relative}.o-scroll_example div.-sticky{background-color:green;z-index:100}.js-animate{opacity:0;transition:opacity 1s ease-out}.js-animate.is-show{opacity:1}.js-animate.is-red{transition:opacity 1s ease-out,background-color 1s ease-out .3s;opacity:1;background-color:red}
+html {
+  height: 100%; }
+
+body {
+  margin: 0; }
+  .has-smooth-scroll body {
+    height: 100%;
+    width: 100%;
+    overflow: hidden; }
+
+.has-smooth-scroll .o-scroll {
+  height: 100%;
+  position: relative; }
+
+.scroll-content {
+  overflow: auto; }
+  body[data-wheel-reversed] .scroll-content {
+    width: 200vw; }
+
+.o-scroll_example {
+  font-size: 0;
+  text-align: center; }
+  .o-scroll_example > div {
+    font-size: 1rem;
+    display: inline-block;
+    width: 40vw;
+    margin: 30px;
+    height: 500px;
+    background-color: blue;
+    z-index: 10;
+    position: relative; }
+    .o-scroll_example > div div {
+      background-color: red;
+      height: 100px;
+      position: absolute;
+      top: 50%;
+      left: 30px;
+      right: 30px; }
+    .o-scroll_example > div.-sticky {
+      background-color: green;
+      z-index: 100; }
+
+.js-animate {
+  opacity: 0;
+  -webkit-transition: opacity 1s ease-out;
+  transition: opacity 1s ease-out; }
+  .js-animate.is-show, .js-animate.-sticky {
+    opacity: 1; }
+  .js-animate.is-red {
+    -webkit-transition: opacity 1s ease-out, background-color 1s ease-out 0.3s;
+    transition: opacity 1s ease-out, background-color 1s ease-out 0.3s;
+    opacity: 1;
+    background-color: red; }

@@ -15,7 +15,6 @@ body {
     .has-smooth-scroll & {
         height: 100%;
         position: relative;
-        overflow: hidden;
     }
 }
 
@@ -33,7 +32,7 @@ body {
     font-size: 0;
     text-align: center;
 
-    div {
+    >div {
         font-size: 1rem;
         display: inline-block;
         width: 40vw;
@@ -42,6 +41,15 @@ body {
         background-color: blue;
         z-index: 10;
         position: relative;
+
+        div {
+            background-color: red;
+            height: 100px;
+            position: absolute;
+            top: 50%;
+            left: 30px;
+            right: 30px;
+        }
 
         &.-sticky {
             background-color: green;
@@ -54,7 +62,8 @@ body {
     opacity: 0;
     transition: opacity 1s ease-out;
 
-    &.is-show {
+    &.is-show,
+    &.-sticky{
         opacity: 1;
     }
     &.is-red {

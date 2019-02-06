@@ -20,9 +20,15 @@
         <section class="o-scroll" id="js-scroll">
             <h1>Locomotive Smooth Scroll</h1>
             <div class="o-scroll_example">
-                <div class="js-animate -sticky" data-sticky data-sticky-target="#stopSticky"></div>
-                <div class="js-animate" data-repeat>repeat</div>
-                <div class="js-animate" id="stopSticky"></div>
+                <div class="js-animate -sticky" data-sticky data-sticky-target="#stopSticky">
+                    <div class="js-animate" data-speed="1.5"></div>
+                </div>
+                <div class="js-animate" data-repeat>repeat
+                    <div class="js-animate" data-speed="1.5"></div>
+                </div>
+                <div class="js-animate" id="stopSticky">
+                    stop sticky
+                </div>
                 <div class="js-animate" data-repeat data-callback="test.Scroll(test:0|key:value|isTriggered:true)" >has callback</div>
                 <div class="js-animate" data-repeat>repeat</div>
                 <div class="js-animate" data-viewport-offset="0.3" data-repeat>Viewport offset</div>
