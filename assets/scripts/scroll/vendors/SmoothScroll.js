@@ -41,7 +41,7 @@ export default class extends Scroll {
 
         this.instance = new VirtualScroll({
             mouseMultiplier: 0.5,
-            touchMultiplier: 1.5,
+            touchMultiplier: 4,
             firefoxMultiplier: 30
         });
 
@@ -356,9 +356,7 @@ export default class extends Scroll {
      * Set the scroll bar limit
      */
     setScrollLimit() {
-        this.scrollLimit = this.$container[0].clientHeight - this.windowHeight;
-
-        console.log(this.scrollLimit);
+        this.scrollLimit = this.$container[0].offsetHeight - this.windowHeight;
     }
 
     /**
@@ -397,8 +395,8 @@ export default class extends Scroll {
      */
     transformElements(isFirstCall) {
         if (this.parallaxElements.length > 0) {
-            const scrollbarBottom = this.instance.scroll.y + this.windowHeight;
-            const scrollbarMiddle = this.instance.scroll.y + this.windowMiddle;
+            const scrollBottom = this.instance.scroll.y + this.windowHeight;
+            const scrollMiddle = this.instance.scroll.y + this.windowMiddle;
 
             let i = 0;
             const len = this.parallaxElements.length;
@@ -406,12 +404,11 @@ export default class extends Scroll {
 
             for (; i < len; i++) {
                 let curEl = this.parallaxElements[i];
-                let scrollBottom = scrollbarBottom;
 
                 let transformDistance = false;
 
                 // Define if the element is in view
-                let inView = (scrollBottom >= curEl.offset && this.instance.scroll.y <= curEl.limit);
+                let inView = ((scrollBottom + this.windowHeight) >= curEl.offset && this.instance.scroll.y <= curEl.limit);
 
                 this.toggleElement(curEl, i);
 
@@ -430,11 +427,11 @@ export default class extends Scroll {
                         break;
 
                         case 'bottom':
-                            transformDistance = (this.scrollLimit - scrollBottom) * curEl.speed;
+                            transformDistance = (this.scrollLimit - scrollBottom + this.windowHeight) * curEl.speed;
                         break;
 
                         default:
-                            transformDistance = (scrollbarMiddle - curEl.middle) * -curEl.speed;
+                            transformDistance = (scrollMiddle - curEl.middle) * -curEl.speed;
                         break;
                     }
                 }

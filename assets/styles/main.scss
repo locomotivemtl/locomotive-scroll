@@ -1,6 +1,8 @@
 html{
     height: 100%;
     font-family: Arial;
+    overflow: hidden;
+    position: fixed;
 }
 
 body {
@@ -17,6 +19,9 @@ figure {
 }
 
 .o-scroll{
+    box-sizing: border-box;
+    overflow: hidden;
+
     .has-smooth-scroll & {
         position: relative;
     }
@@ -24,7 +29,7 @@ figure {
 
 .o-title {
     text-align: center;
-    font-size: 6vw;
+    font-size: 8vw;
     padding: 25vh 0;
     margin: 0;
 
@@ -98,6 +103,7 @@ figure {
 
 .o-article {
     max-width: 450px;
+    margin: 120px 0;
 }
 
 .o-article_title {
