@@ -11,10 +11,11 @@ import ScrollManager from './scroll/vendors/ScrollManager';
         container: $('#js-scroll'),
         selector: '.js-animate',
         smooth: true,
-        smoothMobile: false,
+        smoothMobile: true,
         mobileContainer: $(document),
         getWay: false,
-        getSpeed: false
+        getSpeed: false,
+        inertia: 0.75
     });
 
 })();

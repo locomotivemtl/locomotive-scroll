@@ -22,7 +22,7 @@
     "dest": "./www/assets/images/"
   },
   "views": {
-    "src": "./wwww/"
+    "src": "./www/"
   },
   "modules": {
     "build": "gulp",

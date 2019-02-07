@@ -22,6 +22,7 @@ export default class extends Scroll {
         this.isReversed = options.reversed || DEFAULTS.reversed;
         this.getWay = options.getWay || DEFAULTS.getWay;
         this.getSpeed = options.getSpeed || DEFAULTS.getSpeed;
+        this.inertia = options.inertia || DEFAULTS.inertia;
 
         this.parallaxElements = [];
 
@@ -39,14 +40,19 @@ export default class extends Scroll {
         $html.addClass('has-smooth-scroll');
 
         this.instance = new VirtualScroll({
-            mouseMultiplier: 1,
+            mouseMultiplier: 0.5,
             touchMultiplier: 1.5,
             firefoxMultiplier: 30
         });
 
-        this.inertia = 0.25;
+        this.inertia = this.inertia * 0.1;
 
         this.instance.scroll = {
+            x: 0,
+            y: 0
+        }
+
+        this.instance.delta = {
             x: 0,
             y: 0
         }
@@ -54,12 +60,11 @@ export default class extends Scroll {
         // @todo : to optimize
         this.instance.on((e) => {
 
-            this.instance.scroll.y-= e.deltaY * this.inertia;
+            this.instance.delta.y -= e.deltaY;
 
-            if(this.instance.scroll.y < 0) this.instance.scroll.y = 0;
-            if(this.instance.scroll.y > this.scrollLimit) this.instance.scroll.y = this.scrollLimit;
+            if(this.instance.delta.y < 0) this.instance.delta.y = 0;
+            if(this.instance.delta.y > this.scrollLimit) this.instance.delta.y = this.scrollLimit;
 
-            this.renderAnimations(false)
         });
 
         this.setScrollLimit();
@@ -73,14 +78,11 @@ export default class extends Scroll {
         this.$container.on(EVENT.REBUILD, () => {
             // @todo
             // this.scrollbar.scrollTo(0, 0, 1);
-            this.updateElements();
+            this.update();
         });
 
         // Update event
-        this.$container.on(EVENT.UPDATE, (event, options) => this.updateElements(options));
-
-        // Render event
-        this.$container.on(EVENT.RENDER, () => this.renderAnimations(false));
+        this.$container.on(EVENT.UPDATE, (event, options) => this.update(options));
 
         // Scrollto button event
         this.$container.on(EVENT.CLICK, '.js-scrollto', (event) => {
@@ -104,9 +106,12 @@ export default class extends Scroll {
         });
 
         // Resize event
-        $window.on(EVENT.RESIZE, debounce(() => {
-            this.updateElements()
-        }, 20));
+        $window.on(EVENT.RESIZE,() => {
+            this.update()
+        });
+
+        this.preloadImages();
+        this.render();
     }
 
     /**
@@ -126,7 +131,7 @@ export default class extends Scroll {
             let elementSpeed = $element.attr('data-speed') ? $element.attr('data-speed') / 10 : false;
             let elementPosition = $element.attr('data-position');
             let elementTarget = $element.attr('data-target');
-            let elementHorizontal = $element.attr('data-horizontal');
+            let elementHorizontal = (typeof $element.attr('data-horizontal') === 'string');
             let elementSticky = (typeof $element.attr('data-sticky') === 'string');
             let elementStickyTarget = $element.attr('data-sticky-target');
             let $target = (elementTarget && $(elementTarget).length) ? $(elementTarget) : $element;
@@ -244,25 +249,28 @@ export default class extends Scroll {
      *                               called by smooth-scrollbar instance listener.
      * @return {void}
      */
-    renderAnimations(isFirstCall, e) {
+    render(isFirstCall, e) {
+        this.raf = requestAnimationFrame(()=>this.render());
+
+        let value = this.lerp(this.instance.scroll.y,this.instance.delta.y, this.inertia);
+
+        this.instance.scroll.y = value;
 
         const scrollbarTop = this.instance.scroll.y;
 
-        // console.log(e.y);
-
         // need to move the container
         this.$container.css({
-            '-webkit-transform': `translate3d(0, ${-scrollbarTop}px, 0)`,
-            '-ms-transform': `translate3d(0, ${-scrollbarTop}px, 0)`,
-            'transform': `translate3d(0, ${-scrollbarTop}px, 0)`
+            '-webkit-transform': `translate3d(0, ${-this.instance.scroll.y}px, 0)`,
+            '-ms-transform': `translate3d(0, ${-this.instance.scroll.y}px, 0)`,
+            'transform': `translate3d(0, ${-this.instance.scroll.y}px, 0)`
         });
 
         if(this.getWay){
-            if (scrollbarTop > this.scroll.y) {
+            if (this.instance.scroll.y > this.scroll.y) {
                 if (this.scroll.direction !== 'down') {
                     this.scroll.direction = 'down';
                 }
-            } else if (scrollbarTop < this.scroll.y) {
+            } else if (this.instance.scroll.y < this.scroll.y) {
                 if (this.scroll.direction !== 'up') {
                     this.scroll.direction = 'up';
                 }
@@ -270,20 +278,24 @@ export default class extends Scroll {
         }
 
         if(this.getSpeed) {
-            if (this.scroll.y !== scrollbarTop) {
+            if (this.scroll.y !== this.instance.scroll.y) {
                 this.scroll.speed = this.scrollbar.movement.y;
-                this.scroll.y = scrollbarTop;
+                this.scroll.y = this.instance.scroll.y;
             }else {
                 this.scroll.speed = 0;
             }
         }
 
-        if (this.scroll.y !== scrollbarTop) {
-            this.scroll.y = scrollbarTop;
+        if (this.scroll.y !== this.instance.scroll.y) {
+            this.scroll.y = this.instance.scroll.y;
         }
 
         this.transformElements(isFirstCall);
         this.animateElements();
+    }
+
+    lerp (start, end, amt){
+        return (1-amt)*start+amt*end
     }
 
     /**
@@ -345,6 +357,8 @@ export default class extends Scroll {
      */
     setScrollLimit() {
         this.scrollLimit = this.$container[0].clientHeight - this.windowHeight;
+
+        console.log(this.scrollLimit);
     }
 
     /**
@@ -397,7 +411,7 @@ export default class extends Scroll {
                 let transformDistance = false;
 
                 // Define if the element is in view
-                let inView = (scrollBottom >= curEl.offset && this.scroll.y <= curEl.limit);
+                let inView = (scrollBottom >= curEl.offset && this.instance.scroll.y <= curEl.limit);
 
                 this.toggleElement(curEl, i);
 
@@ -440,7 +454,7 @@ export default class extends Scroll {
      *
      * @param {object} options
      */
-    updateElements(options) {
+    update(options) {
         options = options || {};
 
         // @todo
@@ -454,7 +468,6 @@ export default class extends Scroll {
         this.addElements();
         this.transformElements(true);
 
-        this.renderAnimations(false);
     }
 
     /**
@@ -465,6 +478,21 @@ export default class extends Scroll {
         this.scrollbar.reverseWheel(isReversed);
     }
 
+    preloadImages() {
+        const images = Array.from(document.querySelectorAll('img'))
+
+        images.forEach((image) => {
+            const img = document.createElement('img');
+
+            img.addEventListener('load', () => {
+                images.splice(images.indexOf(image), 1)
+                images.length === 0 && this.update()
+            });
+
+            img.src = image.getAttribute('src')
+        })
+    }
+
     /**
      * Destroy
      */
@@ -473,5 +501,8 @@ export default class extends Scroll {
         $html.removeClass('has-smooth-scroll');
         this.parallaxElements = [];
         this.instance.destroy();
+
+        cancelAnimationFrame(this.raf);
+
     }
 }

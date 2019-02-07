@@ -1,5 +1,6 @@
 html{
     height: 100%;
+    font-family: Arial;
 }
 
 body {
@@ -11,12 +12,23 @@ body {
     }
 }
 
+figure {
+    margin: 0;
+}
+
 .o-scroll{
     .has-smooth-scroll & {
         position: relative;
     }
 }
 
+.o-title {
+    text-align: center;
+    font-size: 6vw;
+    padding: 25vh 0;
+    margin: 0;
+
+}
 
 .scroll-content {
     overflow: auto;
@@ -26,48 +38,109 @@ body {
     }
 }
 
-// example
-.o-scroll_example {
-    font-size: 0;
-    text-align: center;
+.o-container {
+    max-width: 1600px;
+    margin: 0 120px;
 
-    >div {
-        font-size: 1rem;
-        display: inline-block;
-        width: 40vw;
-        margin: 30px;
-        height: 500px;
-        background-color: blue;
-        z-index: 10;
-        position: relative;
-
-        div {
-            background-color: red;
-            height: 100px;
-            position: absolute;
-            top: 50%;
-            left: 30px;
-            right: 30px;
-        }
-
-        &.-sticky {
-            background-color: green;
-            z-index: 100;
-        }
+    @media (max-width: 1000px) {
+        margin: 0 60px;
+    }
+    @media (max-width: 700px) {
+        margin: 0 30px;
     }
 }
 
-.js-animate {
-    opacity: 0;
-    transition: opacity 1s ease-out;
+.o-layout {
+    font-size: 0;
+    margin-left: -30px;
+}
 
-    &.is-show,
-    &.-sticky{
-        opacity: 1;
+.o-layout_item {
+    vertical-align: top;
+    box-sizing: border-box;
+    width: 33%;
+    display: inline-block;
+    font-size: 16px;
+
+    padding-left: 30px;
+    margin-bottom: 30px;
+
+    @media (max-width: 1000px) {
+        width: 50%;
     }
-    &.is-red {
-        transition: opacity 1s ease-out, background-color 1s ease-out 0.3s;
+    @media (max-width: 500px) {
+        width: 100%;
+    }
+}
+
+.o-image {
+    width: 100%;
+    position: relative;
+
+    overflow: hidden;
+
+    &::before {
+        content:"";
+        display: block;
+        padding-bottom: 100%;
+    }
+}
+
+.o-image_background {
+    position: absolute;
+    top: -25%;
+    bottom: -25%;
+    right: 0;
+    left: 0;
+    background-size: cover;
+    background-position: center center;
+}
+
+.o-article {
+    max-width: 450px;
+}
+
+.o-article_title {
+    margin-bottom: 15px;
+    font-size: 36px;
+
+    opacity: 0;
+    transform: translateY(30px);
+    transition: opacity 0.6s cubic-bezier(0.215, 0.610, 0.355, 1.000), transform 0.6s cubic-bezier(0.215, 0.610, 0.355, 1.000);
+
+    &.is-show {
         opacity: 1;
-        background-color: red;
+        transform: none;
+        transition-delay: 0.3s;
+    }
+}
+
+.o-article_time {
+    color: gray;
+    margin: 15px 0 5px 0;
+    display: block;
+    opacity: 0;
+    transform: translateY(60px);
+    transition: opacity 0.6s cubic-bezier(0.215, 0.610, 0.355, 1.000), transform 0.6s cubic-bezier(0.215, 0.610, 0.355, 1.000);
+
+    &.is-show {
+        opacity: 1;
+        transform: none;
+        transition-delay: 0.3s;
+    }
+}
+
+
+.o-article_text {
+    line-height: 1.6;
+    display: block;
+    opacity: 0;
+    transform: translateY(60px);
+    transition: opacity 0.6s cubic-bezier(0.215, 0.610, 0.355, 1.000), transform 0.6s cubic-bezier(0.215, 0.610, 0.355, 1.000);
+
+    &.is-show {
+        opacity: 1;
+        transform: none;
+        transition-delay: 0.3s;
     }
 }

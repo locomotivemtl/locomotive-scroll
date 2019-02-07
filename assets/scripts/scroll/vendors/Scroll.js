@@ -69,11 +69,11 @@ export default class {
 
         this.addElements();
 
-        this.renderAnimations();
+        this.render();
 
         // On scroll
         this.$container.on(EVENT.SCROLL, () => {
-            this.renderAnimations();
+            this.render();
         });
 
         // Rebuild event
@@ -81,14 +81,14 @@ export default class {
             this.scrollTo({
                 targetOffset: 0
             });
-            this.updateElements();
+            this.update();
         });
 
         // Update event
-        this.$container.on(EVENT.UPDATE, (event, options) => this.updateElements(options));
+        this.$container.on(EVENT.UPDATE, (event, options) => this.update(options));
 
         // Render event
-        this.$container.on(EVENT.RENDER, () => this.renderAnimations());
+        this.$container.on(EVENT.RENDER, () => this.render());
 
         // Scrollto button event
         this.$container.on(EVENT.CLICK, '.js-scrollto', (event) => {
@@ -111,7 +111,7 @@ export default class {
 
         // Resize event
         $window.on(EVENT.RESIZE, debounce(() => {
-            this.updateElements()
+            this.update()
         }, 20));
 
     }
@@ -252,7 +252,7 @@ export default class {
     /**
      * Render the class animations, and update the global scroll positionning.
      */
-    renderAnimations() {
+    render() {
         // if (window.pageYOffset > this.scroll.y) {
         //     if (this.scroll.direction !== 'down') {
         //         this.scroll.direction = 'down';
@@ -440,7 +440,7 @@ export default class {
     /**
      * Update elements and recalculate all the positions on the page
      */
-    updateElements() {
+    update() {
         this.addElements();
         this.animateElements();
 
