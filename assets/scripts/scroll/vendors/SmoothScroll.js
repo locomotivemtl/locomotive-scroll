@@ -114,9 +114,6 @@ export default class extends Scroll {
         this.preloadImages();
         this.render();
 
-        this.scrollTo({
-            toBottom: true
-        })
     }
 
     /**
