@@ -61,9 +61,10 @@ export default class extends Scroll {
         this.instance.on((e) => {
 
             this.instance.delta.y -= e.deltaY;
+            this.isScrolling = true;
 
             if(this.instance.delta.y < 0) this.instance.delta.y = 0;
-            if(this.instance.delta.y > this.scrollLimit) this.instance.delta.y = this.scrollLimit;
+            if(this.instance.delta.y > this.instance.limit) this.instance.delta.y = this.instance.limit;
 
         });
 
@@ -112,6 +113,10 @@ export default class extends Scroll {
 
         this.preloadImages();
         this.render();
+
+        this.scrollTo({
+            toBottom: true
+        })
     }
 
     /**
@@ -137,6 +142,7 @@ export default class extends Scroll {
             let $target = (elementTarget && $(elementTarget).length) ? $(elementTarget) : $element;
             let elementOffset = $target.offset().top + this.instance.scroll.y;
             let elementLimit = elementOffset + $target.outerHeight();
+
 
             let elementViewportOffset = null;
             if(typeof $element.attr('data-viewport-offset') === 'string') {
@@ -195,6 +201,7 @@ export default class extends Scroll {
 
             if (!elementTarget && $element.attr('data-transform')) {
                 elementOffset -= parseFloat($element.attr('data-transform').y);
+                elementLimit = elementOffset + $target.outerHeight();
             }
 
             if (elementSticky) {
@@ -218,16 +225,19 @@ export default class extends Scroll {
             // For parallax animated elements
             if (elementSpeed !== false) {
                 let elementPosition = $element.attr('data-position');
-                let elementHorizontal = $element.attr('data-horizontal');
+                let elementHorizontal = (typeof $element.attr('data-horizontal') === 'string');
                 let elementMiddle = ((elementLimit - elementOffset) / 2) + elementOffset;
+                let elementDelay = $element.attr('data-delay');
 
                 newElement.horizontal = elementHorizontal;
                 newElement.middle = elementMiddle;
                 newElement.offset = elementOffset;
                 newElement.position = elementPosition;
                 newElement.speed = elementSpeed
+                newElement.delay = elementDelay;
 
                 this.parallaxElements.push(newElement);
+
             } else {
                 newElement.sticky = elementSticky;
 
@@ -252,9 +262,12 @@ export default class extends Scroll {
     render(isFirstCall, e) {
         this.raf = requestAnimationFrame(()=>this.render());
 
-        let value = this.lerp(this.instance.scroll.y,this.instance.delta.y, this.inertia);
+        if(this.isScrolling) {
+            this.instance.scroll.y = this.lerp(this.instance.scroll.y,this.instance.delta.y, this.inertia);
+        } else {
+            this.instance.scroll.y = this.lerp(this.instance.scroll.y,this.instance.delta.y, this.inertia * 0.5);
 
-        this.instance.scroll.y = value;
+        }
 
         const scrollbarTop = this.instance.scroll.y;
 
@@ -344,11 +357,12 @@ export default class extends Scroll {
         if (toTop === true) {
             targetOffset = 0;
         } else if (toBottom === true) {
-            targetOffset = this.scrollbar.limit.y;
+            targetOffset = this.instance.limit;
         }
 
         setTimeout(() => {
-            this.instance.scrollTo(0, targetOffset, speed);
+            this.isScrolling = false;
+            this.instance.delta.y = targetOffset;
         }, delay);
     }
 
@@ -356,7 +370,7 @@ export default class extends Scroll {
      * Set the scroll bar limit
      */
     setScrollLimit() {
-        this.scrollLimit = this.$container[0].offsetHeight - this.windowHeight;
+        this.instance.limit = this.$container[0].offsetHeight - this.windowHeight;
     }
 
     /**
@@ -368,23 +382,56 @@ export default class extends Scroll {
      * @param  {int}     z        Translate value
      * @return {void}
      */
-    transformElement($element, x, y, z) {
+    transformElement($element, x, y, z, delay) {
         // Defaults
         x = x || 0;
         y = y || 0;
         z = z || 0;
 
-        // Translate and store the positionning as `data`
-        $element.css({
-            '-webkit-transform': `translate3d(${x}px, ${y}px, ${z}px)`,
-            '-ms-transform': `translate3d(${x}px, ${y}px, ${z}px)`,
-            'transform': `translate3d(${x}px, ${y}px, ${z}px)`
-        }).data('transform',{
-            x : x,
-            y : y,
-            z : z
-        });
+        if(!delay) {
+            // Translate and store the positionning as `data`
+            $element.css({
+                '-webkit-transform': `translate3d(${x}px, ${y}px, ${z}px)`,
+                '-ms-transform': `translate3d(${x}px, ${y}px, ${z}px)`,
+                'transform': `translate3d(${x}px, ${y}px, ${z}px)`
+            }).data('transform',{
+                x : x,
+                y : y,
+                z : z
+            });
+        } else {
 
+            let start = this.getTranslate($element[0]);
+            let lerpY = this.lerp(start.y, y, delay);
+            let lerpX = this.lerp(start.x, x, delay);
+
+            $element.css({
+                '-webkit-transform': `translate3d(${lerpX}px, ${lerpY}px, ${z}px)`,
+                '-ms-transform': `translate3d(${lerpX}px, ${lerpY}px, ${z}px)`,
+                'transform': `translate3d(${lerpX}px, ${lerpY}px, ${z}px)`
+            }).data('transform',{
+                x : lerpX,
+                y : lerpY,
+                z : z
+            });
+        }
+
+    }
+
+    getTranslate(el){
+        const translate = {}
+        if(!window.getComputedStyle) return;
+
+        const style = getComputedStyle(el);
+        const transform = style.transform || style.webkitTransform || style.mozTransform;
+
+        let mat = transform.match(/^matrix3d\((.+)\)$/);
+        if(mat) return parseFloat(mat[1].split(', ')[13]);
+        mat = transform.match(/^matrix\((.+)\)$/);
+        translate.x = mat ? parseFloat(mat[1].split(', ')[4]) : 0;
+        translate.y = mat ? parseFloat(mat[1].split(', ')[5]) : 0;
+
+        return translate;
     }
 
     /**
@@ -427,7 +474,7 @@ export default class extends Scroll {
                         break;
 
                         case 'bottom':
-                            transformDistance = (this.scrollLimit - scrollBottom + this.windowHeight) * curEl.speed;
+                            transformDistance = (this.instance.limit - scrollBottom + this.windowHeight) * curEl.speed;
                         break;
 
                         default:
@@ -439,8 +486,8 @@ export default class extends Scroll {
                 // Transform horizontal OR vertical. Defaults to vertical
                 if (isNumeric(transformDistance)) {
                     (curEl.horizontal) ?
-                        this.transformElement(curEl.$element, transformDistance) :
-                        this.transformElement(curEl.$element, 0, transformDistance);
+                        this.transformElement(curEl.$element, transformDistance,0,0, curEl.delay) :
+                        this.transformElement(curEl.$element, 0, transformDistance,0, curEl.delay);
                 }
             }
         }

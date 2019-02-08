@@ -15,7 +15,7 @@ import ScrollManager from './scroll/vendors/ScrollManager';
         mobileContainer: $(document),
         getWay: false,
         getSpeed: false,
-        inertia: 0.75
+        inertia: 1
     });
 
 })();

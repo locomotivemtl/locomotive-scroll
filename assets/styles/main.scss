@@ -21,6 +21,7 @@ figure {
 .o-scroll{
     box-sizing: border-box;
     overflow: hidden;
+    width: 100vw;
 
     .has-smooth-scroll & {
         position: relative;
@@ -44,6 +45,7 @@ figure {
 }
 
 .o-container {
+    position: relative;
     max-width: 1600px;
     margin: 0 120px;
 
@@ -55,24 +57,31 @@ figure {
     }
 }
 
+.o-letter {
+    position: absolute;
+    top: 100vh;
+    right: 0;
+    font-size: 80vw;
+    line-height: 1;
+    display: block;
+    // opacity: 0.1;
+    font-weight: bold;
+}
+
 .o-layout {
     font-size: 0;
-    margin-left: -30px;
+    margin-left: -60px;
 }
 
 .o-layout_item {
     vertical-align: top;
     box-sizing: border-box;
-    width: 33%;
+    width: 50%;
     display: inline-block;
     font-size: 16px;
+    padding-left: 60px;
+    margin-bottom: 60px;
 
-    padding-left: 30px;
-    margin-bottom: 30px;
-
-    @media (max-width: 1000px) {
-        width: 50%;
-    }
     @media (max-width: 500px) {
         width: 100%;
     }
@@ -87,7 +96,7 @@ figure {
     &::before {
         content:"";
         display: block;
-        padding-bottom: 100%;
+        padding-bottom: 75%;
     }
 }
 
@@ -103,7 +112,7 @@ figure {
 
 .o-article {
     max-width: 450px;
-    margin: 120px 0;
+    margin: 20vh 0;
 }
 
 .o-article_title {
@@ -149,4 +158,28 @@ figure {
         transform: none;
         transition-delay: 0.3s;
     }
+}
+
+.o-fixed_wrapper {
+    position: relative;
+    width: 100vw;
+    height: 100vh;
+    overflow: hidden;
+}
+
+.o-fixed {
+    position: absolute;
+    top: 0;
+    bottom: 0;
+    right: 0;
+    left: 0;
+}
+
+.o-fixed_target {
+    display: block;
+    position: absolute;
+    top: -100vh;
+    right: 0;
+    left: 0;
+    height: 200vh;
 }

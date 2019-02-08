@@ -18,9 +18,17 @@
     </head>
     <body>
         <section class="o-scroll" id="js-scroll">
+            <span class="o-letter js-animate" data-speed="3" data-delay="0.1">
+                LOCO
+            </span>
+
             <div class="o-container">
 
-                <h1 class="o-title js-animate" data-position="top" data-speed="10">Locomotive Scroll 🚀</h1>
+                <h1 class="o-title js-animate" data-delay="0.2" data-position="top" data-speed="10">Locomotive Scroll 🚀</h1>
+
+                <a href="#scroll-to" class="js-scrollto">
+                    Scroll to
+                </a>
 
                 <div class="o-layout">
                     <div class="o-layout_item">
@@ -71,52 +79,17 @@
                             </div>
                         </figure>
                     </div>
-                    <div class="o-layout_item">
-                        <figure class="o-image js-animate" data-speed="1">
-                            <div class="o-image_background js-animate" data-speed="-1.2" style="background-image:url('https://picsum.photos/600/600/?random=308')">
-                            </div>
-                        </figure>
-                    </div>
-                    <div class="o-layout_item">
-                        <figure class="o-image js-animate" data-speed="1">
-                            <div class="o-image_background js-animate" data-speed="-1.2" style="background-image:url('https://picsum.photos/600/600/?random=309')">
-                            </div>
-                        </figure>
-                    </div>
-                    <div class="o-layout_item">
-                        <figure class="o-image js-animate" data-speed="1">
-                            <div class="o-image_background js-animate" data-speed="-1.2" style="background-image:url('https://picsum.photos/600/600/?random=310')">
-                            </div>
-                        </figure>
-                    </div>
-                    <div class="o-layout_item">
-                        <figure class="o-image js-animate" data-speed="1">
-                            <div class="o-image_background js-animate" data-speed="-1.2" style="background-image:url('https://picsum.photos/600/600/?random=311')">
-                            </div>
-                        </figure>
-                    </div>
-                    <div class="o-layout_item">
-                        <figure class="o-image js-animate" data-speed="1">
-                            <div class="o-image_background js-animate" data-speed="-1.2" style="background-image:url('https://picsum.photos/600/600/?random=317')">
-                            </div>
-                        </figure>
-                    </div>
-                    <div class="o-layout_item">
-                        <figure class="o-image js-animate" data-speed="1">
-                            <div class="o-image_background js-animate" data-speed="-1.2" style="background-image:url('https://picsum.photos/600/600/?random=318')">
-                            </div>
-                        </figure>
-                    </div>
-                    <div class="o-layout_item">
-                        <figure class="o-image js-animate" data-speed="1">
-                            <div class="o-image_background js-animate" data-speed="-1.2" style="background-image:url('https://picsum.photos/600/600/?random=319')">
-                            </div>
-                        </figure>
-                    </div>
                 </div>
+            </div>
 
-                <h1 class="o-title js-animate" data-horizontal="true" data-speed="6">Horizontal tagline 💨</h1>
+            <h1 class="o-title js-animate" id="scroll-to" data-horizontal data-speed="6">Horizontal tagline 💨</h1>
 
+            <div class="o-fixed_wrapper">
+                <span class="o-fixed_target" id="target"></span>
+                <div class="o-fixed js-animate" data-sticky style="background-image:url('https://picsum.photos/1920/1080/?random')"></div>
+            </div>
+
+            <div class="o-container">
                 <article class="o-article">
                     <h1 class="o-article_title js-animate" data-repeat class="js-animate">
                         Article title
