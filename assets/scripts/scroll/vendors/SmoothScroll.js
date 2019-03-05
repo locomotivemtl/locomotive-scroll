@@ -40,7 +40,8 @@ export default class extends Scroll {
         $html.addClass('has-smooth-scroll');
 
         this.instance = new VirtualScroll({
-            mouseMultiplier: 0.5,
+            mouseMultiplier: 1,
+            touchMultiplier: 1.5,
             touchMultiplier: 4,
             firefoxMultiplier: 30
         });
