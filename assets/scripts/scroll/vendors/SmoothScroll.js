@@ -23,9 +23,9 @@ export default class extends Scroll {
         this.getDirection = options.getDirection || DEFAULTS.getDirection;
         this.getSpeed = options.getSpeed || DEFAULTS.getSpeed;
         this.inertia = options.inertia || DEFAULTS.inertia;
+        this.scrollBarClassName = options.scrollBarClassName || 'o-scrollbar';
 
         this.parallaxElements = [];
-
 
     }
 
@@ -71,9 +71,23 @@ export default class extends Scroll {
         });
 
         this.setScrollLimit();
+        this.initScrollBar();
 
         this.addElements();
 
+        this.events();
+
+        this.preloadImages();
+
+        this.timestamp = Date.now();
+        this.render();
+
+    }
+
+    /**
+    * Listen/trigger events
+    **/
+    events() {
         // Rebuild event
         this.$container.on(EVENT.REBUILD, () => {
             this.update();
@@ -95,8 +109,7 @@ export default class extends Scroll {
             });
         });
 
-        // @todo scrollto
-        // this.$container.on(EVENT.SCROLLTO, (event) => this.scrollTo(event.options));
+        this.$container.on(EVENT.SCROLLTO, (event) => this.scrollTo(event.options));
 
         // Setup done
         $document.triggerHandler({
@@ -107,11 +120,18 @@ export default class extends Scroll {
         $window.on(EVENT.RESIZE,() => {
             this.update()
         });
+    }
 
-        this.preloadImages();
+    initScrollBar() {
+        this.scrollbar = document.createElement('span');
+        this.scrollbar.classList.add(`${this.scrollBarClassName}`);
 
-        this.timestamp = Date.now();
-        this.render();
+        document.body.append(this.scrollbar);
+        this.scrollbar.style.height = `${(window.innerHeight * window.innerHeight) / this.instance.limit}px`;
+        this.scrollBarLimit = window.innerHeight - this.scrollbar.getBoundingClientRect().height;
+
+        console.log(this.scrollbar.getBoundingClientRect().height);
+
 
     }
 
@@ -300,6 +320,10 @@ export default class extends Scroll {
 
         this.callbacks.onScroll(this.instance)
         this.timestamp = Date.now();
+
+        // scrollbar translation
+        let scrollBarTranslation = (this.instance.scroll.y / this.instance.limit) * this.scrollBarLimit
+        this.scrollbar.style.transform = `translate3d(0,${scrollBarTranslation}px,0)`
     }
 
     lerp (start, end, amt){

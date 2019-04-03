@@ -28,6 +28,15 @@ figure {
     }
 }
 
+.o-scrollbar {
+    width: 5px;
+    background-color: black;
+    position: fixed;
+    right: 0;
+    top: 0;
+    height: 100px;
+}
+
 .o-title {
     text-align: center;
     font-size: 8vw;

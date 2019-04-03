@@ -16,8 +16,9 @@ import ScrollManager from './scroll/vendors/ScrollManager';
         getDirection: true,
         getSpeed: true,
         inertia: 1,
+        scrollBarClassName: 'o-scrollbar',
         onScroll: (e) => {
-            console.log(e.scroll.speed);
+            // console.log(e.scroll.y);
         }
     });
 
