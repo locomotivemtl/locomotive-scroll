@@ -1,10 +1,11 @@
 {
     "name": "locomotive-scroll",
     "title": "Locomotive Scroll",
-    "version": "1.0.0",
+    "version": "2.0.0",
     "author": "Locomotive <info@locomotive.ca>",
     "dependencies": {
-        "virtual-scroll": "git+https://git@github.com/locomotivemtl/virtual-scroll.git"
+        "virtual-scroll": "git+https://git@github.com/locomotivemtl/virtual-scroll.git",
+        "virtual-scroll-locomotive": "git+https://git@github.com/locomotivemtl/virtual-scroll.git"
     },
     "devDependencies": {
         "@modularbp/gulp": "^1.0.5",

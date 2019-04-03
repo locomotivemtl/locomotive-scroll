@@ -20,15 +20,12 @@ export default class extends Scroll {
         super(options);
 
         this.isReversed = options.reversed || DEFAULTS.reversed;
-        this.getWay = options.getWay || DEFAULTS.getWay;
+        this.getDirection = options.getDirection || DEFAULTS.getDirection;
         this.getSpeed = options.getSpeed || DEFAULTS.getSpeed;
         this.inertia = options.inertia || DEFAULTS.inertia;
 
         this.parallaxElements = [];
 
-        if(this.getSpeed) {
-            this.scroll.speed = 0;
-        }
 
     }
 
@@ -40,8 +37,7 @@ export default class extends Scroll {
         $html.addClass('has-smooth-scroll');
 
         this.instance = new VirtualScroll({
-            mouseMultiplier: 1,
-            touchMultiplier: 1.5,
+            mouseMultiplier: (navigator.platform.indexOf('Win') > -1) ? 1 : 0.4,
             touchMultiplier: 4,
             firefoxMultiplier: 30
         });
@@ -50,12 +46,17 @@ export default class extends Scroll {
 
         this.instance.scroll = {
             x: 0,
-            y: 0
+            y: 0,
+            direction: null
         }
 
         this.instance.delta = {
             x: 0,
             y: 0
+        }
+
+        if(this.getSpeed) {
+            this.instance.scroll.speed = 0;
         }
 
         // @todo : to optimize
@@ -71,15 +72,10 @@ export default class extends Scroll {
 
         this.setScrollLimit();
 
-        // @todo
-        // this.setWheelDirection(this.isReversed);
-
         this.addElements();
 
         // Rebuild event
         this.$container.on(EVENT.REBUILD, () => {
-            // @todo
-            // this.scrollbar.scrollTo(0, 0, 1);
             this.update();
         });
 
@@ -113,6 +109,8 @@ export default class extends Scroll {
         });
 
         this.preloadImages();
+
+        this.timestamp = Date.now();
         this.render();
 
     }
@@ -267,8 +265,6 @@ export default class extends Scroll {
 
         }
 
-        const scrollbarTop = this.instance.scroll.y;
-
         // need to move the container
         this.$container.css({
             '-webkit-transform': `translate3d(0, ${-this.instance.scroll.y}px, 0)`,
@@ -276,33 +272,34 @@ export default class extends Scroll {
             'transform': `translate3d(0, ${-this.instance.scroll.y}px, 0)`
         });
 
-        if(this.getWay){
-            if (this.instance.scroll.y > this.scroll.y) {
-                if (this.scroll.direction !== 'down') {
-                    this.scroll.direction = 'down';
+        if(this.getDirection){
+            if (this.instance.delta.y > this.instance.scroll.y) {
+                if (this.instance.scroll.direction !== 'down') {
+                    this.instance.scroll.direction = 'down';
                 }
-            } else if (this.instance.scroll.y < this.scroll.y) {
-                if (this.scroll.direction !== 'up') {
-                    this.scroll.direction = 'up';
+            } else if (this.instance.delta.y < this.instance.scroll.y) {
+                if (this.instance.scroll.direction !== 'up') {
+                    this.instance.scroll.direction = 'up';
                 }
             }
         }
 
         if(this.getSpeed) {
-            if (this.scroll.y !== this.instance.scroll.y) {
-                this.scroll.speed = this.scrollbar.movement.y;
-                this.scroll.y = this.instance.scroll.y;
-            }else {
-                this.scroll.speed = 0;
-            }
-        }
 
-        if (this.scroll.y !== this.instance.scroll.y) {
-            this.scroll.y = this.instance.scroll.y;
+            if (this.instance.delta.y !== this.instance.scroll.y) {
+                this.instance.scroll.speed = (this.instance.delta.y - this.instance.scroll.y) / (Date.now() - this.timestamp);
+                this.instance.delta.y = this.instance.delta.y;
+            }else {
+                this.instance.scroll.speed = 0;
+            }
+
         }
 
         this.transformElements(isFirstCall);
         this.animateElements();
+
+        this.callbacks.onScroll(this.instance)
+        this.timestamp = Date.now();
     }
 
     lerp (start, end, amt){

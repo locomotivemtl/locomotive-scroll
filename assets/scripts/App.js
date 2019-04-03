@@ -13,9 +13,12 @@ import ScrollManager from './scroll/vendors/ScrollManager';
         smooth: true,
         smoothMobile: true,
         mobileContainer: $(document),
-        getWay: false,
-        getSpeed: false,
-        inertia: 1
+        getDirection: true,
+        getSpeed: true,
+        inertia: 1,
+        onScroll: (e) => {
+            console.log(e.scroll.speed);
+        }
     });
 
 })();

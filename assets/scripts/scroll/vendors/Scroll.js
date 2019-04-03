@@ -28,7 +28,7 @@ export const DEFAULTS = {
     smooth: false,
     smoothMobile: false,
     reversed: false,
-    getWay: false,
+    getDirection: false,
     getSpeed: false
 };
 
@@ -48,10 +48,12 @@ export default class {
             onScroll: typeof options.onScroll === 'function' ? options.onScroll : DEFAULTS.onScroll
         };
 
-        this.scroll = {
-            x: 0,
-            y: 0,
-            direction: ''
+        this.instance = {
+            scroll: {
+                x: 0,
+                y: 0,
+                direction: ''
+            }
         }
 
         this.windowHeight = $window.height();
@@ -253,21 +255,21 @@ export default class {
      * Render the class animations, and update the global scroll positionning.
      */
     render() {
-        // if (window.pageYOffset > this.scroll.y) {
-        //     if (this.scroll.direction !== 'down') {
-        //         this.scroll.direction = 'down';
+        // if (window.pageYOffset > this.instance.scroll.y) {
+        //     if (this.instance.scroll.direction !== 'down') {
+        //         this.instance.scroll.direction = 'down';
         //     }
-        // } else if (window.pageYOffset < this.scroll.y) {
-        //     if (this.scroll.direction !== 'up') {
-        //         this.scroll.direction = 'up';
+        // } else if (window.pageYOffset < this.instance.scroll.y) {
+        //     if (this.instance.scroll.direction !== 'up') {
+        //         this.instance.scroll.direction = 'up';
         //     }
         // }
 
-        if (this.scroll.y !== window.pageYOffset) {
-            this.scroll.y = window.pageYOffset;
+        if (this.instance.scroll.y !== window.pageYOffset) {
+            this.instance.scroll.y = window.pageYOffset;
         }
-        if (this.scroll.x !== window.pageXOffset) {
-            this.scroll.x = window.pageXOffset;
+        if (this.instance.scroll.x !== window.pageXOffset) {
+            this.instance.scroll.x = window.pageXOffset;
         }
 
         this.callbacks.onScroll(this.scroll)
@@ -287,7 +289,7 @@ export default class {
 
         if (typeof element !== 'undefined') {
             // Find the bottom edge of the scroll container
-            const scrollTop = this.scroll.y;
+            const scrollTop = this.instance.scroll.y;
             const scrollBottom = scrollTop + this.windowHeight;
 
             // Define if the element is inView
@@ -309,8 +311,7 @@ export default class {
                     let scrollViewportOffset = scrollBottom - (this.windowHeight * element.viewportOffset[0]);
                     inView = (scrollViewportOffset > element.offset && scrollViewportOffset < element.limit);
                 }
-            }
-             else {
+            }else {
                 inView = (scrollBottom >= element.offset && scrollTop <= element.limit);
             }
 
@@ -338,7 +339,7 @@ export default class {
                 }
 
                 if (element.sticky) {
-                    let y = this.scroll.y - element.offset;
+                    let y = this.instance.scroll.y - element.offset;
 
                     element.$element.css({
                         '-webkit-transform': `translate3d(0, ${y}px, 0)`,
