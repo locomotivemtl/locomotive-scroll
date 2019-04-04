@@ -3,6 +3,7 @@ html{
     font-family: Arial;
     overflow: hidden;
     position: fixed;
+
 }
 
 body {
@@ -28,13 +29,31 @@ figure {
     }
 }
 
-.o-scrollbar {
-    width: 5px;
-    background-color: black;
+.o-scrollbar_wrapper {
+    width: 10px;
     position: fixed;
     right: 0;
     top: 0;
-    height: 100px;
+    bottom: 0;
+    transform-origin: center right;
+    transform: scaleX(1);
+    transition: transform 0.2s linear;
+
+    &:hover {
+        transform: scaleX(1.3);
+        cursor: grab;
+    }
+}
+.o-scrollbar {
+    background-color: black;
+    position: absolute;
+    top: 0;
+    left: 0;
+    right: 0;
+
+    &:hover {
+        cursor: pointer;
+    }
 }
 
 .o-title {
@@ -42,7 +61,6 @@ figure {
     font-size: 8vw;
     padding: 25vh 0;
     margin: 0;
-
 }
 
 .scroll-content {

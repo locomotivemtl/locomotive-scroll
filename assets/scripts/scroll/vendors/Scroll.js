@@ -29,7 +29,9 @@ export const DEFAULTS = {
     smoothMobile: false,
     reversed: false,
     getDirection: false,
-    getSpeed: false
+    getSpeed: false,
+    scrollBarClassName: 'o-scrollbar',
+    isScrollingClassName: 'is-scrolling'
 };
 
 /**

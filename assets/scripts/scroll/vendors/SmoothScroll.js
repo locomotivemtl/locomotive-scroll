@@ -2,7 +2,7 @@
 // Locomotive Smooth Scroll
 // ==========================================================================
 /* jshint esnext: true */
-import { $window, $document, $html } from '../../utils/environment';
+import { $window, $document, $html, html } from '../../utils/environment';
 import Scroll, { DEFAULTS, EVENT } from '../Scroll';
 
 import debounce from '../../utils/debounce';
@@ -23,9 +23,11 @@ export default class extends Scroll {
         this.getDirection = options.getDirection || DEFAULTS.getDirection;
         this.getSpeed = options.getSpeed || DEFAULTS.getSpeed;
         this.inertia = options.inertia || DEFAULTS.inertia;
-        this.scrollBarClassName = options.scrollBarClassName || 'o-scrollbar';
+        this.scrollBarClassName = options.scrollBarClassName || DEFAULTS.scrollBarClassName;
+        this.isScrollingClassName = options.isScrollingClassName || DEFAULTS.isScrollingClassName;
 
         this.parallaxElements = [];
+        this.isDraggingScrollBar = false;
 
     }
 
@@ -62,12 +64,14 @@ export default class extends Scroll {
         // @todo : to optimize
         this.instance.on((e) => {
 
-            this.instance.delta.y -= e.deltaY;
-            this.isScrolling = true;
+            if(!this.isDraggingScrollBar) {
+                this.instance.delta.y -= e.deltaY;
+                this.isScrolling = true;
+                html.classList.add(this.isScrollingClassName);
 
-            if(this.instance.delta.y < 0) this.instance.delta.y = 0;
-            if(this.instance.delta.y > this.instance.limit) this.instance.delta.y = this.instance.limit;
-
+                if(this.instance.delta.y < 0) this.instance.delta.y = 0;
+                if(this.instance.delta.y > this.instance.limit) this.instance.delta.y = this.instance.limit;
+            }
         });
 
         this.setScrollLimit();
@@ -123,16 +127,56 @@ export default class extends Scroll {
     }
 
     initScrollBar() {
+        this.scrollbarWrapper = document.createElement('span');
         this.scrollbar = document.createElement('span');
+        this.scrollbarWrapper.classList.add(`${this.scrollBarClassName}_wrapper`);
         this.scrollbar.classList.add(`${this.scrollBarClassName}`);
 
-        document.body.append(this.scrollbar);
+        this.scrollbarWrapper.append(this.scrollbar);
+        document.body.append(this.scrollbarWrapper);
         this.scrollbar.style.height = `${(window.innerHeight * window.innerHeight) / this.instance.limit}px`;
         this.scrollBarLimit = window.innerHeight - this.scrollbar.getBoundingClientRect().height;
 
-        console.log(this.scrollbar.getBoundingClientRect().height);
+        this.scrollbar.addEventListener('mousedown',(e) => this.getScrollBar(e));
+        window.addEventListener('mouseup',(e) => this.releaseScrollBar(e));
+        window.addEventListener('mousemove',(e) => this.moveScrollBar(e));
 
+    }
 
+    reinitScrollBar() {
+        this.scrollbar.style.height = `${(window.innerHeight * window.innerHeight) / this.instance.limit}px`;
+        this.scrollBarLimit = window.innerHeight - this.scrollbar.getBoundingClientRect().height;
+
+    }
+
+    destroyScrollBar() {
+        this.scrollbar.removeEventListener('mousedown',(e) => this.getScrollBar(e));
+        window.removeEventListener('mouseup',(e) => this.releaseScrollBar(e));
+        window.removeEventListener('mousemove',(e) => this.moveScrollBar(e));
+    }
+
+    getScrollBar(e) {
+        this.isScrolling = false;
+        this.isDraggingScrollBar = true;
+        html.classList.remove(this.isScrollingClassName);
+
+    }
+
+    releaseScrollBar(e) {
+        this.isScrolling = true;
+        this.isDraggingScrollBar = false;
+        html.classList.add(this.isScrollingClassName);
+    }
+
+    moveScrollBar(e) {
+        if(this.isDraggingScrollBar) {
+
+            let y = (e.pageY * 100 / (window.innerHeight)) * this.instance.limit / 100;
+
+            if(y > 0 && y < this.instance.limit) {
+                this.instance.delta.y = y;
+            }
+        }
     }
 
     /**
@@ -280,10 +324,13 @@ export default class extends Scroll {
 
         if(this.isScrolling) {
             this.instance.scroll.y = this.lerp(this.instance.scroll.y,this.instance.delta.y, this.inertia);
-        } else {
+        } else if(this.isDraggingScrollBar) {
+            this.instance.scroll.y = this.lerp(this.instance.scroll.y,this.instance.delta.y, 0.2);
+        }else {
             this.instance.scroll.y = this.lerp(this.instance.scroll.y,this.instance.delta.y, this.inertia * 0.5);
-
         }
+
+        // console.log(this.isDraggingScrollBar, this.instance.scroll.y);
 
         // need to move the container
         this.$container.css({
@@ -312,7 +359,10 @@ export default class extends Scroll {
             }else {
                 this.instance.scroll.speed = 0;
             }
+        }
 
+        if(Math.abs(this.instance.scroll.y - this.instance.delta.y) < 1 ) {
+            html.classList.remove(this.isScrollingClassName);
         }
 
         this.transformElements(isFirstCall);
@@ -382,6 +432,7 @@ export default class extends Scroll {
         setTimeout(() => {
             this.isScrolling = false;
             this.instance.delta.y = targetOffset;
+            html.classList.remove(this.isScrollingClassName);
         }, delay);
     }
 
@@ -530,6 +581,7 @@ export default class extends Scroll {
         // this.setWheelDirection(this.isReversed);
         this.addElements();
         this.transformElements(true);
+        this.reinitScrollBar();
 
     }
 
