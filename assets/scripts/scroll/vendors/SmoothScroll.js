@@ -233,35 +233,36 @@ export default class extends Scroll {
 
         for (let y = 0 ; y < this.sections.length; y ++) {
 
-            const $elements = $(this.selector, this.sections[y].element);
-            const len = $elements.length;
-            let i = 0;
+            const elements = document.querySelectorAll(this.selector, this.sections[y].element);
+            const len = elements.length;
 
-            for (; i < len; i ++) {
-                let $element = $elements.eq(i);
-                let elementSpeed = $element.attr('data-speed') ? $element.attr('data-speed') / 10 : false;
-                let elementPosition = $element.attr('data-position');
-                let elementTarget = $element.attr('data-target');
-                let elementHorizontal = (typeof $element.attr('data-horizontal') === 'string');
-                let elementSticky = (typeof $element.attr('data-sticky') === 'string');
-                let elementStickyTarget = $element.attr('data-sticky-target');
-                let $target = (elementTarget && $(elementTarget).length) ? $(elementTarget) : $element;
-
+            for (let i = 0 ; i < elements.length; i ++) {
+                let element = elements[i];
+                let elementSpeed = element.getAttribute('data-speed') ? element.getAttribute('data-speed') / 10 : false;
+                let elementPosition = element.getAttribute('data-position');
+                let elementTarget = element.getAttribute('data-target');
+                let elementHorizontal = (typeof element.getAttribute('data-horizontal') === 'string');
+                let elementSticky = (typeof element.getAttribute('data-sticky') === 'string');
+                let elementStickyTarget = element.getAttribute('data-sticky-target');
+                let target = (elementTarget && document.querySelectorAll(elementTarget).length) ? document.querySelectorAll(elementTarget) : element;
+                let elementOffset;
                 // reset transform to get the real offset
-                let elementOffset = parseInt($target.offset().top + this.instance.scroll.y);
 
                 if(!this.sections[y].inView) {
-                    elementOffset = parseInt($target.offset().top - this.getTranslate(this.sections[y].element).y)
+                    elementOffset = parseInt(target.getBoundingClientRect().top - this.getTranslate(this.sections[y].element).y)
+                } else {
+                    elementOffset = parseInt(target.getBoundingClientRect().top + this.instance.scroll.y);
                 }
-                let elementLimit = elementOffset + $target.outerHeight();
+
+                let elementLimit = elementOffset + target.offsetHeight;
 
                 let elementViewportOffset = null;
-                if(typeof $element.attr('data-viewport-offset') === 'string') {
+                if(typeof element.getAttribute('data-viewport-offset') === 'string') {
                    elementViewportOffset = $element.attr('data-viewport-offset').split(',');
                 }
 
                 //Manage callback
-                let elementCallbackString = (typeof $element.attr('data-callback') === 'string') ? $element.attr('data-callback') : null;
+                let elementCallbackString = (typeof element.getAttribute('data-callback') === 'string') ? element.getAttribute('data-callback') : null;
                 let elementCallback = null;
 
                 if(elementCallbackString != null){
@@ -303,28 +304,25 @@ export default class extends Scroll {
                 }
 
                 // If elements stays visible after scrolling past it
-                let elementRepeat = (typeof $element.attr('data-repeat') === 'string');
+                let elementRepeat = (typeof element.getAttribute('data-repeat') === 'string');
 
-                let elementInViewClass = $element.attr('data-inview-class');
-                if (typeof elementInViewClass === 'undefined') {
-                    elementInViewClass = 'is-show';
-                }
+                let elementInViewClass = (typeof element.getAttribute('data-inview-class') === 'string') ? element.getAttribute('data-inview-class') : 'is-show';
 
-                if (!elementTarget && $element.attr('data-transform')) {
-                    elementOffset -= parseInt(JSON.parse($element.attr('data-transform')).y);
-                    elementLimit = elementOffset + $target.outerHeight();
+                if (!elementTarget && element.getAttribute('data-transform')) {
+                    elementOffset -= parseInt(JSON.parse(element.getAttribute('data-transform')).y);
+                    elementLimit = elementOffset + target.offsetHeight;
                 }
 
                 if (elementSticky) {
                     if (typeof elementStickyTarget === 'undefined') {
                         elementLimit = Infinity;
                     } else {
-                        elementLimit = $(elementStickyTarget).offset().top - $element.height() + this.instance.scroll.y;
+                        elementLimit = $(elementStickyTarget)[0].getBoundingClientRect().top - element.offsetHeight + this.instance.scroll.y;
                     }
                 }
 
                 const newElement = {
-                    $element: $element,
+                    $element: $(element),
                     inViewClass: elementInViewClass,
                     limit: elementLimit,
                     offset: Math.round(elementOffset),
@@ -335,10 +333,10 @@ export default class extends Scroll {
 
                 // For parallax animated elements
                 if (elementSpeed !== false) {
-                    let elementPosition = $element.attr('data-position');
-                    let elementHorizontal = (typeof $element.attr('data-horizontal') === 'string');
+                    let elementPosition = element.getAttribute('data-position');
+                    let elementHorizontal = (typeof element.getAttribute('data-horizontal') === 'string');
                     let elementMiddle = ((elementLimit - elementOffset) / 2) + elementOffset;
-                    let elementDelay = $element.attr('data-delay');
+                    let elementDelay = element.getAttribute('data-delay');
 
                     newElement.horizontal = elementHorizontal;
                     newElement.middle = elementMiddle;
@@ -384,7 +382,7 @@ export default class extends Scroll {
 
         for (let i = this.sections.length - 1; i >= 0; i--) {
             if(this.instance.scroll.y > this.sections[i].offset && this.instance.scroll.y < this.sections[i].limit) {
-                this.transformElement(this.sections[i].element,0,-this.instance.scroll.y);
+                this.transform(this.sections[i].element,0,-this.instance.scroll.y);
                 this.sections[i].element.style.visibility = 'visible';
             } else {
                 this.sections[i].element.style.visibility = 'hidden';
@@ -425,7 +423,7 @@ export default class extends Scroll {
 
         // scrollbar translation
         let scrollBarTranslation = (this.instance.scroll.y / this.instance.limit) * this.scrollBarLimit
-        this.scrollbar.style.transform = `translate3d(0,${scrollBarTranslation}px,0)`
+        this.transform(this.scrollbar,0,scrollBarTranslation)
     }
 
     lerp (start, end, amt){
@@ -504,7 +502,7 @@ export default class extends Scroll {
      * @param  {int}     z        Translate value
      * @return {void}
      */
-    transformElement(element, x, y, delay) {
+    transform(element, x, y, delay) {
         // Defaults
         x = parseInt(x*10000)/10000 || 0;
         y = parseInt(y*10000)/10000 || 0;
@@ -519,7 +517,7 @@ export default class extends Scroll {
             element.style.OTransform = transform;
             element.style.transform = transform;
 
-            element.setAttribute('data-transform',`{"x": ${x},"y": ${y}`)
+            element.setAttribute('data-transform',`{"x": ${parseInt(x)},"y": ${parseInt(y)}}`)
 
         } else {
 
@@ -535,7 +533,7 @@ export default class extends Scroll {
             element.style.OTransform = transform;
             element.style.transform = transform;
 
-            element.setAttribute('data-transform',`{"x": ${lerpX},"y": ${lerpY}`);
+            element.setAttribute('data-transform',`{"x": ${parseInt(lerpX)},"y": ${parseInt(lerpY)}}`);
         }
 
     }
@@ -608,8 +606,8 @@ export default class extends Scroll {
                 // Transform horizontal OR vertical. Defaults to vertical
                 if (isNumeric(transformDistance)) {
                     (curEl.horizontal) ?
-                        this.transformElement(curEl.$element[0], transformDistance,0, curEl.delay) :
-                        this.transformElement(curEl.$element[0], 0, transformDistance, curEl.delay);
+                        this.transform(curEl.$element[0], transformDistance,0, curEl.delay) :
+                        this.transform(curEl.$element[0], 0, transformDistance, curEl.delay);
                 }
             }
         }

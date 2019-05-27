@@ -77,26 +77,23 @@ export default class {
         this.render();
 
         // On scroll
-        this.$container.on(EVENT.SCROLL, () => {
+        $document.on(EVENT.SCROLL, () => {
             this.render();
         });
 
         // Rebuild event
-        this.$container.on(EVENT.REBUILD, () => {
-            this.scrollTo({
-                targetOffset: 0
-            });
+        $document.on(EVENT.REBUILD, () => {
             this.update();
         });
 
         // Update event
-        this.$container.on(EVENT.UPDATE, (event, options) => this.update(options));
+        $document.on(EVENT.UPDATE, (event, options) => this.update(options));
 
         // Render event
-        this.$container.on(EVENT.RENDER, () => this.render());
+        $document.on(EVENT.RENDER, () => this.render());
 
         // Scrollto button event
-        this.$container.on(EVENT.CLICK, '.js-scrollto', (event) => {
+        $document.on(EVENT.CLICK, '.js-scrollto', (event) => {
             event.preventDefault();
 
             let $target = $(event.currentTarget);
@@ -107,7 +104,7 @@ export default class {
                 offsetElem: offset
             });
         });
-        this.$container.on(EVENT.SCROLLTO, (event) => this.scrollTo(event.options));
+        $document.on(EVENT.SCROLLTO, (event) => this.scrollTo(event.options));
 
         // Setup done
         $document.triggerHandler({
