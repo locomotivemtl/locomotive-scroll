@@ -384,13 +384,7 @@ export default class extends Scroll {
 
         for (let i = this.sections.length - 1; i >= 0; i--) {
             if(this.instance.scroll.y > this.sections[i].offset && this.instance.scroll.y < this.sections[i].limit) {
-                const transform = `matrix(1,0,0,1,0,${-this.instance.scroll.y})`
-
-                this.sections[i].element.style.webkitTransform = transform
-                this.sections[i].element.style.MozTransform = transform
-                this.sections[i].element.style.msTransform = transform
-                this.sections[i].element.style.OTransform = transform
-                this.sections[i].element.style.transform = transform;
+                this.transformElement(this.sections[i].element,0,-this.instance.scroll.y);
                 this.sections[i].element.style.visibility = 'visible';
             } else {
                 this.sections[i].element.style.visibility = 'hidden';
@@ -518,7 +512,6 @@ export default class extends Scroll {
         if(!delay) {
             // Translate and store the positionning as `data`
             const transform = `matrix(1,0,0,1,${x},${y})`
-
 
             element.style.webkitTransform = transform;
             element.style.MozTransform = transform;
