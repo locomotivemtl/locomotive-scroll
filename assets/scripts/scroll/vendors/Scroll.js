@@ -22,6 +22,7 @@ export const EVENT = {
 
 export const DEFAULTS = {
     container: $document,
+    sections: '.js-section',
     mobileContainer: $document,
     onScroll: function(){},
     selector: '.js-animate',
@@ -31,7 +32,7 @@ export const DEFAULTS = {
     getDirection: false,
     getSpeed: false,
     scrollBarClassName: 'o-scrollbar',
-    isScrollingClassName: 'is-scrolling'
+    isScrollingClassName: 'is-scrolling',
 };
 
 /**

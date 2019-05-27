@@ -9,6 +9,7 @@ import ScrollManager from './scroll/vendors/ScrollManager';
     // Init Locomotive Scroll
     const smoothScroll = new ScrollManager({
         container: $('#js-scroll'),
+        sections: '.js-section',
         selector: '.js-animate',
         smooth: true,
         smoothMobile: true,

@@ -135,6 +135,36 @@ figure {
     left: 0;
     background-size: cover;
     background-position: center center;
+
+    &::after {
+        content:"";
+        position: absolute;
+        top: 0;
+        bottom: 0;
+        right: 0;
+        left: 0;
+        background-color: rgba(0,0,0,0.3);
+    }
+}
+
+.o-image_title {
+    position: absolute;
+    top: 50%;
+    left: 0;
+    width: 100%;
+    text-align: center;
+    color: white;
+    text-transform: uppercase;
+    z-index: 2;
+    font-size: 10vw;
+    transform: translateY(-50%);
+    font-weight: bold;
+    margin: 0;
+    span {
+        display: inline-block;
+        min-width: 0.1em;
+        padding: 10vh 0;
+    }
 }
 
 .o-article {
