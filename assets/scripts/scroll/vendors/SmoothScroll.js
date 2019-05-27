@@ -510,31 +510,39 @@ export default class extends Scroll {
      * @param  {int}     z        Translate value
      * @return {void}
      */
-    transformElement($element, x, y, z, delay) {
+    transformElement(element, x, y, delay) {
         // Defaults
         x = parseInt(x*10000)/10000 || 0;
         y = parseInt(y*10000)/10000 || 0;
-        z = parseInt(z*10000)/10000 || 0;
 
         if(!delay) {
             // Translate and store the positionning as `data`
-            $element.css({
-                '-webkit-transform': `translate3d(${x}px, ${y}px, ${z}px)`,
-                '-ms-transform': `translate3d(${x}px, ${y}px, ${z}px)`,
-                'transform': `translate3d(${x}px, ${y}px, ${z}px)`
-            }).attr('data-transform',`{"x": ${x},"y": ${y},"z": ${z}}`)
+            const transform = `matrix(1,0,0,1,${x},${y})`
+
+
+            element.style.webkitTransform = transform;
+            element.style.MozTransform = transform;
+            element.style.msTransform = transform;
+            element.style.OTransform = transform;
+            element.style.transform = transform;
+
+            element.setAttribute('data-transform',`{"x": ${x},"y": ${y}`)
 
         } else {
 
-            let start = this.getTranslate($element[0]);
+            let start = this.getTranslate(element);
             let lerpY = this.lerp(start.y, y, delay);
             let lerpX = this.lerp(start.x, x, delay);
 
-            $element.css({
-                '-webkit-transform': `translate3d(${parseInt(lerpX*10000)/10000}px, ${parseInt(lerpY * 10000) / 10000}px, ${z}px)`,
-                '-ms-transform': `translate3d(${parseInt(lerpX*10000)/10000}px, ${parseInt(lerpY * 10000) / 10000}px, ${z}px)`,
-                'transform': `translate3d(${parseInt(lerpX*10000)/10000}px, ${parseInt(lerpY * 10000) / 10000}px, ${z}px)`
-            }).attr('data-transform',`{"x": ${parseInt(lerpX*10000)/10000},"y": ${parseInt(lerpY * 10000) / 10000},"z": ${z}}`)
+            const transform = `matrix(1,0,0,1,${lerpX},${lerpY})`
+
+            element.style.webkitTransform = transform;
+            element.style.MozTransform = transform;
+            element.style.msTransform = transform;
+            element.style.OTransform = transform;
+            element.style.transform = transform;
+
+            element.setAttribute('data-transform',`{"x": ${lerpX},"y": ${lerpY}`);
         }
 
     }
@@ -607,8 +615,8 @@ export default class extends Scroll {
                 // Transform horizontal OR vertical. Defaults to vertical
                 if (isNumeric(transformDistance)) {
                     (curEl.horizontal) ?
-                        this.transformElement(curEl.$element, transformDistance,0,0, curEl.delay) :
-                        this.transformElement(curEl.$element, 0, transformDistance,0, curEl.delay);
+                        this.transformElement(curEl.$element[0], transformDistance,0, curEl.delay) :
+                        this.transformElement(curEl.$element[0], 0, transformDistance, curEl.delay);
                 }
             }
         }
