@@ -37,7 +37,7 @@ export const DEFAULTS = {
 
 /**
  * Manage animation of elements on the page according to scroll position.
- *
+
  * @todo  Manage some options (normally from data attributes) with constructor options (ex.: set repeat for all)
  * @todo  Method to get the distance (as percentage) of an element in the viewport
  */

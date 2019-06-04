@@ -1,6 +1,10 @@
-# Locomotive Smooth Scroll
-
-![experimental](https://img.shields.io/badge/stability-experimental-orange.svg)
+<p align="center">
+    <a href="https://github.com/locomotivemtl/locomotive-boilerplate">
+        <img src="https://user-images.githubusercontent.com/4596862/58807621-67aeec00-85e6-11e9-8e3a-3fe4123ee76c.png" height="140">
+    </a>
+</p>
+<h1 align="center">Locomotive Scroll</h1>
+<p align="center">Elements in viewport detection & smooth scrolling with parallax.</p>
 
 ## Data attributes
 Data | Value | Description

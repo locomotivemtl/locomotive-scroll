@@ -22,7 +22,6 @@ export default class {
 
     init() {
         $html[0].scrollTop = 0;
-        $body[0].scrollTop = 0;
 
         if (!this.smoothMobile) {
             this.isMobile = (/Android|iPhone|iPad|iPod|BlackBerry|IEMobile|Opera Mini/i.test(navigator.userAgent));

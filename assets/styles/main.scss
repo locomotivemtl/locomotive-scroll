@@ -1,16 +1,16 @@
 html{
-    height: 100%;
     font-family: Arial;
-    overflow: hidden;
-    position: fixed;
+
+    &.has-smoothscroll {
+        overflow: hidden;
+    }
 
 }
 
 body {
     margin: 0;
-    .has-smooth-scroll & {
-        height: 100%;
-        width: 100%;
+
+    .has-smoothscroll & {
         overflow: hidden;
     }
 }
@@ -24,7 +24,7 @@ figure {
     overflow: hidden;
     width: 100vw;
 
-    .has-smooth-scroll & {
+    .has-smoothscroll & {
         position: relative;
     }
 }
@@ -180,7 +180,7 @@ figure {
     transform: translateY(30px);
     transition: opacity 0.6s cubic-bezier(0.215, 0.610, 0.355, 1.000), transform 0.6s cubic-bezier(0.215, 0.610, 0.355, 1.000);
 
-    &.is-show {
+    &.is-inview {
         opacity: 1;
         transform: none;
         transition-delay: 0.3s;
@@ -195,7 +195,7 @@ figure {
     transform: translateY(60px);
     transition: opacity 0.6s cubic-bezier(0.215, 0.610, 0.355, 1.000), transform 0.6s cubic-bezier(0.215, 0.610, 0.355, 1.000);
 
-    &.is-show {
+    &.is-inview {
         opacity: 1;
         transform: none;
         transition-delay: 0.3s;
@@ -210,7 +210,7 @@ figure {
     transform: translateY(60px);
     transition: opacity 0.6s cubic-bezier(0.215, 0.610, 0.355, 1.000), transform 0.6s cubic-bezier(0.215, 0.610, 0.355, 1.000);
 
-    &.is-show {
+    &.is-inview {
         opacity: 1;
         transform: none;
         transition-delay: 0.3s;

@@ -2,30 +2,26 @@
 // Locomotive Smooth Scroll
 // ==========================================================================
 /* jshint esnext: true */
-import { $window, $document, $html, html } from '../../utils/environment';
-import Scroll, { DEFAULTS, EVENT } from '../Scroll';
+import { $window, $document, $html, html } from '../utils/environment';
+import scroll from './scroll';
 
-import debounce from '../../utils/debounce';
 import VirtualScroll from 'virtual-scroll';
-import { isNumeric } from '../../utils/is';
 
-/**
- * Smooth scrolling using `smooth-scrollbar`.
- * Based on `Scroll` class, which allows animations of elements on the page
- * according to scroll position.
- *
- */
-export default class extends Scroll {
+import debounce from '../utils/debounce';
+import { isNumeric } from '../utils/is';
+
+export default class extends scroll {
     constructor(options) {
         super(options);
 
-        this.sectionsSelector = (options.sections) ? document.querySelectorAll(options.sections) : document.querySelectorAll(DEFAULTS.sections);
-        this.isReversed = options.reversed || DEFAULTS.reversed;
-        this.getDirection = options.getDirection || DEFAULTS.getDirection;
-        this.getSpeed = options.getSpeed || DEFAULTS.getSpeed;
-        this.inertia = options.inertia || DEFAULTS.inertia;
-        this.scrollBarClassName = options.scrollBarClassName || DEFAULTS.scrollBarClassName;
-        this.isScrollingClassName = options.isScrollingClassName || DEFAULTS.isScrollingClassName;
+        const DEFAULTS = {};
+        this.sectionsSelector = (this.sections) ? document.querySelectorAll(this.sections) : document.querySelectorAll(DEFAULTS.sections);
+        // this.isReversed = options.reversed || DEFAULTS.reversed;
+        // this.getDirection = options.getDirection || DEFAULTS.getDirection;
+        // this.getSpeed = options.getSpeed || DEFAULTS.getSpeed;
+        // this.inertia = options.inertia || DEFAULTS.inertia;
+        // this.scrollBarClassName = options.scrollBarClassName || DEFAULTS.scrollBarClassName;
+        // this.isScrollingClassName = options.isScrollingClassName || DEFAULTS.isScrollingClassName;
 
         this.parallaxElements = [];
         this.isDraggingScrollBar = false;
@@ -44,6 +40,10 @@ export default class extends Scroll {
      * Initialize scrolling animations
      */
     init() {
+        // this.callbacks = {
+        //     onScroll: typeof options.onScroll === 'function' ? options.onScroll : DEFAULTS.onScroll
+        // };
+
         // Add class to the document to know if SmoothScroll is initialized (to manage overflow on containers)
         $html.addClass('has-smooth-scroll');
 
@@ -108,38 +108,61 @@ export default class extends Scroll {
     * Listen/trigger events
     **/
     events() {
-        // Rebuild event
-        this.$container.on(EVENT.REBUILD, () => {
-            this.update();
-        });
+        // // Rebuild event
+        // this.$container.on(EVENT.REBUILD, () => {
+        //     this.update();
+        // });
 
-        // Update event
-        this.$container.on(EVENT.UPDATE, (event, options) => this.update(options));
+        // // Update event
+        // this.$container.on(EVENT.UPDATE, (event, options) => this.update(options));
 
-        // Scrollto button event
-        this.$container.on(EVENT.CLICK, '.js-scrollto', (event) => {
-            event.preventDefault();
+        // // Scrollto button event
+        // this.$container.on(EVENT.CLICK, '.js-scrollto', (event) => {
+        //     event.preventDefault();
 
-            let $target = $(event.currentTarget);
-            let offset = $target.data('offset');
+        //     let $target = $(event.currentTarget);
+        //     let offset = $target.data('offset');
 
-            this.scrollTo({
-                sourceElem: $target,
-                offsetElem: offset
-            });
-        });
+        //     this.scrollTo({
+        //         sourceElem: $target,
+        //         offsetElem: offset
+        //     });
+        // });
 
-        this.$container.on(EVENT.SCROLLTO, (event) => this.scrollTo(event.options));
+        // this.$container.on(EVENT.SCROLLTO, (event) => this.scrollTo(event.options));
 
-        // Setup done
-        $document.triggerHandler({
-            type: EVENT.ISREADY
-        });
+        // // Setup done
+        // $document.triggerHandler({
+        //     type: EVENT.ISREADY
+        // });
 
-        // Resize event
-        $window.on(EVENT.RESIZE, debounce(() => {
-            this.update();
-        },600));
+        // // Resize event
+        // $window.on(EVENT.RESIZE, debounce(() => {
+        //     this.update();
+        // },600));
+    }
+
+    /**
+     * Loop through all animatable elements and apply animation method(s).
+     */
+    animateElements() {
+        const len = this.animatedElements.length;
+        const removeIndexes = [];
+        let i = 0;
+        for (; i < len; i++) {
+            let element = this.animatedElements[i];
+
+            // If the element's visibility must not be manipulated any further, remove it from the list
+            if (this.toggleElement(element, i)) {
+                removeIndexes.push(i);
+            }
+        }
+
+        // Remove animated elements after looping through elements
+        i = removeIndexes.length;
+        while (i--) {
+            this.animatedElements.splice(removeIndexes[i], 1);
+        }
     }
 
     initScrollBar() {
@@ -441,7 +464,7 @@ export default class extends Scroll {
         this.transformElements(isFirstCall);
         this.animateElements();
 
-        this.callbacks.onScroll(this.instance);
+        // this.callbacks.onScroll(this.instance);
         this.timestamp = Date.now();
 
         // scrollbar translation
@@ -545,7 +568,6 @@ export default class extends Scroll {
             element.setAttribute('data-transform',`{"x": ${parseInt(x)},"y": ${parseInt(y)}}`)
 
         } else {
-
             let start = this.getTranslate(element);
             let lerpY = this.lerp(start.y, y, delay);
             let lerpX = this.lerp(start.x, x, delay);
@@ -577,6 +599,98 @@ export default class extends Scroll {
         translate.y = mat ? parseFloat(mat[1].split(', ')[5]) : 0;
 
         return translate;
+    }
+
+    toggleElement(element, index) {
+        let removeFromContainer = false;
+
+        if (typeof element !== 'undefined') {
+            // Find the bottom edge of the scroll container
+            const scrollTop = this.instance.scroll.y;
+            const scrollBottom = scrollTop + this.windowHeight;
+
+            // Define if the element is inView
+            let inView = false;
+
+            if (element.position === 'top') {
+                inView = (scrollTop >= element.offset && scrollTop <= element.limit);
+            } else if (element.position === 'below') {
+                inView = (scrollTop > element.limit);
+            } else if (element.sticky) {
+                inView = (scrollTop >= element.offset && scrollTop <= element.limit);
+            }else if(element.viewportOffset != undefined) {
+                if(element.viewportOffset.length > 1) {
+                    let scrollViewportOffsetTop = scrollTop + (this.windowHeight * element.viewportOffset[1]);
+                    let scrollViewportOffsetBottom = scrollBottom - (this.windowHeight * element.viewportOffset[0]);
+                    inView = (scrollViewportOffsetBottom > element.offset && scrollViewportOffsetTop < element.limit);
+
+                } else {
+                    let scrollViewportOffset = scrollBottom - (this.windowHeight * element.viewportOffset[0]);
+                    inView = (scrollViewportOffset > element.offset && scrollViewportOffset < element.limit);
+                }
+            }else {
+                inView = (scrollBottom >= element.offset && scrollTop <= element.limit);
+            }
+
+            if (element.sticky) {
+                if (scrollTop > element.limit) {
+                    element.$element.addClass('is-unstuck');
+                } else {
+                    element.$element.removeClass('is-unstuck');
+                }
+
+                if (scrollTop < element.offset) {
+                    element.$element.removeClass(element.inViewClass);
+                }
+            }
+
+            // Add class if inView, remove if not
+            if (inView) {
+                if(!element.$element.hasClass(element.inViewClass)){
+                    element.$element.addClass(element.inViewClass);
+                    this.triggerCallback(element,'enter');
+                }
+
+                if (!element.repeat && !element.sticky) {
+                    removeFromContainer = true;
+                }
+
+                if (element.sticky) {
+                    let y = this.instance.scroll.y - element.offset;
+
+                    element.$element.css({
+                        '-webkit-transform': `translate3d(0, ${y}px, 0)`,
+                        '-ms-transform': `translate3d(0, ${y}px, 0)`,
+                        'transform': `translate3d(0, ${y}px, 0)`
+                    });
+                }
+            } else {
+                if (element.repeat) {
+                    if(element.$element.hasClass(element.inViewClass)){
+                        element.$element.removeClass(element.inViewClass);
+                        this.triggerCallback(element,'leave');
+                    }
+                }
+            }
+        }
+
+        return removeFromContainer;
+    }
+
+    triggerCallback(element,way){
+
+        if(element.callback != undefined){
+            element.$element.trigger({
+                type: element.callback.event,
+                options: element.callback.options,
+                way: way
+            });
+            //add this where you want dude (in your module btw)
+            // $document.on(event.Namespace,(e)=>{
+            //     console.log(e.options, e.way);
+            // });
+            /////////////////////////////////////////////
+        }
     }
 
     /**
@@ -635,6 +749,29 @@ export default class extends Scroll {
                         this.transform(curEl.$element[0], 0, transformDistance, curEl.delay);
                 }
             }
+        }
+    }
+
+    /**
+     * Loop through all animatable elements and apply animation method(s).
+     */
+    animateElements() {
+        const len = this.animatedElements.length;
+        const removeIndexes = [];
+        let i = 0;
+        for (; i < len; i++) {
+            let element = this.animatedElements[i];
+
+            // If the element's visibility must not be manipulated any further, remove it from the list
+            if (this.toggleElement(element, i)) {
+                removeIndexes.push(i);
+            }
+        }
+
+        // Remove animated elements after looping through elements
+        i = removeIndexes.length;
+        while (i--) {
+            this.animatedElements.splice(removeIndexes[i], 1);
         }
     }
 

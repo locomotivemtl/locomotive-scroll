@@ -1,21 +1,14 @@
-// ==========================================================================
-// App
-// ==========================================================================
-/* jshint esnext: true */
-import ScrollManager from './scroll/vendors/ScrollManager';
+import locomotiveScroll from './scroll/main';
 
 (function() {
 
-    // Init Locomotive Scroll
-    const smoothScroll = new ScrollManager({
-        container: $('#js-scroll'),
+    const scroll = new locomotiveScroll({
+        el: document.querySelector('#js-scroll'),
         sections: '.js-section',
-        selector: '.js-animate',
+        selector: '[data-scroll]',
         smooth: true,
         smoothMobile: true,
         mobileContainer: $(document),
-        getDirection: true,
-        getSpeed: true,
         inertia: 1,
         scrollBarClassName: 'o-scrollbar',
         isScrollingClassName: 'is-scrolling',
