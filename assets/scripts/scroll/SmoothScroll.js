@@ -12,6 +12,7 @@ export default class extends scroll {
         this.isDraggingScrollBar = false;
         this.isTicking = false;
         this.hasScrollTicking = false;
+        this.parallaxElements = [];
     }
 
     init() {
@@ -47,6 +48,8 @@ export default class extends scroll {
             }
             this.isTicking = false;
         });
+
+        this.addElements();
     }
 
     setScrollLimit() {
@@ -79,6 +82,8 @@ export default class extends scroll {
 
             this.updateScroll();
             this.transform(this.el, 0, -this.instance.scroll.y);
+
+            // this.transformElements();
 
             if (this.getDirection) {
                 this.getDirection();
@@ -127,23 +132,39 @@ export default class extends scroll {
         }
     }
 
-    // render(isFirstCall, e) {
-    //     for (let i = this.sections.length - 1; i >= 0; i--) {
-    //         if(this.instance.scroll.y > this.sections[i].offset && this.instance.scroll.y < this.sections[i].limit) {
-    //             this.transform(this.sections[i].element,0,-this.instance.scroll.y);
-    //             this.sections[i].element.style.visibility = 'visible';
-    //         } else {
-    //             this.sections[i].element.style.visibility = 'hidden';
-    //         }
-    //     }
+    addElements() {
+        const els = this.el.querySelectorAll('[data-'+this.name+']');
 
-    //     this.transformElements(isFirstCall);
-    //     this.animateElements();
+        els.forEach((el, i) => {
+            let cl = el.dataset[this.name + '-class'] || this.class;
+            let top = el.getBoundingClientRect().top + this.scrollPosition;
+            let bottom = top + el.offsetHeight;
+            let offset = parseInt(el.dataset[this.name + '-offset']) || parseInt(this.offset);
+            let repeat = el.dataset[this.name + '-repeat'];
+            let call = el.dataset[this.name + '-call'];
+            let speed = el.dataset[this.name + '-speed'];
 
-    //     // scrollbar translation
-    //     let scrollBarTranslation = (this.instance.scroll.y / this.instance.limit) * this.scrollBarLimit;
-    //     this.transform(this.scrollbar,0,scrollBarTranslation);
-    // }
+            if(repeat == 'false') {
+                repeat = false;
+            } else if (repeat != undefined) {
+                repeat = true;
+            } else {
+                repeat = this.repeat;
+            }
+
+            this.els[i] = {
+                el: el,
+                class: cl,
+                top: top + offset,
+                bottom: bottom,
+                offset: offset,
+                repeat: repeat,
+                inView: false,
+                call: call,
+                speed: speed
+            }
+        });
+    }
 
     lerp(start, end, amt){
         return (1 - amt) * start + amt * end
