@@ -136,13 +136,13 @@ export default class extends scroll {
         const els = this.el.querySelectorAll('[data-'+this.name+']');
 
         els.forEach((el, i) => {
-            let cl = el.dataset[this.name + '-class'] || this.class;
+            let cl = el.dataset[this.name + 'Class'] || this.class;
             let top = el.getBoundingClientRect().top + this.scrollPosition;
             let bottom = top + el.offsetHeight;
-            let offset = parseInt(el.dataset[this.name + '-offset']) || parseInt(this.offset);
-            let repeat = el.dataset[this.name + '-repeat'];
-            let call = el.dataset[this.name + '-call'];
-            let speed = el.dataset[this.name + '-speed'];
+            let offset = parseInt(el.dataset[this.name + 'Offset']) || parseInt(this.offset);
+            let repeat = el.dataset[this.name + 'Repeat'];
+            let call = el.dataset[this.name + 'Call'];
+            let speed = el.dataset[this.name + 'Speed'] ? parseFloat(el.dataset[this.name + 'Speed']) : false;
 
             if(repeat == 'false') {
                 repeat = false;

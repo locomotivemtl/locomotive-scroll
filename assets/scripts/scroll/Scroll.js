@@ -23,12 +23,12 @@ export default class {
         const els = this.el.querySelectorAll('[data-'+this.name+']');
 
         els.forEach((el, i) => {
-            let cl = el.dataset[this.name + '-class'] || this.class;
+            let cl = el.dataset[this.name + 'Class'] || this.class;
             let top = el.getBoundingClientRect().top + this.scrollPosition;
             let bottom = top + el.offsetHeight;
-            let offset = parseInt(el.dataset[this.name + '-offset']) || parseInt(this.offset);
-            let repeat = el.dataset[this.name + '-repeat'];
-            let call = el.dataset[this.name + '-call'];
+            let offset = parseInt(el.dataset[this.name + 'Offset']) || parseInt(this.offset);
+            let repeat = el.dataset[this.name + 'Repeat'];
+            let call = el.dataset[this.name + 'Call'];
 
             if(repeat == 'false') {
                 repeat = false;

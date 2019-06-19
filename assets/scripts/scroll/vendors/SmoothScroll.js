@@ -331,7 +331,7 @@ export default class extends Scroll {
                     if (typeof elementStickyTarget === 'undefined') {
                         elementLimit = Infinity;
                     } else {
-                        elementLimit = $(elementStickyTarget)[0].getBoundingClientRect().top - element.offsetHeight + this.instance.scroll.y;
+                        elementLimit = elementStickyTarget.getBoundingClientRect().top - element.offsetHeight + this.instance.scroll.y;
                     }
                 }
 
