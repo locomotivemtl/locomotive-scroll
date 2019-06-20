@@ -1,5 +1,6 @@
 import virtualScroll from 'virtual-scroll';
 import scroll from './scroll';
+import { lerp } from '../utils/maths'
 
 const html = document.documentElement;
 
@@ -106,9 +107,9 @@ export default class extends scroll {
 
     updateScroll() {
         if (this.isScrolling) {
-            this.instance.scroll.y = this.lerp(this.instance.scroll.y, this.instance.delta.y, this.inertia);
+            this.instance.scroll.y = lerp(this.instance.scroll.y, this.instance.delta.y, this.inertia);
         } else if (this.isDraggingScrollBar) {
-            this.instance.scroll.y = this.lerp(this.instance.scroll.y, this.instance.delta.y, (this.inertia * 2));
+            this.instance.scroll.y = lerp(this.instance.scroll.y, this.instance.delta.y, (this.inertia * 2));
         }
     }
 
@@ -133,6 +134,9 @@ export default class extends scroll {
     }
 
     addElements() {
+        this.els = []
+        this.parallaxElements = []
+
         const els = this.el.querySelectorAll('[data-'+this.name+']');
 
         els.forEach((el, i) => {
@@ -152,22 +156,21 @@ export default class extends scroll {
                 repeat = this.repeat;
             }
 
-            this.els[i] = {
-                el: el,
+            const mappedEl = {
+                el,
                 class: cl,
                 top: top + offset,
-                bottom: bottom,
-                offset: offset,
-                repeat: repeat,
+                bottom,
+                offset,
+                repeat,
                 inView: false,
-                call: call,
-                speed: speed
+                call,
+                speed
             }
-        });
-    }
 
-    lerp(start, end, amt){
-        return (1 - amt) * start + amt * end
+            this.els[i] = mappedEl
+            this.parallaxElements[i] = mappedEl
+        });
     }
 
     transform(element, x, y, delay) {
