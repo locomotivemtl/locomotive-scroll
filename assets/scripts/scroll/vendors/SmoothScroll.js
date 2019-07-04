@@ -4,13 +4,14 @@
 /* jshint esnext: true */
 import { $window, $document, $html, html } from '../../utils/environment';
 import Scroll, { DEFAULTS, EVENT } from '../Scroll';
+import { getParents, queryClosestParent } from '../../utils/html';
+import { lerp } from '../../utils/maths'
 
 import debounce from '../../utils/debounce';
 import VirtualScroll from 'virtual-scroll';
 import { isNumeric } from '../../utils/is';
 
-/**
- * Smooth scrolling using `smooth-scrollbar`.
+/**`.
  * Based on `Scroll` class, which allows animations of elements on the page
  * according to scroll position.
  *
@@ -26,18 +27,13 @@ export default class extends Scroll {
         this.inertia = options.inertia || DEFAULTS.inertia;
         this.scrollBarClassName = options.scrollBarClassName || DEFAULTS.scrollBarClassName;
         this.isScrollingClassName = options.isScrollingClassName || DEFAULTS.isScrollingClassName;
+        this.isDraggingClassName = options.isDraggingClassName || DEFAULTS.isDraggingClassName;
 
         this.parallaxElements = [];
         this.isDraggingScrollBar = false;
         this.isTicking = false;
         this.hasScrollTicking = false;
         this.isScrolling = false;
-        this.$container = this.el;
-
-        this.windowHeight = $window.height();
-        this.windowMiddle = this.windowHeight / 2;
-
-        this.animatedElements = [];
     }
 
     /**
@@ -45,7 +41,7 @@ export default class extends Scroll {
      */
     init() {
         // Add class to the document to know if SmoothScroll is initialized (to manage overflow on containers)
-        $html.addClass('has-smooth-scroll');
+        document.documentElement.classList.add('has-smooth-scroll');
 
         this.instance = new VirtualScroll({
             mouseMultiplier: (navigator.platform.indexOf('Win') > -1) ? 1 : 0.4,
@@ -120,12 +116,9 @@ export default class extends Scroll {
         this.$container.on(EVENT.CLICK, '.js-scrollto', (event) => {
             event.preventDefault();
 
-            let $target = $(event.currentTarget);
-            let offset = $target.data('offset');
-
             this.scrollTo({
-                sourceElem: $target,
-                offsetElem: offset
+                sourceElem: event.currentTarget,
+                offsetElem: event.currentTarget.getAttribute('data-offset')
             });
         });
 
@@ -173,12 +166,14 @@ export default class extends Scroll {
     getScrollBar(e) {
         this.isDraggingScrollBar = true;
         this.checkScroll();
-        html.classList.add(this.isScrollingClassName);
+        html.classList.remove(this.isScrollingClassName);
+        html.classList.add(this.isDraggingClassName);
     }
 
     releaseScrollBar(e) {
         this.isDraggingScrollBar = false;
-        html.classList.remove(this.isScrollingClassName);
+        html.classList.add(this.isScrollingClassName);
+        html.classList.remove(this.isDraggingClassName);
     }
 
     moveScrollBar(e) {
@@ -207,6 +202,7 @@ export default class extends Scroll {
             let sectionElement = this.sectionsSelector[i];
             let offset = sectionElement.getBoundingClientRect().top - (window.innerHeight * 1.5) - this.getTranslate(sectionElement).y;
             let limit = offset + sectionElement.getBoundingClientRect().height + (window.innerHeight * 2);
+            let persistent = typeof sectionElement.getAttribute('data-persistent') === 'string'
 
             let inView = false;
             for (let i = this.sections.length - 1; i >= 0; i--) {
@@ -217,23 +213,14 @@ export default class extends Scroll {
 
             const section = {
                 element: sectionElement,
-                offset: offset,
-                limit: limit,
-                inView: inView
+                offset,
+                limit,
+                inView,
+                persistent
             }
 
             this.sections.push(section);
-
-            if(i === 2) {
-                let debug = {
-                    offset: sectionElement.getBoundingClientRect().top - (window.innerHeight * 1.5),
-                    scrollValue: parseInt(this.instance.scroll.y),
-                    limit: limit,
-                    final: offset
-                }
-            }
         }
-
     }
 
     /**
@@ -247,7 +234,7 @@ export default class extends Scroll {
 
         for (let y = 0 ; y < this.sections.length; y ++) {
 
-            const elements = document.querySelectorAll(this.selector, this.sections[y].element);
+            const elements = this.sections[y].element.querySelectorAll(this.selector);
             const len = elements.length;
 
             for (let i = 0 ; i < elements.length; i ++) {
@@ -272,7 +259,7 @@ export default class extends Scroll {
 
                 let elementViewportOffset = null;
                 if(typeof element.getAttribute('data-viewport-offset') === 'string') {
-                   elementViewportOffset = $element.attr('data-viewport-offset').split(',');
+                   elementViewportOffset = element.getAttribute('data-viewport-offset').split(',');
                 }
 
                 //Manage callback
@@ -328,15 +315,15 @@ export default class extends Scroll {
                 }
 
                 if (elementSticky) {
-                    if (typeof elementStickyTarget === 'undefined') {
+                    if (!elementStickyTarget || typeof elementStickyTarget === 'undefined') {
                         elementLimit = Infinity;
                     } else {
-                        elementLimit = elementStickyTarget.getBoundingClientRect().top - element.offsetHeight + this.instance.scroll.y;
+                        elementLimit = document.querySelectorAll(elementStickyTarget)[0].getBoundingClientRect().top - element.offsetHeight + this.instance.scroll.y;
                     }
                 }
 
                 const newElement = {
-                    $element: $(element),
+                    element,
                     inViewClass: elementInViewClass,
                     limit: elementLimit,
                     offset: Math.round(elementOffset),
@@ -378,7 +365,7 @@ export default class extends Scroll {
     checkScroll() {
         if (this.isScrolling || this.isDraggingScrollBar) {
             if (!this.hasScrollTicking) {
-                requestAnimationFrame(() => this.checkScroll());
+                requestAnimationFrame(() => this.checkScroll());
                 this.hasScrollTicking = true;
             }
 
@@ -396,20 +383,20 @@ export default class extends Scroll {
     /**
      * Render the class/transform animations, and update the global scroll positionning.
      *
-     * @param  {boolean} isFirstCall Determines if this is the first occurence of method being called
+     * @param  {boolean} isForced Determines if this is a forced request (from a manual call to update or a resize)
      * @param  {object}  status      Optional status object received when method is
      *                               called by smooth-scrollbar instance listener.
      * @return {void}
      */
-    render(isFirstCall, e) {
+    render(isForced, e) {
         if(this.isScrolling) {
-            this.instance.scroll.y = this.lerp(this.instance.scroll.y,this.instance.delta.y, this.inertia);
+            this.instance.scroll.y = lerp(this.instance.scroll.y,this.instance.delta.y, this.inertia);
         } else if(this.isDraggingScrollBar) {
-            this.instance.scroll.y = this.lerp(this.instance.scroll.y,this.instance.delta.y, 0.2);
+            this.instance.scroll.y = lerp(this.instance.scroll.y,this.instance.delta.y, 0.2);
         }
 
         for (let i = this.sections.length - 1; i >= 0; i--) {
-            if(this.instance.scroll.y > this.sections[i].offset && this.instance.scroll.y < this.sections[i].limit) {
+            if(this.sections[i].persistent || (this.instance.scroll.y > this.sections[i].offset && this.instance.scroll.y < this.sections[i].limit)) {
                 this.transform(this.sections[i].element,0,-this.instance.scroll.y);
                 this.sections[i].element.style.visibility = 'visible';
             } else {
@@ -438,7 +425,7 @@ export default class extends Scroll {
             }
         }
 
-        this.transformElements(isFirstCall);
+        this.transformElements(isForced);
         this.animateElements();
 
         this.callbacks.onScroll(this.instance);
@@ -451,63 +438,97 @@ export default class extends Scroll {
         this.hasScrollTicking = false;
     }
 
-    lerp (start, end, amt){
-        return (1-amt)*start+amt*end
-    }
-
     /**
      * Scroll to a desired target.
      *
      * @param  {object} options
+     *      Available options :
+     *          {node} targetElem - The DOM element we want to scroll to
+     *          {node} sourceElem - An `<a>` element with an href targeting the anchor we want to scroll to
+     *          {node} offsetElem - A DOM element from which we get the height to substract from the targetOffset
+     *              (ex: use offsetElem to pass a mobile header that is above content, to make sure the scrollTo will be aligned with it)
+     *          {int} targetOffset - An absolute vertical scroll value to reach, or an offset to apply on top of given `targetElem` or `sourceElem`'s target
+     *          {int} delay - Amount of milliseconds to wait before starting to scroll
+     *          {boolean} toTop - Set to true to scroll all the way to the top
+     *          {boolean} toBottom - Set to true to scroll all the way to the bottom
+     *          {float} speed - Duration of the scroll (⚠️ DISABLED since v2)
      * @return {void}
      */
     scrollTo(options) {
-        const $targetElem = options.targetElem;
-        const $sourceElem = options.sourceElem;
+        let targetElem = options.targetElem;
+        const sourceElem = options.sourceElem;
         const offsetElem = options.offsetElem;
         let targetOffset = isNumeric(options.targetOffset) ? parseInt(options.targetOffset) : 0;
         const delay = isNumeric(options.delay) ? parseInt(options.delay) : 0;
-        const speed = isNumeric(options.speed) ? parseInt(options.speed) : 900;
+        // const speed = isNumeric(options.speed) ? parseInt(options.speed) : 900; // (⚠️ DISABLED since v2)
         const toTop = options.toTop;
         const toBottom = options.toBottom;
-        let offset = 0;
 
-        if (typeof $targetElem === 'undefined' && typeof $sourceElem === 'undefined' && typeof targetOffset === 'undefined') {
-            console.warn('You must specify at least one parameter.')
+        // Make sure at least one of the required options has beeen filled
+        if (!toTop && !toBottom && !isNumeric(options.targetOffset) && !targetElem && !sourceElem) {
+            console.warn(`You must specify at least one of these parameters:`, [
+                '{boolean} toTop - Set to true to scroll all the way to the top',
+                '{boolean} toBottom - Set to true to scroll all the way to the bottom',
+                '{int} targetOffset - An absolute vertical scroll value to reach, or an offset to apply on top of given `targetElem` or `sourceElem`\'s target',
+                '{node} targetElem - The DOM element we want to scroll to',
+                '{node} sourceElem - An `<a>` element with an href targeting the anchor we want to scroll to'
+            ]);
             return false;
         }
 
-        if (typeof $targetElem !== 'undefined' && $targetElem instanceof jQuery && $targetElem.length > 0) {
-            targetOffset = $targetElem.offset().top + this.instance.scroll.y + targetOffset;
-        }
-
-        if (typeof $sourceElem !== 'undefined' && $sourceElem instanceof jQuery && $sourceElem.length > 0) {
+        // If sourceElem is given, find and store the targetElem it's related to
+        if (sourceElem) {
             let targetData = '';
 
-            if ($sourceElem.attr('data-target')) {
-                targetData = $sourceElem.attr('data-target');
-            } else {
-                targetData = $sourceElem.attr('href');
-            }
+            console.log(sourceElem);
 
-            targetOffset = $(targetData).offset().top + this.instance.scroll.y + targetOffset;
+            // Get the selector (given with `data-target` or `href` attributes on sourceElem)
+            let sourceElemTarget = sourceElem.getAttribute('data-target')
+            targetData = sourceElemTarget ? sourceElemTarget : sourceElem.getAttribute('href')
+
+            // Store the target for later
+            targetElem = document.querySelectorAll(targetData)[0]
         }
 
-        if (typeof offsetElem !== 'undefined') {
-            offset = $(offsetElem).outerHeight();
+        // We have a targetElem, get it's coordinates
+        if (targetElem) {
+            // Get targetElem offset from top
+            const targetElemBCR = targetElem.getBoundingClientRect()
+            const targetElemOffsetTop = targetElemBCR.top + this.$container[0].scrollTop
+
+            // Try and find the targetElem's parent section
+            const targetParents = getParents(targetElem)
+            const parentSection = targetParents.find(candidate => this.sections.find(section => section.element == candidate))
+            let parentSectionOffset = 0
+            if(parentSection) {
+                parentSectionOffset = this.getTranslate(parentSection).y // We got a parent section, store it's current offset to remove it later
+            }
+
+            // Final value of scroll destination : targetElemOffsetTop + (optional offset given in options) - (parent's section translate)
+            targetOffset = targetElemOffsetTop + targetOffset - parentSectionOffset;
+        }
+
+        // We have an offsetElem, get its height and remove it from targetOffset already computed
+        if (offsetElem) {
+            let offset = offsetElem.offsetHeight;
             targetOffset = targetOffset - offset;
         }
 
+        // If we want to go to one of boundaries
         if (toTop === true) {
             targetOffset = 0;
         } else if (toBottom === true) {
             targetOffset = this.instance.limit;
         }
 
+        // Wait for the asked delay if needed
         setTimeout(() => {
-            this.isScrolling = false;
-            this.instance.delta.y = targetOffset;
-            html.classList.remove(this.isScrollingClassName);
+            this.instance.delta.y = targetOffset; // Actual scrollTo (the lerp will do the animation itself)
+
+            // Update the scroll. If we were in idle state: we're not anymore
+            this.isScrolling = true;
+            this.checkScroll();
+            html.classList.add(this.isScrollingClassName);
         }, delay);
     }
 
@@ -521,7 +542,7 @@ export default class extends Scroll {
     /**
      * Apply CSS transform properties on an element.
      *
-     * @param  {object}  $element Targetted jQuery element
+     * @param  {object}  element  Targetted node
      * @param  {int}     x        Translate value
      * @param  {int}     y        Translate value
      * @param  {int}     z        Translate value
@@ -547,8 +568,8 @@ export default class extends Scroll {
         } else {
 
             let start = this.getTranslate(element);
-            let lerpY = this.lerp(start.y, y, delay);
-            let lerpX = this.lerp(start.x, x, delay);
+            let lerpY = lerp(start.y, y, delay);
+            let lerpX = lerp(start.x, x, delay);
 
             const transform = `matrix(1,0,0,1,${lerpX},${lerpY})`
 
@@ -582,10 +603,10 @@ export default class extends Scroll {
     /**
      * Loop through all parallax-able elements and apply transform method(s).
      *
-     * @param  {boolean} isFirstCall Determines if this is the first occurence of method being called
+     * @param  {boolean} isForced Determines if this is a forced request (from a manual call to update or a resize)
      * @return {void}
      */
-    transformElements(isFirstCall) {
+    transformElements(isForced) {
         if (this.parallaxElements.length > 0) {
             const scrollBottom = this.instance.scroll.y + this.windowHeight;
             const scrollMiddle = this.instance.scroll.y + this.windowMiddle;
@@ -604,15 +625,18 @@ export default class extends Scroll {
 
                 this.toggleElement(curEl, i);
 
-                if (isFirstCall && !inView && curEl.speed) {
+                if (isForced && !inView && curEl.speed) {
                     // Different calculations if it is the first call and the item is not in the view
-                    if (curEl.position !== 'top') {
-                        transformDistance = (curEl.offset - this.windowMiddle - curEl.middle) * -curEl.speed;
-                    }
+                    // if (curEl.position !== 'top') {
+                    //     if(curEl.$element.attr('data-log')) console.log(`(curEl.offset (${curEl.offset}) - this.windowMiddle (${this.windowMiddle}) - curEl.middle (${curEl.middle})) * curEl.speed (${curEl.speed})`);
+                    //     transformDistance = (curEl.offset - this.windowMiddle - curEl.middle) * curEl.speed;
+                    // }
+
+                    transformDistance = 0
                 }
 
                 // If element is in view
-                if (inView && curEl.speed) {
+                if (inView && curEl.speed) { //|| (isForced && !inView && curEl.speed)) {
                     switch (curEl.position) {
                         case 'top':
                             transformDistance = this.instance.scroll.y * -curEl.speed;
@@ -631,8 +655,8 @@ export default class extends Scroll {
                 // Transform horizontal OR vertical. Defaults to vertical
                 if (isNumeric(transformDistance)) {
                     (curEl.horizontal) ?
-                        this.transform(curEl.$element[0], transformDistance,0, curEl.delay) :
-                        this.transform(curEl.$element[0], 0, transformDistance, curEl.delay);
+                        this.transform(curEl.element, transformDistance,0, curEl.delay) :
+                        this.transform(curEl.element, 0, transformDistance, curEl.delay);
                 }
             }
         }

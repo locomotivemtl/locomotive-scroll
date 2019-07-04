@@ -4,8 +4,6 @@ import locomotiveScroll from './scroll/main';
 
     const scroll = new locomotiveScroll({
         el: document.querySelector('#js-scroll'),
-        sections: '.js-section',
-        selector: '[data-scroll]',
         smooth: true,
         smoothMobile: true,
         mobileContainer: $(document),

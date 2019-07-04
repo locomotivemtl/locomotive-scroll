@@ -1,6 +1,6 @@
 import { defaults } from './options';
-import scroll from './scroll';
-import smoothScroll from './smoothScroll.js';
+import Scroll from './Native';
+import Smooth from './Smooth.js';
 
 export default class {
     constructor(options = {}) {
@@ -16,9 +16,9 @@ export default class {
         }
 
         if (this.smooth == true && !this.isMobile) {
-            this.scroll = new smoothScroll(this.options);
+            this.scroll = new Smooth(this.options);
         } else {
-            this.scroll = new scroll(this.options);
+            this.scroll = new Scroll(this.options);
         }
 
         this.scroll.init();

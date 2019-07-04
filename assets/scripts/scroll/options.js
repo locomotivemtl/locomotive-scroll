@@ -10,7 +10,6 @@ export const defaults = {
     repeat: false,
     smooth: false,
     smoothMobile: false,
-    sections: '.js-section',
     getDirection: false,
     getSpeed: false
 };
