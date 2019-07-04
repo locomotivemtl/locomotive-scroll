@@ -99,12 +99,7 @@ figure {
 .o-image {
   width: 100%;
   position: relative;
-  overflow: hidden;
-  opacity: 0;
-  -webkit-transition: opacity 0.6s;
-  transition: opacity 0.6s; }
-  .o-image.is-inview {
-    opacity: 1; }
+  overflow: hidden; }
   .o-image::before {
     content: "";
     display: block;

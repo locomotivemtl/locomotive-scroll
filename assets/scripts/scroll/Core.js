@@ -73,7 +73,7 @@ export default class {
 
     setOutOfView(el, i) {
 
-        if(el.repeat) {
+        if(el.repeat || el.speed !== undefined) {
             this.els[i].inView = false;
             el.el.classList.remove(el.class);
         }

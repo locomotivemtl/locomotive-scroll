@@ -107,8 +107,6 @@ export default class extends Core {
             this.transformElements();
 
             this.hasScrollTicking = false;
-
-            console.log('checkScroll');
         }
     }
 
@@ -177,15 +175,24 @@ export default class extends Core {
                 let call = el.dataset[this.name + 'Call'];
                 let position = el.dataset[this.name + 'Position'];
                 let delay = el.dataset[this.name + 'Delay'];
+                let direction = el.dataset[this.name + 'Direction'];
                 let speed = el.dataset[this.name + 'Speed'] ? parseFloat(el.dataset[this.name + 'Speed'])/10 : false;
+                let target = el.dataset[this.name + 'Target'];
+                let targetEl;
 
-                if(!this.sections[y].inView) {
-                    top = el.getBoundingClientRect().top - getTranslate(this.sections[y].el).y - getTranslate(el).y;
+                if(target !== undefined) {
+                    targetEl = document.querySelector(`${target}`);
                 } else {
-                    top = el.getBoundingClientRect().top + this.instance.scroll.y - getTranslate(el).y;
+                    targetEl = el;
                 }
 
-                let bottom = top + el.offsetHeight;
+                if(!this.sections[y].inView) {
+                    top = targetEl.getBoundingClientRect().top - getTranslate(this.sections[y].el).y - getTranslate(targetEl).y;
+                } else {
+                    top = targetEl.getBoundingClientRect().top + this.instance.scroll.y - getTranslate(targetEl).y;
+                }
+
+                let bottom = top + targetEl.offsetHeight;
                 let middle = ((bottom - top) / 2) + top
 
                 if(repeat == 'false') {
@@ -208,7 +215,9 @@ export default class extends Core {
                     call,
                     speed,
                     delay,
-                    position
+                    position,
+                    target,
+                    direction
                 }
 
                 this.els.push(mappedEl);
@@ -257,9 +266,11 @@ export default class extends Core {
             transform = `matrix(1,0,0,1,${x},${y})`
 
         } else {
-            let lerpY = lerp(getTranslate(element).y, y, delay);
+            let start = getTranslate(element);
+            let lerpX = lerp(start.x, x, delay);
+            let lerpY = lerp(start.y, y, delay);
 
-            transform = `matrix(1,0,0,1,0,${lerpY})`
+            transform = `matrix(1,0,0,1,${lerpX},${lerpY})`
         }
 
         element.style.webkitTransform = transform;
@@ -296,7 +307,12 @@ export default class extends Core {
             }
 
             if(transformDistance !== false) {
-                this.transform(current.el, 0, transformDistance, (isForced ? false : current.delay))
+                if(current.direction === 'horizontal') {
+                    this.transform(current.el, transformDistance, 0, (isForced ? false : current.delay))
+                } else {
+                    this.transform(current.el, 0, transformDistance, (isForced ? false : current.delay))
+
+                }
             }
 
         });
