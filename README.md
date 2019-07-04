@@ -30,23 +30,4 @@ Locomotive Smooth Scroll is build on top of [virtual-scroll](https://github.com/
     -	`npm install`
 
 2.  **Run grunt and start coding**
-    -   `grunt`
-
-### BrowserSync
-
-BrowserSync will automatically inject, refresh and sync all your browsers.
-
-Run `grunt sync`
-
-## JavaScript
-
--   We use HTML data attributes to init our JavaScript modules: `data-module`
--   All DOM related JavaScript is hooked to `js-` prefixed HTML classes
--   [jQuery](https://jquery.com) is globally included
-
-[locomtl]:   https://locomotive.ca
-[smoothscrollbar]:   https://github.com/idiotWu/smooth-scrollbar
-
-## Todo
--   Function to get the percentage (distance) of my element on the viewport
--   Find a solution to have really slow element
+    -   `gulp`
