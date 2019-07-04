@@ -6,6 +6,7 @@ export default class {
 
         this.namespace = 'locomotive';
         this.windowHeight = window.innerHeight;
+        this.windowMiddle = this.windowHeight / 2;
         this.els = [];
 
 
@@ -38,11 +39,11 @@ export default class {
 
         this.els.forEach((el, i) => {
             if (!el.inView) {
-                if ((scrollBottom > el.top) && (scrollTop < el.bottom)) {
+                if ((scrollBottom >= el.top) && (scrollTop < el.bottom)) {
                     this.setInView(el, i);
                 }
             }
-            if(el.repeat && el.inView) {
+            if(el.inView) {
                 if ((scrollBottom < el.top) || (scrollTop > el.bottom)) {
                     this.setOutOfView(el, i);
                 }
@@ -53,12 +54,8 @@ export default class {
     }
 
     setInView(el, i) {
-        if (el.repeat) {
-            this.els[i].inView = true;
-        } else {
-            this.els.splice(i, 1);
-        }
 
+        this.els[i].inView = true;
         el.el.classList.add(el.class);
 
         if (el.call) {
@@ -68,12 +65,19 @@ export default class {
             const callEvent = new Event(this.namespace + 'call');
             window.dispatchEvent(callEvent);
         }
+
+        if (!el.repeat && el.speed === undefined ){
+            this.els.splice(i, 1);
+        }
     }
 
     setOutOfView(el, i) {
-        console.log('out of view');
-        this.els[i].inView = false;
-        el.el.classList.remove(el.class);
+
+        if(el.repeat) {
+            this.els[i].inView = false;
+            el.el.classList.remove(el.class);
+        }
+
     }
 
     updateElements() {

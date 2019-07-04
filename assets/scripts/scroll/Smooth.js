@@ -50,6 +50,7 @@ export default class extends Core {
         this.addSections();
         this.addElements();
         this.detectElements();
+        this.transformElements(true);
     }
 
     setScrollLimit() {
@@ -103,17 +104,25 @@ export default class extends Core {
             }
 
             this.detectElements();
+            this.transformElements();
 
             this.hasScrollTicking = false;
+
+            console.log('checkScroll');
         }
     }
 
     checkResize() {
         this.windowHeight = window.innerHeight;
+        this.windowMiddle = this.windowHeight / 2;
 
         this.setScrollLimit();
         this.addSections();
         this.addElements();
+        this.detectElements();
+        this.updateScroll();
+        this.transformElements(true);
+
     }
 
     updateDelta(e) {
@@ -127,6 +136,8 @@ export default class extends Core {
             this.instance.scroll.y = lerp(this.instance.scroll.y, this.instance.delta.y, this.inertia);
         } else if (this.isDraggingScrollBar) {
             this.instance.scroll.y = lerp(this.instance.scroll.y, this.instance.delta.y, (this.inertia * 2));
+        } else {
+            this.instance.scroll.y = this.instance.delta.y;
         }
     }
 
@@ -164,15 +175,18 @@ export default class extends Core {
                 let offset = parseInt(el.dataset[this.name + 'Offset']) || parseInt(this.offset);
                 let repeat = el.dataset[this.name + 'Repeat'];
                 let call = el.dataset[this.name + 'Call'];
-                let speed = el.dataset[this.name + 'Speed'] ? parseFloat(el.dataset[this.name + 'Speed']) : false;
+                let position = el.dataset[this.name + 'Position'];
+                let delay = el.dataset[this.name + 'Delay'];
+                let speed = el.dataset[this.name + 'Speed'] ? parseFloat(el.dataset[this.name + 'Speed'])/10 : false;
 
                 if(!this.sections[y].inView) {
-                    top = el.getBoundingClientRect().top - getTranslate(this.sections[y].el).y
+                    top = el.getBoundingClientRect().top - getTranslate(this.sections[y].el).y - getTranslate(el).y;
                 } else {
-                    top = el.getBoundingClientRect().top + this.instance.scroll.y;
+                    top = el.getBoundingClientRect().top + this.instance.scroll.y - getTranslate(el).y;
                 }
 
                 let bottom = top + el.offsetHeight;
+                let middle = ((bottom - top) / 2) + top
 
                 if(repeat == 'false') {
                     repeat = false;
@@ -186,18 +200,23 @@ export default class extends Core {
                     el,
                     class: cl,
                     top: top + offset,
+                    middle,
                     bottom,
                     offset,
                     repeat,
                     inView: false,
                     call,
-                    speed
+                    speed,
+                    delay,
+                    position
                 }
 
-                this.els[i] = mappedEl
-                this.parallaxElements[i] = mappedEl
-            });
+                this.els.push(mappedEl);
 
+                if(speed !== undefined) {
+                    this.parallaxElements.push(mappedEl);
+                }
+            });
 
         })
 
@@ -215,7 +234,7 @@ export default class extends Core {
             let persistent = typeof section.dataset[this.name + 'Persistent'] === 'string';
 
             let inView = false;
-            if(this.instance.scroll.y > offset && this.instance.scroll.y < limit) {
+            if(this.instance.scroll.y >= offset && this.instance.scroll.y <= limit) {
                 inView = true;
             }
 
@@ -229,15 +248,58 @@ export default class extends Core {
 
             this.sections[i] = mappedSection;
         });
-
     }
 
     transform(element, x, y, delay) {
-        const transform = `matrix(1,0,0,1,${x},${y})`
+        let transform;
+
+        if(!delay) {
+            transform = `matrix(1,0,0,1,${x},${y})`
+
+        } else {
+            let lerpY = lerp(getTranslate(element).y, y, delay);
+
+            transform = `matrix(1,0,0,1,0,${lerpY})`
+        }
 
         element.style.webkitTransform = transform;
         element.style.msTransform = transform;
         element.style.transform = transform;
+    }
+
+    transformElements(isForced) {
+
+        const scrollBottom = this.instance.scroll.y + this.windowHeight;
+        const scrollMiddle = this.instance.scroll.y + this.windowMiddle;
+
+        this.parallaxElements.forEach((current, i) => {
+            let transformDistance = false;
+
+            if(isForced && !current.inView) {
+                transformDistance = 0
+            }
+
+            if(current.inView) {
+                switch (current.position) {
+                    case 'top':
+                        transformDistance = this.instance.scroll.y * -current.speed;
+                    break;
+
+                    case 'bottom':
+                        transformDistance = (this.instance.limit - scrollBottom + this.windowHeight) * current.speed;
+                    break;
+
+                    default:
+                        transformDistance = (scrollMiddle - current.middle) * -current.speed;
+                    break;
+                }
+            }
+
+            if(transformDistance !== false) {
+                this.transform(current.el, 0, transformDistance, (isForced ? false : current.delay))
+            }
+
+        });
     }
 
     destroy() {

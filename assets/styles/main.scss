@@ -117,9 +117,13 @@ figure {
 .o-image {
     width: 100%;
     position: relative;
-
     overflow: hidden;
+    opacity: 0;
+    transition: opacity 0.6s;
 
+    &.is-inview {
+        opacity: 1;
+    }
     &::before {
         content:"";
         display: block;
@@ -160,11 +164,15 @@ figure {
     transform: translateY(-50%);
     font-weight: bold;
     margin: 0;
+
     span {
         display: inline-block;
         min-width: 0.1em;
         padding: 10vh 0;
+
     }
+
+
 }
 
 .o-article {
