@@ -329,6 +329,7 @@ export default class extends Core {
             }
 
             this.sections[i] = mappedSection;
+
         });
     }
 
@@ -398,7 +399,6 @@ export default class extends Core {
                     this.transform(current.el, transformDistance, 0, (isForced ? false : current.delay))
                 } else {
                     this.transform(current.el, 0, transformDistance, (isForced ? false : current.delay))
-
                 }
             }
 

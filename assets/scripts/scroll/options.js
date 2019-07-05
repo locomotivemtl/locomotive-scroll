@@ -13,5 +13,6 @@ export const defaults = {
     smooth: false,
     smoothMobile: false,
     getDirection: false,
-    getSpeed: false
+    getSpeed: false,
+    onScroll: (e) => {}
 };

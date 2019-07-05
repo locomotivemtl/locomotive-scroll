@@ -236,13 +236,25 @@ figure {
     overflow: hidden;
 }
 
-.o-fixed {
+
+.o-fixed_target {
     position: absolute;
-    top: 0;
-    bottom: 0;
+    top: -100vh;
+    bottom: -100vh;
     right: 0;
     left: 0;
+    background-color: red;
+    opacity: 0.3
 }
+
+.o-fixed {
+    position: absolute;
+    top: -100vh;
+    right: 0;
+    left: 0;
+    height: 100%;
+}
+
 
 .o-grid {
     position: relative;

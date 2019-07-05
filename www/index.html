@@ -37,7 +37,7 @@
                     </span>
                     <div class="o-layout_item">
                         <figure class="o-image" data-scroll data-scroll-sticky data-scroll-target="#sticky-target">
-                            <div class="o-image_background" data-scroll-target="#js-image" data-scroll data-scroll-speed="-1.2" style="background-image:url('https://picsum.photos/600/600/?random=300')">
+                            <div class="o-image_background" data-scroll data-scroll-target="#js-image" style="background-image:url('https://picsum.photos/600/600/?random=300')">
                             </div>
                         </figure>
                     </div>
@@ -110,8 +110,10 @@
             <div data-scroll-section>
                 <h1 class="o-title" data-scroll id="scroll-to" data-scroll-direction="horizontal" data-scroll-speed="6">Horizontal tagline 💨</h1>
             </div>
-            <div class="o-fixed_wrapper" data-scroll-section>
-                <div class="o-fixed" data-scroll data-scroll-speed="-2" style="background-image:url('https://picsum.photos/1920/1080/?random')"></div>
+
+            <div class="o-fixed_wrapper" data-scroll-section data-scroll-persistent>
+                <div class="o-fixed_target" id="fixed-target"></div>
+                <div class="o-fixed" data-scroll data-scroll-sticky data-scroll-target="#fixed-target" style="background-image:url('https://picsum.photos/1920/1080/?random')"></div>
             </div>
 
             <div class="o-container" data-scroll-section>
