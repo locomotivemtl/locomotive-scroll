@@ -10,6 +10,7 @@ import locomotiveScroll from './scroll/main';
         inertia: 1,
         scrollBarClassName: 'o-scrollbar',
         isScrollingClassName: 'is-scrolling',
+        isDraggingClassName: 'is-dragging',
         onScroll: (e) => {
             // console.log(e.scroll.y);
         }

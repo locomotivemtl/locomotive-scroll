@@ -5,6 +5,10 @@ html{
         overflow: hidden;
     }
 
+    &.is-dragging {
+        user-select: none;
+    }
+
 }
 
 body {

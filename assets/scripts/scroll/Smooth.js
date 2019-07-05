@@ -33,8 +33,6 @@ export default class extends Core {
             ...this.instance
         }
 
-        this.setScrollLimit();
-
         this.instance.vs.on((e) => {
             if (!this.isTicking && !this.isDraggingScrollBar) {
                 requestAnimationFrame(() => {
@@ -46,6 +44,9 @@ export default class extends Core {
             }
             this.isTicking = false;
         });
+
+        this.setScrollLimit();
+        this.initScrollBar();
 
         this.addSections();
         this.addElements();
@@ -106,6 +107,10 @@ export default class extends Core {
             this.detectElements();
             this.transformElements();
 
+            // scrollbar translation
+            const scrollBarTranslation = (this.instance.scroll.y / this.instance.limit) * this.scrollBarLimit;
+            this.transform(this.scrollbar,0,scrollBarTranslation);
+
             this.hasScrollTicking = false;
         }
     }
@@ -159,6 +164,65 @@ export default class extends Core {
         }
     }
 
+    // Scrollbar functions
+    initScrollBar() {
+        this.scrollbarWrapper = document.createElement('span');
+        this.scrollbar = document.createElement('span');
+        this.scrollbarWrapper.classList.add(`${this.scrollBarClassName}_wrapper`);
+        this.scrollbar.classList.add(`${this.scrollBarClassName}`);
+
+        this.scrollbarWrapper.append(this.scrollbar);
+        document.body.append(this.scrollbarWrapper);
+        this.scrollbar.style.height = `${(window.innerHeight * window.innerHeight) / this.instance.limit}px`;
+        this.scrollBarLimit = window.innerHeight - this.scrollbar.getBoundingClientRect().height;
+
+        this.scrollbar.addEventListener('mousedown',(e) => this.getScrollBar(e));
+        window.addEventListener('mouseup',(e) => this.releaseScrollBar(e));
+        window.addEventListener('mousemove',(e) => this.moveScrollBar(e));
+
+    }
+
+    reinitScrollBar() {
+        this.scrollbar.style.height = `${(window.innerHeight * window.innerHeight) / this.instance.limit}px`;
+        this.scrollBarLimit = window.innerHeight - this.scrollbar.getBoundingClientRect().height;
+    }
+
+    destroyScrollBar() {
+        this.scrollbar.removeEventListener('mousedown',(e) => this.getScrollBar(e));
+        window.removeEventListener('mouseup',(e) => this.releaseScrollBar(e));
+        window.removeEventListener('mousemove',(e) => this.moveScrollBar(e));
+    }
+
+    getScrollBar(e) {
+        this.isDraggingScrollBar = true;
+        this.checkScroll();
+        html.classList.remove(this.isScrollingClassName);
+        html.classList.add(this.isDraggingClassName);
+    }
+
+    releaseScrollBar(e) {
+        this.isDraggingScrollBar = false;
+        html.classList.add(this.isScrollingClassName);
+        html.classList.remove(this.isDraggingClassName);
+    }
+
+    moveScrollBar(e) {
+        if (!this.isTicking && this.isDraggingScrollBar) {
+            requestAnimationFrame(() => {
+                console.log(window.innerHeight)
+                let y = (e.clientY * 100 / (window.innerHeight)) * this.instance.limit / 100;
+
+                if(y > 0 && y < this.instance.limit) {
+                    this.instance.delta.y = y;
+                }
+            });
+            this.isTicking = true;
+        }
+        this.isTicking = false;
+    }
+
+
+    // Manage elements and sections
     addElements() {
         this.els = []
         this.parallaxElements = []
@@ -303,7 +367,6 @@ export default class extends Core {
                 switch (current.position) {
                     case 'top':
                         transformDistance = this.instance.scroll.y * -current.speed;
-
                     break;
 
                     case 'bottom':
@@ -320,15 +383,15 @@ export default class extends Core {
             if(current.sticky) {
                 if(current.inView) {
                     transformDistance = this.instance.scroll.y - current.top + window.innerHeight;
-                }
-                if(this.instance.scroll.y < current.top) {
-                    transformDistance = 0;
-                }
-                if(this.instance.scroll.y > current.bottom) {
-                    transformDistance = current.bottom;
+                } else {
+                    if(this.instance.scroll.y < current.top) {
+                        transformDistance = 0;
+                    }
+                    if(this.instance.scroll.y > current.bottom) {
+                        transformDistance = current.bottom - current.offsetHeight;
+                    }
                 }
             }
-
 
             if(transformDistance !== false) {
                 if(current.direction === 'horizontal') {
