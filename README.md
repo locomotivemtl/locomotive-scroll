@@ -6,42 +6,121 @@
 <h1 align="center">Locomotive Scroll</h1>
 <p align="center">Elements in viewport detection & smooth scrolling with parallax.</p>
 
-## Data attributes
-Data | Type | Description
---- | --- | ---
-data-scroll-speed | Float | Speed of transform
-data-scroll-delay | Float | For elements with a data-speed, to add a lerp
-data-scroll-repeat | Boolean | Determine if the "In View" class is added one or each times
-data-scroll-class | is-show | CSS Class when the element is in view.
-data-scroll-position | topbottom | Trigger from top/bottom of the window instead of the default from bottom to top
-data-scroll-target | #id, .class | Trigger from another element
-data-scroll-direction | String | "horizontal"
-data-scroll-sticky | false | Set $element sticky when it's in viewport
-data-scroll-sticky-target | #id | Stop the element stick when the target is in viewport
-data-scroll-callback | `test.Scroll(test:0|key:value|isTriggered:true)` | trigger event, with options way wich return "leave" or "enter" when $element is in viewport
-data-scroll-viewport-offset | i,j | value between 0 to 1 (0.3 to start at 30% of the bottom of the viewport), useful to trigger a sequence of callbacks. (i : value wich start at the bottom, j : start at the top, j is optional)
-
-
+## Installation
+```sh
+npm install locomotivescroll
 ```
-// example to trigger a scroll to
-const scrollToEvent = new CustomEvent('scrollto',{
-    detail: {
-        options: {
-            targetElem: document.querySelectorAll('#introduction')[0]
-        }
-    }
+
+## Usage
+```js
+import locomotiveScroll from 'locomotivescroll';
+
+const scroll = new locomotiveScroll();
+```
+```html
+<h1 data-scroll>Hello</h1>
+<p data-scroll>Text</p>
+```
+
+#### With smooth scrolling
+```js
+import locomotiveScroll from 'locomotivescroll';
+
+const scroll = new locomotiveScroll({
+    el: document.querySelector('#js-scroll'),
+    smooth: true
 });
-
-window.dispatchEvent(scrollToEvent)
 ```
+```html
+<h1 data-scroll data-scroll-speed="1">Hello</h1>
+<p data-scroll data-scroll-speed="2">Text</p>
+```
+
+#### With methods
+```js
+import locomotiveScroll from 'locomotivescroll';
+
+const scroll = new locomotiveScroll();
+const target = document.querySelector('#js-target');
+
+scroll.scrollTo(target);
+```
+
+#### With events
+```js
+import locomotiveScroll from 'locomotivescroll';
+
+const scroll = new locomotiveScroll();
+
+scroll.on('call', (func) => {
+    // Using modularJS
+    this.call(...func); 
+    // Using jQuery events
+    $(document).trigger(func);
+    // Or do it your way 😎
+});
+```
+```html
+<!-- Using modularJS -->
+<div data-scroll data-scroll-call="function, module">Trigger</div>
+<!-- Using jQuery events -->
+<div data-scroll data-scroll-call="EVENT_NAME">Trigger</div>
+<!-- Or do it your way 😎 -->
+<div data-scroll data-scroll-call="{y,o,l,o}">Trigger</div>
+```
+
+## Options
+| Option | Type | Default | Description |
+| ------ | ---- | ------- | ----------- |
+| `el` | `object` | `document` | Scroll container element. |
+| `elMobile` | `object` | `document` | Mobile scroll container element. |
+| `name` | `string` | `'scroll'` | Data attributes name. |
+| `offset` | `number` | `0` | In-view trigger offset. |
+| `repeat` | `boolean` | `false` | Repeat in-view detection. |
+| `smooth` | `boolean` | `false` | Smooth scrolling |
+| `smoothMobile` | `boolean` | `false` | Smooth scrolling on iOS and Android devices. |
+| `direction` | `string` | `vertical` | Scroll direction |
+| `inertia` | `number` | `1` | Lerp intensity |
+| `class` | `string` | `'is-inview'` | Elements in-view class. |
+| `scrollbarClass` | `string` | `c-scrollbar` | Scrollbar element class. |
+| `scrollingClass` | `string` | `is-scrolling` | Is scrolling class. |
+| `draggingClass` | `string` | `is-dragging` | Is dragging class. |
+| `smoothClass` | `string` | `has-smoothscroll` | Has smooth scrolling class. |
+
+## Attributes
+| Attribute | Values | Description |
+| --------- | ------ | ----------- |
+| `data-scroll` |  | Detect if in-view. |
+| `data-scroll-class` | `string` | Element in-view class.  |
+| `data-scroll-offset` | `number` | Element in-view trigger offset. |
+| `data-scroll-repeat` | `true`, `false` | Element in-view detection repeat. |
+| `data-scroll-call` | `string` | Element in-view trigger call event. |
+| `data-scroll-speed` | `number` | Element parallax speed. Negative value for inverse way. |
+| `data-scroll-target` | `string` | Target element in-view position. |
+| `data-scroll-position` | `top`, `bottom` | In-view trigger window position |
+| `data-scroll-direction` | `vertical`, `horizontal` | Element parallax direction. |
+| `data-scroll-delay` | `number` | Element parallax lerp delay. |
+| `data-scroll-sticky` |  | Sticky element. Start and stops at `data-scroll-target` position. |
+
+## Methods
+| Method | Description |
+| --------- | ----------- |
+| `init()` | Reinit the scroll. |
+| `update()` | Update elements position.  |
+| `destroy()` | Destroy the scroll events. |
+| `scrollTo(el)` | Scroll to element. |
+
+## Events
+| Event | Arguments | Description |
+| ----- | --------- | ----------- |
+| `scroll` | `obj` | Returns scroll position. |
+| `call` | `func` | Trigger if in-view. Returns your `string` or `array` if contains `,`. |
 
 ## Dependencies
-Locomotive Smooth Scroll is build on top of [virtual-scroll](https://github.com/ayamflow/virtual-scroll).
+| Name | Description |
+| ---- | ----------- |
+| [Virtual Scroll] | Custom scroll event. |
+| [modularScroll] | Elements in viewport detection. Forked from it, not a dependency. |
 
-## Getting started
-
-1.  **Get the latest node modules**
-    -	`npm install`
-
-2.  **Run grunt and start coding**
-    -   `gulp`
+[Virtual Scroll]: https://github.com/ayamflow/virtual-scroll
+[modularScroll]:  https://github.com/modularorg/modularscroll
