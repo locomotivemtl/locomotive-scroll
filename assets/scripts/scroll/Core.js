@@ -27,8 +27,42 @@ export default class {
         window.addEventListener('resize', this.checkResize, false);
     }
 
+    init() {
+
+        this.initEvents();
+    }
+
     checkScroll(){}
     checkResize(){}
+
+    initEvents() {
+
+        // scroll to elements
+        this.scrollToElements = this.el.querySelectorAll(`[data-${this.name}-to]`);
+
+        this.prepareScrollTo = this.prepareScrollTo.bind(this);
+        this.scrollToElements.forEach((el) => {
+            el.addEventListener('click', this.prepareScrollTo, false);
+        });
+
+        // scroll to event
+        this.scrollTo = this.scrollTo.bind(this);
+        window.addEventListener('scrollto', this.scrollTo, false);
+
+    }
+
+    prepareScrollTo(event) {
+        event.preventDefault();
+
+        this.scrollTo({
+            detail: {
+                options: {
+                    sourceElem: event.currentTarget,
+                    offsetElem: event.currentTarget.getAttribute('data-offset')
+                }
+            }
+        });
+    }
 
     // addElements(){}
 
@@ -107,6 +141,10 @@ export default class {
     destroy() {
         window.removeEventListener('scroll', this.checkScroll, false);
         window.removeEventListener('resize', this.checkResize, false);
+
+        this.scrollToElements.forEach((el) => {
+            el.removeEventListener('click', this.prepareScrollTo, false);
+        });
     }
 
 }

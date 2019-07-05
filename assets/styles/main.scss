@@ -1,270 +1,68 @@
-html{
-    font-family: Arial;
+// ==========================================================================
+// Main
+// ==========================================================================
 
-    &.has-smoothscroll {
-        overflow: hidden;
-    }
+// Settings
+// ==========================================================================
+@import "settings/config.colors";
+@import "settings/config";
 
-    &.is-dragging {
-        user-select: none;
-    }
+// ==========================================================================
+// Tools
+// ==========================================================================
+@import "tools/functions";
+@import "tools/mixins";
+@import "tools/fonts";
+@import "tools/layout";
+@import "tools/widths";
+// @import "tools/family";
 
-}
+// Generic
+// ==========================================================================
+@import "node_modules/normalize.css/normalize";
+@import "generic/generic";
+@import "generic/media";
+@import "generic/form";
+@import "generic/button";
 
-body {
-    margin: 0;
+// Elements
+// ==========================================================================
+@import "elements/fonts";
+@import "elements/page";
+@import "elements/headings";
 
-    .has-smoothscroll & {
-        overflow: hidden;
-    }
-}
+// Objects
+// ==========================================================================
+@import "objects/container";
+@import "objects/ratio";
+@import "objects/layout";
+@import "objects/form";
+@import "objects/button";
+@import "objects/scroll";
+@import "objects/title";
+// @import "objects/crop";
+// @import "objects/table";
 
-figure {
-    margin: 0;
-}
+// Vendors
+// ==========================================================================
+// @import "vendors/vendor";
 
-.o-scroll{
-    box-sizing: border-box;
-    overflow: hidden;
-    width: 100vw;
+// Components
+// ==========================================================================
+@import "components/header";
+@import "components/fixed";
 
-    .has-smoothscroll & {
-        position: relative;
-    }
-}
+// Templates
+// ==========================================================================
+// @import "templates/template";
 
-.o-scrollbar_wrapper {
-    width: 10px;
-    position: fixed;
-    right: 0;
-    top: 0;
-    bottom: 0;
-    transform-origin: center right;
-    transform: scaleX(1);
-    transition: transform 0.2s linear;
-
-    &:hover {
-        transform: scaleX(1.3);
-        cursor: grab;
-    }
-}
-.o-scrollbar {
-    background-color: black;
-    position: absolute;
-    top: 0;
-    left: 0;
-    right: 0;
-
-    &:hover {
-        cursor: pointer;
-    }
-}
-
-.o-title {
-    text-align: center;
-    font-size: 8vw;
-    padding: 25vh 0;
-    margin: 0;
-
-    span {
-        display: inline-block;
-        min-width: 0.2em;
-    }
-}
-
-.scroll-content {
-    overflow: auto;
-
-    body[data-wheel-reversed] & {
-        width: 200vw;
-    }
-}
-
-.o-container {
-    position: relative;
-    max-width: 1600px;
-    margin: 0 120px;
-
-    @media (max-width: 1000px) {
-        margin: 0 60px;
-    }
-    @media (max-width: 700px) {
-        margin: 0 30px;
-    }
-}
-
-.o-letter {
-    position: absolute;
-    top: 100vh;
-    right: 0;
-    font-size: 80vw;
-    line-height: 1;
-    display: block;
-    // opacity: 0.1;
-    font-weight: bold;
-}
-
-.o-layout {
-    font-size: 0;
-    margin-left: -60px;
-}
-
-.o-layout_item {
-    vertical-align: top;
-    box-sizing: border-box;
-    width: 50%;
-    display: inline-block;
-    font-size: 16px;
-    padding-left: 60px;
-    margin-bottom: 60px;
-
-    @media (max-width: 500px) {
-        width: 100%;
-    }
-}
-
-.o-image {
-    width: 100%;
-    position: relative;
-    overflow: hidden;
-
-    &::before {
-        content:"";
-        display: block;
-        padding-bottom: 75%;
-    }
-}
-
-.o-image_background {
-    position: absolute;
-    top: -25%;
-    bottom: -25%;
-    right: 0;
-    left: 0;
-    background-size: cover;
-    background-position: center center;
-
-    &::after {
-        content:"";
-        position: absolute;
-        top: 0;
-        bottom: 0;
-        right: 0;
-        left: 0;
-        background-color: rgba(0,0,0,0.3);
-    }
-}
-
-.o-image_title {
-    position: absolute;
-    top: 50%;
-    left: 0;
-    width: 100%;
-    text-align: center;
-    color: white;
-    text-transform: uppercase;
-    z-index: 2;
-    font-size: 7vw;
-    transform: translateY(-50%);
-    font-weight: bold;
-    margin: 0;
-
-    span {
-        display: inline-block;
-        min-width: 0.1em;
-        padding: 10vh 0;
-
-    }
-
-
-}
-
-.o-article {
-    max-width: 450px;
-    margin: 20vh 0;
-}
-
-.o-article_title {
-    margin-bottom: 15px;
-    font-size: 36px;
-
-    opacity: 0;
-    transform: translateY(30px);
-    transition: opacity 0.6s cubic-bezier(0.215, 0.610, 0.355, 1.000), transform 0.6s cubic-bezier(0.215, 0.610, 0.355, 1.000);
-
-    &.is-inview {
-        opacity: 1;
-        transform: none;
-        transition-delay: 0.3s;
-    }
-}
-
-.o-article_time {
-    color: gray;
-    margin: 15px 0 5px 0;
-    display: block;
-    opacity: 0;
-    transform: translateY(60px);
-    transition: opacity 0.6s cubic-bezier(0.215, 0.610, 0.355, 1.000), transform 0.6s cubic-bezier(0.215, 0.610, 0.355, 1.000);
-
-    &.is-inview {
-        opacity: 1;
-        transform: none;
-        transition-delay: 0.3s;
-    }
-}
-
-
-.o-article_text {
-    line-height: 1.6;
-    display: block;
-    opacity: 0;
-    transform: translateY(60px);
-    transition: opacity 0.6s cubic-bezier(0.215, 0.610, 0.355, 1.000), transform 0.6s cubic-bezier(0.215, 0.610, 0.355, 1.000);
-
-    &.is-inview {
-        opacity: 1;
-        transform: none;
-        transition-delay: 0.3s;
-    }
-}
-
-.o-fixed_wrapper {
-    position: relative;
-    width: 100vw;
-    height: 100vh;
-    overflow: hidden;
-}
-
-
-.o-fixed_target {
-    position: absolute;
-    top: -100vh;
-    bottom: -100vh;
-    right: 0;
-    left: 0;
-    background-color: red;
-    opacity: 0.3
-}
-
-.o-fixed {
-    position: absolute;
-    top: -100vh;
-    right: 0;
-    left: 0;
-    height: 100%;
-}
-
-
-.o-grid {
-    position: relative;
-}
-
-.o-grid_target {
-    position: absolute;
-    top: 0;
-    bottom: 0;
-    right: 100%;
-    width: 30px;
-    background-color: rgba(255,0,0,0.2);
-}
+// Utilities
+// ==========================================================================
+@import "utilities/ratio";
+@import "utilities/widths";
+@import "utilities/align";
+// @import "utilities/helpers";
+// @import "utilities/states";
+// @import "utilities/headings";
+// @import "utilities/spacing";
+// @import "utilities/print";

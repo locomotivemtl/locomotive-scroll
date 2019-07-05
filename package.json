@@ -4,7 +4,8 @@
     "version": "2.0.0",
     "author": "Locomotive <info@locomotive.ca>",
     "dependencies": {
-        "virtual-scroll": "git+https://github.com/ayamflow/virtual-scroll.git"
+        "virtual-scroll": "git+https://github.com/ayamflow/virtual-scroll.git",
+        "normalize.css": "*"
     },
     "devDependencies": {
         "@modularbp/gulp": "^1.0.5",

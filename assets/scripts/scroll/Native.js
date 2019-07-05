@@ -13,6 +13,8 @@ export default class extends Core {
 
         this.addElements();
         this.detectElements();
+
+        super.init();
     }
 
     checkScroll() {

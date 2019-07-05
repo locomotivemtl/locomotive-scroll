@@ -1,0 +1,25 @@
+
+.c-fixed_wrapper {
+    position: relative;
+    width: 100vw;
+    height: 100vh;
+    overflow: hidden;
+}
+
+.c-fixed_target {
+    position: absolute;
+    top: -100vh;
+    bottom: -100vh;
+    right: 0;
+    left: 0;
+    background-color: red;
+    opacity: 0.3
+}
+
+.c-fixed {
+    position: absolute;
+    top: -100vh;
+    right: 0;
+    left: 0;
+    height: 100%;
+}

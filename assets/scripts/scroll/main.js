@@ -15,7 +15,7 @@ export default class {
             this.isMobile = (/Android|iPhone|iPad|iPod|BlackBerry|IEMobile|Opera Mini/i.test(navigator.userAgent));
         }
 
-        if (this.smooth == true && !this.isMobile) {
+        if (this.smooth === true && !this.isMobile) {
             this.scroll = new Smooth(this.options);
         } else {
             this.scroll = new Scroll(this.options);
@@ -23,16 +23,6 @@ export default class {
 
         this.scroll.init();
 
-        // const $scrollToOnLoadEl = $('.js-scrollto-on-load').first();
-
-        // if ($scrollToOnLoadEl.length === 1) {
-        //     $document.triggerHandler({
-        //         type: 'Event.SCROLLTO',
-        //         options: {
-        //             targetElem: $scrollToOnLoadEl
-        //         }
-        //     });
-        // }
     }
 
     destroy() {

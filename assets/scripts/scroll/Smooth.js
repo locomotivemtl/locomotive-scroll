@@ -2,6 +2,7 @@ import virtualScroll from 'virtual-scroll';
 import Core from './Core';
 import { lerp } from '../utils/maths'
 import { getTranslate } from '../utils/transform'
+import { getParents, queryClosestParent } from '../utils/html';
 
 const html = document.documentElement;
 
@@ -52,6 +53,91 @@ export default class extends Core {
         this.addElements();
         this.detectElements();
         this.transformElements(true);
+
+        super.init();
+
+    }
+
+    /**
+     * Scroll to a desired target.
+     *
+     * @param  {object} options
+     *      Available options :
+     *          {node} targetElem - The DOM element we want to scroll to
+     *          {node} sourceElem - An `<a>` element with an href targeting the anchor we want to scroll to
+     *          {node} offsetElem - A DOM element from which we get the height to substract from the targetOffset
+     *              (ex: use offsetElem to pass a mobile header that is above content, to make sure the scrollTo will be aligned with it)
+     *          {int} targetOffset - An absolute vertical scroll value to reach, or an offset to apply on top of given `targetElem` or `sourceElem`'s target
+     *          {int} delay - Amount of milliseconds to wait before starting to scroll
+     *          {boolean} toTop - Set to true to scroll all the way to the top
+     *          {boolean} toBottom - Set to true to scroll all the way to the bottom
+     * @return {void}
+     */
+    scrollTo(params) {
+
+        const options = params.detail.options;
+
+        let targetElem = options.targetElem;
+        const sourceElem = options.sourceElem;
+        const offsetElem = options.offsetElem;
+        let targetOffset = options.targetOffset ? options.targetOffset : 0 ;
+        const delay = options.delay;
+        const toTop = options.toTop;
+        const toBottom = options.toBottom;
+
+        // If sourceElem is given, find and store the targetElem it's related to
+        if (sourceElem) {
+            let targetData = '';
+
+            // Get the selector (given with `data-target` or `href` attributes on sourceElem)
+            let sourceElemTarget = sourceElem.getAttribute('data-target')
+            targetData = sourceElemTarget ? sourceElemTarget : sourceElem.getAttribute('href')
+
+            // Store the target for later
+            targetElem = document.querySelectorAll(targetData)[0]
+        }
+
+        // We have a targetElem, get it's coordinates
+        if (targetElem) {
+            // Get targetElem offset from top
+            const targetElemBCR = targetElem.getBoundingClientRect()
+            const targetElemOffsetTop = targetElemBCR.top + this.instance.scroll.y
+
+            // Try and find the targetElem's parent section
+            const targetParents = getParents(targetElem)
+            console.log(targetParents);
+            const parentSection = targetParents.find(candidate => this.sections.find(section => section.element == candidate))
+            let parentSectionOffset = 0
+            if(parentSection) {
+                parentSectionOffset = getTranslate(parentSection).y // We got a parent section, store it's current offset to remove it later
+            }
+
+            // Final value of scroll destination : targetElemOffsetTop + (optional offset given in options) - (parent's section translate)
+            targetOffset = targetElemOffsetTop + targetOffset - parentSectionOffset;
+        }
+
+        // We have an offsetElem, get its height and remove it from targetOffset already computed
+        if (offsetElem) {
+            let offset = offsetElem.offsetHeight;
+            targetOffset = targetOffset - offset;
+        }
+
+        // If we want to go to one of boundaries
+        if (toTop === true) {
+            targetOffset = 0;
+        } else if (toBottom === true) {
+            targetOffset = this.instance.limit;
+        }
+
+        // Wait for the asked delay if needed
+        setTimeout(() => {
+            this.instance.delta.y = targetOffset; // Actual scrollTo (the lerp will do the animation itself)
+
+            // Update the scroll. If we were in idle state: we're not anymore
+            this.isScrolling = true;
+            this.checkScroll();
+            html.classList.add(this.isScrollingClassName);
+        }, delay);
     }
 
     setScrollLimit() {

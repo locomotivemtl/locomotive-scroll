@@ -1,0 +1,50 @@
+// ==========================================================================
+// Objects / Buttons
+// ==========================================================================
+.o-button {
+    position: relative;
+    color: white;
+    padding: rem(20px) rem(35px);
+    font-size: rem(12px);
+    text-transform: uppercase;
+    letter-spacing: 0.1em;
+    border-radius: 30px;
+
+    &::before,
+    &::after {
+        content:"";
+        position: absolute;
+        top: 0;
+        bottom: 0;
+        right: 0;
+        left: 0;
+        transition: transform 0.3s $bounce, opacity 0.6s $easing;
+        border-radius: 30px;
+        transform: scale(1);
+
+    }
+
+    &::before {
+        opacity: 1;
+        z-index: -2;
+        background-image: linear-gradient(to right top, #170074, #650078, #9a0075, #c7006d, #eb1262);
+    }
+    &::after {
+        opacity: 0;
+        z-index: -1;
+        background-image: linear-gradient(to left top, #170074, #650078, #9a0075, #c7006d, #eb1262);
+
+    }
+
+    @include u-hocus {
+        color: white;
+        &::after {
+            opacity: 1;
+        }
+        &::before,
+        &::after {
+            transform: scale(1.1);
+        }
+    }
+
+}

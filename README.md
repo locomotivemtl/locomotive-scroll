@@ -21,6 +21,20 @@ data-scroll-sticky-target | #id | Stop the element stick when the target is in v
 data-scroll-callback | `test.Scroll(test:0|key:value|isTriggered:true)` | trigger event, with options way wich return "leave" or "enter" when $element is in viewport
 data-scroll-viewport-offset | i,j | value between 0 to 1 (0.3 to start at 30% of the bottom of the viewport), useful to trigger a sequence of callbacks. (i : value wich start at the bottom, j : start at the top, j is optional)
 
+
+```
+// example to trigger a scroll to
+const scrollToEvent = new CustomEvent('scrollto',{
+    detail: {
+        options: {
+            targetElem: document.querySelectorAll('#introduction')[0]
+        }
+    }
+});
+
+window.dispatchEvent(scrollToEvent)
+```
+
 ## Dependencies
 Locomotive Smooth Scroll is build on top of [virtual-scroll](https://github.com/ayamflow/virtual-scroll).
 
