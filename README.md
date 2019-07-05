@@ -7,19 +7,19 @@
 <p align="center">Elements in viewport detection & smooth scrolling with parallax.</p>
 
 ## Data attributes
-Data | Value | Description
+Data | Type | Description
 --- | --- | ---
-data-speed | float | Speed of transform
-data-delay | float | For elements with a data-speed, to add a lerp
-data-repeat | false | Determine if the "In View" class is added one or each times
-data-inview-class | is-show | CSS Class when the element is in view.
-data-position | top/bottom | Trigger from top/bottom of the window instead of the default from bottom to top
-data-target | #id, .class | Trigger from another element
-data-horizontal | false | Use transformX instead of transformY
-data-sticky | false | Set $element sticky when it's in viewport
-data-sticky-target | #id | Stop the element stick when the target is in viewport
-data-callback | `test.Scroll(test:0|key:value|isTriggered:true)` | trigger event, with options way wich return "leave" or "enter" when $element is in viewport
-data-viewport-offset | i,j | value between 0 to 1 (0.3 to start at 30% of the bottom of the viewport), useful to trigger a sequence of callbacks. (i : value wich start at the bottom, j : start at the top, j is optional)
+data-scroll-speed | Float | Speed of transform
+data-scroll-delay | Float | For elements with a data-speed, to add a lerp
+data-scroll-repeat | Boolean | Determine if the "In View" class is added one or each times
+data-scroll-class | is-show | CSS Class when the element is in view.
+data-scroll-position | topbottom | Trigger from top/bottom of the window instead of the default from bottom to top
+data-scroll-target | #id, .class | Trigger from another element
+data-scroll-direction | String | "horizontal"
+data-scroll-sticky | false | Set $element sticky when it's in viewport
+data-scroll-sticky-target | #id | Stop the element stick when the target is in viewport
+data-scroll-callback | `test.Scroll(test:0|key:value|isTriggered:true)` | trigger event, with options way wich return "leave" or "enter" when $element is in viewport
+data-scroll-viewport-offset | i,j | value between 0 to 1 (0.3 to start at 30% of the bottom of the viewport), useful to trigger a sequence of callbacks. (i : value wich start at the bottom, j : start at the top, j is optional)
 
 ## Dependencies
 Locomotive Smooth Scroll is build on top of [virtual-scroll](https://github.com/ayamflow/virtual-scroll).

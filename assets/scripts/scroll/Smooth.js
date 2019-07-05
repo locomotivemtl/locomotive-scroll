@@ -176,6 +176,7 @@ export default class extends Core {
                 let position = el.dataset[this.name + 'Position'];
                 let delay = el.dataset[this.name + 'Delay'];
                 let direction = el.dataset[this.name + 'Direction'];
+                let sticky = typeof el.dataset[this.name + 'Sticky'] === 'string';
                 let speed = el.dataset[this.name + 'Speed'] ? parseFloat(el.dataset[this.name + 'Speed'])/10 : false;
                 let target = el.dataset[this.name + 'Target'];
                 let targetEl;
@@ -193,7 +194,14 @@ export default class extends Core {
                 }
 
                 let bottom = top + targetEl.offsetHeight;
-                let middle = ((bottom - top) / 2) + top
+                let middle = ((bottom - top) / 2) + top;
+
+                if(sticky) {
+                    top += window.innerHeight;
+                    bottom = top + targetEl.offsetHeight - window.innerHeight - el.offsetHeight;
+                    middle = ((bottom - top) / 2) + top;
+                }
+
 
                 if(repeat == 'false') {
                     repeat = false;
@@ -217,7 +225,8 @@ export default class extends Core {
                     delay,
                     position,
                     target,
-                    direction
+                    direction,
+                    sticky
                 }
 
                 this.els.push(mappedEl);
@@ -286,7 +295,7 @@ export default class extends Core {
         this.parallaxElements.forEach((current, i) => {
             let transformDistance = false;
 
-            if(isForced && !current.inView) {
+            if((isForced && !current.inView)) {
                 transformDistance = 0
             }
 
@@ -294,6 +303,7 @@ export default class extends Core {
                 switch (current.position) {
                     case 'top':
                         transformDistance = this.instance.scroll.y * -current.speed;
+
                     break;
 
                     case 'bottom':
@@ -304,7 +314,21 @@ export default class extends Core {
                         transformDistance = (scrollMiddle - current.middle) * -current.speed;
                     break;
                 }
+
             }
+
+            if(current.sticky) {
+                if(current.inView) {
+                    transformDistance = this.instance.scroll.y - current.top + window.innerHeight;
+                }
+                if(this.instance.scroll.y < current.top) {
+                    transformDistance = 0;
+                }
+                if(this.instance.scroll.y > current.bottom) {
+                    transformDistance = current.bottom;
+                }
+            }
+
 
             if(transformDistance !== false) {
                 if(current.direction === 'horizontal') {

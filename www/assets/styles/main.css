@@ -53,6 +53,9 @@ figure {
   font-size: 8vw;
   padding: 25vh 0;
   margin: 0; }
+  .o-title span {
+    display: inline-block;
+    min-width: 0.2em; }
 
 .scroll-content {
   overflow: auto; }
@@ -210,10 +213,13 @@ figure {
   right: 0;
   left: 0; }
 
-.o-fixed_target {
-  display: block;
+.o-grid {
+  position: relative; }
+
+.o-grid_target {
   position: absolute;
-  top: -100vh;
-  right: 0;
-  left: 0;
-  height: 200vh; }
+  top: 0;
+  bottom: 0;
+  right: 100%;
+  width: 30px;
+  background-color: rgba(255, 0, 0, 0.2); }
