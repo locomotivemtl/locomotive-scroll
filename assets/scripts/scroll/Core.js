@@ -49,6 +49,17 @@ export default class {
         this.scrollTo = this.scrollTo.bind(this);
         window.addEventListener('scrollto', this.scrollTo, false);
 
+        // example to trigger a scroll to
+        // const scrollToEvent = new CustomEvent('scrollto',{
+        //     detail: {
+        //         options: {
+        //             targetElem: document.querySelectorAll('#introduction')[0]
+        //         }
+        //     }
+        // });
+
+        // window.dispatchEvent(scrollToEvent)
+
     }
 
     prepareScrollTo(event) {
@@ -87,29 +98,29 @@ export default class {
         this.hasScrollTicking = false;
     }
 
-    setInView(el, i) {
+    setInView(current, i) {
 
         this.els[i].inView = true;
-        el.el.classList.add(el.class);
+        current.el.classList.add(current.class);
 
-        if (el.call) {
-            this.callValue = el.call.split(',').map(item => item.trim());
+        if (current.call) {
+            this.callValue = current.call.split(',').map(item => item.trim());
             if (this.callValue.length == 1) this.callValue = this.callValue[0];
 
             const callEvent = new Event(this.namespace + 'call');
             window.dispatchEvent(callEvent);
         }
 
-        if (!el.repeat && el.speed === undefined ){
+        if (!current.repeat && current.speed === false && !current.sticky ){
             this.els.splice(i, 1);
         }
     }
 
-    setOutOfView(el, i) {
+    setOutOfView(current, i) {
 
-        if(el.repeat || el.speed !== undefined) {
+        if(current.repeat || current.speed !== undefined) {
             this.els[i].inView = false;
-            el.el.classList.remove(el.class);
+            current.el.classList.remove(current.class);
         }
 
     }

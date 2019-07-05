@@ -381,7 +381,7 @@ export default class extends Core {
 
                 this.els.push(mappedEl);
 
-                if(speed !== undefined) {
+                if(speed !== false || sticky) {
                     this.parallaxElements.push(mappedEl);
                 }
             });

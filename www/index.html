@@ -20,24 +20,52 @@
         <section class="o-scroll" id="js-scroll">
 
             <header class="c-header" data-scroll-section>
-                <div class="o-title_wrapper">
-                    <h1 class="o-title"><span data-scroll data-scroll-speed="5" data-scroll-position="top">L</span><span data-scroll data-scroll-speed="8" data-scroll-position="top">o</span><span data-scroll data-scroll-speed="5" data-scroll-position="top">c</span><span data-scroll data-scroll-speed="8" data-scroll-position="top" >o</span><span data-scroll data-scroll-speed="5" data-scroll-position="top">m</span><span data-scroll data-scroll-speed="8" data-scroll-position="top">o</span><span data-scroll data-scroll-speed="5" data-scroll-position="top">t</span><span data-scroll data-scroll-speed="8" data-scroll-position="top">i</span><span data-scroll data-scroll-speed="5" data-scroll-position="top">v</span><span data-scroll data-scroll-speed="8" data-scroll-position="top">e</span><span> </span><span data-scroll data-scroll-speed="5" data-scroll-position="top">S</span><span data-scroll data-scroll-speed="8" data-scroll-position="top">c</span><span data-scroll data-scroll-speed="5" data-scroll-position="top">r</span><span data-scroll data-scroll-speed="8" data-scroll-position="top">o</span><span data-scroll data-scroll-speed="5" data-scroll-position="top">l</span><span data-scroll data-scroll-speed="8" data-scroll-position="top">l</span></h1>
-                    <a href="#introduction" class="c-header_button o-button" data-scroll-to>
-                        Discover
-                    </a>
+                <div class="o-title_wrapper" id="header-inner">
+                    <h1 class="o-title"><span data-scroll data-scroll-direction="horizontal" data-scroll-speed="5" data-scroll-position="top">🚂</span><span data-scroll data-scroll-speed="5" data-scroll-position="top">L</span><span data-scroll data-scroll-speed="8" data-scroll-position="top">o</span><span data-scroll data-scroll-speed="5" data-scroll-position="top">c</span><span data-scroll data-scroll-speed="8" data-scroll-position="top" >o</span><span data-scroll data-scroll-speed="5" data-scroll-position="top">m</span><span data-scroll data-scroll-speed="8" data-scroll-position="top">o</span><span data-scroll data-scroll-speed="5" data-scroll-position="top">t</span><span data-scroll data-scroll-speed="8" data-scroll-position="top">i</span><span data-scroll data-scroll-speed="5" data-scroll-position="top">v</span><span data-scroll data-scroll-speed="8" data-scroll-position="top">e</span><span> </span><span data-scroll data-scroll-speed="5" data-scroll-position="top">S</span><span data-scroll data-scroll-speed="8" data-scroll-position="top">c</span><span data-scroll data-scroll-speed="5" data-scroll-position="top">r</span><span data-scroll data-scroll-speed="8" data-scroll-position="top">o</span><span data-scroll data-scroll-speed="5" data-scroll-position="top">l</span><span data-scroll data-scroll-speed="8" data-scroll-position="top">l</span></h1>
+                    <div data-scroll data-scroll-speed="-3" data-scroll-target="#header-inner">
+                        <a href="#introduction" class="c-header_button o-button" data-scroll-to >
+                            Discover
+                        </a>
+                    </div>
                 </div>
 
             </header>
 
             <div class="o-container" data-scroll-section>
-                <div id="introduction">
-                    Lorem ipsum dolor sit amet, consectetur adipisicing elit. Sapiente doloremque alias porro ipsum non ullam, natus nostrum veritatis voluptatem molestiae reprehenderit repudiandae provident dolor nesciunt aspernatur. Labore ut laboriosam beatae.
+                <div class="c-intro" id="introduction" data-scroll>
+                    Locomotive scroll is a flexible library used by developers from Locomotive Agency. It built on the top of virtual-scroll (by ayamflow). Consectetur adipisicing elit. Veniam, incidunt nobis, nemo, consequatur reiciendis consequuntur molestias ducimus officia eaque distinctio omnis. Ullam placeat aut, ut aliquid sapiente ratione nulla id?
+                </div>
+            </div>
+
+            <div class="c-features" data-scroll-section>
+                <div class="o-container">
+                    <div class="c-features_grid o-layout -gutter" id="sticky-target">
+                        <div class="c-features_col o-layout_item u-1/2@from-small" data-scroll data-scroll-sticky data-scroll-target="#sticky-target">
+                            <div class="c-features_item">
+                                Sticky block
+                            </div>
+                        </div>
+                        <div class="c-features_col o-layout_item u-1/2@from-small">
+                            <div class="c-features_item">
+                                Lorem ipsum dolor sit amet, consectetur adipisicing elit.
+                            </div>
+                            <div class="c-features_item">
+                                Lorem ipsum dolor sit amet, consectetur adipisicing elit.
+                            </div>
+                            <div class="c-features_item">
+                                Lorem ipsum dolor sit amet, consectetur adipisicing elit.
+                            </div>
+                            <div class="c-features_item">
+                                Lorem ipsum dolor sit amet, consectetur adipisicing elit.
+                            </div>
+                        </div>
+                    </div>
                 </div>
             </div>
 
             <div class="c-fixed_wrapper" data-scroll-section data-scroll-persistent>
                 <div class="c-fixed_target" id="fixed-target"></div>
-                <div class="c-fixed" data-scroll data-scroll-sticky data-scroll-target="#fixed-target" style="background-image:url('https://picsum.photos/1920/1080/?random')"></div>
+                <div class="c-fixed" data-scroll data-scroll-sticky data-scroll-target="#fixed-target" style="background-image:url('https://images.unsplash.com/photo-1555381983-49b080e6ac89?ixlib=rb-1.2.1&ixid=eyJhcHBfaWQiOjEyMDd9&auto=format&fit=crop&w=2125&q=80')"></div>
             </div>
 
             <div class="o-container" data-scroll-section>
