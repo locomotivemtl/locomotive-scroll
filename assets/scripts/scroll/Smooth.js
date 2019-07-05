@@ -75,7 +75,7 @@ export default class extends Core {
      */
     scrollTo(params) {
 
-        const options = params.detail.options;
+        const options = params.options;
 
         let targetElem = options.targetElem;
         const sourceElem = options.sourceElem;

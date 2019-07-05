@@ -4,8 +4,8 @@ import locomotiveScroll from './scroll/main';
 
     const scroll = new locomotiveScroll({
         el: document.querySelector('#js-scroll'),
-        smooth: true,
-        smoothMobile: true,
+        smooth: false,
+        smoothMobile: false,
         mobileContainer: $(document),
         inertia: 1,
         scrollBarClassName: 'o-scrollbar',

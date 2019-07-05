@@ -23,7 +23,6 @@ export default class {
             }
         }
 
-        window.addEventListener('scroll', this.checkScroll, false);
         window.addEventListener('resize', this.checkResize, false);
     }
 
@@ -66,11 +65,9 @@ export default class {
         event.preventDefault();
 
         this.scrollTo({
-            detail: {
-                options: {
-                    sourceElem: event.currentTarget,
-                    offsetElem: event.currentTarget.getAttribute('data-offset')
-                }
+            options: {
+                sourceElem: event.currentTarget,
+                offsetElem: event.currentTarget.getAttribute('data-offset')
             }
         });
     }
@@ -150,7 +147,6 @@ export default class {
     }
 
     destroy() {
-        window.removeEventListener('scroll', this.checkScroll, false);
         window.removeEventListener('resize', this.checkResize, false);
 
         this.scrollToElements.forEach((el) => {
