@@ -16,7 +16,6 @@ export default class extends Core {
         this.isTicking = false;
         this.hasScrollTicking = false;
         this.parallaxElements = [];
-
         this.inertiaRatio = 1;
     }
 
@@ -50,14 +49,12 @@ export default class extends Core {
 
         this.setScrollLimit();
         this.initScrollBar();
-
         this.addSections();
         this.addElements();
         this.detectElements();
         this.transformElements(true);
 
         super.init();
-
     }
 
     setScrollLimit() {
@@ -91,15 +88,17 @@ export default class extends Core {
 
             this.updateScroll();
 
-            for (let i = this.sections.length - 1; i >= 0; i--) {
-                if(this.sections[i].persistent || (this.instance.scroll.y > this.sections[i].offset && this.instance.scroll.y < this.sections[i].limit)) {
-                    this.transform(this.sections[i].el,0,-this.instance.scroll.y);
-                    this.sections[i].el.style.visibility = 'visible';
-                    this.sections[i].inView = true;
-                } else {
-                    this.sections[i].el.style.visibility = 'hidden';
-                    this.sections[i].inView = false;
-                    this.transform(this.sections[i].el, 0, 0);
+            if (this.sections.length) {
+                for (let i = this.sections.length - 1; i >= 0; i--) {
+                    if(this.sections[i].persistent || (this.instance.scroll.y > this.sections[i].offset && this.instance.scroll.y < this.sections[i].limit)) {
+                        this.transform(this.sections[i].el, 0, -this.instance.scroll.y);
+                        this.sections[i].el.style.visibility = 'visible';
+                        this.sections[i].inView = true;
+                    } else {
+                        this.sections[i].el.style.visibility = 'hidden';
+                        this.sections[i].inView = false;
+                        this.transform(this.sections[i].el, 0, 0);
+                    }
                 }
             }
 
@@ -115,9 +114,8 @@ export default class extends Core {
             this.detectElements();
             this.transformElements();
 
-            // scrollbar translation
             const scrollBarTranslation = (this.instance.scroll.y / this.instance.limit) * this.scrollBarLimit;
-            this.transform(this.scrollbar,0,scrollBarTranslation);
+            this.transform(this.scrollbarThumb, 0, scrollBarTranslation);
 
             this.hasScrollTicking = false;
         }
@@ -133,7 +131,6 @@ export default class extends Core {
         this.detectElements();
         this.updateScroll();
         this.transformElements(true);
-
     }
 
     updateDelta(e) {
@@ -172,31 +169,29 @@ export default class extends Core {
         }
     }
 
-    // Scrollbar functions
     initScrollBar() {
-        this.scrollbarWrapper = document.createElement('span');
         this.scrollbar = document.createElement('span');
-        this.scrollbarWrapper.classList.add(`${this.scrollbarClass}_wrapper`);
+        this.scrollbarThumb = document.createElement('span');
         this.scrollbar.classList.add(`${this.scrollbarClass}`);
+        this.scrollbarThumb.classList.add(`${this.scrollbarClass}_thumb`);
 
-        this.scrollbarWrapper.append(this.scrollbar);
-        document.body.append(this.scrollbarWrapper);
-        this.scrollbar.style.height = `${(window.innerHeight * window.innerHeight) / this.instance.limit}px`;
-        this.scrollBarLimit = window.innerHeight - this.scrollbar.getBoundingClientRect().height;
+        this.scrollbar.append(this.scrollbarThumb);
+        document.body.append(this.scrollbar);
+        this.scrollbarThumb.style.height = `${(window.innerHeight * window.innerHeight) / this.instance.limit}px`;
+        this.scrollBarLimit = window.innerHeight - this.scrollbarThumb.getBoundingClientRect().height;
 
-        this.scrollbar.addEventListener('mousedown',(e) => this.getScrollBar(e));
+        this.scrollbarThumb.addEventListener('mousedown',(e) => this.getScrollBar(e));
         window.addEventListener('mouseup',(e) => this.releaseScrollBar(e));
         window.addEventListener('mousemove',(e) => this.moveScrollBar(e));
-
     }
 
     reinitScrollBar() {
-        this.scrollbar.style.height = `${(window.innerHeight * window.innerHeight) / this.instance.limit}px`;
-        this.scrollBarLimit = window.innerHeight - this.scrollbar.getBoundingClientRect().height;
+        this.scrollbarThumb.style.height = `${(window.innerHeight * window.innerHeight) / this.instance.limit}px`;
+        this.scrollBarLimit = window.innerHeight - this.scrollbarThumb.getBoundingClientRect().height;
     }
 
     destroyScrollBar() {
-        this.scrollbar.removeEventListener('mousedown',(e) => this.getScrollBar(e));
+        this.scrollbarThumb.removeEventListener('mousedown',(e) => this.getScrollBar(e));
         window.removeEventListener('mouseup',(e) => this.releaseScrollBar(e));
         window.removeEventListener('mousemove',(e) => this.moveScrollBar(e));
     }
@@ -217,7 +212,6 @@ export default class extends Core {
     moveScrollBar(e) {
         if (!this.isTicking && this.isDraggingScrollbar) {
             requestAnimationFrame(() => {
-                console.log(window.innerHeight)
                 let y = (e.clientY * 100 / (window.innerHeight)) * this.instance.limit / 100;
 
                 if(y > 0 && y < this.instance.limit) {
@@ -229,14 +223,11 @@ export default class extends Core {
         this.isTicking = false;
     }
 
-
-    // Manage elements and sections
     addElements() {
         this.els = []
         this.parallaxElements = []
 
         this.sections.forEach((section, y) => {
-
             const els = this.sections[y].el.querySelectorAll(`[data-${this.name}]`);
 
             els.forEach((el, i) => {
@@ -275,7 +266,6 @@ export default class extends Core {
                     middle = ((bottom - top) / 2) + top;
                 }
 
-
                 if(repeat == 'false') {
                     repeat = false;
                 } else if (repeat != undefined) {
@@ -286,7 +276,6 @@ export default class extends Core {
 
                 let relativeOffset = [0,0];
                 if(offset) {
-
                     for (var i = 0; i < offset.length; i++) {
                         if(offset[i].includes('%')) {
                             relativeOffset[i] = parseInt(offset[i].replace('%','') * this.windowHeight / 100);
@@ -294,9 +283,7 @@ export default class extends Core {
                             relativeOffset[i] = parseInt(offset[i]);
                         }
                     }
-
                 }
-
 
                 const mappedEl = {
                     el,
@@ -324,7 +311,6 @@ export default class extends Core {
             });
 
         })
-
     }
 
     addSections() {
@@ -333,7 +319,6 @@ export default class extends Core {
         const sections = this.el.querySelectorAll(`[data-${this.name}-section]`);
 
         sections.forEach((section, i) => {
-
             let offset = section.getBoundingClientRect().top - (window.innerHeight * 1.5) - getTranslate(section).y;
             let limit = offset + section.getBoundingClientRect().height + (window.innerHeight * 2);
             let persistent = typeof section.dataset[this.name + 'Persistent'] === 'string';
@@ -352,7 +337,6 @@ export default class extends Core {
             }
 
             this.sections[i] = mappedSection;
-
         });
     }
 
@@ -376,7 +360,6 @@ export default class extends Core {
     }
 
     transformElements(isForced) {
-
         const scrollBottom = this.instance.scroll.y + this.windowHeight;
         const scrollMiddle = this.instance.scroll.y + this.windowMiddle;
 
@@ -401,7 +384,6 @@ export default class extends Core {
                         transformDistance = (scrollMiddle - current.middle) * -current.speed;
                     break;
                 }
-
             }
 
             if(current.sticky) {
@@ -415,8 +397,6 @@ export default class extends Core {
                         transformDistance = current.bottom - current.top + window.innerHeight;
                     }
                 }
-
-                console.log(transformDistance, current.bottom, current.target.offsetHeight)
             }
 
             if(transformDistance !== false) {
@@ -483,12 +463,10 @@ export default class extends Core {
         this.instance.delta.y = Math.min(offset, this.instance.limit); // Actual scrollTo (the lerp will do the animation itself)
         this.inertiaRatio = Math.min(4000 / Math.abs(this.instance.delta.y - this.instance.scroll.y),0.8);
 
-
         // Update the scroll. If we were in idle state: we're not anymore
         this.isScrolling = true;
         this.checkScroll();
         html.classList.add(this.isScrollingClassName);
-
     }
 
     destroy() {

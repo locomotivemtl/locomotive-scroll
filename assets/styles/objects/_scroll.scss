@@ -9,7 +9,7 @@
     }
 }
 
-.o-scrollbar_wrapper {
+.c-scrollbar {
     width: 10px;
     position: fixed;
     right: 0;
@@ -24,7 +24,8 @@
         cursor: grab;
     }
 }
-.o-scrollbar {
+
+.c-scrollbar_thumb {
     background-color: black;
     position: absolute;
     top: 0;

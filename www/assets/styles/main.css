@@ -781,7 +781,7 @@ h6, .o-h6 {
   .has-smoothscroll .o-scroll {
     position: relative; }
 
-.o-scrollbar_wrapper {
+.c-scrollbar {
   width: 10px;
   position: fixed;
   right: 0;
@@ -795,19 +795,19 @@ h6, .o-h6 {
   transition: -webkit-transform 0.2s linear;
   transition: transform 0.2s linear;
   transition: transform 0.2s linear, -webkit-transform 0.2s linear; }
-  .o-scrollbar_wrapper:hover {
+  .c-scrollbar:hover {
     -webkit-transform: scaleX(1.3);
     transform: scaleX(1.3);
     cursor: -webkit-grab;
     cursor: grab; }
 
-.o-scrollbar {
+.c-scrollbar_thumb {
   background-color: black;
   position: absolute;
   top: 0;
   left: 0;
   right: 0; }
-  .o-scrollbar:hover {
+  .c-scrollbar_thumb:hover {
     cursor: pointer; }
 
 .o-title_wrapper {

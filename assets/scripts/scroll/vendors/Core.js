@@ -5,10 +5,10 @@ export default class {
         Object.assign(this, defaults, options);
 
         this.namespace = 'locomotive';
+        this.html = document.documentElement;
         this.windowHeight = window.innerHeight;
         this.windowMiddle = this.windowHeight / 2;
         this.els = [];
-
 
         this.hasScrollTicking = false;
         this.checkScroll = this.checkScroll.bind(this);
@@ -27,49 +27,34 @@ export default class {
     }
 
     init() {
-
         this.initEvents();
     }
 
-    checkScroll(){}
-    checkResize(){}
+    // checkScroll() {}
+
+    // checkResize() {}
 
     initEvents() {
+        this.scrollToEls = this.el.querySelectorAll(`[data-${this.name}-to]`);
+        this.setScrollTo = this.setScrollTo.bind(this);
 
-        // scroll to elements
-        this.scrollToElements = this.el.querySelectorAll(`[data-${this.name}-to]`);
-
-        this.prepareScrollTo = this.prepareScrollTo.bind(this);
-        this.scrollToElements.forEach((el) => {
-            el.addEventListener('click', this.prepareScrollTo, false);
+        this.scrollToEls.forEach((el) => {
+            el.addEventListener('click', this.setScrollTo, false);
         });
-
-        // scroll to event
-        this.scrollTo = this.scrollTo.bind(this);
-        window.addEventListener('scrollto', this.scrollTo, false);
-
-        setTimeout(() => {
-            // this.scrollTo(document.querySelectorAll('#introduction')[0]);
-            // this.scrollTo('#introduction');
-            // this.scrollTo('bottom');
-            // this.scrollTo('top');
-        },1000)
-
     }
 
-    prepareScrollTo(event) {
+    setScrollTo(event) {
         event.preventDefault();
 
         this.scrollTo(
-            event.currentTarget.getAttribute('data-href') ? event.currentTarget.getAttribute('data-href') : event.currentTarget.getAttribute('href'),
-            event.currentTarget.getAttribute('data-offset')
+            event.currentTarget.getAttribute(`data-${this.name}-href`) || event.currentTarget.getAttribute('href'),
+            event.currentTarget.getAttribute(`data-${this.name}-offset`)
         );
     }
 
-    // addElements(){}
+    // addElements() {}
 
     detectElements() {
-
         const scrollTop = this.instance.scroll.y;
         const scrollBottom = scrollTop + this.windowHeight;
 
@@ -90,7 +75,6 @@ export default class {
     }
 
     setInView(current, i) {
-
         this.els[i].inView = true;
         current.el.classList.add(current.class);
 
@@ -108,12 +92,10 @@ export default class {
     }
 
     setOutOfView(current, i) {
-
         if(current.repeat || current.speed !== undefined) {
             this.els[i].inView = false;
             current.el.classList.remove(current.class);
         }
-
     }
 
     updateElements() {
@@ -143,9 +125,8 @@ export default class {
     destroy() {
         window.removeEventListener('resize', this.checkResize, false);
 
-        this.scrollToElements.forEach((el) => {
-            el.removeEventListener('click', this.prepareScrollTo, false);
+        this.scrollToEls.forEach((el) => {
+            el.removeEventListener('click', this.setScrollTo, false);
         });
     }
-
 }

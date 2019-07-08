@@ -2,10 +2,9 @@ import Core from './Core';
 
 export default class extends Core {
     constructor(options = {}) {
-
         super(options);
-        window.addEventListener('scroll', this.checkScroll, false);
 
+        window.addEventListener('scroll', this.checkScroll, false);
     }
 
     init() {
@@ -22,7 +21,7 @@ export default class extends Core {
             this.instance.scroll.y = window.scrollY;
 
             if(!this.hasScrollTicking) {
-            requestAnimationFrame(() => {
+                requestAnimationFrame(() => {
                     this.detectElements();
                 });
                 this.hasScrollTicking = true;
@@ -89,10 +88,10 @@ export default class extends Core {
         if(typeof targetOption === 'string') {
 
             if(targetOption === 'top') {
-                target = document.querySelectorAll('html')[0];
+                target = this.html;
             } else if(targetOption === 'bottom') {
                 offset = document.offsetHeight;
-                document.querySelectorAll('html')[0].scrollIntoView({ behavior: 'smooth', block: "end", inline: "nearest"});
+                this.html.scrollIntoView({ behavior: 'smooth', block: "end", inline: "nearest"});
 
                 return;
 
