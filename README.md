@@ -73,7 +73,6 @@ scroll.on('call', (func) => {
 | Option | Type | Default | Description |
 | ------ | ---- | ------- | ----------- |
 | `el` | `object` | `document` | Scroll container element. |
-| `elMobile` | `object` | `document` | Mobile scroll container element. |
 | `name` | `string` | `'scroll'` | Data attributes name. |
 | `offset` | `number` | `0` | In-view trigger offset. |
 | `repeat` | `boolean` | `false` | Repeat in-view detection. |
@@ -91,6 +90,7 @@ scroll.on('call', (func) => {
 | Attribute | Values | Description |
 | --------- | ------ | ----------- |
 | `data-scroll` |  | Detect if in-view. |
+| `data-scroll-section` |  | Sections to scroll. Spliting your page in sections may improve performance. |
 | `data-scroll-class` | `string` | Element in-view class.  |
 | `data-scroll-offset` | `number` | Element in-view trigger offset. |
 | `data-scroll-repeat` | `true`, `false` | Element in-view detection repeat. |
@@ -103,12 +103,14 @@ scroll.on('call', (func) => {
 | `data-scroll-sticky` |  | Sticky element. Start and stops at `data-scroll-target` position. |
 
 ## Methods
-| Method | Description |
-| --------- | ----------- |
-| `init()` | Reinit the scroll. |
-| `update()` | Update elements position.  |
-| `destroy()` | Destroy the scroll events. |
-| `scrollTo(el)` | Scroll to element. |
+| Method | Description | Arguments |
+| ------ | ----------- | --------- |
+| `init()` | Reinit the scroll. | |
+| `update()` | Update elements position.  | |
+| `destroy()` | Destroy the scroll events. | |
+| `start()` | Restart the scroll events. | |
+| `stop()` | Stop the scroll events. | |
+| `scrollTo(target, offset)` | Scroll to element. | `target`: dom `object`, selector `string`, `top` or `bottom`  `offset`: `number` |
 
 ## Events
 | Event | Arguments | Description |

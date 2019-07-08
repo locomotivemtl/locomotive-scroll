@@ -12,7 +12,7 @@ export default class extends Core {
 
         this.inertia = this.inertia * 0.1;
         this.isScrolling = false;
-        this.isDraggingScrollBar = false;
+        this.isDraggingScrollbar = false;
         this.isTicking = false;
         this.hasScrollTicking = false;
         this.parallaxElements = [];
@@ -35,7 +35,7 @@ export default class extends Core {
         }
 
         this.instance.vs.on((e) => {
-            if (!this.isTicking && !this.isDraggingScrollBar) {
+            if (!this.isTicking && !this.isDraggingScrollbar) {
                 requestAnimationFrame(() => {
                     if (!this.isScrolling) this.startScrolling();
 
@@ -136,7 +136,7 @@ export default class extends Core {
             // Update the scroll. If we were in idle state: we're not anymore
             this.isScrolling = true;
             this.checkScroll();
-            html.classList.add(this.isScrollingClassName);
+            html.classList.add(this.scrollingClass);
         }, delay);
     }
 
@@ -157,7 +157,7 @@ export default class extends Core {
     }
 
     checkScroll() {
-        if (this.isScrolling || this.isDraggingScrollBar) {
+        if (this.isScrolling || this.isDraggingScrollbar) {
             if (!this.hasScrollTicking) {
                 requestAnimationFrame(() => this.checkScroll());
                 this.hasScrollTicking = true;
@@ -223,7 +223,7 @@ export default class extends Core {
     updateScroll() {
         if (this.isScrolling) {
             this.instance.scroll.y = lerp(this.instance.scroll.y, this.instance.delta.y, this.inertia);
-        } else if (this.isDraggingScrollBar) {
+        } else if (this.isDraggingScrollbar) {
             this.instance.scroll.y = lerp(this.instance.scroll.y, this.instance.delta.y, (this.inertia * 2));
         } else {
             this.instance.scroll.y = this.instance.delta.y;
@@ -254,8 +254,8 @@ export default class extends Core {
     initScrollBar() {
         this.scrollbarWrapper = document.createElement('span');
         this.scrollbar = document.createElement('span');
-        this.scrollbarWrapper.classList.add(`${this.scrollBarClassName}_wrapper`);
-        this.scrollbar.classList.add(`${this.scrollBarClassName}`);
+        this.scrollbarWrapper.classList.add(`${this.scrollbarClass}_wrapper`);
+        this.scrollbar.classList.add(`${this.scrollbarClass}`);
 
         this.scrollbarWrapper.append(this.scrollbar);
         document.body.append(this.scrollbarWrapper);
@@ -280,20 +280,20 @@ export default class extends Core {
     }
 
     getScrollBar(e) {
-        this.isDraggingScrollBar = true;
+        this.isDraggingScrollbar = true;
         this.checkScroll();
-        html.classList.remove(this.isScrollingClassName);
-        html.classList.add(this.isDraggingClassName);
+        html.classList.remove(this.scrollingClass);
+        html.classList.add(this.draggingClass);
     }
 
     releaseScrollBar(e) {
-        this.isDraggingScrollBar = false;
-        html.classList.add(this.isScrollingClassName);
-        html.classList.remove(this.isDraggingClassName);
+        this.isDraggingScrollbar = false;
+        html.classList.add(this.scrollingClass);
+        html.classList.remove(this.draggingClass);
     }
 
     moveScrollBar(e) {
-        if (!this.isTicking && this.isDraggingScrollBar) {
+        if (!this.isTicking && this.isDraggingScrollbar) {
             requestAnimationFrame(() => {
                 console.log(window.innerHeight)
                 let y = (e.clientY * 100 / (window.innerHeight)) * this.instance.limit / 100;
