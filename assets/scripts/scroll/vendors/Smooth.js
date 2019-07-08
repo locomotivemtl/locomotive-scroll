@@ -303,7 +303,6 @@ export default class extends Core {
             els.forEach((el, i) => {
                 let cl = el.dataset[this.name + 'Class'] || this.class;
                 let top;
-                let offset = parseInt(el.dataset[this.name + 'Offset']) || parseInt(this.offset);
                 let repeat = el.dataset[this.name + 'Repeat'];
                 let call = el.dataset[this.name + 'Call'];
                 let position = el.dataset[this.name + 'Position'];
@@ -311,6 +310,8 @@ export default class extends Core {
                 let direction = el.dataset[this.name + 'Direction'];
                 let sticky = typeof el.dataset[this.name + 'Sticky'] === 'string';
                 let speed = el.dataset[this.name + 'Speed'] ? parseFloat(el.dataset[this.name + 'Speed'])/10 : false;
+                let offset = (typeof el.dataset[this.name + 'Offset'] === 'string') ? el.dataset[this.name + 'Offset'].split(',') : false;
+
                 let target = el.dataset[this.name + 'Target'];
                 let targetEl;
 
@@ -344,12 +345,28 @@ export default class extends Core {
                     repeat = this.repeat;
                 }
 
+                let relativeOffset = [0,0];
+                if(offset) {
+
+                    for (var i = 0; i < offset.length; i++) {
+                        if(offset[i].includes('%')) {
+                            relativeOffset[i] = parseInt(offset[i].replace('%','') * this.windowHeight / 100);
+                        } else {
+                            relativeOffset[i] = parseInt(offset[i]);
+                        }
+                    }
+
+                    console.log(relativeOffset);
+
+                }
+
+
                 const mappedEl = {
                     el,
                     class: cl,
-                    top: top + offset,
+                    top: top + relativeOffset[0],
                     middle,
-                    bottom,
+                    bottom: bottom - relativeOffset[1],
                     offset,
                     repeat,
                     inView: false,

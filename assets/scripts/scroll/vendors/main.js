@@ -24,6 +24,10 @@ export default class {
 
         this.scroll.init();
 
+        if(window.location.hash) {
+            this.scroll.scrollTo(window.location.hash);
+        }
+
     }
 
     destroy() {

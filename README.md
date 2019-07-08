@@ -74,7 +74,7 @@ scroll.on('call', (func) => {
 | ------ | ---- | ------- | ----------- |
 | `el` | `object` | `document` | Scroll container element. |
 | `name` | `string` | `'scroll'` | Data attributes name. |
-| `offset` | `number` | `0` | In-view trigger offset. |
+| `offset` | `array` | `0` | In-view trigger offset. |
 | `repeat` | `boolean` | `false` | Repeat in-view detection. |
 | `smooth` | `boolean` | `false` | Smooth scrolling |
 | `smoothMobile` | `boolean` | `false` | Smooth scrolling on iOS and Android devices. |
@@ -92,7 +92,7 @@ scroll.on('call', (func) => {
 | `data-scroll` |  | Detect if in-view. |
 | `data-scroll-section` |  | Sections to scroll. Spliting your page in sections may improve performance. |
 | `data-scroll-class` | `string` | Element in-view class.  |
-| `data-scroll-offset` | `number` | Element in-view trigger offset. |
+| `data-scroll-offset` | `string` | Element in-view trigger offset (Example :"10", "100,50%", "25%, 15%"). |
 | `data-scroll-repeat` | `true`, `false` | Element in-view detection repeat. |
 | `data-scroll-call` | `string` | Element in-view trigger call event. |
 | `data-scroll-speed` | `number` | Element parallax speed. Negative value for inverse way. |

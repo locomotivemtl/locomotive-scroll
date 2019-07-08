@@ -853,7 +853,7 @@ h6, .o-h6 {
   background-position: center center; }
 
 .c-intro {
-  padding: 7.5rem 0;
+  margin: 7.5rem 0;
   font-size: 2.1875rem;
   line-height: 1.2;
   opacity: 0;

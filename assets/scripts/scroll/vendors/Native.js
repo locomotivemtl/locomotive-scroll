@@ -22,7 +22,7 @@ export default class extends Core {
             this.instance.scroll.y = window.scrollY;
 
             if(!this.hasScrollTicking) {
-                requestAnimationFrame(() => {
+            requestAnimationFrame(() => {
                     this.detectElements();
                 });
                 this.hasScrollTicking = true;
