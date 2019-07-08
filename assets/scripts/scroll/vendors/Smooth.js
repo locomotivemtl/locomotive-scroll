@@ -60,67 +60,6 @@ export default class extends Core {
 
     }
 
-    /**
-     * Scroll to a desired target.
-     *
-     * @param  {object} options
-     *      Available options :
-     *          {node} target - The DOM element we want to scroll to
-     *          {node} sourceElem - An `<a>` element with an href targeting the anchor we want to scroll to
-     *          {node} offsetElem - A DOM element from which we get the height to substract from the offset
-     *              (ex: use offsetElem to pass a mobile header that is above content, to make sure the scrollTo will be aligned with it)
-     *          {int} offset - An absolute vertical scroll value to reach, or an offset to apply on top of given `target` or `sourceElem`'s target
-     *          {int} delay - Amount of milliseconds to wait before starting to scroll
-     *          {boolean} toTop - Set to true to scroll all the way to the top
-     *          {boolean} toBottom - Set to true to scroll all the way to the bottom
-     * @return {void}
-     */
-    scrollTo(targetOption, offsetOption) {
-        let target;
-        let offset = offsetOption ? parseInt(offsetOption) : 0;
-
-        if(typeof targetOption === 'string') {
-
-            if(targetOption === 'top') {
-                offset = 0;
-            } else if(targetOption === 'bottom') {
-                offset = this.instance.limit;
-            } else {
-                target = document.querySelectorAll(targetOption)[0];
-            }
-
-        } else if(!targetOption.target) {
-            target = targetOption;
-        }
-
-        // We have a target, get it's coordinates
-        if (target) {
-            // Get target offset from top
-            const targetBCR = target.getBoundingClientRect()
-            const offsetTop = targetBCR.top + this.instance.scroll.y
-
-            // Try and find the target's parent section
-            const targetParents = getParents(target)
-            const parentSection = targetParents.find(candidate => this.sections.find(section => section.element == candidate))
-            let parentSectionOffset = 0
-            if(parentSection) {
-                parentSectionOffset = getTranslate(parentSection).y // We got a parent section, store it's current offset to remove it later
-            }
-            // Final value of scroll destination : offsetTop + (optional offset given in options) - (parent's section translate)
-            offset = offsetTop + offset - parentSectionOffset;
-        }
-
-        this.instance.delta.y = Math.min(offset, this.instance.limit); // Actual scrollTo (the lerp will do the animation itself)
-        this.inertiaRatio = Math.min(4000 / Math.abs(this.instance.delta.y - this.instance.scroll.y),0.8);
-
-
-        // Update the scroll. If we were in idle state: we're not anymore
-        this.isScrolling = true;
-        this.checkScroll();
-        html.classList.add(this.isScrollingClassName);
-
-    }
-
     setScrollLimit() {
         this.instance.limit = this.el.offsetHeight - this.windowHeight;
     }
@@ -356,8 +295,6 @@ export default class extends Core {
                         }
                     }
 
-                    console.log(relativeOffset);
-
                 }
 
 
@@ -374,7 +311,7 @@ export default class extends Core {
                     speed,
                     delay,
                     position,
-                    target,
+                    target: targetEl,
                     direction,
                     sticky
                 }
@@ -475,9 +412,11 @@ export default class extends Core {
                         transformDistance = 0;
                     }
                     if(this.instance.scroll.y > current.bottom) {
-                        transformDistance = current.bottom - current.offsetHeight;
+                        transformDistance = current.bottom - current.top + window.innerHeight;
                     }
                 }
+
+                console.log(transformDistance, current.bottom, current.target.offsetHeight)
             }
 
             if(transformDistance !== false) {
@@ -489,6 +428,67 @@ export default class extends Core {
             }
 
         });
+    }
+
+    /**
+     * Scroll to a desired target.
+     *
+     * @param  {object} options
+     *      Available options :
+     *          {node} target - The DOM element we want to scroll to
+     *          {node} sourceElem - An `<a>` element with an href targeting the anchor we want to scroll to
+     *          {node} offsetElem - A DOM element from which we get the height to substract from the offset
+     *              (ex: use offsetElem to pass a mobile header that is above content, to make sure the scrollTo will be aligned with it)
+     *          {int} offset - An absolute vertical scroll value to reach, or an offset to apply on top of given `target` or `sourceElem`'s target
+     *          {int} delay - Amount of milliseconds to wait before starting to scroll
+     *          {boolean} toTop - Set to true to scroll all the way to the top
+     *          {boolean} toBottom - Set to true to scroll all the way to the bottom
+     * @return {void}
+     */
+    scrollTo(targetOption, offsetOption) {
+        let target;
+        let offset = offsetOption ? parseInt(offsetOption) : 0;
+
+        if(typeof targetOption === 'string') {
+
+            if(targetOption === 'top') {
+                offset = 0;
+            } else if(targetOption === 'bottom') {
+                offset = this.instance.limit;
+            } else {
+                target = document.querySelectorAll(targetOption)[0];
+            }
+
+        } else if(!targetOption.target) {
+            target = targetOption;
+        }
+
+        // We have a target, get it's coordinates
+        if (target) {
+            // Get target offset from top
+            const targetBCR = target.getBoundingClientRect()
+            const offsetTop = targetBCR.top + this.instance.scroll.y
+
+            // Try and find the target's parent section
+            const targetParents = getParents(target)
+            const parentSection = targetParents.find(candidate => this.sections.find(section => section.element == candidate))
+            let parentSectionOffset = 0
+            if(parentSection) {
+                parentSectionOffset = getTranslate(parentSection).y // We got a parent section, store it's current offset to remove it later
+            }
+            // Final value of scroll destination : offsetTop + (optional offset given in options) - (parent's section translate)
+            offset = offsetTop + offset - parentSectionOffset;
+        }
+
+        this.instance.delta.y = Math.min(offset, this.instance.limit); // Actual scrollTo (the lerp will do the animation itself)
+        this.inertiaRatio = Math.min(4000 / Math.abs(this.instance.delta.y - this.instance.scroll.y),0.8);
+
+
+        // Update the scroll. If we were in idle state: we're not anymore
+        this.isScrolling = true;
+        this.checkScroll();
+        html.classList.add(this.isScrollingClassName);
+
     }
 
     destroy() {
