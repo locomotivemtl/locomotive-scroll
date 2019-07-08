@@ -16,6 +16,8 @@ export default class extends Core {
         this.isTicking = false;
         this.hasScrollTicking = false;
         this.parallaxElements = [];
+
+        this.inertiaRatio = 1;
     }
 
     init() {
@@ -63,81 +65,60 @@ export default class extends Core {
      *
      * @param  {object} options
      *      Available options :
-     *          {node} targetElem - The DOM element we want to scroll to
+     *          {node} target - The DOM element we want to scroll to
      *          {node} sourceElem - An `<a>` element with an href targeting the anchor we want to scroll to
-     *          {node} offsetElem - A DOM element from which we get the height to substract from the targetOffset
+     *          {node} offsetElem - A DOM element from which we get the height to substract from the offset
      *              (ex: use offsetElem to pass a mobile header that is above content, to make sure the scrollTo will be aligned with it)
-     *          {int} targetOffset - An absolute vertical scroll value to reach, or an offset to apply on top of given `targetElem` or `sourceElem`'s target
+     *          {int} offset - An absolute vertical scroll value to reach, or an offset to apply on top of given `target` or `sourceElem`'s target
      *          {int} delay - Amount of milliseconds to wait before starting to scroll
      *          {boolean} toTop - Set to true to scroll all the way to the top
      *          {boolean} toBottom - Set to true to scroll all the way to the bottom
      * @return {void}
      */
-    scrollTo(params) {
+    scrollTo(targetOption, offsetOption) {
+        let target;
+        let offset = offsetOption ? parseInt(offsetOption) : 0;
 
-        const options = params.options;
+        if(typeof targetOption === 'string') {
 
-        let targetElem = options.targetElem;
-        const sourceElem = options.sourceElem;
-        const offsetElem = options.offsetElem;
-        let targetOffset = options.targetOffset ? options.targetOffset : 0 ;
-        const delay = options.delay;
-        const toTop = options.toTop;
-        const toBottom = options.toBottom;
+            if(targetOption === 'top') {
+                offset = 0;
+            } else if(targetOption === 'bottom') {
+                offset = this.instance.limit;
+            } else {
+                target = document.querySelectorAll(targetOption)[0];
+            }
 
-        // If sourceElem is given, find and store the targetElem it's related to
-        if (sourceElem) {
-            let targetData = '';
-
-            // Get the selector (given with `data-target` or `href` attributes on sourceElem)
-            let sourceElemTarget = sourceElem.getAttribute('data-target')
-            targetData = sourceElemTarget ? sourceElemTarget : sourceElem.getAttribute('href')
-
-            // Store the target for later
-            targetElem = document.querySelectorAll(targetData)[0]
+        } else if(!targetOption.target) {
+            target = targetOption;
         }
 
-        // We have a targetElem, get it's coordinates
-        if (targetElem) {
-            // Get targetElem offset from top
-            const targetElemBCR = targetElem.getBoundingClientRect()
-            const targetElemOffsetTop = targetElemBCR.top + this.instance.scroll.y
+        // We have a target, get it's coordinates
+        if (target) {
+            // Get target offset from top
+            const targetBCR = target.getBoundingClientRect()
+            const offsetTop = targetBCR.top + this.instance.scroll.y
 
-            // Try and find the targetElem's parent section
-            const targetParents = getParents(targetElem)
-            console.log(targetParents);
+            // Try and find the target's parent section
+            const targetParents = getParents(target)
             const parentSection = targetParents.find(candidate => this.sections.find(section => section.element == candidate))
             let parentSectionOffset = 0
             if(parentSection) {
                 parentSectionOffset = getTranslate(parentSection).y // We got a parent section, store it's current offset to remove it later
             }
-
-            // Final value of scroll destination : targetElemOffsetTop + (optional offset given in options) - (parent's section translate)
-            targetOffset = targetElemOffsetTop + targetOffset - parentSectionOffset;
+            // Final value of scroll destination : offsetTop + (optional offset given in options) - (parent's section translate)
+            offset = offsetTop + offset - parentSectionOffset;
         }
 
-        // We have an offsetElem, get its height and remove it from targetOffset already computed
-        if (offsetElem) {
-            let offset = offsetElem.offsetHeight;
-            targetOffset = targetOffset - offset;
-        }
+        this.instance.delta.y = Math.min(offset, this.instance.limit); // Actual scrollTo (the lerp will do the animation itself)
+        this.inertiaRatio = Math.min(4000 / Math.abs(this.instance.delta.y - this.instance.scroll.y),0.8);
 
-        // If we want to go to one of boundaries
-        if (toTop === true) {
-            targetOffset = 0;
-        } else if (toBottom === true) {
-            targetOffset = this.instance.limit;
-        }
 
-        // Wait for the asked delay if needed
-        setTimeout(() => {
-            this.instance.delta.y = targetOffset; // Actual scrollTo (the lerp will do the animation itself)
+        // Update the scroll. If we were in idle state: we're not anymore
+        this.isScrolling = true;
+        this.checkScroll();
+        html.classList.add(this.isScrollingClassName);
 
-            // Update the scroll. If we were in idle state: we're not anymore
-            this.isScrolling = true;
-            this.checkScroll();
-            html.classList.add(this.scrollingClass);
-        }, delay);
     }
 
     setScrollLimit() {
@@ -152,6 +133,7 @@ export default class extends Core {
 
     stopScrolling() {
         this.isScrolling = false;
+        this.inertiaRatio = 1;
         this.instance.scroll.y = Math.round(this.instance.scroll.y);
         html.classList.remove(this.scrollingClass);
     }
@@ -164,7 +146,7 @@ export default class extends Core {
             }
 
             const distance = (Math.abs(this.instance.delta.y - this.instance.scroll.y));
-            if ((distance < 1 && this.instance.delta.y != 0) || (distance < 0.5 && this.instance.delta.y == 0)) {
+            if ((distance < 0.9 && this.instance.delta.y != 0) || (distance < 0.5 && this.instance.delta.y == 0)) {
                 this.stopScrolling();
             }
 
@@ -178,6 +160,7 @@ export default class extends Core {
                 } else {
                     this.sections[i].el.style.visibility = 'hidden';
                     this.sections[i].inView = false;
+                    this.transform(this.sections[i].el, 0, 0);
                 }
             }
 
@@ -222,8 +205,8 @@ export default class extends Core {
 
     updateScroll() {
         if (this.isScrolling) {
-            this.instance.scroll.y = lerp(this.instance.scroll.y, this.instance.delta.y, this.inertia);
-        } else if (this.isDraggingScrollbar) {
+            this.instance.scroll.y = lerp(this.instance.scroll.y, this.instance.delta.y, this.inertia * this.inertiaRatio);
+        } else if (this.isDraggingScrollBar) {
             this.instance.scroll.y = lerp(this.instance.scroll.y, this.instance.delta.y, (this.inertia * 2));
         } else {
             this.instance.scroll.y = this.instance.delta.y;

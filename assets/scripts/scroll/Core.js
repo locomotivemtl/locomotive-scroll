@@ -48,28 +48,22 @@ export default class {
         this.scrollTo = this.scrollTo.bind(this);
         window.addEventListener('scrollto', this.scrollTo, false);
 
-        // example to trigger a scroll to
-        // const scrollToEvent = new CustomEvent('scrollto',{
-        //     detail: {
-        //         options: {
-        //             targetElem: document.querySelectorAll('#introduction')[0]
-        //         }
-        //     }
-        // });
-
-        // window.dispatchEvent(scrollToEvent)
+        setTimeout(() => {
+            // this.scrollTo(document.querySelectorAll('#introduction')[0]);
+            // this.scrollTo('#introduction');
+            // this.scrollTo('bottom');
+            // this.scrollTo('top');
+        },1000)
 
     }
 
     prepareScrollTo(event) {
         event.preventDefault();
 
-        this.scrollTo({
-            options: {
-                sourceElem: event.currentTarget,
-                offsetElem: event.currentTarget.getAttribute('data-offset')
-            }
-        });
+        this.scrollTo(
+            event.currentTarget.getAttribute('data-href') ? event.currentTarget.getAttribute('data-href') : event.currentTarget.getAttribute('href'),
+            event.currentTarget.getAttribute('data-offset')
+        );
     }
 
     // addElements(){}

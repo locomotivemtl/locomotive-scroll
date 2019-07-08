@@ -83,57 +83,33 @@ export default class extends Core {
      * @param  {object} options
      * @return {void}
      */
-    scrollTo(params) {
-        const options = params.options;
+    scrollTo(targetOption, offsetOption) {
+        let target;
+        let offset = offsetOption ? parseInt(offsetOption) : 0;
 
-        let targetElem = options.targetElem;
-        let sourceElem = options.sourceElem;
-        const offsetElem = options.offsetElem;
-        let targetOffset = options.targetOffset ? options.targetOffset : 0 ;
-        const speed = options.speed ? options.speed : 800 ;
-        const delay = options.delay;
-        let toTop = options.toTop;
-        let toBottom = options.toBottom;
-        let offset = 0;
+        if(typeof targetOption === 'string') {
 
-
-        // If sourceElem is given, find and store the targetElem it's related to
-        if (sourceElem) {
-            let targetData = '';
-
-            // Get the selector (given with `data-target` or `href` attributes on sourceElem)
-            let sourceElemTarget = sourceElem.getAttribute('data-target')
-            targetData = sourceElemTarget ? sourceElemTarget : sourceElem.getAttribute('href')
-
-            // Store the target for later
-            targetElem = document.querySelectorAll(targetData)[0]
-        }
-
-        if (targetElem) {
-            targetOffset = targetElem.getBoundingClientRect().top + targetOffset;
-        }
-
-        if (offsetElem) {
-            let offset = offsetElem.offsetHeight;
-            targetOffset = targetOffset - offset;
-        }
-
-        if (toTop === true) {
-            targetElem =  document.querySelectorAll('html')[0];
-        } else if (toBottom === true) {
-            targetOffset = document.offsetHeight;
-
-            setTimeout(() => {
+            if(targetOption === 'top') {
+                target = document.querySelectorAll('html')[0];
+            } else if(targetOption === 'bottom') {
+                offset = document.offsetHeight;
                 document.querySelectorAll('html')[0].scrollIntoView({ behavior: 'smooth', block: "end", inline: "nearest"});
-            }, delay);
 
-            return;
+                return;
+
+            } else {
+                target = document.querySelectorAll(targetOption)[0];
+            }
+
+        } else if(!targetOption.target) {
+            target = targetOption;
         }
 
-        setTimeout(() => {
-            targetElem.scrollIntoView({ behavior: 'smooth'});
-        }, delay);
+        if (target) {
+            offset = target.getBoundingClientRect().top + offset;
+        }
 
+        target.scrollIntoView({ behavior: 'smooth'});
     }
 
 
