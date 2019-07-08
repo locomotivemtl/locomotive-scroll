@@ -12,7 +12,7 @@ $assets-path: "../"  !default;
 
 // Typefaces
 // =============================================================================
-$font-sans-serif: Arial, sans-serif;
+$font-sans-serif: 'Open Sans', sans-serif;
 
 // Typography
 // =============================================================================
@@ -22,7 +22,7 @@ $line-height: 24px / $font-size;
 $font-family: $font-sans-serif;
 $color:       #222222;
 // Headings
-$font-size-h1:  36px  !default;
+$font-size-h1:  9vw  !default;
 $font-size-h2:  28px  !default;
 $font-size-h3:  24px  !default;
 $font-size-h4:  20px  !default;
@@ -33,6 +33,7 @@ $line-height-h: $line-height;
 $light:  300;
 $normal: 400;
 $medium: 500;
+$semi-bold: 600;
 $bold:   700;
 
 // Transitions
@@ -67,7 +68,7 @@ $unit-small: 40px;
 
 // Container
 // ==========================================================================
-$container-width: 1300px;
+$container-width: 1400px;
 $padding:         $unit;
 
 // Breakpoints

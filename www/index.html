@@ -1,6 +1,6 @@
 <!doctype html>
 <!-- Determine the usage of this class with backend browser/UA sniffing -->
-<html lang="fr" class="is-smooth-scroll-compatible">
+<html lang="fr" class="is-smooth-scroll-compatible is-loading">
 <!-- <html lang="fr"> -->
     <head>
         <meta charset="utf-8">
@@ -13,72 +13,94 @@
         <link rel="apple-touch-icon" href="assets/images/apple-touch-icon.png">
         <link rel="icon" href="assets/images/favicon.png">
 
+        <link href="https://fonts.googleapis.com/css?family=Open+Sans:400,600,700&display=swap" rel="stylesheet">
+
         <link rel="stylesheet" href="/assets/styles/main.css">
 
     </head>
     <body>
+
         <section class="o-scroll" id="js-scroll">
-
-            <header class="c-header" data-scroll-section>
-                <div class="o-title_wrapper" id="header-inner">
-                    <h1 class="o-title"><span data-scroll data-scroll-direction="horizontal" data-scroll-speed="5" data-scroll-position="top">🚂</span><span data-scroll data-scroll-speed="5" data-scroll-position="top">L</span><span data-scroll data-scroll-speed="8" data-scroll-position="top">o</span><span data-scroll data-scroll-speed="5" data-scroll-position="top">c</span><span data-scroll data-scroll-speed="8" data-scroll-position="top" >o</span><span data-scroll data-scroll-speed="5" data-scroll-position="top">m</span><span data-scroll data-scroll-speed="8" data-scroll-position="top">o</span><span data-scroll data-scroll-speed="5" data-scroll-position="top">t</span><span data-scroll data-scroll-speed="8" data-scroll-position="top">i</span><span data-scroll data-scroll-speed="5" data-scroll-position="top">v</span><span data-scroll data-scroll-speed="8" data-scroll-position="top">e</span><span> </span><span data-scroll data-scroll-speed="5" data-scroll-position="top">S</span><span data-scroll data-scroll-speed="8" data-scroll-position="top">c</span><span data-scroll data-scroll-speed="5" data-scroll-position="top">r</span><span data-scroll data-scroll-speed="8" data-scroll-position="top">o</span><span data-scroll data-scroll-speed="5" data-scroll-position="top">l</span><span data-scroll data-scroll-speed="8" data-scroll-position="top">l</span></h1>
-                    <div data-scroll data-scroll-speed="-3" data-scroll-target="#header-inner">
-                        <a href="#introduction" class="c-header_button o-button" data-scroll-to>
-                            Discover
-                        </a>
-                        <a href="#footer" class="c-header_button o-button" data-scroll-to >
-                            Footer
-                        </a>
-                    </div>
-                </div>
-
-            </header>
-
-            <div class="o-container" data-scroll-section>
-                <div class="c-intro" id="introduction" data-scroll data-scroll-repeat data-scroll-offset="10%">
-                    Locomotive scroll is a flexible library used by developers from Locomotive Agency. It built on the top of virtual-scroll (by ayamflow). Consectetur adipisicing elit. Veniam, incidunt nobis, nemo, consequatur reiciendis consequuntur molestias ducimus officia eaque distinctio omnis. Ullam placeat aut, ut aliquid sapiente ratione nulla id?
-                </div>
-            </div>
-
-            <div class="c-features" data-scroll-section>
+            <div data-scroll-section>
                 <div class="o-container">
-                    <div class="c-features_grid o-layout -gutter" id="sticky-target">
-                        <div class="c-features_col o-layout_item u-1/2@from-small" data-scroll data-scroll-sticky data-scroll-target="#sticky-target">
-                            <div class="c-features_item">
-                                Sticky block
+                    <header class="c-header" id="header">
+                        <div class="c-header_heading" data-scroll data-scroll-speed="-8" data-scroll-position="top" data-scroll-target="#header">
+                            <div class="o-layout">
+                                <div class="o-layout_item u-1/2" data-scroll data-scroll-direction="horizontal" data-scroll-speed="-2" data-scroll-position="top" data-scroll-target="#header">
+                                    <a href="" class="u-label c-header_heading_label">Locomotive.ca</a>
+                                </div>
+                                <div class="o-layout_item u-1/2" data-scroll data-scroll-direction="horizontal" data-scroll-speed="2" data-scroll-position="top" data-scroll-target="#header">
+                                    <div class="u-text-right">
+                                        <p class="u-label c-header_heading_label">
+                                            2019 – Edition
+                                        </p>
+                                    </div>
+                                </div>
                             </div>
                         </div>
-                        <div class="c-features_col o-layout_item u-1/2@from-small">
-                            <div class="c-features_item">
-                                Lorem ipsum dolor sit amet, consectetur adipisicing elit.
+                        <h1 class="c-header_title">
+                            <span class="c-header_title_line">
+                                <span data-scroll data-scroll-speed="3"data-scroll-position="top">L</span><span data-scroll data-scroll-speed="4"data-scroll-position="top">o</span><span data-scroll data-scroll-speed="2.5" data-scroll-position="top">c</span><span data-scroll data-scroll-speed="3" data-scroll-position="top">o</span><span data-scroll data-scroll-speed="4" data-scroll-position="top">m</span><span data-scroll data-scroll-speed="3" data-scroll-position="top">o</span><span data-scroll data-scroll-speed="2" data-scroll-position="top">t</span><span data-scroll data-scroll-speed="4" data-scroll-position="top">i</span><span data-scroll data-scroll-speed="2" data-scroll-position="top">v</span><span data-scroll data-scroll-speed="1.2" data-scroll-position="top">e</span>
+                            </span>
+                            <span class="c-header_title_line">
+                                <span data-scroll data-scroll-speed="2"data-scroll-position="top">S</span><span data-scroll data-scroll-speed="3"data-scroll-position="top">c</span><span data-scroll data-scroll-speed="2" data-scroll-position="top">r</span><span data-scroll data-scroll-speed="2" data-scroll-position="top">o</span><span data-scroll data-scroll-speed="3" data-scroll-position="top">l</span><span data-scroll data-scroll-speed="2" data-scroll-position="top">l</span>
+                            </span>
+                            <span class="c-header_title_line u-white">
+                                <span data-scroll data-scroll-speed="2"data-scroll-position="top" data-scroll-delay="0.05">2</span><span data-scroll data-scroll-speed="3"data-scroll-position="top" data-scroll-delay="0.05">0</span><span data-scroll data-scroll-speed="1.5" data-scroll-position="top" data-scroll-delay="0.05">1</span><span data-scroll data-scroll-speed="2" data-scroll-position="top" data-scroll-delay="0.05">9</span>
+                            </span>
+                        </h1>
+                        <hr class="c-header_line" data-scroll data-scroll-offset="100" />
+                    </header>
+                </div>
+            </div>
+            <div data-scroll-section>
+                <div class="o-container">
+                    <div class="c-summary" data-scroll data-scroll-offset="100">
+                        <div class="o-layout -gutter">
+                            <div class="o-layout_item u-2/5">
+                                <p class="c-summary_text">
+                                    A simple scroll library based on virtual-scroll by Ayamflow used by developers at Locomotive. It basicly triggers class when elements are in viewport, but it allows many others functionnalities.
+                                </p>
                             </div>
-                            <div class="c-features_item">
-                                Lorem ipsum dolor sit amet, consectetur adipisicing elit.
-                            </div>
-                            <div class="c-features_item">
-                                Lorem ipsum dolor sit amet, consectetur adipisicing elit.
-                            </div>
-                            <div class="c-features_item">
-                                Lorem ipsum dolor sit amet, consectetur adipisicing elit.
+                            <div class="o-layout_item u-3/5">
+                                <ul class="c-summary_list">
+                                    <li class="c-summary_list_item u-label" data-scroll>
+                                        <a href="#speed-control" data-scroll-to>
+                                            01. Speed Control
+                                            <span class="c-summary_list_icon u-icon">
+                                                ↓
+                                            </span>
+                                        </a>
+                                    </li>
+                                    <li class="c-summary_list_item u-label" data-scroll>
+                                        <a href="#speed-control" data-scroll-to>
+                                            02. Scroll direction
+                                            <span class="c-summary_list_icon u-icon">
+                                                ↓
+                                            </span>
+                                        </a>
+                                    </li>
+                                    <li class="c-summary_list_item u-label" data-scroll>
+                                        <a href="#speed-control" data-scroll-to>
+                                            03. Lerp effect
+                                            <span class="c-summary_list_icon u-icon">
+                                                ↓
+                                            </span>
+                                        </a>
+                                    </li>
+                                    <li class="c-summary_list_item u-label" data-scroll>
+                                        <a href="#speed-control" data-scroll-to>
+                                            04. Fixed Elements
+                                            <span class="c-summary_list_icon u-icon">
+                                                ↓
+                                            </span>
+                                        </a>
+                                    </li>
+                                </ul>
                             </div>
                         </div>
                     </div>
                 </div>
-            </div>
-
-            <div class="c-fixed_wrapper" data-scroll-section>
-                <div class="c-fixed_target" id="fixed-target"></div>
-                <div class="c-fixed" data-scroll data-scroll-sticky data-scroll-target="#fixed-target" style="background-image:url('https://images.unsplash.com/photo-1555381983-49b080e6ac89?ixlib=rb-1.2.1&ixid=eyJhcHBfaWQiOjEyMDd9&auto=format&fit=crop&w=2125&q=80')"></div>
-            </div>
-
-            <div class="o-container" data-scroll-section >
-
-                <div class="o-title_wrapper" id="footer">
-                    <h1 class="o-title" data-scroll data-scroll-position="bottom" data-scroll-speed="5"/>
-                        Thank you 🤟
-                    </h1>
-                </div>
-
             </div>
         </section>
 

@@ -11,10 +11,10 @@
 
 .c-scrollbar {
     width: 10px;
-    position: fixed;
+    position: absolute;
     right: 0;
     top: 0;
-    bottom: 0;
+    height: 100vh;
     transform-origin: center right;
     transform: scaleX(1);
     transition: transform 0.2s linear;

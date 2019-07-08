@@ -2,6 +2,22 @@
 // Utilities / Helpers
 // ==========================================================================
 
+// Colors
+.u-white {
+    color: $white;
+}
+
+// Text
+.u-label {
+    font-size: rem(18px);
+    text-transform: uppercase;
+    font-weight: $semi-bold;
+}
+
+.u-icon {
+    font-family: "Lucida Grande"
+}
+
 // Layout
 // ==========================================================================
 .u-clearfix {

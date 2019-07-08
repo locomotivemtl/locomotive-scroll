@@ -16,6 +16,9 @@
 //
 .o-h {
     @include h;
+    margin-bottom: 0;
+    line-height: 1;
+    font-weight: $semi-bold;
 }
 
 //
@@ -30,7 +33,9 @@
 h1, .o-h1 {
     @extend .o-h;
 
-    font-size: rem($font-size-h1);
+    font-size: $font-size-h1;
+    text-transform: uppercase;
+    letter-spacing: -0.05em;
 }
 
 h2, .o-h2 {

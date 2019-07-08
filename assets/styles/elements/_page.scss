@@ -13,11 +13,11 @@
 // 3. Ensure the page always fills at least the entire height of the viewport.
 //
 html {
-    overflow-y: scroll; /* [2] */
-    min-height: 100%; /* [3] */
     color: $color;
     font-family: $font-family;
     line-height: $line-height; /* [1] */
+    background-color: $beige;
+    letter-spacing: -0.05em;
 
     @media (max-width: $to-small) {
         font-size: 12px;
@@ -49,6 +49,7 @@ html {
 
     &.is-loading {
         cursor: wait;
+        overflow: hidden;
     }
 
     &.has-smoothscroll {

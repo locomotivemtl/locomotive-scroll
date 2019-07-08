@@ -177,7 +177,7 @@ export default class extends Core {
 
         this.scrollbar.append(this.scrollbarThumb);
         document.body.append(this.scrollbar);
-        this.scrollbarThumb.style.height = `${(window.innerHeight * window.innerHeight) / this.instance.limit}px`;
+        this.scrollbarThumb.style.height = `${(window.innerHeight * window.innerHeight) / (this.instance.limit + window.innerHeight)}px`;
         this.scrollBarLimit = window.innerHeight - this.scrollbarThumb.getBoundingClientRect().height;
 
         this.scrollbarThumb.addEventListener('mousedown',(e) => this.getScrollBar(e));

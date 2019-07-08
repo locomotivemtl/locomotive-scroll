@@ -371,7 +371,7 @@ hr {
   padding: 0;
   height: 1px;
   border: 0;
-  border-top: 1px solid #CCCCCC; }
+  border-top: 1px solid #272727; }
 
 audio,
 canvas,
@@ -469,14 +469,12 @@ button,
     text-decoration: none; }
 
 html {
-  overflow-y: scroll;
-  /* [2] */
-  min-height: 100%;
-  /* [3] */
   color: #222222;
-  font-family: Arial, sans-serif;
+  font-family: "Open Sans", sans-serif;
   line-height: 1.5;
-  /* [1] */ }
+  /* [1] */
+  background-color: #D4C9C9;
+  letter-spacing: -0.05em; }
   @media (max-width: 699px) {
     html {
       font-size: 12px; } }
@@ -500,7 +498,8 @@ html {
     html {
       font-size: 24px; } }
   html.is-loading {
-    cursor: wait; }
+    cursor: wait;
+    overflow: hidden; }
   html.has-smoothscroll {
     overflow: hidden; }
   html.is-dragging {
@@ -518,16 +517,21 @@ html {
   text-shadow: none; }
 
 a {
-  color: #1A0DAB; }
+  color: #272727; }
   a:focus, a:hover {
     color: currentColor; }
 
 .o-h, h1, .o-h1, h2, .o-h2, h3, .o-h3, h4, .o-h4, h5, .o-h5, h6, .o-h6 {
   margin-top: 0;
-  line-height: 1.5; }
+  line-height: 1.5;
+  margin-bottom: 0;
+  line-height: 1;
+  font-weight: 600; }
 
 h1, .o-h1 {
-  font-size: 2.25rem; }
+  font-size: 9vw;
+  text-transform: uppercase;
+  letter-spacing: -0.05em; }
 
 h2, .o-h2 {
   font-size: 1.75rem; }
@@ -551,7 +555,7 @@ h6, .o-h6 {
   margin-left: auto;
   padding-right: 60px;
   padding-left: 60px;
-  max-width: 1300px; }
+  max-width: 1400px; }
 
 /**
  * Create ratio-bound content blocks, to keep media (e.g. images, videos) in
@@ -783,10 +787,10 @@ h6, .o-h6 {
 
 .c-scrollbar {
   width: 10px;
-  position: fixed;
+  position: absolute;
   right: 0;
   top: 0;
-  bottom: 0;
+  height: 100vh;
   -webkit-transform-origin: center right;
   transform-origin: center right;
   -webkit-transform: scaleX(1);
@@ -823,10 +827,80 @@ h6, .o-h6 {
     min-width: 0.2em; }
 
 .c-header {
-  text-align: center; }
+  height: 100vh;
+  position: relative; }
 
-.c-header_button {
-  margin-top: 7.5rem; }
+.c-header_title {
+  position: absolute;
+  bottom: 0;
+  left: 0;
+  padding: 2.5rem 0; }
+
+.c-header_line {
+  position: absolute;
+  bottom: 0;
+  right: 0;
+  left: 0;
+  -webkit-transform: scaleX(0);
+  transform: scaleX(0);
+  -webkit-transition: -webkit-transform 0.6s cubic-bezier(0.215, 0.61, 0.355, 1);
+  transition: -webkit-transform 0.6s cubic-bezier(0.215, 0.61, 0.355, 1);
+  transition: transform 0.6s cubic-bezier(0.215, 0.61, 0.355, 1);
+  transition: transform 0.6s cubic-bezier(0.215, 0.61, 0.355, 1), -webkit-transform 0.6s cubic-bezier(0.215, 0.61, 0.355, 1); }
+  .c-header_line.is-inview {
+    -webkit-transform: scaleX(1);
+    transform: scaleX(1); }
+
+.c-header_heading {
+  margin: 1.875rem 0; }
+
+.c-header_heading_label {
+  display: block;
+  -webkit-transition: -webkit-transform 0.6s cubic-bezier(0.215, 0.61, 0.355, 1);
+  transition: -webkit-transform 0.6s cubic-bezier(0.215, 0.61, 0.355, 1);
+  transition: transform 0.6s cubic-bezier(0.215, 0.61, 0.355, 1);
+  transition: transform 0.6s cubic-bezier(0.215, 0.61, 0.355, 1), -webkit-transform 0.6s cubic-bezier(0.215, 0.61, 0.355, 1);
+  -webkit-transform: translateY(-60px);
+  transform: translateY(-60px); }
+  html.is-loaded .c-header_heading_label {
+    -webkit-transform: none;
+    transform: none;
+    -webkit-transition-delay: 0.3s;
+    transition-delay: 0.3s; }
+  html.is-loaded .o-layout_item:nth-child(2) .c-header_heading_label {
+    -webkit-transition-delay: 0.4s;
+    transition-delay: 0.4s; }
+
+.c-header_title_line {
+  display: block;
+  opacity: 0;
+  -webkit-transform-origin: center left;
+  transform-origin: center left;
+  -webkit-transform: translateY(15vh) skewY(30deg);
+  transform: translateY(15vh) skewY(30deg);
+  -webkit-transition: opacity 1s cubic-bezier(0.165, 0.84, 0.44, 1), -webkit-transform 1s cubic-bezier(0.165, 0.84, 0.44, 1);
+  transition: opacity 1s cubic-bezier(0.165, 0.84, 0.44, 1), -webkit-transform 1s cubic-bezier(0.165, 0.84, 0.44, 1);
+  transition: opacity 1s cubic-bezier(0.165, 0.84, 0.44, 1), transform 1s cubic-bezier(0.165, 0.84, 0.44, 1);
+  transition: opacity 1s cubic-bezier(0.165, 0.84, 0.44, 1), transform 1s cubic-bezier(0.165, 0.84, 0.44, 1), -webkit-transform 1s cubic-bezier(0.165, 0.84, 0.44, 1); }
+  html.is-loaded .c-header_title_line {
+    -webkit-transform: none;
+    transform: none;
+    opacity: 1; }
+    html.is-loaded .c-header_title_line:nth-child(1) {
+      -webkit-transition-delay: 0.6s;
+      transition-delay: 0.6s; }
+    html.is-loaded .c-header_title_line:nth-child(2) {
+      -webkit-transition-delay: 0.7s;
+      transition-delay: 0.7s; }
+    html.is-loaded .c-header_title_line:nth-child(3) {
+      -webkit-transition-delay: 0.8s;
+      transition-delay: 0.8s; }
+    html.is-loaded .c-header_title_line:nth-child(4) {
+      -webkit-transition-delay: 0.9s;
+      transition-delay: 0.9s; }
+  .c-header_title_line span {
+    display: inline-block;
+    min-width: 0.1em; }
 
 .c-fixed_wrapper {
   position: relative;
@@ -878,6 +952,131 @@ h6, .o-h6 {
   border-radius: 20px;
   padding: 3.75rem;
   margin-bottom: 3.75rem; }
+
+.c-summary {
+  margin: 3.75rem 0 7.5rem 0; }
+
+.c-summary_text {
+  font-size: 1.125rem;
+  font-weight: 600;
+  opacity: 0;
+  -webkit-transform: translateY(60px);
+  transform: translateY(60px);
+  -webkit-transition: -webkit-transform 1s cubic-bezier(0.215, 0.61, 0.355, 1);
+  transition: -webkit-transform 1s cubic-bezier(0.215, 0.61, 0.355, 1);
+  transition: transform 1s cubic-bezier(0.215, 0.61, 0.355, 1);
+  transition: transform 1s cubic-bezier(0.215, 0.61, 0.355, 1), -webkit-transform 1s cubic-bezier(0.215, 0.61, 0.355, 1); }
+  .c-summary.is-inview .c-summary_text {
+    opacity: 1;
+    -webkit-transform: none;
+    transform: none; }
+  @media (min-width: 1000px) {
+    .c-summary_text {
+      max-width: 320px; } }
+
+.c-summary_list_item {
+  position: relative;
+  padding: 8px 0;
+  opacity: 0;
+  -webkit-transform: translateX(-60px);
+  transform: translateX(-60px);
+  -webkit-transition: opacity 0.6s cubic-bezier(0.215, 0.61, 0.355, 1), -webkit-transform 0.6s cubic-bezier(0.215, 0.61, 0.355, 1);
+  transition: opacity 0.6s cubic-bezier(0.215, 0.61, 0.355, 1), -webkit-transform 0.6s cubic-bezier(0.215, 0.61, 0.355, 1);
+  transition: opacity 0.6s cubic-bezier(0.215, 0.61, 0.355, 1), transform 0.6s cubic-bezier(0.215, 0.61, 0.355, 1);
+  transition: opacity 0.6s cubic-bezier(0.215, 0.61, 0.355, 1), transform 0.6s cubic-bezier(0.215, 0.61, 0.355, 1), -webkit-transform 0.6s cubic-bezier(0.215, 0.61, 0.355, 1); }
+  .c-summary_list_item::after {
+    content: "";
+    position: absolute;
+    bottom: 0;
+    right: 0;
+    left: 0;
+    height: 1px;
+    background-color: #272727;
+    -webkit-transform: scaleX(0);
+    transform: scaleX(0);
+    -webkit-transform-origin: center left;
+    transform-origin: center left;
+    -webkit-transition: -webkit-transform 0.6s cubic-bezier(0.215, 0.61, 0.355, 1);
+    transition: -webkit-transform 0.6s cubic-bezier(0.215, 0.61, 0.355, 1);
+    transition: transform 0.6s cubic-bezier(0.215, 0.61, 0.355, 1);
+    transition: transform 0.6s cubic-bezier(0.215, 0.61, 0.355, 1), -webkit-transform 0.6s cubic-bezier(0.215, 0.61, 0.355, 1); }
+  .c-summary_list_item.is-inview {
+    -webkit-transform: none;
+    transform: none;
+    opacity: 1; }
+    .c-summary_list_item.is-inview::after {
+      -webkit-transform: scaleX(1);
+      transform: scaleX(1); }
+    .c-summary_list_item.is-inview:nth-child(1) {
+      -webkit-transition-delay: 0.1s;
+      transition-delay: 0.1s; }
+      .c-summary_list_item.is-inview:nth-child(1)::after {
+        -webkit-transition-delay: 0.5s;
+        transition-delay: 0.5s; }
+    .c-summary_list_item.is-inview:nth-child(2) {
+      -webkit-transition-delay: 0.2s;
+      transition-delay: 0.2s; }
+      .c-summary_list_item.is-inview:nth-child(2)::after {
+        -webkit-transition-delay: 0.6s;
+        transition-delay: 0.6s; }
+    .c-summary_list_item.is-inview:nth-child(3) {
+      -webkit-transition-delay: 0.3s;
+      transition-delay: 0.3s; }
+      .c-summary_list_item.is-inview:nth-child(3)::after {
+        -webkit-transition-delay: 0.7s;
+        transition-delay: 0.7s; }
+    .c-summary_list_item.is-inview:nth-child(4) {
+      -webkit-transition-delay: 0.4s;
+      transition-delay: 0.4s; }
+      .c-summary_list_item.is-inview:nth-child(4)::after {
+        -webkit-transition-delay: 0.8s;
+        transition-delay: 0.8s; }
+    .c-summary_list_item.is-inview:nth-child(5) {
+      -webkit-transition-delay: 0.5s;
+      transition-delay: 0.5s; }
+      .c-summary_list_item.is-inview:nth-child(5)::after {
+        -webkit-transition-delay: 0.9s;
+        transition-delay: 0.9s; }
+    .c-summary_list_item.is-inview:nth-child(6) {
+      -webkit-transition-delay: 0.6s;
+      transition-delay: 0.6s; }
+      .c-summary_list_item.is-inview:nth-child(6)::after {
+        -webkit-transition-delay: 1s;
+        transition-delay: 1s; }
+
+.c-summary_list_icon {
+  position: absolute;
+  top: 50%;
+  right: 0;
+  -webkit-transform: translateY(-50%) translateX(30px) rotate(90deg);
+  transform: translateY(-50%) translateX(30px) rotate(90deg);
+  opacity: 0;
+  -webkit-transition: opacity 0.4s cubic-bezier(0.215, 0.61, 0.355, 1), -webkit-transform 0.4s cubic-bezier(0.215, 0.61, 0.355, 1);
+  transition: opacity 0.4s cubic-bezier(0.215, 0.61, 0.355, 1), -webkit-transform 0.4s cubic-bezier(0.215, 0.61, 0.355, 1);
+  transition: opacity 0.4s cubic-bezier(0.215, 0.61, 0.355, 1), transform 0.4s cubic-bezier(0.215, 0.61, 0.355, 1);
+  transition: opacity 0.4s cubic-bezier(0.215, 0.61, 0.355, 1), transform 0.4s cubic-bezier(0.215, 0.61, 0.355, 1), -webkit-transform 0.4s cubic-bezier(0.215, 0.61, 0.355, 1); }
+  .c-summary_list_item.is-inview .c-summary_list_icon {
+    -webkit-transform: translateY(-50%) rotate(0deg);
+    transform: translateY(-50%) rotate(0deg);
+    opacity: 1; }
+  .c-summary_list_item.is-inview:nth-child(1) .c-summary_list_icon {
+    -webkit-transition-delay: 0.6s;
+    transition-delay: 0.6s; }
+  .c-summary_list_item.is-inview:nth-child(2) .c-summary_list_icon {
+    -webkit-transition-delay: 0.7s;
+    transition-delay: 0.7s; }
+  .c-summary_list_item.is-inview:nth-child(3) .c-summary_list_icon {
+    -webkit-transition-delay: 0.8s;
+    transition-delay: 0.8s; }
+  .c-summary_list_item.is-inview:nth-child(4) .c-summary_list_icon {
+    -webkit-transition-delay: 0.9s;
+    transition-delay: 0.9s; }
+  .c-summary_list_item.is-inview:nth-child(5) .c-summary_list_icon {
+    -webkit-transition-delay: 1s;
+    transition-delay: 1s; }
+  .c-summary_list_item.is-inview:nth-child(6) .c-summary_list_icon {
+    -webkit-transition-delay: 1.1s;
+    transition-delay: 1.1s; }
 
 /* stylelint-disable */
 .u-2\:1::before {
@@ -977,3 +1176,70 @@ h6, .o-h6 {
     display: inline-block;
     vertical-align: middle;
     font-size: 1rem; }
+
+.u-white {
+  color: #FFFFFF; }
+
+.u-label {
+  font-size: 1.125rem;
+  text-transform: uppercase;
+  font-weight: 600; }
+
+.u-icon {
+  font-family: "Lucida Grande"; }
+
+.u-clearfix::after {
+  display: block;
+  clear: both;
+  content: ""; }
+
+.u-truncate {
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+  word-wrap: normal;
+  max-width: 100%; }
+
+[hidden][aria-hidden="false"] {
+  position: absolute;
+  display: inherit;
+  clip: rect(0, 0, 0, 0); }
+
+[hidden][aria-hidden="false"]:focus {
+  clip: auto; }
+
+/**
+ * Completely remove from the flow but leave available to screen readers.
+ */
+.u-screen-reader-text {
+  position: absolute !important;
+  overflow: hidden;
+  clip: rect(0 0 0 0);
+  margin: 0;
+  padding: 0;
+  width: 1px;
+  height: 1px;
+  border: 0; }
+
+@media not print {
+  .u-screen-reader-text\@screen {
+    position: absolute !important;
+    overflow: hidden;
+    clip: rect(0 0 0 0);
+    margin: 0;
+    padding: 0;
+    width: 1px;
+    height: 1px;
+    border: 0; } }
+
+/*
+ * Extends the `.screen-reader-text` class to allow the element
+ * to be focusable when navigated to via the keyboard.
+ *
+ * @link https://www.drupal.org/node/897638
+ * @todo Define styles when focused.
+ */
+.u-screen-reader-text.-focusable:focus, .u-screen-reader-text.-focusable:active {
+  clip: auto;
+  width: auto;
+  height: auto; }

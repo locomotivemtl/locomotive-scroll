@@ -5,14 +5,14 @@
 // Palette
 // =============================================================================
 $white: #FFFFFF;
-$black: #000000;
+$black: #272727;
 
 // Specific
 // =============================================================================
 // Link
-$link-color:       #1A0DAB;
-$link-focus-color: #1A0DAB;
-$link-hover-color: darken(#1A0DAB, 10%);
+$link-color:       $black;
+$link-focus-color: $black;
+$link-hover-color: darken($black, 10%);
 // Selection
 $selection-text-color:       #3297FD;
 $selection-background-color: #FFFFFF;
@@ -23,3 +23,6 @@ $facebook-color:  #3B5998;
 $instagram-color: #E1306C;
 $youtube-color:   #CD201F;
 $twitter-color:   #1DA1F2;
+
+// Customs
+$beige: #D4C9C9;

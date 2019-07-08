@@ -1,8 +1,69 @@
 .c-header {
-    text-align: center;
+    height: 100vh;
+    position: relative;
 }
 
-.c-header_button {
-    margin-top: rem($unit * 2);
+.c-header_title {
+    position: absolute;
+    bottom: 0;
+    left: 0;
+    padding: rem($unit-small) 0;
 }
 
+.c-header_line {
+    position: absolute;
+    bottom: 0;
+    right: 0;
+    left: 0;
+    transform: scaleX(0);
+    transition: transform 0.6s $easing;
+
+    &.is-inview {
+        transform: scaleX(1)
+    }
+}
+
+
+.c-header_heading {
+    margin: rem($unit / 2) 0;
+}
+
+.c-header_heading_label {
+    display: block;
+    transition: transform 0.6s $easing;
+
+    transform: translateY(-60px);
+
+    html.is-loaded & {
+        transform: none;
+        transition-delay: 0.3s;
+    }
+
+    html.is-loaded .o-layout_item:nth-child(2) & {
+        transition-delay: 0.4s;
+    }
+}
+
+.c-header_title_line {
+    display: block;
+    opacity: 0;
+    transform-origin: center left;
+    transform: translateY(15vh) skewY(30deg);
+    transition: opacity 1s $Power3EaseOut, transform 1s $Power3EaseOut;
+
+    html.is-loaded & {
+        transform: none;
+        opacity: 1;
+
+        @for $i from 1 through 4 {
+            &:nth-child(#{$i}){
+                transition-delay: 0.5 + $i*0.1s;
+            }
+        }
+    }
+
+    span {
+        display: inline-block;
+        min-width: 0.1em;
+    }
+}
