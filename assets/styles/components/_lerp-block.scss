@@ -1,0 +1,24 @@
+.c-lerp-block {
+    font-weight: $bold;
+    text-transform: uppercase;
+    font-size: rem(45px);
+
+    &:not(:last-child) {
+        margin-bottom: rem($unit);
+    }
+}
+
+.c-lerp-block_index {
+    display: inline-block;
+    vertical-align: top;
+    background-color: $black;
+    border-radius: 50%;
+    color: $beige;
+    padding: rem($unit/2.5) rem($unit-small);
+    font-size: rem(20px);
+}
+
+.c-lerp-block_title {
+    display: inline-block;
+
+}

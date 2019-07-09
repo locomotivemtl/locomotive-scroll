@@ -384,12 +384,14 @@ export default class extends Core {
             if(current.sticky) {
                 if(current.inView) {
                     transformDistance = this.instance.scroll.y - current.top + window.innerHeight;
+
                 } else {
-                    if(this.instance.scroll.y < current.top) {
+                    if(this.instance.scroll.y < current.top && this.instance.scroll.y > current.top -100) {
                         transformDistance = 0;
-                    }
-                    if(this.instance.scroll.y > current.bottom) {
+                    } else if(this.instance.scroll.y > current.bottom && this.instance.scroll.y < current.bottom + 100) {
                         transformDistance = current.bottom - current.top + window.innerHeight;
+                    } else {
+                        transformDistance = false;
                     }
                 }
             }
