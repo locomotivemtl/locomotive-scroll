@@ -1,7 +1,6 @@
 import { defaults } from './options';
 import Scroll from '../Native';
-import Smooth from '../Smooth.js';
-
+import Smooth from '../Smooth';
 
 export default class {
     constructor(options = {}) {
@@ -27,7 +26,14 @@ export default class {
         if(window.location.hash) {
             this.scroll.scrollTo(window.location.hash);
         }
+    }
 
+    start() {
+        this.scroll.startScroll();
+    }
+
+    stop() {
+        this.scroll.stopScroll();
     }
 
     destroy() {

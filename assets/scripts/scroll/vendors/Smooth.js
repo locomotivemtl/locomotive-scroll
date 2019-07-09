@@ -17,6 +17,7 @@ export default class extends Core {
         this.hasScrollTicking = false;
         this.parallaxElements = [];
         this.inertiaRatio = 1;
+        this.stop = false;
     }
 
     init() {
@@ -36,6 +37,10 @@ export default class extends Core {
         }
 
         this.instance.vs.on((e) => {
+            if (this.stop) {
+                return;
+            }
+
             if (!this.isTicking && !this.isDraggingScrollbar) {
                 requestAnimationFrame(() => {
                     if (!this.isScrolling) this.startScrolling();
@@ -466,7 +471,15 @@ export default class extends Core {
         // Update the scroll. If we were in idle state: we're not anymore
         this.isScrolling = true;
         this.checkScroll();
-        html.classList.add(this.isScrollingClassName);
+        html.classList.add(this.scrollingClass);
+    }
+
+    startScroll() {
+        this.stop = false;
+    }
+
+    stopScroll() {
+        this.stop = true;
     }
 
     destroy() {
