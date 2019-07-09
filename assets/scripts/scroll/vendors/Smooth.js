@@ -91,17 +91,15 @@ export default class extends Core {
 
             this.updateScroll();
 
-            if (this.sections.length) {
-                for (let i = this.sections.length - 1; i >= 0; i--) {
-                    if(this.sections[i].persistent || (this.instance.scroll.y > this.sections[i].offset && this.instance.scroll.y < this.sections[i].limit)) {
-                        this.transform(this.sections[i].el, 0, -this.instance.scroll.y);
-                        this.sections[i].el.style.visibility = 'visible';
-                        this.sections[i].inView = true;
-                    } else {
-                        this.sections[i].el.style.visibility = 'hidden';
-                        this.sections[i].inView = false;
-                        this.transform(this.sections[i].el, 0, 0);
-                    }
+            for (let i = this.sections.length - 1; i >= 0; i--) {
+                if(this.sections[i].persistent || (this.instance.scroll.y > this.sections[i].offset && this.instance.scroll.y < this.sections[i].limit)) {
+                    this.transform(this.sections[i].el, 0, -this.instance.scroll.y);
+                    this.sections[i].el.style.visibility = 'visible';
+                    this.sections[i].inView = true;
+                } else {
+                    this.sections[i].el.style.visibility = 'hidden';
+                    this.sections[i].inView = false;
+                    this.transform(this.sections[i].el, 0, 0);
                 }
             }
 
@@ -127,13 +125,7 @@ export default class extends Core {
     checkResize() {
         this.windowHeight = window.innerHeight;
         this.windowMiddle = this.windowHeight / 2;
-
-        this.setScrollLimit();
-        this.addSections();
-        this.addElements();
-        this.detectElements();
-        this.updateScroll();
-        this.transformElements(true);
+        this.update();
     }
 
     updateDelta(e) {
@@ -470,6 +462,15 @@ export default class extends Core {
         this.isScrolling = true;
         this.checkScroll();
         html.classList.add(this.scrollingClass);
+    }
+
+    update() {
+        this.setScrollLimit();
+        this.addSections();
+        this.addElements();
+        this.detectElements();
+        this.updateScroll();
+        this.transformElements(true);
     }
 
     startScroll() {

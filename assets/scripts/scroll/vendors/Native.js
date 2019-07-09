@@ -72,7 +72,18 @@ export default class extends Core {
                 call: call
             }
         });
+    }
 
+    updateElements() {
+        this.els.forEach((el, i) => {
+            const top = el.el.getBoundingClientRect().top + this.instance.scroll.y;
+            const bottom = top + el.el.offsetHeight;
+
+            this.els[i].top = top + el.offset;
+            this.els[i].bottom = bottom;
+        });
+
+        this.hasScrollTicking = false;
     }
 
     /**
@@ -110,6 +121,9 @@ export default class extends Core {
         target.scrollIntoView({ behavior: 'smooth'});
     }
 
+    update() {
+        this.updateElements();
+    }
 
     destroy() {
         super.destroy();

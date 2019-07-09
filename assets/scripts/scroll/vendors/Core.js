@@ -34,9 +34,9 @@ export default class {
         this.initEvents();
     }
 
-    // checkScroll() {}
+    checkScroll() {}
 
-    // checkResize() {}
+    checkResize() {}
 
     initEvents() {
         this.scrollToEls = this.el.querySelectorAll(`[data-${this.name}-to]`);
@@ -56,7 +56,7 @@ export default class {
         );
     }
 
-    // addElements() {}
+    addElements() {}
 
     detectElements() {
         const scrollTop = this.instance.scroll.y;
@@ -105,19 +105,6 @@ export default class {
         }
     }
 
-    updateElements() {
-        this.els.forEach((el, i) => {
-            const top = el.el.getBoundingClientRect().top + this.instance.scroll.y;
-            const bottom = top + el.el.offsetHeight;
-
-            this.els[i].top = top + el.offset;
-            this.els[i].bottom = bottom;
-        });
-
-        this.hasScrollTicking = false;
-    }
-
-
     on(event, func) {
         window.addEventListener(this.namespace + event, () => {
             switch (event) {
@@ -128,6 +115,10 @@ export default class {
             }
         }, false);
     }
+
+    startScroll() {}
+
+    stopScroll() {}
 
     destroy() {
         window.removeEventListener('resize', this.checkResize, false);

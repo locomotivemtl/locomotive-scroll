@@ -28,12 +28,20 @@ export default class {
         }
     }
 
+    update() {
+        this.scroll.update();
+    }
+
     start() {
         this.scroll.startScroll();
     }
 
     stop() {
         this.scroll.stopScroll();
+    }
+
+    scrollTo(target, offset) {
+        this.scroll.scrollTo(target, offset);
     }
 
     destroy() {
