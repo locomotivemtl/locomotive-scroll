@@ -7,15 +7,17 @@
     color: $white;
 }
 
-// Text
+// Text / font
 .u-label {
-    font-size: rem(18px);
-    text-transform: uppercase;
-    font-weight: $semi-bold;
+    @include u-label;
 }
 
 .u-icon {
     font-family: "Lucida Grande"
+}
+
+.u-text {
+    font-size: rem(14px);
 }
 
 // Layout

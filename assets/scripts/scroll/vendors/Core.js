@@ -2,6 +2,8 @@ import { defaults } from './options';
 
 export default class {
     constructor(options = {}) {
+        window.scrollTo(0,0);
+
         Object.assign(this, defaults, options);
 
         this.namespace = 'locomotive';
@@ -22,6 +24,8 @@ export default class {
                 speed: 0
             }
         }
+
+        this.html.classList.add(this.initClass);
 
         window.addEventListener('resize', this.checkResize, false);
     }
@@ -94,6 +98,9 @@ export default class {
     setOutOfView(current, i) {
         if(current.repeat || current.speed !== undefined) {
             this.els[i].inView = false;
+        }
+
+        if(current.repeat ) {
             current.el.classList.remove(current.class);
         }
     }

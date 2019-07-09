@@ -27,7 +27,11 @@
                         <div class="c-header_heading" data-scroll data-scroll-speed="-8" data-scroll-position="top" data-scroll-target="#header">
                             <div class="o-layout">
                                 <div class="o-layout_item u-1/2" data-scroll data-scroll-direction="horizontal" data-scroll-speed="-2" data-scroll-position="top" data-scroll-target="#header">
-                                    <a href="" class="u-label c-header_heading_label">Locomotive.ca</a>
+                                    <span class="u-label c-header_heading_label">
+                                        <a href="https://locomotive.ca" target="_blank">
+                                            Locomotive.ca
+                                        </a>
+                                    </span>
                                 </div>
                                 <div class="o-layout_item u-1/2" data-scroll data-scroll-direction="horizontal" data-scroll-speed="2" data-scroll-position="top" data-scroll-target="#header">
                                     <div class="u-text-right">
@@ -40,29 +44,32 @@
                         </div>
                         <h1 class="c-header_title">
                             <span class="c-header_title_line">
-                                <span data-scroll data-scroll-speed="3"data-scroll-position="top">L</span><span data-scroll data-scroll-speed="4"data-scroll-position="top">o</span><span data-scroll data-scroll-speed="2.5" data-scroll-position="top">c</span><span data-scroll data-scroll-speed="3" data-scroll-position="top">o</span><span data-scroll data-scroll-speed="4" data-scroll-position="top">m</span><span data-scroll data-scroll-speed="3" data-scroll-position="top">o</span><span data-scroll data-scroll-speed="2" data-scroll-position="top">t</span><span data-scroll data-scroll-speed="4" data-scroll-position="top">i</span><span data-scroll data-scroll-speed="2" data-scroll-position="top">v</span><span data-scroll data-scroll-speed="1.2" data-scroll-position="top">e</span>
+                                <span data-scroll data-scroll-speed="3" data-scroll-position="top">Locomotive</span>
                             </span>
                             <span class="c-header_title_line">
-                                <span data-scroll data-scroll-speed="2"data-scroll-position="top">S</span><span data-scroll data-scroll-speed="3"data-scroll-position="top">c</span><span data-scroll data-scroll-speed="2" data-scroll-position="top">r</span><span data-scroll data-scroll-speed="2" data-scroll-position="top">o</span><span data-scroll data-scroll-speed="3" data-scroll-position="top">l</span><span data-scroll data-scroll-speed="2" data-scroll-position="top">l</span>
+                                <span data-scroll data-scroll-speed="2" data-scroll-position="top">Scroll</span>
                             </span>
                             <span class="c-header_title_line u-white">
-                                <span data-scroll data-scroll-speed="2"data-scroll-position="top" data-scroll-delay="0.05">2</span><span data-scroll data-scroll-speed="3"data-scroll-position="top" data-scroll-delay="0.05">0</span><span data-scroll data-scroll-speed="1.5" data-scroll-position="top" data-scroll-delay="0.05">1</span><span data-scroll data-scroll-speed="2" data-scroll-position="top" data-scroll-delay="0.05">9</span>
+                                <span data-scroll data-scroll-speed="3"data-scroll-position="top" data-scroll-delay="0.05">2</span><span data-scroll data-scroll-speed="5"data-scroll-position="top" data-scroll-delay="0.05">0</span><span data-scroll data-scroll-speed="2" data-scroll-position="top" data-scroll-delay="0.05">1</span><span data-scroll data-scroll-speed="4" data-scroll-position="top" data-scroll-delay="0.05">9</span>
                             </span>
                         </h1>
                         <hr class="c-header_line" data-scroll data-scroll-offset="100" />
+                        <a href="https://locomotive.ca" target="_blank" class="c-header_logo">
+                            <svg role="img"><use xlink:href="assets/images/sprite.svg#logo"></use></svg>
+                        </a>
                     </header>
                 </div>
             </div>
-            <div data-scroll-section>
+            <section data-scroll-section>
                 <div class="o-container">
                     <div class="c-summary" data-scroll data-scroll-offset="100">
                         <div class="o-layout -gutter">
-                            <div class="o-layout_item u-2/5">
+                            <div class="o-layout_item u-2/5@from-medium">
                                 <p class="c-summary_text">
-                                    A simple scroll library based on virtual-scroll by Ayamflow used by developers at Locomotive. It basicly triggers class when elements are in viewport, but it allows many others functionnalities.
+                                    A simple scroll library used by developers at Locomotive built on the top of <a href="https://github.com/ayamflow/virtual-scroll" target="_blank">virtual-scroll</a> by ayamflow. It basicly triggers class when elements are in viewport, but it allows many others functionnalities.
                                 </p>
                             </div>
-                            <div class="o-layout_item u-3/5">
+                            <div class="o-layout_item u-3/5@from-medium">
                                 <ul class="c-summary_list">
                                     <li class="c-summary_list_item u-label" data-scroll>
                                         <a href="#speed-control" data-scroll-to>
@@ -73,7 +80,7 @@
                                         </a>
                                     </li>
                                     <li class="c-summary_list_item u-label" data-scroll>
-                                        <a href="#speed-control" data-scroll-to>
+                                        <a href="#scroll-direction" data-scroll-to>
                                             02. Scroll direction
                                             <span class="c-summary_list_icon u-icon">
                                                 ↓
@@ -81,7 +88,7 @@
                                         </a>
                                     </li>
                                     <li class="c-summary_list_item u-label" data-scroll>
-                                        <a href="#speed-control" data-scroll-to>
+                                        <a href="#lerp-effect" data-scroll-to>
                                             03. Lerp effect
                                             <span class="c-summary_list_icon u-icon">
                                                 ↓
@@ -89,7 +96,7 @@
                                         </a>
                                     </li>
                                     <li class="c-summary_list_item u-label" data-scroll>
-                                        <a href="#speed-control" data-scroll-to>
+                                        <a href="#fixed-elements" data-scroll-to>
                                             04. Fixed Elements
                                             <span class="c-summary_list_icon u-icon">
                                                 ↓
@@ -101,7 +108,133 @@
                         </div>
                     </div>
                 </div>
-            </div>
+            </section>
+            <section data-scroll-section class="c-section" id="speed-control">
+                <div class="o-container">
+                    <div class="o-layout -gutter">
+                        <div class="o-layout_item u-2/5@from-medium">
+                            <div class="c-section_infos" data-scroll data-scroll-sticky data-scroll-target="#speed-control">
+                                <h3>
+                                    01. <br>
+                                    Speed control
+                                </h3>
+                                <div class="c-sections_infos_text u-text">
+                                    <p>
+                                        Lorem ipsum dolor sit amet, consectetur adipisicing elit. Sequi amet quos porro repellendus corporis.
+                                    </p>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="o-layout_item u-3/5@from-medium">
+                            <div class="c-speed-block">
+                                <div class="o-image_wrapper">
+                                    <div class="o-image" data-scroll>
+                                        <img class="c-speed-block_image" src="assets/images/locomotive01.jpg" alt="Locomotive image from unsplash">
+                                    </div>
+                                </div>
+                                <p class="c-speed-block_title">
+                                    Speed x1
+                                </p>
+                                <span class="c-speed-block_bubble" data-scroll data-scroll-speed="4">
+                                    4x
+                                </span>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="o-layout -gutter -bottom">
+                        <div class="o-layout_item u-2/5@from-medium">
+                            <div class="c-speed-block" data-scroll data-scroll-speed="2">
+                                <div class="o-image_wrapper">
+                                    <div class="o-image" data-scroll data-scroll-speed="-1.5">
+                                        <img class="c-speed-block_image" src="assets/images/locomotive02.jpg" alt="Locomotive image from unsplash">
+                                    </div>
+                                </div>
+                                <p class="c-speed-block_title">
+                                    Speed x2
+                                </p>
+                                <span class="c-speed-block_bubble -right" data-scroll data-scroll-speed="1">
+                                    1x
+                                </span>
+                                <span class="c-speed-block_bubble -left -bottom" data-scroll data-scroll-speed="3">
+                                    3x
+                                </span>
+                            </div>
+                        </div>
+                        <div class="o-layout_item u-3/5@from-medium">
+                            <div class="o-layout u-text-right">
+                                <div class="o-layout_item u-1/2@from-medium">
+                                    <div class="c-speed-block -margin" data-scroll data-scroll-speed="3">
+                                        <div class="o-image_wrapper">
+                                            <div class="o-image" data-scroll data-scroll-speed="-2">
+                                                <img class="c-speed-block_image" src="assets/images/locomotive03.jpg" alt="Locomotive image from unsplash">
+                                            </div>
+                                        </div>
+                                        <p class="c-speed-block_title">
+                                            Speed x3
+                                        </p>
+
+                                        <span class="c-speed-block_bubble -left -top" data-scroll data-scroll-speed="2">
+                                            2x
+                                        </span>
+                                        <span class="c-speed-block_bubble -right" data-scroll data-scroll-speed="6">
+                                            6x
+                                        </span>
+                                        <span class="c-speed-block_bubble -left -bottom" data-scroll data-scroll-speed="9">
+                                            9x
+                                        </span>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </section>
+
+            <section data-scroll-section class="c-section" id="scroll-direction">
+                <div class="o-container">
+                    <div class="c-direction-block_wrapper">
+                        <div class="c-section_infos" data-scroll data-scroll-sticky data-scroll-target="#scroll-direction">
+                            <h3>
+                                02. <br>
+                                Scroll direction
+                            </h3>
+                            <div class="c-sections_infos_text u-text">
+                                <p>
+                                    Lorem ipsum dolor sit amet, consectetur adipisicing elit. Sequi amet quos porro repellendus corporis.
+                                </p>
+                            </div>
+                        </div>
+                        <div class="c-direction-block" id="direction">
+                            <div class="c-direction-block_item -one">
+                                <span class="c-direction-block_item_inner" data-scroll data-scroll-direction="horizontal" data-scroll-speed="6" data-scroll-target="#direction">
+                                    I move in this direction
+                                </span>
+                            </div>
+                            <div class="c-direction-block_item -two">
+                                <span class="c-direction-block_item_inner" data-scroll data-scroll-direction="horizontal" data-scroll-speed="-8" data-scroll-target="#direction">
+                                    And in this direction
+                                </span>
+                            </div>
+                            <div class="c-direction-block_item -three">
+                                <span class="c-direction-block_item_inner" data-scroll data-scroll-direction="horizontal" data-scroll-speed="9" data-scroll-target="#direction">
+                                    Sooo customizable. right?
+                                </span>
+                            </div>
+                            <div class="c-direction-block_item -four">
+                                <span class="c-direction-block_item_inner" data-scroll data-scroll-direction="horizontal" data-scroll-speed="-9" data-scroll-target="#direction">
+                                    I can also go in this direction
+                                </span>
+                            </div>
+                            <div class="c-direction-block_item -five">
+                                <span class="c-direction-block_item_inner" data-scroll data-scroll-direction="horizontal" data-scroll-speed="-20" data-scroll-target="#direction">
+                                    Ok, it's enought!!!!
+                                </span>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </section>
+
         </section>
 
         <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.0.0/jquery.min.js"></script>

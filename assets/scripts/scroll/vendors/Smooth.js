@@ -4,8 +4,6 @@ import { lerp } from '../../utils/maths'
 import { getTranslate } from '../../utils/transform'
 import { getParents, queryClosestParent } from '../../utils/html';
 
-const html = document.documentElement;
-
 export default class extends Core {
     constructor(options = {}) {
         super(options);
@@ -21,7 +19,7 @@ export default class extends Core {
     }
 
     init() {
-        html.classList.add(this.smoothClass);
+        this.html.classList.add(this.smoothClass);
 
         this.instance = {
             vs: new virtualScroll({
@@ -69,14 +67,14 @@ export default class extends Core {
     startScrolling() {
         this.isScrolling = true;
         this.checkScroll();
-        html.classList.add(this.scrollingClass);
+        this.html.classList.add(this.scrollingClass);
     }
 
     stopScrolling() {
         this.isScrolling = false;
         this.inertiaRatio = 1;
         this.instance.scroll.y = Math.round(this.instance.scroll.y);
-        html.classList.remove(this.scrollingClass);
+        this.html.classList.remove(this.scrollingClass);
     }
 
     checkScroll() {
@@ -204,14 +202,14 @@ export default class extends Core {
     getScrollBar(e) {
         this.isDraggingScrollbar = true;
         this.checkScroll();
-        html.classList.remove(this.scrollingClass);
-        html.classList.add(this.draggingClass);
+        this.html.classList.remove(this.scrollingClass);
+        this.html.classList.add(this.draggingClass);
     }
 
     releaseScrollBar(e) {
         this.isDraggingScrollbar = false;
-        html.classList.add(this.scrollingClass);
-        html.classList.remove(this.draggingClass);
+        this.html.classList.add(this.scrollingClass);
+        this.html.classList.remove(this.draggingClass);
     }
 
     moveScrollBar(e) {

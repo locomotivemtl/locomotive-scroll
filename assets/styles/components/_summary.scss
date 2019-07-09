@@ -21,7 +21,6 @@
 
 .c-summary_list_item {
     position: relative;
-    padding: 8px 0;
     opacity: 0;
     transform: translateX(-60px);
     transition: opacity 0.6s $easing, transform 0.6s $easing;
@@ -55,6 +54,11 @@
                 }
             }
         }
+    }
+
+    a {
+        display: block;
+        padding: 8px 0;
     }
 }
 

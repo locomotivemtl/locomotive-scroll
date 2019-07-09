@@ -12,5 +12,6 @@ export const defaults = {
     scrollbarClass: 'c-scrollbar',
     scrollingClass: 'is-scrolling',
     draggingClass: 'is-dragging',
-    smoothClass: 'has-smoothscroll'
+    smoothClass: 'has-smoothscroll',
+    initClass: 'has-scroll-init'
 };

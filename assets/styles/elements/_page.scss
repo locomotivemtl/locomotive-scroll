@@ -47,7 +47,7 @@ html {
         font-size: 24px;
     }
 
-    &.is-loading {
+    &:not(.has-scroll-init) {
         cursor: wait;
         overflow: hidden;
     }
@@ -74,8 +74,9 @@ body {
 }
 
 a {
+    transition: color 0.3s $easing;
     @include u-hocus {
-        color: currentColor;
+        color: $link-hover-color;
     }
 
     color: $link-color;

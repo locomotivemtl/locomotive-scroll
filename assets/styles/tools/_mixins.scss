@@ -205,3 +205,11 @@
     display: $display $important;
     visibility: visible  $important;
 }
+
+// Customs
+
+@mixin u-label {
+    font-size: rem(18px);
+    text-transform: uppercase;
+    font-weight: $semi-bold;
+}

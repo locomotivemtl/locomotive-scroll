@@ -1,0 +1,50 @@
+.c-direction-block_wrapper {
+    min-height: 200vh;
+
+}
+
+.c-direction-block {
+    position: absolute;
+    right: 0;
+    left: 0;
+    top: -50vh;
+    bottom: -50vh;
+    z-index: 1;
+}
+
+.c-direction-block_item {
+    position: absolute;
+    font-size: 10vw;
+    white-space: nowrap;
+    font-weight: $semi-bold;
+    text-transform: uppercase;
+    line-height: 1;
+
+    span {
+        display: block;
+        background-color: $white;
+        white-space: nowrap;
+        padding: 0 20px;
+    }
+
+    &.-one {
+        top: 60vh;
+        transform: translateX(-50vw) rotate(26deg)
+    }
+    &.-two {
+        top: 110vh;
+        // transform: translateX(-50vw);
+    }
+    &.-three {
+        top: 120vh;
+        transform: rotate(9deg)
+    }
+    &.-four {
+        top: 160vh;
+        transform: translateX(-50vw) rotate(-19deg)
+    }
+    &.-five {
+        top: 150vh;
+        transform: translateX(-10vw) rotate(3deg)
+    }
+}

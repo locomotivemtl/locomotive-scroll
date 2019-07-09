@@ -1,0 +1,17 @@
+.c-section {
+    position: relative;
+    padding-bottom: 25vh;
+    margin-bottom: 50vh;
+}
+
+.c-section_infos {
+    position: relative;
+    padding-top: 35vh;
+    max-width: 320px;
+    z-index: 0;
+
+}
+
+.c-sections_infos_text {
+    margin-top: rem($unit/4);
+}
