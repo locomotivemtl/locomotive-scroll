@@ -83,14 +83,10 @@ export default class {
         current.el.classList.add(current.class);
 
         if (current.call) {
-            this.callValue = current.call.split(',').map(item => item.trim());
-            if (this.callValue.length == 1) this.callValue = this.callValue[0];
-
-            const callEvent = new Event(this.namespace + 'call');
-            window.dispatchEvent(callEvent);
+            this.dispatchCall(current, 'enter');
         }
 
-        if (!current.repeat && current.speed === false && !current.sticky ){
+        if (!current.repeat && current.speed === false && !current.sticky ) {
             this.els.splice(i, 1);
         }
     }
@@ -100,16 +96,29 @@ export default class {
             this.els[i].inView = false;
         }
 
+        if (current.call) {
+            this.dispatchCall(current, 'exit');
+        }
+
         if(current.repeat ) {
             current.el.classList.remove(current.class);
         }
     }
 
-    on(event, func) {
+    dispatchCall(current, way) {
+        this.callWay = way;
+        this.callValue = current.call.split(',').map(item => item.trim());
+        if (this.callValue.length == 1) this.callValue = this.callValue[0];
+
+        const callEvent = new Event(this.namespace + 'call');
+        window.dispatchEvent(callEvent);
+    }
+
+    setEvents(event, func) {
         window.addEventListener(this.namespace + event, () => {
             switch (event) {
                 case 'call':
-                    return func(this.callValue);
+                    return func(this.callValue, this.callWay);
                 default:
                     return func();
             }

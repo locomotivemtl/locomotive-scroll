@@ -44,6 +44,10 @@ export default class {
         this.scroll.scrollTo(target, offset);
     }
 
+    on(event, func) {
+        this.scroll.setEvents(event, func);
+    }
+
     destroy() {
         this.scroll.destroy();
     }

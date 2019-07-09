@@ -10,6 +10,10 @@ import locomotiveScroll from './scroll/vendors/main';
             el: document.querySelector('#js-scroll'),
             smooth: true
         });
-    },1000)
+
+        // scroll.on('call', (func, way) => {
+        //     console.log(func, way);
+        // })
+    }, 1000)
 
 })();
