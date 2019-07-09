@@ -1,14 +1,12 @@
 <!doctype html>
-<!-- Determine the usage of this class with backend browser/UA sniffing -->
-<html lang="fr" class="is-smooth-scroll-compatible is-loading">
-<!-- <html lang="fr"> -->
+<html lang="en" class="is-smooth-scroll-compatible is-loading">
     <head>
         <meta charset="utf-8">
         <meta http-equiv="X-UA-Compatible" content="IE=edge">
         <meta name="description" content="">
         <meta name="viewport" content="width=device-width, initial-scale=1">
         <meta name="theme-color" content="#000000">
-        <title>Locomotive Scroll</title>
+        <title>Locomotive Scroll &mdash; Detection of elements in viewport & smooth scrolling with parallax effects.</title>
 
         <link rel="apple-touch-icon" href="assets/images/apple-touch-icon.png">
         <link rel="icon" href="assets/images/favicon.png">
@@ -16,10 +14,8 @@
         <link href="https://fonts.googleapis.com/css?family=Open+Sans:400,600,700&display=swap" rel="stylesheet">
 
         <link rel="stylesheet" href="/assets/styles/main.css">
-
     </head>
     <body>
-
         <section class="o-scroll" id="js-scroll">
             <div data-scroll-section>
                 <div class="o-container">
@@ -66,7 +62,7 @@
                         <div class="o-layout -gutter">
                             <div class="o-layout_item u-2/5@from-medium">
                                 <p class="c-summary_text">
-                                    A simple scroll library used by developers at Locomotive built on the top of <a href="https://github.com/ayamflow/virtual-scroll" target="_blank">virtual-scroll</a> by ayamflow. It basicly triggers class when elements are in viewport, but it allows many others functionnalities.
+                                    A simple scroll library used by developers at Locomotive. Built as a layer on top of <em>ayamflow's</em> <a href="https://github.com/ayamflow/virtual-scroll" target="_blank">virtual-scroll</a>, it basically triggers classes when elements are in the viewport, while also allows providing many others functionalities.
                                 </p>
                             </div>
                             <div class="o-layout_item u-3/5@from-medium">
@@ -120,7 +116,7 @@
                                 </h3>
                                 <div class="c-sections_infos_text u-text">
                                     <p>
-                                        Lorem ipsum dolor sit amet, consectetur adipisicing elit. Sequi amet quos porro repellendus corporis.
+                                        Each element can be animated at a different speed. You get to choo-choo-choose!
                                     </p>
                                 </div>
                             </div>
@@ -172,7 +168,6 @@
                                         <p class="c-speed-block_title">
                                             Speed x3
                                         </p>
-
                                         <span class="c-speed-block_bubble -left -top" data-scroll data-scroll-speed="2">
                                             2x
                                         </span>
@@ -200,14 +195,14 @@
                             </h3>
                             <div class="c-sections_infos_text u-text">
                                 <p>
-                                    Lorem ipsum dolor sit amet, consectetur adipisicing elit. Sequi amet quos porro repellendus corporis.
+                                    And if that wasn't enough, make 'em go backwards. Or upwards. Or downwards!
                                 </p>
                             </div>
                         </div>
                         <div class="c-direction-block" id="direction">
                             <div class="c-direction-block_item -one">
-                                <span class="c-direction-block_item_inner" data-scroll data-scroll-direction="horizontal" data-scroll-speed="6" data-scroll-target="#direction">
-                                    I move in this direction
+                                <span class="c-direction-block_item_inner" data-scroll data-scroll-direction="vertical" data-scroll-speed="6" data-scroll-target="#direction">
+                                    I'm moving in this direction
                                 </span>
                             </div>
                             <div class="c-direction-block_item -two">
@@ -217,7 +212,7 @@
                             </div>
                             <div class="c-direction-block_item -three">
                                 <span class="c-direction-block_item_inner" data-scroll data-scroll-direction="horizontal" data-scroll-speed="9" data-scroll-target="#direction">
-                                    Sooo customizable. right?
+                                    Sooo customizable. Right?
                                 </span>
                             </div>
                             <div class="c-direction-block_item -four">
@@ -226,8 +221,8 @@
                                 </span>
                             </div>
                             <div class="c-direction-block_item -five">
-                                <span class="c-direction-block_item_inner" data-scroll data-scroll-direction="horizontal" data-scroll-speed="-20" data-scroll-target="#direction">
-                                    Ok, it's enought!!!!
+                                <span class="c-direction-block_item_inner" data-scroll data-scroll-direction="vertical" data-scroll-speed="-20" data-scroll-target="#direction">
+                                    Ok, enough!!!!
                                 </span>
                             </div>
                         </div>

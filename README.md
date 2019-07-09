@@ -4,7 +4,7 @@
     </a>
 </p>
 <h1 align="center">Locomotive Scroll</h1>
-<p align="center">Elements in viewport detection & smooth scrolling with parallax.</p>
+<p align="center">Detection of elements in viewport & smooth scrolling with parallax effects.</p>
 
 ## Installation
 ```sh
@@ -54,10 +54,10 @@ const scroll = new locomotiveScroll();
 
 scroll.on('call', (func) => {
     // Using modularJS
-    this.call(...func); 
+    this.call(...func);
     // Using jQuery events
     $(document).trigger(func);
-    // Or do it your way 😎
+    // Or do it your own way 😎
 });
 ```
 ```html
@@ -65,54 +65,54 @@ scroll.on('call', (func) => {
 <div data-scroll data-scroll-call="function, module">Trigger</div>
 <!-- Using jQuery events -->
 <div data-scroll data-scroll-call="EVENT_NAME">Trigger</div>
-<!-- Or do it your way 😎 -->
+<!-- Or do it your own way 😎 -->
 <div data-scroll data-scroll-call="{y,o,l,o}">Trigger</div>
 ```
 
-## Options
+## Instance options
 | Option | Type | Default | Description |
 | ------ | ---- | ------- | ----------- |
 | `el` | `object` | `document` | Scroll container element. |
-| `name` | `string` | `'scroll'` | Data attributes name. |
+| `name` | `string` | `'scroll'` | Data attribute prefix (`data-scroll-xxxx`). |
 | `offset` | `array` | `0` | In-view trigger offset. |
 | `repeat` | `boolean` | `false` | Repeat in-view detection. |
-| `smooth` | `boolean` | `false` | Smooth scrolling |
+| `smooth` | `boolean` | `false` | Smooth scrolling. |
 | `smoothMobile` | `boolean` | `false` | Smooth scrolling on iOS and Android devices. |
-| `direction` | `string` | `vertical` | Scroll direction |
-| `inertia` | `number` | `1` | Lerp intensity |
-| `class` | `string` | `'is-inview'` | Elements in-view class. |
+| `direction` | `string` | `vertical` | Scroll direction. |
+| `inertia` | `number` | `1` | Lerp intensity. |
+| `class` | `string` | `'is-inview'` | Element in-view class. |
 | `scrollbarClass` | `string` | `c-scrollbar` | Scrollbar element class. |
 | `scrollingClass` | `string` | `is-scrolling` | Is scrolling class. |
 | `draggingClass` | `string` | `is-dragging` | Is dragging class. |
 | `smoothClass` | `string` | `has-smoothscroll` | Has smooth scrolling class. |
 
-## Attributes
+## Element attributes
 | Attribute | Values | Description |
 | --------- | ------ | ----------- |
 | `data-scroll` |  | Detect if in-view. |
-| `data-scroll-section` |  | Sections to scroll. Spliting your page in sections may improve performance. |
-| `data-scroll-class` | `string` | Element in-view class.  |
-| `data-scroll-offset` | `string` | Element in-view trigger offset (Example :"10", "100,50%", "25%, 15%"). |
+| `data-scroll-section` |  | Defines a scrollable section. Splitting your page into sections may improve performance. |
+| `data-scroll-class` | `string` | Element in-view class. |
+| `data-scroll-offset` | `string` | Element in-view trigger offset (ex.: `"10"`, `"100,50%"`, `"25%, 15%"`). |
 | `data-scroll-repeat` | `true`, `false` | Element in-view detection repeat. |
 | `data-scroll-call` | `string` | Element in-view trigger call event. |
-| `data-scroll-speed` | `number` | Element parallax speed. Negative value for inverse way. |
-| `data-scroll-target` | `string` | Target element in-view position. |
-| `data-scroll-position` | `top`, `bottom` | In-view trigger window position |
-| `data-scroll-direction` | `vertical`, `horizontal` | Element parallax direction. |
-| `data-scroll-delay` | `number` | Element parallax lerp delay. |
-| `data-scroll-sticky` |  | Sticky element. Start and stops at `data-scroll-target` position. |
+| `data-scroll-speed` | `number` | Element parallax speed. A negative value will reverse the direction. |
+| `data-scroll-target` | `string` | Target element's in-view position. |
+| `data-scroll-position` | `top`, `bottom` | Window position of in-view trigger. |
+| `data-scroll-direction` | `vertical`, `horizontal` | Element's parallax direction. |
+| `data-scroll-delay` | `number` | Element's parallax lerp delay. |
+| `data-scroll-sticky` |  | Sticky element. Starts and stops at `data-scroll-target` position. |
 
-## Methods
+## Instance methods
 | Method | Description | Arguments |
 | ------ | ----------- | --------- |
-| `init()` | Reinit the scroll. | |
-| `update()` | Update elements position.  | |
-| `destroy()` | Destroy the scroll events. | |
-| `start()` | Restart the scroll events. | |
-| `stop()` | Stop the scroll events. | |
-| `scrollTo(target, offset)` | Scroll to element. | `target`: dom `object`, selector `string`, `top` or `bottom`  `offset`: `number` |
+| `init()` | Reinitializes the scroll. | |
+| `update()` | Updates all element positions.  | |
+| `destroy()` | Destroys the scroll events. | |
+| `start()` | Restarts the scroll events. | |
+| `stop()` | Stops the scroll events. | |
+| `scrollTo(target, offset)` | Scroll to an element. | `target`: dom `object`, selector `string`, `top` or `bottom`  `offset`: `number` |
 
-## Events
+## Instance events
 | Event | Arguments | Description |
 | ----- | --------- | ----------- |
 | `scroll` | `obj` | Returns scroll position. |
