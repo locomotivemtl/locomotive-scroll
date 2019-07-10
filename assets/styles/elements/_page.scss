@@ -16,7 +16,6 @@ html {
     color: $color;
     font-family: $font-family;
     line-height: $line-height; /* [1] */
-    background-color: $beige;
     letter-spacing: -0.05em;
 
     @media (max-width: $to-small) {

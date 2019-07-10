@@ -114,6 +114,8 @@ export default class {
     dispatchCall(current, way) {
         this.callWay = way;
         this.callValue = current.call.split(',').map(item => item.trim());
+        this.callObj = current;
+
         if (this.callValue.length == 1) this.callValue = this.callValue[0];
 
         const callEvent = new Event(this.namespace + 'call');
@@ -126,7 +128,7 @@ export default class {
                 case 'scroll':
                     return func(this.instance);
                 case 'call':
-                    return func(this.callValue, this.callWay);
+                    return func(this.callValue, this.callWay, this.callObj);
                 default:
                     return func();
             }

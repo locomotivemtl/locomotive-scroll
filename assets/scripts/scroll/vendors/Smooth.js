@@ -226,6 +226,7 @@ export default class extends Core {
     addElements() {
         this.els = []
         this.parallaxElements = []
+        let count = 0;
 
         this.sections.forEach((section, y) => {
             const els = this.sections[y].el.querySelectorAll(`[data-${this.name}]`);
@@ -287,6 +288,7 @@ export default class extends Core {
 
                 const mappedEl = {
                     el,
+                    id: count,
                     class: cl,
                     top: top + relativeOffset[0],
                     middle,
@@ -303,6 +305,7 @@ export default class extends Core {
                     sticky
                 }
 
+                count++;
                 this.els.push(mappedEl);
 
                 if(speed !== false || sticky) {

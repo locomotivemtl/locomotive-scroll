@@ -2,6 +2,7 @@
     box-sizing: border-box;
     overflow: hidden;
     width: 100vw;
+    background-color: hsl(0,11%, 81%);
 
     .has-scroll-smooth & {
         position: relative;

@@ -473,7 +473,6 @@ html {
   font-family: "Open Sans", sans-serif;
   line-height: 1.5;
   /* [1] */
-  background-color: #D4C9C9;
   letter-spacing: -0.05em; }
   @media (max-width: 699px) {
     html {
@@ -783,7 +782,8 @@ h6, .o-h6 {
   -webkit-box-sizing: border-box;
   box-sizing: border-box;
   overflow: hidden;
-  width: 100vw; }
+  width: 100vw;
+  background-color: #d4c9c9; }
   .has-scroll-smooth .o-scroll {
     position: relative; }
 
@@ -832,7 +832,7 @@ h6, .o-h6 {
 .o-image_wrapper {
   position: relative;
   overflow: hidden;
-  background-color: #D4C9C9; }
+  background-color: #d4c9c9; }
 
 .o-image {
   opacity: 0.75;
