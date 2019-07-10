@@ -85,7 +85,7 @@ export default class extends Core {
             }
 
             const distance = (Math.abs(this.instance.delta.y - this.instance.scroll.y));
-            if ((distance < 0.9 && this.instance.delta.y != 0) || (distance < 0.5 && this.instance.delta.y == 0)) {
+            if ((distance < 0.5 && this.instance.delta.y != 0) || (distance < 0.5 && this.instance.delta.y == 0)) {
                 this.stopScrolling();
             }
 
@@ -412,19 +412,15 @@ export default class extends Core {
      *
      * @param  {object} options
      *      Available options :
-     *          {node} target - The DOM element we want to scroll to
-     *          {node} sourceElem - An `<a>` element with an href targeting the anchor we want to scroll to
-     *          {node} offsetElem - A DOM element from which we get the height to substract from the offset
-     *              (ex: use offsetElem to pass a mobile header that is above content, to make sure the scrollTo will be aligned with it)
-     *          {int} offset - An absolute vertical scroll value to reach, or an offset to apply on top of given `target` or `sourceElem`'s target
-     *          {int} delay - Amount of milliseconds to wait before starting to scroll
-     *          {boolean} toTop - Set to true to scroll all the way to the top
+     *          {node, string, "top", "bottom"} targetOption - The DOM element we want to scroll to
+     *          {int} offsetOption - An absolute vertical scroll value to reach, or an offset to apply on top of given `target` or `sourceElem`'s target
      *          {boolean} toBottom - Set to true to scroll all the way to the bottom
      * @return {void}
      */
     scrollTo(targetOption, offsetOption) {
         let target;
         let offset = offsetOption ? parseInt(offsetOption) : 0;
+
 
         if(typeof targetOption === 'string') {
 
@@ -456,14 +452,18 @@ export default class extends Core {
             // Final value of scroll destination : offsetTop + (optional offset given in options) - (parent's section translate)
             offset = offsetTop + offset - parentSectionOffset;
         }
+        offset -= this.instance.scroll.y;
 
         this.instance.delta.y = Math.min(offset, this.instance.limit); // Actual scrollTo (the lerp will do the animation itself)
         this.inertiaRatio = Math.min(4000 / Math.abs(this.instance.delta.y - this.instance.scroll.y),0.8);
 
+        console.log(offset, this.instance.limit);
+
+
         // Update the scroll. If we were in idle state: we're not anymore
         this.isScrolling = true;
         this.checkScroll();
-        html.classList.add(this.scrollingClass);
+        this.html.classList.add(this.scrollingClass);
     }
 
     update() {

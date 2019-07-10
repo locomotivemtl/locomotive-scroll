@@ -959,18 +959,16 @@ h6, .o-h6 {
 
 .c-fixed_wrapper {
   position: relative;
-  width: 100vw;
   height: 100vh;
-  overflow: hidden; }
+  overflow: hidden;
+  background-color: #D4C9C9; }
 
 .c-fixed_target {
   position: absolute;
   top: -100vh;
   bottom: -100vh;
   right: 0;
-  left: 0;
-  background-color: red;
-  opacity: 0.3; }
+  left: 0; }
 
 .c-fixed {
   position: absolute;
@@ -979,7 +977,9 @@ h6, .o-h6 {
   left: 0;
   height: 100%;
   background-size: cover;
-  background-position: center center; }
+  background-position: center center;
+  opacity: 0.75;
+  mix-blend-mode: multiply; }
 
 .c-intro {
   margin: 7.5rem 0;
@@ -1142,9 +1142,11 @@ h6, .o-h6 {
 
 .c-section_infos {
   position: relative;
-  padding-top: 35vh;
   max-width: 320px;
-  z-index: 0; }
+  z-index: 0;
+  padding-top: 7.5rem; }
+  .c-section_infos.-padding {
+    padding-top: 35vh; }
 
 .c-sections_infos_text {
   margin-top: 0.9375rem; }
@@ -1245,8 +1247,7 @@ h6, .o-h6 {
 
 .c-lerp-block {
   font-weight: 700;
-  text-transform: uppercase;
-  font-size: 2.8125rem; }
+  text-transform: uppercase; }
   .c-lerp-block:not(:last-child) {
     margin-bottom: 3.75rem; }
 
@@ -1260,7 +1261,13 @@ h6, .o-h6 {
   font-size: 1.25rem; }
 
 .c-lerp-block_title {
-  display: inline-block; }
+  display: inline-block;
+  font-size: 0;
+  margin-left: 1.25rem; }
+  .c-lerp-block_title span {
+    display: inline-block;
+    min-width: 0.01em;
+    font-size: 2.8125rem; }
 
 /* stylelint-disable */
 .u-2\:1::before {

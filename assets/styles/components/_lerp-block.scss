@@ -1,7 +1,6 @@
 .c-lerp-block {
     font-weight: $bold;
     text-transform: uppercase;
-    font-size: rem(45px);
 
     &:not(:last-child) {
         margin-bottom: rem($unit);
@@ -20,5 +19,13 @@
 
 .c-lerp-block_title {
     display: inline-block;
+    font-size: 0;
+    margin-left: rem(20px);
 
+    span {
+        display: inline-block;
+        min-width: 0.01em;
+        font-size: rem(45px);
+
+    }
 }

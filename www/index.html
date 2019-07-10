@@ -105,11 +105,11 @@
                     </div>
                 </div>
             </section>
-            <section data-scroll-section class="c-section" id="speed-control">
-                <div class="o-container">
+            <section data-scroll-section class="c-section">
+                <div class="o-container" id="speed-control">
                     <div class="o-layout -gutter">
                         <div class="o-layout_item u-2/5@from-medium">
-                            <div class="c-section_infos" data-scroll data-scroll-sticky data-scroll-target="#speed-control">
+                            <div class="c-section_infos -padding" data-scroll data-scroll-sticky data-scroll-target="#speed-control">
                                 <h3>
                                     01. <br>
                                     Speed control
@@ -185,10 +185,10 @@
                 </div>
             </section>
 
-            <section data-scroll-section class="c-section" id="scroll-direction">
-                <div class="o-container">
+            <section data-scroll-section class="c-section">
+                <div class="o-container" id="scroll-direction">
                     <div class="c-direction-block_wrapper">
-                        <div class="c-section_infos" data-scroll data-scroll-sticky data-scroll-target="#scroll-direction">
+                        <div class="c-section_infos -padding" data-scroll data-scroll-sticky data-scroll-target="#scroll-direction">
                             <h3>
                                 02. <br>
                                 Scroll direction
@@ -230,9 +230,9 @@
                 </div>
             </section>
 
-            <section data-scroll-section class="c-section" id="lerp-effect">
-                <div class="o-container">
-                    <div class="o-layout -middle">
+            <section data-scroll-section class="c-section">
+                <div class="o-container" id="lerp-effect">
+                    <div class="o-layout">
                         <div class="o-layout_item u-2/5@from-medium">
                             <div class="c-section_infos">
                                 <h3>
@@ -252,7 +252,9 @@
                                     01
                                 </span>
                                 <span class="c-lerp-block_title" data-scroll data-scroll-delay="0.2" data-scroll-speed="6">
-                                    I have a lerp
+                                    <span>
+                                        I have a lerp
+                                    </span>
                                 </span>
                             </div>
                             <div class="c-lerp-block">
@@ -260,17 +262,57 @@
                                     02
                                 </span>
                                 <span class="c-lerp-block_title" data-scroll data-scroll-delay="0.12" data-scroll-speed="6">
-                                    Me too! <br>
-                                    And even more
+                                    <span>
+                                        Me too! <br>
+                                        And even more
+                                    </span>
+                                </span>
+                            </div>
+                            <div class="c-lerp-block">
+                                <span class="c-lerp-block_index" data-scroll data-scroll-delay="0.06" data-scroll-speed="6">
+                                    03
+                                </span>
+                                <span class="c-lerp-block_title">
+                                    <span data-scroll data-scroll-delay="0.2" data-scroll-speed="6">W</span>
+                                    <span data-scroll data-scroll-delay="0.15" data-scroll-speed="6">o</span>
+                                    <span data-scroll data-scroll-delay="0.1" data-scroll-speed="6">W</span>
                                 </span>
                             </div>
                             <div class="c-lerp-block">
                                 <span class="c-lerp-block_index" data-scroll data-scroll-delay="0.03" data-scroll-speed="6">
-                                    03
+                                    04
                                 </span>
                                 <span class="c-lerp-block_title" data-scroll data-scroll-delay="0.06" data-scroll-speed="6">
-                                    Soooo smooooth
+                                    <span>
+                                        Soooo smooooth
+                                    </span>
                                 </span>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </section>
+
+            <section data-scroll-section class="c-section -fixed">
+                <div class="o-container" id="fixed-elements">
+                    <div class="o-layout">
+                        <div class="o-layout_item u-2/5@from-medium">
+                            <div class="c-section_infos -padding" data-scroll data-scroll-sticky data-scroll-target="#fixed-elements">
+                                <h3>
+                                    04. <br>
+                                    Fixed elements
+                                </h3>
+                                <div class="c-sections_infos_text u-text">
+                                    <p>
+                                        Lorem ipsum dolor sit amet, consectetur adipisicing elit. Sequi amet quos porro repellendus corporis.
+                                    </p>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="o-layout_item u-3/5@from-medium">
+                            <div class="c-fixed_wrapper">
+                                <div class="c-fixed_target" id="fixed-target"></div>
+                                <div class="c-fixed" data-scroll data-scroll-sticky data-scroll-target="#fixed-target" style="background-image:url('assets/images/locomotive01.jpg')"></div>
                             </div>
                         </div>
                     </div>

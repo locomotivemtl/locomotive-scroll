@@ -1,9 +1,10 @@
 
 .c-fixed_wrapper {
     position: relative;
-    width: 100vw;
     height: 100vh;
     overflow: hidden;
+    background-color: $beige;
+
 }
 
 .c-fixed_target {
@@ -12,8 +13,6 @@
     bottom: -100vh;
     right: 0;
     left: 0;
-    background-color: red;
-    opacity: 0.3
 }
 
 .c-fixed {
@@ -24,4 +23,6 @@
     height: 100%;
     background-size: cover;
     background-position: center center;
+    opacity: 0.75;
+    mix-blend-mode: multiply;
 }
