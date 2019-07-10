@@ -104,11 +104,11 @@ export default class extends Core {
             }
 
             if (this.getDirection) {
-                this.getDirection();
+                this.addDirection();
             }
 
             if (this.getSpeed) {
-                this.getSpeed();
+                this.addSpeed();
                 this.timestamp = Date.now();
             }
 
@@ -117,6 +117,8 @@ export default class extends Core {
 
             const scrollBarTranslation = (this.instance.scroll.y / this.instance.limit) * this.scrollBarLimit;
             this.transform(this.scrollbarThumb, 0, scrollBarTranslation);
+
+            this.dispatchScroll();
 
             this.hasScrollTicking = false;
         }
@@ -144,7 +146,7 @@ export default class extends Core {
         }
     }
 
-    getDirection() {
+    addDirection() {
         if (this.instance.delta.y > this.instance.scroll.y) {
             if (this.instance.scroll.direction !== 'down') {
                 this.instance.scroll.direction = 'down';
@@ -156,7 +158,7 @@ export default class extends Core {
         }
     }
 
-    getSpeed() {
+    addSpeed() {
         if (this.instance.delta.y != this.instance.scroll.y) {
             this.instance.scroll.speed = (this.instance.delta.y - this.instance.scroll.y) / (Date.now() - this.timestamp);
         } else {
@@ -405,6 +407,11 @@ export default class extends Core {
             }
 
         });
+    }
+
+    dispatchScroll() {
+        const scrollEvent = new Event(this.namespace + 'scroll');
+        window.dispatchEvent(scrollEvent);
     }
 
     /**

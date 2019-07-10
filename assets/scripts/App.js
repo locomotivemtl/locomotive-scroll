@@ -11,8 +11,8 @@ import locomotiveScroll from './scroll/vendors/main';
             smooth: true
         });
 
-        // scroll.on('call', (func, way) => {
-        //     console.log(func, way);
+        // scroll.on('scroll', (obj) => {
+        //     console.log(obj);
         // })
     }, 1000)
 
