@@ -52,17 +52,17 @@ html {
         overflow: hidden;
     }
 
-    &.has-smoothscroll {
+    &.has-scroll-smooth {
         overflow: hidden;
     }
 
-    &.is-dragging {
+    &.has-scroll-dragging {
         user-select: none;
     }
 }
 
 body {
-    .has-smoothscroll & {
+    .has-scroll-smooth & {
         overflow: hidden;
     }
 }

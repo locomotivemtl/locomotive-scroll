@@ -500,15 +500,15 @@ html {
   html:not(.has-scroll-init) {
     cursor: wait;
     overflow: hidden; }
-  html.has-smoothscroll {
+  html.has-scroll-smooth {
     overflow: hidden; }
-  html.is-dragging {
+  html.has-scroll-dragging {
     -webkit-user-select: none;
     -moz-user-select: none;
     -ms-user-select: none;
     user-select: none; }
 
-.has-smoothscroll body {
+.has-scroll-smooth body {
   overflow: hidden; }
 
 ::selection {
@@ -784,7 +784,7 @@ h6, .o-h6 {
   box-sizing: border-box;
   overflow: hidden;
   width: 100vw; }
-  .has-smoothscroll .o-scroll {
+  .has-scroll-smooth .o-scroll {
     position: relative; }
 
 .c-scrollbar {
@@ -816,6 +816,7 @@ h6, .o-h6 {
   .c-scrollbar_thumb:hover {
     cursor: pointer; }
 
+/* Default styles */
 .o-title_wrapper {
   text-align: center;
   padding: 35vh 0; }

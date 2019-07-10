@@ -10,9 +10,9 @@ export const defaults = {
     inertia: 1,
     class: 'is-inview',
     scrollbarClass: 'c-scrollbar',
-    scrollingClass: 'is-scrolling',
-    draggingClass: 'is-dragging',
-    smoothClass: 'has-smoothscroll',
+    scrollingClass: 'has-scroll-scrolling',
+    draggingClass: 'has-scroll-dragging',
+    smoothClass: 'has-scroll-smooth',
     initClass: 'has-scroll-init',
     getSpeed: false,
     getDirection: false

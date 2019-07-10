@@ -80,11 +80,14 @@ scroll.on('call', (func) => {
 | `smoothMobile` | `boolean` | `false` | Smooth scrolling on iOS and Android devices. |
 | `direction` | `string` | `vertical` | Scroll direction. |
 | `inertia` | `number` | `1` | Lerp intensity. |
+| `getDirection` | `boolean` | `false` | Add direction to scroll event. |
+| `getSpeed` | `boolean` | `false` | Add speed to scroll event. |
 | `class` | `string` | `'is-inview'` | Element in-view class. |
+| `initClass` | `string` | `has-scroll-init` | Initialize class. |
+| `scrollingClass` | `string` | `has-scroll-scrolling` | Is scrolling class. |
+| `draggingClass` | `string` | `has-scroll-dragging` | Is dragging class. |
+| `smoothClass` | `string` | `has-scroll-smooth` | Has smooth scrolling class. |
 | `scrollbarClass` | `string` | `c-scrollbar` | Scrollbar element class. |
-| `scrollingClass` | `string` | `is-scrolling` | Is scrolling class. |
-| `draggingClass` | `string` | `is-dragging` | Is dragging class. |
-| `smoothClass` | `string` | `has-smoothscroll` | Has smooth scrolling class. |
 
 ## Element attributes
 | Attribute | Values | Description |

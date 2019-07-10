@@ -1,11 +1,11 @@
 html{
     font-family: Arial;
 
-    &.has-smoothscroll {
+    &.has-scroll-smooth {
         overflow: hidden;
     }
 
-    &.is-dragging {
+    &.has-scroll-dragging {
         user-select: none;
     }
 
@@ -14,7 +14,7 @@ html{
 body {
     margin: 0;
 
-    .has-smoothscroll & {
+    .has-scroll-smooth & {
         overflow: hidden;
     }
 }
@@ -28,7 +28,7 @@ figure {
     overflow: hidden;
     width: 100vw;
 
-    .has-smoothscroll & {
+    .has-scroll-smooth & {
         position: relative;
     }
 }
