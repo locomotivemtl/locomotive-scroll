@@ -8,12 +8,14 @@ import locomotiveScroll from './scroll/vendors/main';
     setTimeout(() => {
         const scroll = new locomotiveScroll({
             el: document.querySelector('#js-scroll'),
-            smooth: true
+            smooth: true,
+            getSpeed: true,
+            getDirection: true
         });
 
-        // scroll.on('scroll', (obj) => {
-        //     console.log(obj);
-        // })
+        scroll.on('scroll', (obj) => {
+            console.log(obj);
+        })
     }, 1000)
 
 })();

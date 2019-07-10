@@ -22,19 +22,22 @@ export default class extends Core {
         this.html.classList.add(this.smoothClass);
 
         this.instance = {
-            vs: new virtualScroll({
-                mouseMultiplier: (navigator.platform.indexOf('Win') > -1) ? 1 : 0.4,
-                touchMultiplier: 4,
-                firefoxMultiplier: 30
-            }),
             delta: {
                 x: 0,
                 y: 0
             },
+            limit: 0,
             ...this.instance
         }
 
-        this.instance.vs.on((e) => {
+
+        const vs = new virtualScroll({
+            mouseMultiplier: (navigator.platform.indexOf('Win') > -1) ? 1 : 0.4,
+            touchMultiplier: 4,
+            firefoxMultiplier: 30
+        });
+
+        vs.on((e) => {
             if (this.stop) {
                 return;
             }
@@ -148,21 +151,21 @@ export default class extends Core {
 
     addDirection() {
         if (this.instance.delta.y > this.instance.scroll.y) {
-            if (this.instance.scroll.direction !== 'down') {
-                this.instance.scroll.direction = 'down';
+            if (this.instance.direction !== 'down') {
+                this.instance.direction = 'down';
             }
         } else if (this.instance.delta.y < this.instance.scroll.y) {
-            if (this.instance.scroll.direction !== 'up') {
-                this.instance.scroll.direction = 'up';
+            if (this.instance.direction !== 'up') {
+                this.instance.direction = 'up';
             }
         }
     }
 
     addSpeed() {
         if (this.instance.delta.y != this.instance.scroll.y) {
-            this.instance.scroll.speed = (this.instance.delta.y - this.instance.scroll.y) / (Date.now() - this.timestamp);
+            this.instance.speed = (this.instance.delta.y - this.instance.scroll.y) / (Date.now() - this.timestamp);
         } else {
-            this.instance.scroll.speed = 0;
+            this.instance.speed = 0;
         }
     }
 

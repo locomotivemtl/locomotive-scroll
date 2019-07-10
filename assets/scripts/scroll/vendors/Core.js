@@ -24,11 +24,11 @@ export default class {
         }
 
         if (this.getDirection) {
-            this.instance.scroll.direction = null;
+            this.instance.direction = null;
         }
 
         if (this.getDirection) {
-            this.instance.scroll.speed = 0;
+            this.instance.speed = 0;
         }
 
         this.html.classList.add(this.initClass);
@@ -124,7 +124,7 @@ export default class {
         window.addEventListener(this.namespace + event, () => {
             switch (event) {
                 case 'scroll':
-                    return func(this.instance.scroll);
+                    return func(this.instance);
                 case 'call':
                     return func(this.callValue, this.callWay);
                 default:
