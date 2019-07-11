@@ -7,7 +7,10 @@
     position: absolute;
     bottom: 0;
     left: 0;
-
+    margin: 0;
+    padding: rem($unit-small) 0;
+    perspective: 600px;
+    -webkit-perspective: 600px;
 }
 
 .c-header_line {
@@ -24,6 +27,35 @@
     }
 }
 
+.c-header_title_line {
+   display: block;
+   opacity: 0;
+   transform-origin: center top;
+   transform-style: preserve-3d;
+   transform: translateY(100%) rotateX(-80deg);
+   transition: opacity 0s $Power2EaseOut, transform 0s $Power2EaseOut;
+   font-size: 0;
+
+   html.is-ready & {
+       transform: none;
+       opacity: 1;
+       transition-duration: 0.8s;
+
+       @for $i from 1 through 4 {
+           &:nth-child(#{$i}){
+               transition-delay: $i*0.1s;
+           }
+       }
+   }
+
+   span {
+       display: inline-block;
+       min-width: 0.05em;
+       font-size: $font-size-h1;
+   }
+}
+
+
 
 .c-header_heading {
     margin: rem($unit / 2) 0;
@@ -32,17 +64,18 @@
 
 .c-header_heading_label {
     display: block;
-    transition: transform 0.6s $easing;
+    transition: transform 0s $easing;
 
     transform: translateY(-60px);
 
-    html.is-loaded & {
+    html.is-ready & {
         transform: none;
-        transition-delay: 0.3s;
+        transition-duration: 0.6s;
+
     }
 
-    html.is-loaded .o-layout_item:nth-child(2) & {
-        transition-delay: 0.4s;
+    html.is-ready .o-layout_item:nth-child(2) & {
+        transition-delay: 0.1s;
     }
 }
 
@@ -54,7 +87,7 @@
     height: rem(150px);
     opacity: 0;
     transform: translateY($unit * 2);
-    transition: opacity 0.6s $Power2EaseOut, transform 0.6s $Power2EaseOut;
+    transition: opacity 0s $Power2EaseOut, transform 0s $Power2EaseOut;
 
     svg {
         display: block;
@@ -62,9 +95,11 @@
         height: 100%;
     }
 
-    html.is-loaded & {
+    html.is-ready & {
         transform: none;
         opacity: 1;
-        transition-delay: 1.2s;
+        transition-delay: 0.6s;
+        transition-duration: 0.6s;
+
     }
 }

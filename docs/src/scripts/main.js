@@ -6,6 +6,10 @@ import { locomotiveScroll } from '../../../src/locomotive-scroll';
     document.documentElement.classList.remove('is-loading');
 
     setTimeout(() => {
+        document.documentElement.classList.add('is-ready');
+    },300)
+
+    setTimeout(() => {
         const scroll = new locomotiveScroll({
             el: document.querySelector('#js-scroll'),
             smooth: true,
@@ -23,6 +27,21 @@ import { locomotiveScroll } from '../../../src/locomotive-scroll';
             dynamicBackgrounds.forEach(obj => {
                 obj.el.style.backgroundColor = `hsl(${progress}, 11%, 81%)`;
             });
+
+            // if(instance.scroll.y >= instance.limit - 10) {
+            //     document.documentElement.classList.remove('is-ready');
+            //     scroll.stop();
+            //     scroll.setScroll(0,0);
+
+            //     setTimeout(() => {
+            //         scroll.update();
+            //         document.documentElement.classList.add('is-ready');
+            //     },100)
+
+            //     setTimeout(() => {
+            //         scroll.start();
+            //     },1000);
+            // }
 
         });
 

@@ -30,7 +30,6 @@ export default class extends Core {
             ...this.instance
         }
 
-
         const vs = new virtualScroll({
             mouseMultiplier: (navigator.platform.indexOf('Win') > -1) ? 1 : 0.4,
             touchMultiplier: 4,
@@ -369,7 +368,7 @@ export default class extends Core {
         this.parallaxElements.forEach((current, i) => {
             let transformDistance = false;
 
-            if((isForced && !current.inView)) {
+            if(isForced) {
                 transformDistance = 0
             }
 
@@ -402,9 +401,6 @@ export default class extends Core {
                     } else {
                         transformDistance = false;
                     }
-                }
-                if(current.id === 50) {
-                    // console.log(transformDistance, this.instance.scroll.y, current.top);
                 }
             }
 
@@ -498,6 +494,19 @@ export default class extends Core {
 
     stopScroll() {
         this.stop = true;
+    }
+
+    setScroll(x,y) {
+        this.instance = {
+            scroll: {
+                x: x,
+                y: y
+            },
+            delta: {
+                x: x,
+                y: y
+            }
+        }
     }
 
     destroy() {

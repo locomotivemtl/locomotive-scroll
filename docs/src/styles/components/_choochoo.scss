@@ -1,0 +1,11 @@
+.c-choochoo_item {
+    padding: 50vh 0;
+    font-size: rem(200px);
+
+    &.-reverse {
+        span {
+            display: block;
+            transform: rotateY(180deg);
+        }
+    }
+}

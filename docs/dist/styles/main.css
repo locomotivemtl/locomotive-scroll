@@ -462,12 +462,17 @@ button,
   .o-button:hover {
     text-decoration: none; }
 
+@font-face {
+  font-family: 'Neue Montreal';
+  src: url("../fonts/NeueMontreal-Medium.woff2") format("woff2"), url("../fonts/NeueMontreal-Medium.woff") format("woff");
+  font-weight: 500;
+  font-style: normal; }
+
 html {
   color: #222222;
-  font-family: "Open Sans", sans-serif;
+  font-family: "Neue Montreal";
   line-height: 1.5;
-  /* [1] */
-  letter-spacing: -0.05em; }
+  /* [1] */ }
   @media (max-width: 699px) {
     html {
       font-size: 12px; } }
@@ -525,7 +530,7 @@ a {
   line-height: 1.5;
   margin-bottom: 0;
   line-height: 1;
-  font-weight: 600; }
+  font-weight: 400; }
 
 h1, .o-h1 {
   font-size: 9vw;
@@ -860,7 +865,11 @@ h6, .o-h6 {
 .c-header_title {
   position: absolute;
   bottom: 0;
-  left: 0; }
+  left: 0;
+  margin: 0;
+  padding: 2.5rem 0;
+  perspective: 600px;
+  -webkit-perspective: 600px; }
 
 .c-header_line {
   position: absolute;
@@ -873,18 +882,43 @@ h6, .o-h6 {
   .c-header_line.is-inview {
     transform: scaleX(1); }
 
+.c-header_title_line {
+  display: block;
+  opacity: 0;
+  transform-origin: center top;
+  transform-style: preserve-3d;
+  transform: translateY(100%) rotateX(-80deg);
+  transition: opacity 0s cubic-bezier(0.215, 0.61, 0.355, 1), transform 0s cubic-bezier(0.215, 0.61, 0.355, 1);
+  font-size: 0; }
+  html.is-ready .c-header_title_line {
+    transform: none;
+    opacity: 1;
+    transition-duration: 0.8s; }
+    html.is-ready .c-header_title_line:nth-child(1) {
+      transition-delay: 0.1s; }
+    html.is-ready .c-header_title_line:nth-child(2) {
+      transition-delay: 0.2s; }
+    html.is-ready .c-header_title_line:nth-child(3) {
+      transition-delay: 0.3s; }
+    html.is-ready .c-header_title_line:nth-child(4) {
+      transition-delay: 0.4s; }
+  .c-header_title_line span {
+    display: inline-block;
+    min-width: 0.05em;
+    font-size: 9vw; }
+
 .c-header_heading {
   margin: 1.875rem 0; }
 
 .c-header_heading_label {
   display: block;
-  transition: transform 0.6s cubic-bezier(0.215, 0.61, 0.355, 1);
+  transition: transform 0s cubic-bezier(0.215, 0.61, 0.355, 1);
   transform: translateY(-60px); }
-  html.is-loaded .c-header_heading_label {
+  html.is-ready .c-header_heading_label {
     transform: none;
-    transition-delay: 0.3s; }
-  html.is-loaded .o-layout_item:nth-child(2) .c-header_heading_label {
-    transition-delay: 0.4s; }
+    transition-duration: 0.6s; }
+  html.is-ready .o-layout_item:nth-child(2) .c-header_heading_label {
+    transition-delay: 0.1s; }
 
 .c-header_logo {
   position: absolute;
@@ -894,15 +928,16 @@ h6, .o-h6 {
   height: 9.375rem;
   opacity: 0;
   transform: translateY(120px);
-  transition: opacity 0.6s cubic-bezier(0.215, 0.61, 0.355, 1), transform 0.6s cubic-bezier(0.215, 0.61, 0.355, 1); }
+  transition: opacity 0s cubic-bezier(0.215, 0.61, 0.355, 1), transform 0s cubic-bezier(0.215, 0.61, 0.355, 1); }
   .c-header_logo svg {
     display: block;
     width: 100%;
     height: 100%; }
-  html.is-loaded .c-header_logo {
+  html.is-ready .c-header_logo {
     transform: none;
     opacity: 1;
-    transition-delay: 1.2s; }
+    transition-delay: 0.6s;
+    transition-duration: 0.6s; }
 
 .c-fixed_wrapper {
   position: relative;
@@ -968,7 +1003,7 @@ h6, .o-h6 {
 .c-summary_list_item {
   position: relative;
   opacity: 0;
-  transform: translateX(-60px);
+  transform: translateY(60px);
   transition: opacity 0.6s cubic-bezier(0.215, 0.61, 0.355, 1), transform 0.6s cubic-bezier(0.215, 0.61, 0.355, 1); }
   .c-summary_list_item::after {
     content: "";
@@ -1189,6 +1224,24 @@ h6, .o-h6 {
     .c-cta_content_text.is-inview > *:nth-child(3) {
       transition-delay: 0.18s; }
 
+.c-cta_button {
+  opacity: 0;
+  transform: translateY(60px);
+  transition: opacity 0.6s cubic-bezier(0.215, 0.61, 0.355, 1), transform 0.6s cubic-bezier(0.215, 0.61, 0.355, 1); }
+  .c-cta_button.is-inview {
+    opacity: 1;
+    transform: none; }
+
+.c-choochoo_item {
+  padding: 50vh 0;
+  font-size: 12.5rem; }
+  .c-choochoo_item.-reverse span {
+    display: block;
+    transform: rotateY(180deg); }
+
+.c-damn {
+  padding: 50vh 0 0 0; }
+
 /* stylelint-disable */
 .u-2\:1::before {
   padding-bottom: 50%; }
@@ -1313,7 +1366,8 @@ h6, .o-h6 {
   font-weight: 600; }
 
 .u-icon {
-  font-family: "Lucida Grande"; }
+  font-family: "Lucida Grande";
+  font-size: 1.125rem; }
 
 .u-text {
   font-size: 0.875rem; }

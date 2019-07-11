@@ -27,8 +27,8 @@
     }
   },
   "svgs": {
-    "src": "./assets/images/sprite/",
-    "dest": "./docs/assets/images/"
+    "src": "./docs/src/images/sprite/",
+    "dest": "./docs/dist/images/"
   },
   "views": {
     "src": "./docs/"

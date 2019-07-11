@@ -313,6 +313,14 @@
       key: "stopScroll",
       value: function stopScroll() {}
     }, {
+      key: "setScroll",
+      value: function setScroll(x, y) {
+        this.instance.scroll = {
+          x: 0,
+          y: 0
+        };
+      }
+    }, {
       key: "destroy",
       value: function destroy() {
         var _this4 = this;
@@ -1465,7 +1473,7 @@
         this.parallaxElements.forEach(function (current, i) {
           var transformDistance = false;
 
-          if (isForced && !current.inView) {
+          if (isForced) {
             transformDistance = 0;
           }
 
@@ -1497,8 +1505,6 @@
                 transformDistance = false;
               }
             }
-
-            if (current.id === 50) ;
           }
 
           if (transformDistance !== false) {
@@ -1600,6 +1606,20 @@
         this.stop = true;
       }
     }, {
+      key: "setScroll",
+      value: function setScroll(x, y) {
+        this.instance = {
+          scroll: {
+            x: x,
+            y: y
+          },
+          delta: {
+            x: x,
+            y: y
+          }
+        };
+      }
+    }, {
       key: "destroy",
       value: function destroy() {
         _get(_getPrototypeOf(_default.prototype), "destroy", this).call(this);
@@ -1660,6 +1680,11 @@
       key: "scrollTo",
       value: function scrollTo(target, offset) {
         this.scroll.scrollTo(target, offset);
+      }
+    }, {
+      key: "setScroll",
+      value: function setScroll(x, y) {
+        this.scroll.setScroll(x, y);
       }
     }, {
       key: "on",

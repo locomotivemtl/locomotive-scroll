@@ -139,6 +139,13 @@ export default class {
 
     stopScroll() {}
 
+    setScroll(x,y) {
+        this.instance.scroll = {
+            x: 0,
+            y: 0
+        }
+    }
+
     destroy() {
         window.removeEventListener('resize', this.checkResize, false);
 

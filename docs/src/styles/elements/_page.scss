@@ -14,9 +14,8 @@
 //
 html {
     color: $color;
-    font-family: $font-family;
+    font-family: $font-neue-montreal;
     line-height: $line-height; /* [1] */
-    letter-spacing: -0.05em;
 
     @media (max-width: $to-small) {
         font-size: 12px;

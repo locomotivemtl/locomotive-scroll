@@ -310,6 +310,14 @@
       key: "stopScroll",
       value: function stopScroll() {}
     }, {
+      key: "setScroll",
+      value: function setScroll(x, y) {
+        this.instance.scroll = {
+          x: 0,
+          y: 0
+        };
+      }
+    }, {
       key: "destroy",
       value: function destroy() {
         var _this4 = this;
@@ -1462,7 +1470,7 @@
         this.parallaxElements.forEach(function (current, i) {
           var transformDistance = false;
 
-          if (isForced && !current.inView) {
+          if (isForced) {
             transformDistance = 0;
           }
 
@@ -1494,8 +1502,6 @@
                 transformDistance = false;
               }
             }
-
-            if (current.id === 50) ;
           }
 
           if (transformDistance !== false) {
@@ -1597,6 +1603,20 @@
         this.stop = true;
       }
     }, {
+      key: "setScroll",
+      value: function setScroll(x, y) {
+        this.instance = {
+          scroll: {
+            x: x,
+            y: y
+          },
+          delta: {
+            x: x,
+            y: y
+          }
+        };
+      }
+    }, {
       key: "destroy",
       value: function destroy() {
         _get(_getPrototypeOf(_default.prototype), "destroy", this).call(this);
@@ -1659,6 +1679,11 @@
         this.scroll.scrollTo(target, offset);
       }
     }, {
+      key: "setScroll",
+      value: function setScroll(x, y) {
+        this.scroll.setScroll(x, y);
+      }
+    }, {
       key: "on",
       value: function on(event, func) {
         this.scroll.setEvents(event, func);
@@ -1677,6 +1702,9 @@
     document.documentElement.classList.add('is-loaded');
     document.documentElement.classList.remove('is-loading');
     setTimeout(function () {
+      document.documentElement.classList.add('is-ready');
+    }, 300);
+    setTimeout(function () {
       var scroll = new _default$3({
         el: document.querySelector('#js-scroll'),
         smooth: true,
@@ -1689,7 +1717,18 @@
         scroll.el.style.backgroundColor = "hsl(".concat(progress, ", 11%, 81%)");
         dynamicBackgrounds.forEach(function (obj) {
           obj.el.style.backgroundColor = "hsl(".concat(progress, ", 11%, 81%)");
-        });
+        }); // if(instance.scroll.y >= instance.limit - 10) {
+        //     document.documentElement.classList.remove('is-ready');
+        //     scroll.stop();
+        //     scroll.setScroll(0,0);
+        //     setTimeout(() => {
+        //         scroll.update();
+        //         document.documentElement.classList.add('is-ready');
+        //     },100)
+        //     setTimeout(() => {
+        //         scroll.start();
+        //     },1000);
+        // }
       });
       scroll.on('call', function (value, way, obj) {
         if (value === 'dynamicBackground') {

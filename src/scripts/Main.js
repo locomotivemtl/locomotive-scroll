@@ -44,6 +44,10 @@ export default class {
         this.scroll.scrollTo(target, offset);
     }
 
+    setScroll(x,y) {
+        this.scroll.setScroll(x,y);
+    }
+
     on(event, func) {
         this.scroll.setEvents(event, func);
     }
