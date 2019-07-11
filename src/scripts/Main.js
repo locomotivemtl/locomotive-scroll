@@ -1,6 +1,6 @@
 import { defaults } from './options';
-import Scroll from '../Native';
-import Smooth from '../Smooth';
+import Scroll from './Native';
+import Smooth from './Smooth';
 
 export default class {
     constructor(options = {}) {

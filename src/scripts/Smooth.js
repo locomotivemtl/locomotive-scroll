@@ -1,8 +1,8 @@
 import virtualScroll from 'virtual-scroll';
 import Core from './Core';
-import { lerp } from '../../utils/maths'
-import { getTranslate } from '../../utils/transform'
-import { getParents, queryClosestParent } from '../../utils/html';
+import { lerp } from './utils/maths'
+import { getTranslate } from './utils/transform'
+import { getParents, queryClosestParent } from './utils/html';
 
 export default class extends Core {
     constructor(options = {}) {

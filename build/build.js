@@ -1,13 +1,18 @@
 import gulp from 'gulp';
-import cssnano from 'gulp-cssnano';
+import postcss from 'gulp-postcss';
+import cssnano from 'cssnano';
 import uglify from 'gulp-uglify';
 import htmlmin from 'gulp-htmlmin';
 import paths from '../mconfig.json';
 
 function buildStyles() {
+    const plugins = [
+        cssnano()
+    ];
+
     return gulp
         .src(paths.styles.dest + '*.css')
-        .pipe(cssnano())
+        .pipe(postcss(plugins))
         .pipe(gulp.dest(paths.styles.dest));
 }
 

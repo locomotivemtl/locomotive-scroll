@@ -1,10 +1,10 @@
-export function transform(el, transformValue){
+export function transform(el, transformValue) {
     el.style.webkitTransform = transformValue;
     el.style.msTransform = transformValue;
     el.style.transform = transformValue;
 }
 
-export function getTranslate(el){
+export function getTranslate(el) {
     const translate = {}
     if(!window.getComputedStyle) return;
 
@@ -13,6 +13,7 @@ export function getTranslate(el){
 
     let mat = transform.match(/^matrix3d\((.+)\)$/);
     if(mat) return parseFloat(mat[1].split(', ')[13]);
+
     mat = transform.match(/^matrix\((.+)\)$/);
     translate.x = mat ? parseFloat(mat[1].split(', ')[4]) : 0;
     translate.y = mat ? parseFloat(mat[1].split(', ')[5]) : 0;

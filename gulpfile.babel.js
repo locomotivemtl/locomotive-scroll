@@ -8,7 +8,7 @@ import watch from './build/watch.js';
 import copy from './build/copy.js';
 import { buildStyles, buildScripts } from './build/build.js';
 
-const compile = gulp.series(styles, scripts, svgs, concat);
+const compile = gulp.series(styles, scripts, svgs);
 const main = gulp.series(copy, compile, serve, watch);
 const build = gulp.series(copy, compile, buildStyles, buildScripts);
 

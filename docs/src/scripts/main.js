@@ -1,4 +1,4 @@
-import locomotiveScroll from './scroll/vendors/main';
+import { locomotiveScroll } from '../../../src/locomotive-scroll';
 
 (function() {
 
