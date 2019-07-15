@@ -173,7 +173,8 @@ function () {
       scroll: {
         x: 0,
         y: 0
-      }
+      },
+      limit: this.html.offsetHeight
     };
 
     if (this.getDirection) {
@@ -195,7 +196,9 @@ function () {
     }
   }, {
     key: "checkScroll",
-    value: function checkScroll() {}
+    value: function checkScroll() {
+      this.dispatchScroll();
+    }
   }, {
     key: "checkResize",
     value: function checkResize() {}
@@ -283,6 +286,12 @@ function () {
       window.dispatchEvent(callEvent);
     }
   }, {
+    key: "dispatchScroll",
+    value: function dispatchScroll() {
+      var scrollEvent = new Event(this.namespace + 'scroll');
+      window.dispatchEvent(scrollEvent);
+    }
+  }, {
     key: "setEvents",
     value: function setEvents(event, func) {
       var _this3 = this;
@@ -359,6 +368,8 @@ function (_Core) {
     key: "checkScroll",
     value: function checkScroll() {
       var _this2 = this;
+
+      _get(_getPrototypeOf(_default.prototype), "checkScroll", this).call(this);
 
       if (this.els.length) {
         this.instance.scroll.y = window.scrollY;
@@ -1091,8 +1102,7 @@ function (_Core) {
         delta: {
           x: 0,
           y: 0
-        },
-        limit: 0
+        }
       }, this.instance);
       var vs = new src({
         mouseMultiplier: navigator.platform.indexOf('Win') > -1 ? 1 : 0.4,
@@ -1190,7 +1200,9 @@ function (_Core) {
         this.transformElements();
         var scrollBarTranslation = this.instance.scroll.y / this.instance.limit * this.scrollBarLimit;
         this.transform(this.scrollbarThumb, 0, scrollBarTranslation);
-        this.dispatchScroll();
+
+        _get(_getPrototypeOf(_default.prototype), "checkScroll", this).call(this);
+
         this.hasScrollTicking = false;
       }
     }
@@ -1509,12 +1521,6 @@ function (_Core) {
           }
         }
       });
-    }
-  }, {
-    key: "dispatchScroll",
-    value: function dispatchScroll() {
-      var scrollEvent = new Event(this.namespace + 'scroll');
-      window.dispatchEvent(scrollEvent);
     }
     /**
      * Scroll to a desired target.

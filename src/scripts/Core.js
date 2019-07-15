@@ -20,7 +20,8 @@ export default class {
             scroll: {
                 x: 0,
                 y: 0
-            }
+            },
+            limit: this.html.offsetHeight
         }
 
         if (this.getDirection) {
@@ -40,7 +41,9 @@ export default class {
         this.initEvents();
     }
 
-    checkScroll() {}
+    checkScroll() {
+        this.dispatchScroll();
+    }
 
     checkResize() {}
 
@@ -120,6 +123,12 @@ export default class {
 
         const callEvent = new Event(this.namespace + 'call');
         window.dispatchEvent(callEvent);
+    }
+
+
+    dispatchScroll() {
+        const scrollEvent = new Event(this.namespace + 'scroll');
+        window.dispatchEvent(scrollEvent);
     }
 
     setEvents(event, func) {

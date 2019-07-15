@@ -26,7 +26,6 @@ export default class extends Core {
                 x: 0,
                 y: 0
             },
-            limit: 0,
             ...this.instance
         }
 
@@ -120,7 +119,7 @@ export default class extends Core {
             const scrollBarTranslation = (this.instance.scroll.y / this.instance.limit) * this.scrollBarLimit;
             this.transform(this.scrollbarThumb, 0, scrollBarTranslation);
 
-            this.dispatchScroll();
+            super.checkScroll();
 
             this.hasScrollTicking = false;
         }
@@ -413,11 +412,6 @@ export default class extends Core {
             }
 
         });
-    }
-
-    dispatchScroll() {
-        const scrollEvent = new Event(this.namespace + 'scroll');
-        window.dispatchEvent(scrollEvent);
     }
 
     /**

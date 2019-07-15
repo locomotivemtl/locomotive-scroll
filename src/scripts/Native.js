@@ -17,6 +17,8 @@ export default class extends Core {
     }
 
     checkScroll() {
+        super.checkScroll();
+
         if (this.els.length) {
             this.instance.scroll.y = window.scrollY;
 
