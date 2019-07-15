@@ -73,8 +73,11 @@ body {
 
 a {
     transition: color 0.3s $easing;
-    @include u-hocus {
-        color: $link-hover-color;
+
+    @media (min-width: $from-large) {
+        @include u-hocus {
+            color: $link-hover-color;
+        }
     }
 
     color: $link-color;

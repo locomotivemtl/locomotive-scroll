@@ -1,10 +1,15 @@
 
 .c-fixed_wrapper {
     position: relative;
-    height: 100vh;
     overflow: hidden;
     background-color: $beige;
 
+    @media (min-width: $from-medium) {
+        height: 100vh;
+    }
+    @media (max-width: $to-medium) {
+        height: 50vh;
+    }
 }
 
 .c-fixed_target {
@@ -25,4 +30,8 @@
     background-position: center center;
     opacity: 0.75;
     mix-blend-mode: multiply;
+
+    html:not(.has-scroll-smooth) & {
+        top: 0;
+    }
 }

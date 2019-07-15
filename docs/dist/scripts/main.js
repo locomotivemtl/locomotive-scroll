@@ -1712,11 +1712,15 @@
         getDirection: true
       });
       var dynamicBackgrounds = [];
+      var dynamicColorElements = [];
       scroll.on('scroll', function (instance) {
         var progress = 360 * instance.scroll.y / instance.limit;
         scroll.el.style.backgroundColor = "hsl(".concat(progress, ", 11%, 81%)");
         dynamicBackgrounds.forEach(function (obj) {
           obj.el.style.backgroundColor = "hsl(".concat(progress, ", 11%, 81%)");
+        });
+        dynamicColorElements.forEach(function (obj) {
+          obj.el.style.color = "hsl(".concat(progress, ", 11%, 81%)");
         }); // if(instance.scroll.y >= instance.limit - 10) {
         //     document.documentElement.classList.remove('is-ready');
         //     scroll.stop();
@@ -1741,6 +1745,22 @@
             for (var i = 0; i < dynamicBackgrounds.length; i++) {
               if (obj.id === dynamicBackgrounds[i].id) {
                 dynamicBackgrounds.splice(i, 1);
+              }
+            }
+          }
+        }
+      });
+      scroll.on('call', function (value, way, obj) {
+        if (value === 'dynamicColor') {
+          if (way === 'enter') {
+            dynamicColorElements.push({
+              id: obj.id,
+              el: obj.el
+            });
+          } else {
+            for (var i = 0; i < dynamicColorElements.length; i++) {
+              if (obj.id === dynamicColorElements[i].id) {
+                dynamicColorElements.splice(i, 1);
               }
             }
           }

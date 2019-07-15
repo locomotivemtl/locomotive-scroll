@@ -18,6 +18,7 @@ import { locomotiveScroll } from '../../../src/locomotive-scroll';
         });
 
         let dynamicBackgrounds = [];
+        let dynamicColorElements = [];
 
         scroll.on('scroll', (instance) => {
             const progress = 360 * instance.scroll.y / instance.limit;
@@ -26,6 +27,9 @@ import { locomotiveScroll } from '../../../src/locomotive-scroll';
 
             dynamicBackgrounds.forEach(obj => {
                 obj.el.style.backgroundColor = `hsl(${progress}, 11%, 81%)`;
+            });
+            dynamicColorElements.forEach(obj => {
+                obj.el.style.color = `hsl(${progress}, 11%, 81%)`;
             });
 
             // if(instance.scroll.y >= instance.limit - 10) {
@@ -56,6 +60,23 @@ import { locomotiveScroll } from '../../../src/locomotive-scroll';
                     for (var i = 0; i < dynamicBackgrounds.length; i++) {
                         if(obj.id === dynamicBackgrounds[i].id) {
                             dynamicBackgrounds.splice(i,1);
+                        }
+                    }
+                }
+            }
+        });
+
+        scroll.on('call', (value, way, obj) => {
+            if(value === 'dynamicColor') {
+                if(way === 'enter') {
+                    dynamicColorElements.push({
+                        id: obj.id,
+                        el: obj.el
+                    });
+                } else {
+                    for (var i = 0; i < dynamicColorElements.length; i++) {
+                        if(obj.id === dynamicColorElements[i].id) {
+                            dynamicColorElements.splice(i,1);
                         }
                     }
                 }

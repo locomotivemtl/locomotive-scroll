@@ -1,6 +1,16 @@
 .c-header {
-    height: 100vh;
     position: relative;
+
+    @media (min-width: $from-medium) {
+        height: 100vh;
+    }
+    @media (min-width: $from-medium) and (max-width: $to-medium) {
+        height: 80vh;
+    }
+    @media (max-width: $to-small) {
+        height: 50vh;
+
+    }
 }
 
 .c-header_title {

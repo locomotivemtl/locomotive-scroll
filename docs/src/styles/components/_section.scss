@@ -1,18 +1,52 @@
 .c-section {
     position: relative;
-    padding-bottom: 25vh;
-    margin-bottom: 50vh;
 
+    @media (min-width: $from-large) {
+        padding-bottom: 25vh;
+        margin-bottom: 35vh;
+    }
+    @media (max-width: $to-large) {
+        padding-bottom: 10vh;
+        margin-bottom: 10vh;
+    }
 }
 
 .c-section_infos {
     position: relative;
     max-width: 320px;
     z-index: 0;
-    padding-top: rem($unit * 2);
 
-    &.-padding {
-        padding-top: 35vh;
+    @media (min-width: $from-medium) {
+        padding-top: rem($unit * 2);
+
+        &.-padding {
+            padding-top: 35vh;
+        }
+    }
+
+    @media (max-width: $to-medium) {
+        margin-bottom: rem($unit/2);
+    }
+}
+
+.c-section_infos_inner {
+    > * {
+        opacity: 0;
+        transform: translateY(60px);
+        transition: opacity 0.6s $easing, transform 0.6s $easing;
+    }
+
+    &.is-inview {
+        > * {
+            opacity: 1;
+            transform: none;
+
+            @for $i from 1 through 3 {
+                &:nth-child(#{$i}){
+                    transition-delay: $i*0.06s;
+                }
+            }
+        }
     }
 }
 

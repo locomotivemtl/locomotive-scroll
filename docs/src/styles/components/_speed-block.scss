@@ -1,8 +1,17 @@
 .c-speed-block {
     position: relative;
 
-    &.-margin {
-        margin-top: rem($unit * 2);
+    @media (min-width: $from-medium) {
+        &.-margin {
+            margin-top: rem($unit * 2);
+        }
+    }
+
+    @media (max-width: $to-medium) {
+        margin: rem($unit/2) 0;
+    }
+    @media (max-width: $to-small) {
+        margin: $unit/4 0;
     }
 }
 
@@ -29,15 +38,16 @@
         transition-delay: 0.3s;
     }
 
+    @media (max-width: $to-large) {
+        display: none;
+    }
 }
 
 .c-speed-block_bubble {
     position: absolute;
     right: 20px;
     top: 45%;
-
-    background-color: $black;
-    border-radius: 50%;
+    z-index: 1;
     color: $beige;
     padding: rem($unit/2.5) rem($unit-small);
     font-size: rem(20px);
@@ -54,6 +64,31 @@
     }
     &.-bottom {
         top: 70%;
+    }
+
+    &::before {
+        content:"";
+        position: absolute;
+        top: 0;
+        bottom: 0;
+        right: 0;
+        left: 0;
+        z-index: -1;
+        background-color: $black;
+        border-radius: 50%;
+        transform: scale(0);
+        transition: transform 0.6s $bounce;
+    }
+
+    &.is-inview {
+        &::before {
+            transform: scale(1);
+            transition-delay: 0.3s;
+        }
+    }
+
+    @media (max-width: $to-large) {
+        display: none;
     }
 }
 

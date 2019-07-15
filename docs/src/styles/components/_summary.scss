@@ -19,6 +19,12 @@
     }
 }
 
+.c-summary_list {
+    @media (max-width: $to-medium) {
+        margin-top: rem($unit/2);
+    }
+}
+
 .c-summary_list_item {
     position: relative;
     opacity: 0;

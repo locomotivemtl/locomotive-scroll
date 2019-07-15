@@ -1,14 +1,32 @@
 .c-direction-block_wrapper {
-    min-height: 180vh;
+    @media (min-width: $from-large) {
+        min-height: 180vh;
+    }
+    @media (min-width: $from-medium) and (max-width: $to-large) {
+        min-height: 130vh;
+    }
+    @media (min-width: $from-small) and (max-width: $to-medium) {
+        min-height: 100vh;
+    }
+    @media (max-width: $to-small) {
+        min-height: 70vh;
+    }
 }
 
 .c-direction-block {
     position: absolute;
     right: 0;
     left: 0;
-    top: -50vh;
-    bottom: -50vh;
     z-index: 1;
+
+    @media (min-width: $from-small) {
+        top: -50vh;
+        bottom: -50vh;
+    }
+    @media (max-width: $to-small) {
+        top: -15vh;
+        bottom: 0;
+    }
 }
 
 .c-direction-block_item {
@@ -27,23 +45,23 @@
     }
 
     &.-one {
-        top: 60vh;
+        top: 33%;
         transform: translateX(-50vw) rotate(26deg)
     }
     &.-two {
-        top: 110vh;
+        top: 45%;
         // transform: translateX(-50vw);
     }
     &.-three {
-        top: 120vh;
+        top: 55%;
         transform: rotate(9deg)
     }
     &.-four {
-        top: 160vh;
+        top: 68%;
         transform: translateX(-50vw) rotate(-19deg)
     }
     &.-five {
-        top: 150vh;
+        top: 63%;
         transform: translateX(-10vw) rotate(3deg)
     }
 }
