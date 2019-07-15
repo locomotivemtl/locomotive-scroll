@@ -19,8 +19,12 @@
     left: 0;
     z-index: 1;
 
-    @media (min-width: $from-small) {
+    @media (min-width: $from-large) {
         top: -50vh;
+        bottom: -50vh;
+    }
+    @media (min-width: $from-small) and (max-width: $to-large) {
+        top: -30vh;
         bottom: -50vh;
     }
     @media (max-width: $to-small) {

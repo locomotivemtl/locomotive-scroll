@@ -1234,9 +1234,13 @@ h6, .o-h6 {
   right: 0;
   left: 0;
   z-index: 1; }
-  @media (min-width: 700px) {
+  @media (min-width: 1200px) {
     .c-direction-block {
       top: -50vh;
+      bottom: -50vh; } }
+  @media (min-width: 700px) and (max-width: 1199px) {
+    .c-direction-block {
+      top: -30vh;
       bottom: -50vh; } }
   @media (max-width: 699px) {
     .c-direction-block {

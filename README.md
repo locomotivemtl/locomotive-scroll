@@ -109,6 +109,7 @@ scroll.on('call', (func) => {
 | Method | Description | Arguments |
 | ------ | ----------- | --------- |
 | `init()` | Reinitializes the scroll. | |
+| `on(eventName, function)` | Listen [instance events] ⬇. | |
 | `update()` | Updates all element positions.  | |
 | `destroy()` | Destroys the scroll events. | |
 | `start()` | Restarts the scroll events. | |
@@ -118,14 +119,15 @@ scroll.on('call', (func) => {
 ## Instance events
 | Event | Arguments | Description |
 | ----- | --------- | ----------- |
-| `scroll` | `obj` | Returns scroll position. |
+| `scroll` | `obj` | Returns scroll instance (position, limit, speed, direction). |
 | `call` | `func` | Trigger if in-view. Returns your `string` or `array` if contains `,`. |
 
 ## Dependencies
 | Name | Description |
 | ---- | ----------- |
-| [Virtual Scroll] | Custom scroll event. |
+| [Virtual Scroll] | Custom scroll event with inertia/momentum. |
 | [modularScroll] | Elements in viewport detection. Forked from it, not a dependency. |
 
+[instance events]: #instance-events
 [Virtual Scroll]: https://github.com/ayamflow/virtual-scroll
 [modularScroll]:  https://github.com/modularorg/modularscroll
