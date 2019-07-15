@@ -1727,7 +1727,8 @@
         });
         dynamicColorElements.forEach(function (obj) {
           obj.el.style.color = "hsl(".concat(progress, ", 11%, 81%)");
-        }); // if(instance.scroll.y >= instance.limit - 10) {
+        });
+        document.documentElement.setAttribute('data-direction', instance.direction); // if(instance.scroll.y >= instance.limit - 10) {
         //     document.documentElement.classList.remove('is-ready');
         //     scroll.stop();
         //     scroll.setScroll(0,0);

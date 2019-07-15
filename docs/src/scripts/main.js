@@ -32,6 +32,8 @@ import { locomotiveScroll } from '../../../src/locomotive-scroll';
                 obj.el.style.color = `hsl(${progress}, 11%, 81%)`;
             });
 
+            document.documentElement.setAttribute('data-direction', instance.direction)
+
             // if(instance.scroll.y >= instance.limit - 10) {
             //     document.documentElement.classList.remove('is-ready');
             //     scroll.stop();

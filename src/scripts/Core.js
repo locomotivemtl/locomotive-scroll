@@ -125,7 +125,6 @@ export default class {
         window.dispatchEvent(callEvent);
     }
 
-
     dispatchScroll() {
         const scrollEvent = new Event(this.namespace + 'scroll');
         window.dispatchEvent(scrollEvent);

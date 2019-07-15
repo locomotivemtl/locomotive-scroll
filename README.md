@@ -82,7 +82,7 @@ scroll.on('call', (func) => {
 | `inertia` | `number` | `1` | Lerp intensity. |
 | `getDirection` | `boolean` | `false` | Add direction to scroll event. |
 | `getSpeed` | `boolean` | `false` | Add speed to scroll event. |
-| `class` | `string` | `'is-inview'` | Element in-view class. |
+| `class` | `string` | `is-inview` | Element in-view class. |
 | `initClass` | `string` | `has-scroll-init` | Initialize class. |
 | `scrollingClass` | `string` | `has-scroll-scrolling` | Is scrolling class. |
 | `draggingClass` | `string` | `has-scroll-dragging` | Is dragging class. |

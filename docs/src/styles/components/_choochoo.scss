@@ -1,11 +1,24 @@
 .c-choochoo_item {
     padding: 50vh 0;
     font-size: rem(200px);
+    span {
+        display: block;
+    }
 
     &.-reverse {
         span {
-            display: block;
             transform: rotateY(180deg);
+        }
+    }
+
+    html[data-direction="up"] & {
+        span {
+            transform: rotateY(180deg);
+        }
+        &.-reverse {
+            span {
+                transform: rotateY(0deg);
+            }
         }
     }
 

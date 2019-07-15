@@ -1370,9 +1370,14 @@ h6, .o-h6 {
 .c-choochoo_item {
   padding: 50vh 0;
   font-size: 12.5rem; }
+  .c-choochoo_item span {
+    display: block; }
   .c-choochoo_item.-reverse span {
-    display: block;
     transform: rotateY(180deg); }
+  html[data-direction="up"] .c-choochoo_item span {
+    transform: rotateY(180deg); }
+  html[data-direction="up"] .c-choochoo_item.-reverse span {
+    transform: rotateY(0deg); }
   @media (max-width: 1199px) {
     .c-choochoo_item {
       display: none; } }
