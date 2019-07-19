@@ -8,12 +8,12 @@
 
 ## Installation
 ```sh
-npm install locomotivescroll
+npm install locomotive-scroll
 ```
 
 ## Usage
 ```js
-import locomotiveScroll from 'locomotivescroll';
+import locomotiveScroll from 'locomotive-scroll';
 
 const scroll = new locomotiveScroll();
 ```
@@ -24,7 +24,7 @@ const scroll = new locomotiveScroll();
 
 #### With smooth scrolling
 ```js
-import locomotiveScroll from 'locomotivescroll';
+import locomotiveScroll from 'locomotive-scroll';
 
 const scroll = new locomotiveScroll({
     el: document.querySelector('#js-scroll'),
@@ -38,7 +38,7 @@ const scroll = new locomotiveScroll({
 
 #### With methods
 ```js
-import locomotiveScroll from 'locomotivescroll';
+import locomotiveScroll from 'locomotive-scroll';
 
 const scroll = new locomotiveScroll();
 const target = document.querySelector('#js-target');
@@ -48,7 +48,7 @@ scroll.scrollTo(target);
 
 #### With events
 ```js
-import locomotiveScroll from 'locomotivescroll';
+import locomotiveScroll from 'locomotive-scroll';
 
 const scroll = new locomotiveScroll();
 
