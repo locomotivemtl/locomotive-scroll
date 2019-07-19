@@ -29,13 +29,13 @@ export default class extends Core {
             ...this.instance
         }
 
-        const vs = new virtualScroll({
+        this.vs = new virtualScroll({
             mouseMultiplier: (navigator.platform.indexOf('Win') > -1) ? 1 : 0.4,
             touchMultiplier: 4,
             firefoxMultiplier: 30
         });
 
-        vs.on((e) => {
+        this.vs.on((e) => {
             if (this.stop) {
                 return;
             }
@@ -467,9 +467,6 @@ export default class extends Core {
         this.instance.delta.y = Math.min(offset, this.instance.limit); // Actual scrollTo (the lerp will do the animation itself)
         this.inertiaRatio = Math.min(4000 / Math.abs(this.instance.delta.y - this.instance.scroll.y),0.8);
 
-        console.log(offset, this.instance.limit);
-
-
         // Update the scroll. If we were in idle state: we're not anymore
         this.isScrolling = true;
         this.checkScroll();
@@ -508,5 +505,10 @@ export default class extends Core {
 
     destroy() {
         super.destroy();
+
+        this.stopScrolling();
+        this.html.classList.remove(this.smoothClass);
+        this.vs.destroy();
+        this.scrollbar.remove();
     }
 }

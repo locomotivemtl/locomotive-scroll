@@ -1,9 +1,9 @@
-/* locomotive-scroll v3.0.0 | MIT License | https://github.com/locomotivemtl/locomotive-scroll */
+/* locomotive-scroll v3.0.1 | MIT License | https://github.com/locomotivemtl/locomotive-scroll */
 (function (global, factory) {
-  typeof exports === 'object' && typeof module !== 'undefined' ? factory(exports) :
-  typeof define === 'function' && define.amd ? define(['exports'], factory) :
-  (global = global || self, factory(global.locomotiveScroll = {}));
-}(this, function (exports) { 'use strict';
+  typeof exports === 'object' && typeof module !== 'undefined' ? module.exports = factory() :
+  typeof define === 'function' && define.amd ? define(factory) :
+  (global = global || self, global.locomotiveScroll = factory());
+}(this, function () { 'use strict';
 
   function _classCallCheck(instance, Constructor) {
     if (!(instance instanceof Constructor)) {
@@ -1111,12 +1111,12 @@
             y: 0
           }
         }, this.instance);
-        var vs = new src({
+        this.vs = new src({
           mouseMultiplier: navigator.platform.indexOf('Win') > -1 ? 1 : 0.4,
           touchMultiplier: 4,
           firefoxMultiplier: 30
         });
-        vs.on(function (e) {
+        this.vs.on(function (e) {
           if (_this2.stop) {
             return;
           }
@@ -1590,8 +1590,7 @@
         offset -= this.instance.scroll.y;
         this.instance.delta.y = Math.min(offset, this.instance.limit); // Actual scrollTo (the lerp will do the animation itself)
 
-        this.inertiaRatio = Math.min(4000 / Math.abs(this.instance.delta.y - this.instance.scroll.y), 0.8);
-        console.log(offset, this.instance.limit); // Update the scroll. If we were in idle state: we're not anymore
+        this.inertiaRatio = Math.min(4000 / Math.abs(this.instance.delta.y - this.instance.scroll.y), 0.8); // Update the scroll. If we were in idle state: we're not anymore
 
         this.isScrolling = true;
         this.checkScroll();
@@ -1635,6 +1634,11 @@
       key: "destroy",
       value: function destroy() {
         _get(_getPrototypeOf(_default.prototype), "destroy", this).call(this);
+
+        this.stopScrolling();
+        this.html.classList.remove(this.smoothClass);
+        this.vs.destroy();
+        this.scrollbar.remove();
       }
     }]);
 
@@ -1713,8 +1717,6 @@
     return _default;
   }();
 
-  exports.locomotiveScroll = _default$3;
-
-  Object.defineProperty(exports, '__esModule', { value: true });
+  return _default$3;
 
 }));

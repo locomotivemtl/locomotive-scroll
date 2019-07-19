@@ -1,4 +1,4 @@
-/* locomotive-scroll v3.0.0 | MIT License | https://github.com/locomotivemtl/locomotive-scroll */
+/* locomotive-scroll v3.0.1 | MIT License | https://github.com/locomotivemtl/locomotive-scroll */
 function _classCallCheck(instance, Constructor) {
   if (!(instance instanceof Constructor)) {
     throw new TypeError("Cannot call a class as a function");
@@ -1105,12 +1105,12 @@ function (_Core) {
           y: 0
         }
       }, this.instance);
-      var vs = new src({
+      this.vs = new src({
         mouseMultiplier: navigator.platform.indexOf('Win') > -1 ? 1 : 0.4,
         touchMultiplier: 4,
         firefoxMultiplier: 30
       });
-      vs.on(function (e) {
+      this.vs.on(function (e) {
         if (_this2.stop) {
           return;
         }
@@ -1584,8 +1584,7 @@ function (_Core) {
       offset -= this.instance.scroll.y;
       this.instance.delta.y = Math.min(offset, this.instance.limit); // Actual scrollTo (the lerp will do the animation itself)
 
-      this.inertiaRatio = Math.min(4000 / Math.abs(this.instance.delta.y - this.instance.scroll.y), 0.8);
-      console.log(offset, this.instance.limit); // Update the scroll. If we were in idle state: we're not anymore
+      this.inertiaRatio = Math.min(4000 / Math.abs(this.instance.delta.y - this.instance.scroll.y), 0.8); // Update the scroll. If we were in idle state: we're not anymore
 
       this.isScrolling = true;
       this.checkScroll();
@@ -1629,6 +1628,11 @@ function (_Core) {
     key: "destroy",
     value: function destroy() {
       _get(_getPrototypeOf(_default.prototype), "destroy", this).call(this);
+
+      this.stopScrolling();
+      this.html.classList.remove(this.smoothClass);
+      this.vs.destroy();
+      this.scrollbar.remove();
     }
   }]);
 
@@ -1707,4 +1711,4 @@ function () {
   return _default;
 }();
 
-export { _default$3 as locomotiveScroll };
+export default _default$3;

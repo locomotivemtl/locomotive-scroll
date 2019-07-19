@@ -1,4 +1,4 @@
-import { locomotiveScroll } from '../../../src/locomotive-scroll';
+import locomotiveScroll from '../../../src/locomotive-scroll';
 
 (function() {
 

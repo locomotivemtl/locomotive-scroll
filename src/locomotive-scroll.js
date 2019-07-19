@@ -1,1 +1,1 @@
-export { default as locomotiveScroll } from './scripts/Main';
+export { default } from './scripts/Main';
