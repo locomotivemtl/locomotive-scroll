@@ -1,0 +1,14 @@
+{
+    "name": "Locomotive Scroll",
+    "short_name": "Locomotive Scroll",
+    "icons": [
+        {
+            "src": "dist/images/favicons/android-chrome-144x144.png",
+            "sizes": "144x144",
+            "type": "image/png"
+        }
+    ],
+    "theme_color": "#ffffff",
+    "background_color": "#ffffff",
+    "display": "standalone"
+}

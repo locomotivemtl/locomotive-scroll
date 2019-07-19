@@ -52,7 +52,7 @@ import locomotiveScroll from '../../../src/locomotive-scroll';
         });
 
         scroll.on('call', (value, way, obj) => {
-            if(value === 'dynamicBackground') {
+            if (value === 'dynamicBackground') {
                 if(way === 'enter') {
                     dynamicBackgrounds.push({
                         id: obj.id,
@@ -65,11 +65,7 @@ import locomotiveScroll from '../../../src/locomotive-scroll';
                         }
                     }
                 }
-            }
-        });
-
-        scroll.on('call', (value, way, obj) => {
-            if(value === 'dynamicColor') {
+            } else if (value === 'dynamicColor') {
                 if(way === 'enter') {
                     dynamicColorElements.push({
                         id: obj.id,

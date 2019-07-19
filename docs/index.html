@@ -1,21 +1,24 @@
 <!doctype html>
-<html lang="en" class="is-smooth-scroll-compatible is-loading">
+<html class="is-smooth-scroll-compatible is-loading" lang="en">
     <head>
         <meta charset="utf-8">
-        <meta http-equiv="X-UA-Compatible" content="IE=edge">
-        <meta name="description" content="">
+        <title>Locomotive Scroll | Detection of elements in viewport & smooth scrolling with parallax effects.</title>
         <meta name="viewport" content="width=device-width, initial-scale=1">
-        <meta name="theme-color" content="#000000">
-        <title>Locomotive Scroll &mdash; Detection of elements in viewport & smooth scrolling with parallax effects.</title>
 
-        <link rel="apple-touch-icon" href="dist/images/apple-touch-icon.png">
-        <link rel="icon" href="dist/images/favicon.png">
+        <meta name="theme-color" content="#ffffff">
+        <meta name="msapplication-TileColor" content="#ffffff">
+        <link rel="manifest" href="site.webmanifest">
+        <link rel="apple-touch-icon" sizes="152x152" href="dist/images/favicons/apple-touch-icon.png">
+        <link rel="icon" type="image/png" sizes="32x32" href="dist/images/favicons/favicon-32x32.png">
+        <link rel="icon" type="image/png" sizes="16x16" href="dist/images/favicons/favicon-16x16.png">
+        <link rel="mask-icon" href="dist/images/favicons/safari-pinned-tab.svg" color="#000000">
 
         <link rel="stylesheet" href="dist/styles/main.css">
     </head>
     <body>
-        <section class="o-scroll" id="js-scroll">
-            <section data-scroll-section>
+        <div class="o-scroll" id="js-scroll">
+
+            <div data-scroll-section>
                 <div class="o-container">
                     <header class="c-header" id="header">
                         <div class="c-header_heading" data-scroll data-scroll-speed="-8" data-scroll-position="top" data-scroll-target="#header">
@@ -53,7 +56,8 @@
                         </a>
                     </header>
                 </div>
-            </section>
+            </div>
+
             <section data-scroll-section>
                 <div class="o-container">
                     <div class="c-summary" data-scroll data-scroll-offset="100">
@@ -103,7 +107,7 @@
                     </div>
                 </div>
             </section>
-            <section data-scroll-section class="c-section">
+            <section class="c-section" data-scroll-section>
                 <div class="o-container" id="speed-control">
                     <div class="o-layout -gutter">
                         <div class="o-layout_item u-2/5@from-medium">
@@ -185,7 +189,7 @@
                 </div>
             </section>
 
-            <section data-scroll-section class="c-section">
+            <section class="c-section" data-scroll-section>
                 <div class="o-container" id="scroll-direction">
                     <div class="c-direction-block_wrapper">
                         <div class="c-section_infos" data-scroll data-scroll-sticky data-scroll-target="#scroll-direction">
@@ -232,7 +236,7 @@
                 </div>
             </section>
 
-            <section data-scroll-section class="c-section">
+            <section class="c-section" data-scroll-section>
                 <div class="o-container" id="lerp-effect">
                     <div class="o-layout">
                         <div class="o-layout_item u-2/5@from-medium">
@@ -303,7 +307,7 @@
                 </div>
             </section>
 
-            <section data-scroll-section class="c-section -fixed" data-persistent>
+            <section class="c-section -fixed" data-scroll-section data-persistent>
                 <div class="o-container" id="fixed-elements">
                     <div class="o-layout">
                         <div class="o-layout_item u-2/5@from-medium">
@@ -331,7 +335,7 @@
                 </div>
             </section>
 
-            <section data-scroll-section class="c-section">
+            <section class="c-section" data-scroll-section>
                 <div class="o-container">
                     <div class="c-cta">
                         <h1 class="o-title" data-scroll>
@@ -420,10 +424,8 @@
                 </div>
             </section>
 
-        </section>
+        </div>
 
-        <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.0.0/jquery.min.js"></script>
-        <script>window.jQuery || document.write('<script src="dist/scripts/jquery-3.0.0.min.js"><\/script>')</script>
         <script src="dist/scripts/main.js"></script>
     </body>
 </html>
