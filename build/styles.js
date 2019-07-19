@@ -1,8 +1,10 @@
 import gulp from 'gulp';
 import sass from 'gulp-sass';
 import autoprefixer from 'gulp-autoprefixer';
+import header from 'gulp-header';
 import merge from 'merge-stream';
 import paths from '../mconfig.json';
+import pkg from '../package.json';
 import error from './error.js';
 import { server } from './serve.js';
 
@@ -28,6 +30,7 @@ function styles() {
             .pipe(autoprefixer({
                 cascade: false
             }))
+            .pipe(header('/*! locomotive-scroll v' + pkg.version + ' | MIT License | https://github.com/locomotivemtl/locomotive-scroll */\n'))
             .pipe(gulp.dest(file.dest))
             .pipe(server.stream());
     });

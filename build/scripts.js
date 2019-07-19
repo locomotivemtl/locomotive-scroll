@@ -3,8 +3,8 @@ import { rollup } from 'rollup';
 import resolve from 'rollup-plugin-node-resolve';
 import babel from 'rollup-plugin-babel';
 import common from 'rollup-plugin-commonjs';
-import merge from 'merge-stream';
 import paths from '../mconfig.json';
+import pkg from '../package.json';
 
 function scripts() {
     const files = [
@@ -41,7 +41,8 @@ function scripts() {
                 return bundle.write({
                     file: file.dest + '.js',
                     name: 'locomotiveScroll',
-                    format: file.format
+                    format: file.format,
+                    banner: '/* locomotive-scroll v' + pkg.version + ' | MIT License | https://github.com/locomotivemtl/locomotive-scroll */'
                 });
             })
     });
