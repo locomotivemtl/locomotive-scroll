@@ -317,7 +317,10 @@ export default class extends Core {
     addSections() {
         this.sections = [];
 
-        const sections = this.el.querySelectorAll(`[data-${this.name}-section]`);
+        let sections = this.el.querySelectorAll(`[data-${this.name}-section]`);
+        if (sections.length === 0) {
+           sections = [this.el];
+        }
 
         sections.forEach((section, i) => {
             let offset = section.getBoundingClientRect().top - (window.innerHeight * 1.5) - getTranslate(section).y;

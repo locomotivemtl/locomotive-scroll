@@ -1432,6 +1432,11 @@ function (_Core) {
 
       this.sections = [];
       var sections = this.el.querySelectorAll("[data-".concat(this.name, "-section]"));
+
+      if (sections.length === 0) {
+        sections = [this.el];
+      }
+
       sections.forEach(function (section, i) {
         var offset = section.getBoundingClientRect().top - window.innerHeight * 1.5 - getTranslate(section).y;
         var limit = offset + section.getBoundingClientRect().height + window.innerHeight * 2;
