@@ -36,20 +36,35 @@ function _defineProperty(obj, key, value) {
   return obj;
 }
 
-function _objectSpread(target) {
+function ownKeys(object, enumerableOnly) {
+  var keys = Object.keys(object);
+
+  if (Object.getOwnPropertySymbols) {
+    var symbols = Object.getOwnPropertySymbols(object);
+    if (enumerableOnly) symbols = symbols.filter(function (sym) {
+      return Object.getOwnPropertyDescriptor(object, sym).enumerable;
+    });
+    keys.push.apply(keys, symbols);
+  }
+
+  return keys;
+}
+
+function _objectSpread2(target) {
   for (var i = 1; i < arguments.length; i++) {
     var source = arguments[i] != null ? arguments[i] : {};
-    var ownKeys = Object.keys(source);
 
-    if (typeof Object.getOwnPropertySymbols === 'function') {
-      ownKeys = ownKeys.concat(Object.getOwnPropertySymbols(source).filter(function (sym) {
-        return Object.getOwnPropertyDescriptor(source, sym).enumerable;
-      }));
+    if (i % 2) {
+      ownKeys(source, true).forEach(function (key) {
+        _defineProperty(target, key, source[key]);
+      });
+    } else if (Object.getOwnPropertyDescriptors) {
+      Object.defineProperties(target, Object.getOwnPropertyDescriptors(source));
+    } else {
+      ownKeys(source).forEach(function (key) {
+        Object.defineProperty(target, key, Object.getOwnPropertyDescriptor(source, key));
+      });
     }
-
-    ownKeys.forEach(function (key) {
-      _defineProperty(target, key, source[key]);
-    });
   }
 
   return target;
@@ -850,7 +865,8 @@ function VirtualScroll(options) {
         preventTouch: false,
         unpreventTouchClass: 'vs-touchmove-allowed',
         limitInertia: false,
-        useKeyboard: true
+        useKeyboard: true,
+        useTouch: true
     }, options);
 
     if (this.options.limitInertia) this._lethargy = new Lethargy();
@@ -977,7 +993,7 @@ VirtualScroll.prototype._bind = function() {
     if(support.hasWheelEvent) this.el.addEventListener('wheel', this._onWheel, this.listenerOptions);
     if(support.hasMouseWheelEvent) this.el.addEventListener('mousewheel', this._onMouseWheel, this.listenerOptions);
 
-    if(support.hasTouch) {
+    if(support.hasTouch && this.options.useTouch) {
         this.el.addEventListener('touchstart', this._onTouchStart, this.listenerOptions);
         this.el.addEventListener('touchmove', this._onTouchMove, this.listenerOptions);
     }
@@ -1099,7 +1115,7 @@ function (_Core) {
       var _this2 = this;
 
       this.html.classList.add(this.smoothClass);
-      this.instance = _objectSpread({
+      this.instance = _objectSpread2({
         delta: {
           x: 0,
           y: 0
