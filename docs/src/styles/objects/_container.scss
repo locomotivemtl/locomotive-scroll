@@ -21,14 +21,15 @@
 .o-container {
     margin-right: auto;
     margin-left: auto;
-    max-width: $container-width;
+    max-width: rem($container-width + (40px*2));
 
-    @media (min-width: $from-medium) {
-        padding-right: $padding;
-        padding-left: $padding;
+    @media (max-width: $to-small) {
+        padding-right: 20px;
+        padding-left: 20px;
     }
-    @media (max-width: $to-medium) {
-        padding-right: $unit/2;
-        padding-left: $unit/2;
+
+    @media (min-width: $from-small) {
+        padding-right: rem(40px);
+        padding-left: rem(40px);
     }
 }

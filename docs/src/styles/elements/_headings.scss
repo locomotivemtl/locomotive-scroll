@@ -33,9 +33,20 @@
 h1, .o-h1 {
     @extend .o-h;
 
-    font-size: $font-size-h1;
+    line-height: 0.9;
     text-transform: uppercase;
-    letter-spacing: -0.05em;
+
+    @media (max-width: $to-small) {
+        font-size: 12vw;
+    }
+
+    @media (min-width: $from-small) and (max-width: $to-huge) {
+        font-size: $font-size-h1;
+    }
+
+    @media (min-width: $from-huge) {
+        font-size: 12vw;
+    }
 }
 
 h2, .o-h2 {

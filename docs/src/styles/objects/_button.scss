@@ -5,14 +5,11 @@
     position: relative;
     z-index: 1;
     color: white;
-    padding: rem(20px) rem(35px);
-    font-size: rem(12px);
-    text-transform: uppercase;
-    letter-spacing: 0.1em;
+    padding: rem(32px) rem(35px);
+    font-size: rem(24px);
     background-color: $black;
     transition: color 0.3s $easing;
     width: 100%;
-    margin: rem($unit / 2) 0;
     text-align: left;
 
     &::before{
@@ -38,15 +35,13 @@
             transform-origin: center bottom;
         }
     }
-
 }
-
 
 .o-button_icon {
     display: inline-block;
     vertical-align: middle;
-    width: rem($unit / 2);
-    height: rem($unit / 2);
+    width: rem(55px);
+    height: rem(55px);
     margin-right: rem($unit / 4);
 
     svg {

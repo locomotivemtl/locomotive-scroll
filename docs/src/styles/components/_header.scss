@@ -1,15 +1,19 @@
 .c-header {
     position: relative;
 
-    @media (min-width: $from-medium) {
-        height: 100vh;
-    }
-    @media (min-width: $from-medium) and (max-width: $to-medium) {
-        height: 80vh;
-    }
     @media (max-width: $to-small) {
         height: 50vh;
+        min-height: 340px;
+    }
 
+    @media (min-width: $from-small) and (max-width: $to-medium) {
+        height: 80vh;
+        min-height: 380px;
+    }
+
+    @media (min-width: $from-medium) {
+        height: 100vh;
+        min-height: rem(700px);
     }
 }
 
@@ -44,7 +48,6 @@
    transform-style: preserve-3d;
    transform: translateY(100%) rotateX(-80deg);
    transition: opacity 0s $Power2EaseOut, transform 0s $Power2EaseOut;
-   font-size: 0;
 
    html.is-ready & {
        transform: none;
@@ -58,18 +61,20 @@
        }
    }
 
-   span {
-       display: inline-block;
-       min-width: 0.05em;
-       font-size: $font-size-h1;
-   }
+   &.-version {
+        text-transform: none;
+        font-size: 0;
+
+        span {
+            display: inline-block;
+        }
+    }
 }
 
 
 
 .c-header_heading {
-    margin: rem($unit / 2) 0;
-
+    padding: rem(30px) 0;
 }
 
 .c-header_heading_label {
@@ -91,13 +96,21 @@
 
 .c-header_logo {
     position: absolute;
-    bottom: rem($unit);
+    bottom: rem(40px);
     right: 0;
-    width: rem(70px);
-    height: rem(150px);
     opacity: 0;
     transform: translateY($unit * 2);
     transition: opacity 0s $Power2EaseOut, transform 0s $Power2EaseOut;
+
+    @media (max-width: $to-small) {
+        width: 30px;
+        height: 66px;
+    }
+
+    @media (min-width: $from-small) {
+        width: rem(64px);
+        height: rem(140px);
+    }
 
     svg {
         display: block;
