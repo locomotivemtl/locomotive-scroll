@@ -63,6 +63,7 @@ h3, .o-h3 {
 
 h4, .o-h4 {
     @extend .o-h;
+    line-height: 1.2;
 
     font-size: rem($font-size-h4);
 }

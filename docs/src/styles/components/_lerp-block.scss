@@ -1,6 +1,7 @@
 .c-lerp-block {
     font-weight: $bold;
     text-transform: uppercase;
+    margin-bottom: rem(160px);
 
     @media (min-width: $from-medium) {
         &:not(:first-child) {
@@ -13,10 +14,13 @@
 }
 
 .c-lerp-block_index {
-    display: inline-block;
     vertical-align: middle;
     color: $beige;
-    padding: rem($unit/2.5) rem($unit-small);
+    width: rem(60px);
+    height: rem(45px);
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
     font-size: rem(20px);
     position: relative;
     z-index: 1;
@@ -48,6 +52,7 @@
     vertical-align: middle;
     font-size: 0;
     margin-left: rem(20px);
+    line-height: 1.1;
 
     &.is-inview {
         >span:not([data-scroll]) {
@@ -66,12 +71,13 @@
     span {
         display: inline-block;
         min-width: 0.3em;
-        @media (min-width: $from-small) {
-            font-size: rem(45px);
-        }
+
         @media (max-width: $to-small) {
             font-size: rem(25px);
         }
 
+        @media (min-width: $from-small) {
+            font-size: rem(70px);
+        }
     }
 }

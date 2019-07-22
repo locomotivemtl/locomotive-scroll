@@ -81,4 +81,8 @@ a {
     }
 
     color: $link-color;
+
+    &.-underline {
+        text-decoration: underline;
+    }
 }

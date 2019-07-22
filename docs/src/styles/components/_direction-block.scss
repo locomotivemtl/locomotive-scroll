@@ -1,4 +1,6 @@
 .c-direction-block_wrapper {
+    margin-bottom: rem(500px);
+
     @media (min-width: $from-large) {
         min-height: 180vh;
     }
@@ -10,6 +12,10 @@
     }
     @media (max-width: $to-small) {
         min-height: 70vh;
+    }
+
+    @media (min-width: $from-medium) {
+        margin-top: -35vh;
     }
 }
 
@@ -30,6 +36,14 @@
     @media (max-width: $to-small) {
         top: -15vh;
         bottom: 0;
+    }
+
+    @media (min-width: $from-medium) and (max-width: $to-large) {
+        margin-top: rem(100px);
+    }
+
+    @media (min-width: $from-large) {
+        margin-top: rem(300px);
     }
 }
 

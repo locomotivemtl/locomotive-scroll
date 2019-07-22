@@ -1,13 +1,13 @@
 .c-section {
     position: relative;
 
-    @media (min-width: $from-large) {
-        padding-bottom: 25vh;
-        margin-bottom: 35vh;
-    }
     @media (max-width: $to-large) {
         padding-bottom: 10vh;
         margin-bottom: 10vh;
+    }
+
+    @media (min-width: $from-large) {
+        margin-bottom: 35vh;
     }
 }
 
@@ -51,5 +51,5 @@
 }
 
 .c-sections_infos_text {
-    margin-top: rem($unit/4);
+    margin-top: rem(20px);
 }

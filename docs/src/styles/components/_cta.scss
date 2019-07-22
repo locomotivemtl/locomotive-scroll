@@ -3,6 +3,10 @@
     transform: scaleX(0);
     transition: transform 0.6s $easing;
 
+    &.-margin {
+        margin-bottom: 30px;
+    }
+
     &.is-inview {
         transform: scaleX(1)
     }
@@ -21,7 +25,7 @@
         transition: opacity 0.6s $easing, transform 0.6s $easing;
 
         &:not(:first-child) {
-            margin-top: 15px;
+            margin-top: rem(30px);
         }
     }
 
@@ -49,4 +53,8 @@
         opacity: 1;
         transform: none;
     }
+}
+
+.c-cta_section {
+    margin-bottom: rem(180px);
 }

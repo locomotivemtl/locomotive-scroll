@@ -46,7 +46,7 @@
 .c-speed-block_bubble {
     position: absolute;
     right: 20px;
-    top: 45%;
+    top: 30%;
     z-index: 1;
     color: $beige;
     padding: rem($unit/2.5) rem($unit-small);
@@ -60,10 +60,11 @@
         left: - 30px;
     }
     &.-top {
-        top: -10%;
+        top: -20%;
     }
     &.-bottom {
-        top: 70%;
+        top: auto;
+        bottom: 0;
     }
 
     &::before {
