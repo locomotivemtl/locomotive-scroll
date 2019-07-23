@@ -137,11 +137,9 @@ export default class extends Core {
         if (this.instance.delta.y > this.instance.limit) this.instance.delta.y = this.instance.limit;
     }
 
-    updateScroll() {
-        if (this.isScrolling) {
+    updateScroll(e) {
+        if (this.isScrolling || this.isDraggingScrollbar) {
             this.instance.scroll.y = lerp(this.instance.scroll.y, this.instance.delta.y, this.inertia * this.inertiaRatio);
-        } else if (this.isDraggingScrollBar) {
-            this.instance.scroll.y = lerp(this.instance.scroll.y, this.instance.delta.y, (this.inertia * 2));
         } else {
             this.instance.scroll.y = this.instance.delta.y;
         }
@@ -178,9 +176,13 @@ export default class extends Core {
         this.scrollbarThumb.style.height = `${(window.innerHeight * window.innerHeight) / (this.instance.limit + window.innerHeight)}px`;
         this.scrollBarLimit = window.innerHeight - this.scrollbarThumb.getBoundingClientRect().height;
 
-        this.scrollbarThumb.addEventListener('mousedown',(e) => this.getScrollBar(e));
-        window.addEventListener('mouseup',(e) => this.releaseScrollBar(e));
-        window.addEventListener('mousemove',(e) => this.moveScrollBar(e));
+        this.getScrollBar = this.getScrollBar.bind(this);
+        this.releaseScrollBar = this.releaseScrollBar.bind(this);
+        this.moveScrollBar = this.moveScrollBar.bind(this);
+
+        this.scrollbarThumb.addEventListener('mousedown', this.getScrollBar);
+        window.addEventListener('mouseup', this.releaseScrollBar);
+        window.addEventListener('mousemove', this.moveScrollBar);
     }
 
     reinitScrollBar() {
@@ -189,9 +191,10 @@ export default class extends Core {
     }
 
     destroyScrollBar() {
-        this.scrollbarThumb.removeEventListener('mousedown',(e) => this.getScrollBar(e));
-        window.removeEventListener('mouseup',(e) => this.releaseScrollBar(e));
-        window.removeEventListener('mousemove',(e) => this.moveScrollBar(e));
+        this.scrollbarThumb.removeEventListener('mousedown', this.getScrollBar);
+        window.removeEventListener('mouseup', this.releaseScrollBar);
+        window.removeEventListener('mousemove', this.moveScrollBar);
+        this.scrollbar.remove();
     }
 
     getScrollBar(e) {
@@ -509,6 +512,6 @@ export default class extends Core {
         this.stopScrolling();
         this.html.classList.remove(this.smoothClass);
         this.vs.destroy();
-        this.scrollbar.remove();
+        this.destroyScrollBar();
     }
 }

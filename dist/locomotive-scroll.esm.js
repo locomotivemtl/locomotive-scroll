@@ -1,4 +1,4 @@
-/* locomotive-scroll v3.0.1 | MIT License | https://github.com/locomotivemtl/locomotive-scroll */
+/* locomotive-scroll v3.0.2 | MIT License | https://github.com/locomotivemtl/locomotive-scroll */
 function _classCallCheck(instance, Constructor) {
   if (!(instance instanceof Constructor)) {
     throw new TypeError("Cannot call a class as a function");
@@ -1239,11 +1239,9 @@ function (_Core) {
     }
   }, {
     key: "updateScroll",
-    value: function updateScroll() {
-      if (this.isScrolling) {
+    value: function updateScroll(e) {
+      if (this.isScrolling || this.isDraggingScrollbar) {
         this.instance.scroll.y = lerp(this.instance.scroll.y, this.instance.delta.y, this.inertia * this.inertiaRatio);
-      } else if (this.isDraggingScrollBar) {
-        this.instance.scroll.y = lerp(this.instance.scroll.y, this.instance.delta.y, this.inertia * 2);
       } else {
         this.instance.scroll.y = this.instance.delta.y;
       }
@@ -1273,8 +1271,6 @@ function (_Core) {
   }, {
     key: "initScrollBar",
     value: function initScrollBar() {
-      var _this4 = this;
-
       this.scrollbar = document.createElement('span');
       this.scrollbarThumb = document.createElement('span');
       this.scrollbar.classList.add("".concat(this.scrollbarClass));
@@ -1283,15 +1279,12 @@ function (_Core) {
       document.body.append(this.scrollbar);
       this.scrollbarThumb.style.height = "".concat(window.innerHeight * window.innerHeight / (this.instance.limit + window.innerHeight), "px");
       this.scrollBarLimit = window.innerHeight - this.scrollbarThumb.getBoundingClientRect().height;
-      this.scrollbarThumb.addEventListener('mousedown', function (e) {
-        return _this4.getScrollBar(e);
-      });
-      window.addEventListener('mouseup', function (e) {
-        return _this4.releaseScrollBar(e);
-      });
-      window.addEventListener('mousemove', function (e) {
-        return _this4.moveScrollBar(e);
-      });
+      this.getScrollBar = this.getScrollBar.bind(this);
+      this.releaseScrollBar = this.releaseScrollBar.bind(this);
+      this.moveScrollBar = this.moveScrollBar.bind(this);
+      this.scrollbarThumb.addEventListener('mousedown', this.getScrollBar);
+      window.addEventListener('mouseup', this.releaseScrollBar);
+      window.addEventListener('mousemove', this.moveScrollBar);
     }
   }, {
     key: "reinitScrollBar",
@@ -1302,17 +1295,10 @@ function (_Core) {
   }, {
     key: "destroyScrollBar",
     value: function destroyScrollBar() {
-      var _this5 = this;
-
-      this.scrollbarThumb.removeEventListener('mousedown', function (e) {
-        return _this5.getScrollBar(e);
-      });
-      window.removeEventListener('mouseup', function (e) {
-        return _this5.releaseScrollBar(e);
-      });
-      window.removeEventListener('mousemove', function (e) {
-        return _this5.moveScrollBar(e);
-      });
+      this.scrollbarThumb.removeEventListener('mousedown', this.getScrollBar);
+      window.removeEventListener('mouseup', this.releaseScrollBar);
+      window.removeEventListener('mousemove', this.moveScrollBar);
+      this.scrollbar.remove();
     }
   }, {
     key: "getScrollBar",
@@ -1332,14 +1318,14 @@ function (_Core) {
   }, {
     key: "moveScrollBar",
     value: function moveScrollBar(e) {
-      var _this6 = this;
+      var _this4 = this;
 
       if (!this.isTicking && this.isDraggingScrollbar) {
         requestAnimationFrame(function () {
-          var y = e.clientY * 100 / window.innerHeight * _this6.instance.limit / 100;
+          var y = e.clientY * 100 / window.innerHeight * _this4.instance.limit / 100;
 
-          if (y > 0 && y < _this6.instance.limit) {
-            _this6.instance.delta.y = y;
+          if (y > 0 && y < _this4.instance.limit) {
+            _this4.instance.delta.y = y;
           }
         });
         this.isTicking = true;
@@ -1350,26 +1336,26 @@ function (_Core) {
   }, {
     key: "addElements",
     value: function addElements() {
-      var _this7 = this;
+      var _this5 = this;
 
       this.els = [];
       this.parallaxElements = [];
       var count = 0;
       this.sections.forEach(function (section, y) {
-        var els = _this7.sections[y].el.querySelectorAll("[data-".concat(_this7.name, "]"));
+        var els = _this5.sections[y].el.querySelectorAll("[data-".concat(_this5.name, "]"));
 
         els.forEach(function (el, i) {
-          var cl = el.dataset[_this7.name + 'Class'] || _this7["class"];
+          var cl = el.dataset[_this5.name + 'Class'] || _this5["class"];
           var top;
-          var repeat = el.dataset[_this7.name + 'Repeat'];
-          var call = el.dataset[_this7.name + 'Call'];
-          var position = el.dataset[_this7.name + 'Position'];
-          var delay = el.dataset[_this7.name + 'Delay'];
-          var direction = el.dataset[_this7.name + 'Direction'];
-          var sticky = typeof el.dataset[_this7.name + 'Sticky'] === 'string';
-          var speed = el.dataset[_this7.name + 'Speed'] ? parseFloat(el.dataset[_this7.name + 'Speed']) / 10 : false;
-          var offset = typeof el.dataset[_this7.name + 'Offset'] === 'string' ? el.dataset[_this7.name + 'Offset'].split(',') : false;
-          var target = el.dataset[_this7.name + 'Target'];
+          var repeat = el.dataset[_this5.name + 'Repeat'];
+          var call = el.dataset[_this5.name + 'Call'];
+          var position = el.dataset[_this5.name + 'Position'];
+          var delay = el.dataset[_this5.name + 'Delay'];
+          var direction = el.dataset[_this5.name + 'Direction'];
+          var sticky = typeof el.dataset[_this5.name + 'Sticky'] === 'string';
+          var speed = el.dataset[_this5.name + 'Speed'] ? parseFloat(el.dataset[_this5.name + 'Speed']) / 10 : false;
+          var offset = typeof el.dataset[_this5.name + 'Offset'] === 'string' ? el.dataset[_this5.name + 'Offset'].split(',') : false;
+          var target = el.dataset[_this5.name + 'Target'];
           var targetEl;
 
           if (target !== undefined) {
@@ -1378,10 +1364,10 @@ function (_Core) {
             targetEl = el;
           }
 
-          if (!_this7.sections[y].inView) {
-            top = targetEl.getBoundingClientRect().top - getTranslate(_this7.sections[y].el).y - getTranslate(targetEl).y;
+          if (!_this5.sections[y].inView) {
+            top = targetEl.getBoundingClientRect().top - getTranslate(_this5.sections[y].el).y - getTranslate(targetEl).y;
           } else {
-            top = targetEl.getBoundingClientRect().top + _this7.instance.scroll.y - getTranslate(targetEl).y;
+            top = targetEl.getBoundingClientRect().top + _this5.instance.scroll.y - getTranslate(targetEl).y;
           }
 
           var bottom = top + targetEl.offsetHeight;
@@ -1398,7 +1384,7 @@ function (_Core) {
           } else if (repeat != undefined) {
             repeat = true;
           } else {
-            repeat = _this7.repeat;
+            repeat = _this5.repeat;
           }
 
           var relativeOffset = [0, 0];
@@ -1406,7 +1392,7 @@ function (_Core) {
           if (offset) {
             for (var i = 0; i < offset.length; i++) {
               if (offset[i].includes('%')) {
-                relativeOffset[i] = parseInt(offset[i].replace('%', '') * _this7.windowHeight / 100);
+                relativeOffset[i] = parseInt(offset[i].replace('%', '') * _this5.windowHeight / 100);
               } else {
                 relativeOffset[i] = parseInt(offset[i]);
               }
@@ -1433,10 +1419,10 @@ function (_Core) {
           };
           count++;
 
-          _this7.els.push(mappedEl);
+          _this5.els.push(mappedEl);
 
           if (speed !== false || sticky) {
-            _this7.parallaxElements.push(mappedEl);
+            _this5.parallaxElements.push(mappedEl);
           }
         });
       });
@@ -1444,7 +1430,7 @@ function (_Core) {
   }, {
     key: "addSections",
     value: function addSections() {
-      var _this8 = this;
+      var _this6 = this;
 
       this.sections = [];
       var sections = this.el.querySelectorAll("[data-".concat(this.name, "-section]"));
@@ -1456,10 +1442,10 @@ function (_Core) {
       sections.forEach(function (section, i) {
         var offset = section.getBoundingClientRect().top - window.innerHeight * 1.5 - getTranslate(section).y;
         var limit = offset + section.getBoundingClientRect().height + window.innerHeight * 2;
-        var persistent = typeof section.dataset[_this8.name + 'Persistent'] === 'string';
+        var persistent = typeof section.dataset[_this6.name + 'Persistent'] === 'string';
         var inView = false;
 
-        if (_this8.instance.scroll.y >= offset && _this8.instance.scroll.y <= limit) {
+        if (_this6.instance.scroll.y >= offset && _this6.instance.scroll.y <= limit) {
           inView = true;
         }
 
@@ -1470,7 +1456,7 @@ function (_Core) {
           inView: inView,
           persistent: persistent
         };
-        _this8.sections[i] = mappedSection;
+        _this6.sections[i] = mappedSection;
       });
     }
   }, {
@@ -1494,7 +1480,7 @@ function (_Core) {
   }, {
     key: "transformElements",
     value: function transformElements(isForced) {
-      var _this9 = this;
+      var _this7 = this;
 
       var scrollBottom = this.instance.scroll.y + this.windowHeight;
       var scrollMiddle = this.instance.scroll.y + this.windowMiddle;
@@ -1508,11 +1494,11 @@ function (_Core) {
         if (current.inView) {
           switch (current.position) {
             case 'top':
-              transformDistance = _this9.instance.scroll.y * -current.speed;
+              transformDistance = _this7.instance.scroll.y * -current.speed;
               break;
 
             case 'bottom':
-              transformDistance = (_this9.instance.limit - scrollBottom + _this9.windowHeight) * current.speed;
+              transformDistance = (_this7.instance.limit - scrollBottom + _this7.windowHeight) * current.speed;
               break;
 
             default:
@@ -1523,11 +1509,11 @@ function (_Core) {
 
         if (current.sticky) {
           if (current.inView) {
-            transformDistance = _this9.instance.scroll.y - current.top + window.innerHeight;
+            transformDistance = _this7.instance.scroll.y - current.top + window.innerHeight;
           } else {
-            if (_this9.instance.scroll.y < current.top - window.innerHeight && _this9.instance.scroll.y < current.top - window.innerHeight / 2) {
+            if (_this7.instance.scroll.y < current.top - window.innerHeight && _this7.instance.scroll.y < current.top - window.innerHeight / 2) {
               transformDistance = 0;
-            } else if (_this9.instance.scroll.y > current.bottom && _this9.instance.scroll.y > current.bottom + 100) {
+            } else if (_this7.instance.scroll.y > current.bottom && _this7.instance.scroll.y > current.bottom + 100) {
               transformDistance = current.bottom - current.top + window.innerHeight;
             } else {
               transformDistance = false;
@@ -1537,9 +1523,9 @@ function (_Core) {
 
         if (transformDistance !== false) {
           if (current.direction === 'horizontal') {
-            _this9.transform(current.el, transformDistance, 0, isForced ? false : current.delay);
+            _this7.transform(current.el, transformDistance, 0, isForced ? false : current.delay);
           } else {
-            _this9.transform(current.el, 0, transformDistance, isForced ? false : current.delay);
+            _this7.transform(current.el, 0, transformDistance, isForced ? false : current.delay);
           }
         }
       });
@@ -1558,7 +1544,7 @@ function (_Core) {
   }, {
     key: "scrollTo",
     value: function scrollTo(targetOption, offsetOption) {
-      var _this10 = this;
+      var _this8 = this;
 
       var target;
       var offset = offsetOption ? parseInt(offsetOption) : 0;
@@ -1583,7 +1569,7 @@ function (_Core) {
 
         var targetParents = getParents(target);
         var parentSection = targetParents.find(function (candidate) {
-          return _this10.sections.find(function (section) {
+          return _this8.sections.find(function (section) {
             return section.element == candidate;
           });
         });
@@ -1648,7 +1634,7 @@ function (_Core) {
       this.stopScrolling();
       this.html.classList.remove(this.smoothClass);
       this.vs.destroy();
-      this.scrollbar.remove();
+      this.destroyScrollBar();
     }
   }]);
 
