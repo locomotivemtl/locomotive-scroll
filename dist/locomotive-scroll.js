@@ -1,4 +1,4 @@
-/* locomotive-scroll v3.0.2 | MIT License | https://github.com/locomotivemtl/locomotive-scroll */
+/* locomotive-scroll v3.0.3 | MIT License | https://github.com/locomotivemtl/locomotive-scroll */
 (function (global, factory) {
   typeof exports === 'object' && typeof module !== 'undefined' ? module.exports = factory() :
   typeof define === 'function' && define.amd ? define(factory) :
@@ -1112,6 +1112,8 @@
       _this.parallaxElements = [];
       _this.inertiaRatio = 1;
       _this.stop = false;
+      _this.checkKey = _this.checkKey.bind(_assertThisInitialized(_this));
+      window.addEventListener('keydown', _this.checkKey, false);
       return _this;
     }
 
@@ -1176,6 +1178,16 @@
         this.inertiaRatio = 1;
         this.instance.scroll.y = Math.round(this.instance.scroll.y);
         this.html.classList.remove(this.scrollingClass);
+      }
+    }, {
+      key: "checkKey",
+      value: function checkKey(e) {
+        if (e.keyCode == 9) {
+          setTimeout(function () {
+            document.documentElement.scrollTop = 0;
+            document.body.scrollTop = 0; // this.scrollTo(document.activeElement);
+          }, 0);
+        }
       }
     }, {
       key: "checkScroll",
@@ -1641,6 +1653,7 @@
         this.html.classList.remove(this.smoothClass);
         this.vs.destroy();
         this.destroyScrollBar();
+        window.removeEventListener('keydown', this.checkKey, false);
       }
     }]);
 

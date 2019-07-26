@@ -16,6 +16,9 @@ export default class extends Core {
         this.parallaxElements = [];
         this.inertiaRatio = 1;
         this.stop = false;
+
+        this.checkKey = this.checkKey.bind(this);
+        window.addEventListener('keydown', this.checkKey, false);
     }
 
     init() {
@@ -76,6 +79,17 @@ export default class extends Core {
         this.inertiaRatio = 1;
         this.instance.scroll.y = Math.round(this.instance.scroll.y);
         this.html.classList.remove(this.scrollingClass);
+    }
+
+    checkKey(e) {
+        if (e.keyCode == 9) {
+            setTimeout(() => {
+                document.documentElement.scrollTop = 0;
+                document.body.scrollTop = 0;
+
+                // this.scrollTo(document.activeElement);
+            }, 0);
+        }
     }
 
     checkScroll() {
@@ -434,7 +448,6 @@ export default class extends Core {
         let target;
         let offset = offsetOption ? parseInt(offsetOption) : 0;
 
-
         if(typeof targetOption === 'string') {
 
             if(targetOption === 'top') {
@@ -513,5 +526,6 @@ export default class extends Core {
         this.html.classList.remove(this.smoothClass);
         this.vs.destroy();
         this.destroyScrollBar();
+        window.removeEventListener('keydown', this.checkKey, false);
     }
 }
