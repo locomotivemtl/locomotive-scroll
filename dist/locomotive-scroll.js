@@ -189,6 +189,7 @@
       this.windowMiddle = this.windowHeight / 2;
       this.els = [];
       this.hasScrollTicking = false;
+      this.hasCallEventSet = false;
       this.checkScroll = this.checkScroll.bind(this);
       this.checkResize = this.checkResize.bind(this);
       this.instance = {
@@ -246,13 +247,13 @@
       value: function addElements() {}
     }, {
       key: "detectElements",
-      value: function detectElements() {
+      value: function detectElements(hasCallEventSet) {
         var _this2 = this;
 
         var scrollTop = this.instance.scroll.y;
         var scrollBottom = scrollTop + this.windowHeight;
         this.els.forEach(function (el, i) {
-          if (!el.inView) {
+          if (!el.inView || hasCallEventSet) {
             if (scrollBottom >= el.top && scrollTop < el.bottom) {
               _this2.setInView(el, i);
             }
@@ -272,12 +273,18 @@
         this.els[i].inView = true;
         current.el.classList.add(current["class"]);
 
-        if (current.call) {
+        if (current.call && this.hasCallEventSet) {
           this.dispatchCall(current, 'enter');
+
+          if (!current.repeat) {
+            this.els[i].call = false;
+          }
         }
 
-        if (!current.repeat && current.speed === false && !current.sticky) {
-          this.els.splice(i, 1);
+        if (!current.repeat && !current.speed && !current.sticky) {
+          if (!current.call || current.call && this.hasCallEventSet) {
+            this.els.splice(i, 1);
+          }
         }
       }
     }, {
@@ -287,7 +294,7 @@
           this.els[i].inView = false;
         }
 
-        if (current.call) {
+        if (current.call && this.hasCallEventSet) {
           this.dispatchCall(current, 'exit');
         }
 
@@ -330,6 +337,11 @@
               return func();
           }
         }, false);
+
+        if (event === 'call') {
+          this.hasCallEventSet = true;
+          this.detectElements(true);
+        }
       }
     }, {
       key: "startScroll",

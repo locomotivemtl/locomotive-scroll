@@ -13,6 +13,8 @@ export default class {
         this.els = [];
 
         this.hasScrollTicking = false;
+        this.hasCallEventSet = false;
+
         this.checkScroll = this.checkScroll.bind(this);
         this.checkResize = this.checkResize.bind(this);
 
@@ -67,17 +69,18 @@ export default class {
 
     addElements() {}
 
-    detectElements() {
+    detectElements(hasCallEventSet) {
         const scrollTop = this.instance.scroll.y;
         const scrollBottom = scrollTop + this.windowHeight;
 
         this.els.forEach((el, i) => {
-            if (!el.inView) {
+            if (!el.inView || hasCallEventSet) {
                 if ((scrollBottom >= el.top) && (scrollTop < el.bottom)) {
                     this.setInView(el, i);
                 }
             }
-            if(el.inView) {
+
+            if (el.inView) {
                 if ((scrollBottom < el.top) || (scrollTop > el.bottom)) {
                     this.setOutOfView(el, i);
                 }
@@ -91,25 +94,31 @@ export default class {
         this.els[i].inView = true;
         current.el.classList.add(current.class);
 
-        if (current.call) {
+        if (current.call && this.hasCallEventSet) {
             this.dispatchCall(current, 'enter');
+
+            if (!current.repeat) {
+                this.els[i].call = false
+            }
         }
 
-        if (!current.repeat && current.speed === false && !current.sticky ) {
-            this.els.splice(i, 1);
+        if (!current.repeat && !current.speed && !current.sticky) {
+            if (!current.call || current.call && this.hasCallEventSet) {
+                this.els.splice(i, 1);
+            }
         }
     }
 
     setOutOfView(current, i) {
-        if(current.repeat || current.speed !== undefined) {
+        if (current.repeat || current.speed !== undefined) {
             this.els[i].inView = false;
         }
 
-        if (current.call) {
+        if (current.call && this.hasCallEventSet) {
             this.dispatchCall(current, 'exit');
         }
 
-        if(current.repeat ) {
+        if (current.repeat) {
             current.el.classList.remove(current.class);
         }
     }
@@ -141,6 +150,11 @@ export default class {
                     return func();
             }
         }, false);
+
+        if (event === 'call') {
+            this.hasCallEventSet = true;
+            this.detectElements(true);
+        }
     }
 
     startScroll() {}
