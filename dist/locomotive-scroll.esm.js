@@ -1136,6 +1136,7 @@ function (_Core) {
         }
       }, this.instance);
       this.vs = new src({
+        el: this.el,
         mouseMultiplier: navigator.platform.indexOf('Win') > -1 ? 1 : 0.4,
         touchMultiplier: 4,
         firefoxMultiplier: 30
