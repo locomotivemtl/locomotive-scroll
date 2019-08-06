@@ -13,9 +13,9 @@ npm install locomotive-scroll
 
 ## Usage
 ```js
-import locomotiveScroll from 'locomotive-scroll';
+import LocomotiveScroll from 'locomotive-scroll';
 
-const scroll = new locomotiveScroll();
+const scroll = new LocomotiveScroll();
 ```
 ```html
 <h1 data-scroll>Hello</h1>
@@ -24,9 +24,9 @@ const scroll = new locomotiveScroll();
 
 #### With smooth scrolling
 ```js
-import locomotiveScroll from 'locomotive-scroll';
+import LocomotiveScroll from 'locomotive-scroll';
 
-const scroll = new locomotiveScroll({
+const scroll = new LocomotiveScroll({
     el: document.querySelector('#js-scroll'),
     smooth: true
 });
@@ -38,9 +38,9 @@ const scroll = new locomotiveScroll({
 
 #### With methods
 ```js
-import locomotiveScroll from 'locomotive-scroll';
+import LocomotiveScroll from 'locomotive-scroll';
 
-const scroll = new locomotiveScroll();
+const scroll = new LocomotiveScroll();
 const target = document.querySelector('#js-target');
 
 scroll.scrollTo(target);
@@ -48,9 +48,9 @@ scroll.scrollTo(target);
 
 #### With events
 ```js
-import locomotiveScroll from 'locomotive-scroll';
+import LocomotiveScroll from 'locomotive-scroll';
 
-const scroll = new locomotiveScroll();
+const scroll = new LocomotiveScroll();
 
 scroll.on('call', (func) => {
     // Using modularJS

@@ -1,4 +1,4 @@
-import locomotiveScroll from '../../../src/locomotive-scroll';
+import LocomotiveScroll from '../../../src/locomotive-scroll';
 
 (function() {
 
@@ -10,7 +10,7 @@ import locomotiveScroll from '../../../src/locomotive-scroll';
     },300)
 
     setTimeout(() => {
-        const scroll = new locomotiveScroll({
+        const scroll = new LocomotiveScroll({
             el: document.querySelector('#js-scroll'),
             smooth: true,
             getSpeed: true,

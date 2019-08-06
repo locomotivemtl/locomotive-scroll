@@ -40,7 +40,7 @@ function scripts() {
             }).then(bundle => {
                 return bundle.write({
                     file: file.dest + '.js',
-                    name: 'locomotiveScroll',
+                    name: 'LocomotiveScroll',
                     format: file.format,
                     banner: '/* locomotive-scroll v' + pkg.version + ' | MIT License | https://github.com/locomotivemtl/locomotive-scroll */'
                 });
