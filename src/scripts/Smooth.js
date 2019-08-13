@@ -471,7 +471,7 @@ export default class extends Core {
 
             // Try and find the target's parent section
             const targetParents = getParents(target)
-            const parentSection = targetParents.find(candidate => this.sections.find(section => section.element == candidate))
+            const parentSection = targetParents.find(candidate => this.sections.find(section => section.el == candidate))
             let parentSectionOffset = 0
             if(parentSection) {
                 parentSectionOffset = getTranslate(parentSection).y // We got a parent section, store it's current offset to remove it later

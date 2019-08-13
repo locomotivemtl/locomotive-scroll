@@ -1,4 +1,4 @@
-/* locomotive-scroll v3.0.4 | MIT License | https://github.com/locomotivemtl/locomotive-scroll */
+/* locomotive-scroll v3.0.5 | MIT License | https://github.com/locomotivemtl/locomotive-scroll */
 function _classCallCheck(instance, Constructor) {
   if (!(instance instanceof Constructor)) {
     throw new TypeError("Cannot call a class as a function");
@@ -877,8 +877,7 @@ function VirtualScroll(options) {
         preventTouch: false,
         unpreventTouchClass: 'vs-touchmove-allowed',
         limitInertia: false,
-        useKeyboard: true,
-        useTouch: true
+        useKeyboard: true
     }, options);
 
     if (this.options.limitInertia) this._lethargy = new Lethargy();
@@ -1005,7 +1004,7 @@ VirtualScroll.prototype._bind = function() {
     if(support.hasWheelEvent) this.el.addEventListener('wheel', this._onWheel, this.listenerOptions);
     if(support.hasMouseWheelEvent) this.el.addEventListener('mousewheel', this._onMouseWheel, this.listenerOptions);
 
-    if(support.hasTouch && this.options.useTouch) {
+    if(support.hasTouch) {
         this.el.addEventListener('touchstart', this._onTouchStart, this.listenerOptions);
         this.el.addEventListener('touchmove', this._onTouchMove, this.listenerOptions);
     }
@@ -1595,7 +1594,7 @@ function (_Core) {
         var targetParents = getParents(target);
         var parentSection = targetParents.find(function (candidate) {
           return _this8.sections.find(function (section) {
-            return section.element == candidate;
+            return section.el == candidate;
           });
         });
         var parentSectionOffset = 0;
