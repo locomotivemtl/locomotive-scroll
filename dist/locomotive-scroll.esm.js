@@ -1,4 +1,4 @@
-/* locomotive-scroll v3.0.7 | MIT License | https://github.com/locomotivemtl/locomotive-scroll */
+/* locomotive-scroll v3.0.8 | MIT License | https://github.com/locomotivemtl/locomotive-scroll */
 function _classCallCheck(instance, Constructor) {
   if (!(instance instanceof Constructor)) {
     throw new TypeError("Cannot call a class as a function");
@@ -943,7 +943,7 @@ function (_Core) {
       }
 
       if (target) {
-        offset = target.getBoundingClientRect().top - offset;
+        offset = target.getBoundingClientRect().top + offset;
       }
 
       offset += this.instance.scroll.y;

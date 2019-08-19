@@ -118,7 +118,7 @@ export default class extends Core {
         }
 
         if (target) {
-            offset = target.getBoundingClientRect().top - offset;
+            offset = target.getBoundingClientRect().top + offset;
         }
         offset += this.instance.scroll.y;
 

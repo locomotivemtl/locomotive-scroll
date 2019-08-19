@@ -1,4 +1,4 @@
-/* locomotive-scroll v3.0.7 | MIT License | https://github.com/locomotivemtl/locomotive-scroll */
+/* locomotive-scroll v3.0.8 | MIT License | https://github.com/locomotivemtl/locomotive-scroll */
 (function (global, factory) {
   typeof exports === 'object' && typeof module !== 'undefined' ? module.exports = factory() :
   typeof define === 'function' && define.amd ? define(factory) :
@@ -949,7 +949,7 @@
         }
 
         if (target) {
-          offset = target.getBoundingClientRect().top - offset;
+          offset = target.getBoundingClientRect().top + offset;
         }
 
         offset += this.instance.scroll.y;
