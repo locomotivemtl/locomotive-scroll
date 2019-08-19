@@ -1,10 +1,15 @@
 import Core from './Core';
+import smoothscroll from 'smoothscroll-polyfill';
 
 export default class extends Core {
     constructor(options = {}) {
         super(options);
 
         window.addEventListener('scroll', this.checkScroll, false);
+
+        // add behavior polyfill for safari
+        smoothscroll.polyfill();
+
     }
 
     init() {
@@ -97,18 +102,13 @@ export default class extends Core {
     scrollTo(targetOption, offsetOption) {
         let target;
         let offset = offsetOption ? parseInt(offsetOption) : 0;
-        console.log(offset);
 
         if(typeof targetOption === 'string') {
 
             if(targetOption === 'top') {
                 target = this.html;
             } else if(targetOption === 'bottom') {
-                offset = document.offsetHeight;
-
-                this.html.scrollIntoView({ behavior: 'smooth', block: 'end', inline: 'nearest'});
-
-                return;
+                offset = this.html.offsetHeight - window.innerHeight;
             } else {
                 target = document.querySelectorAll(targetOption)[0];
             }
@@ -120,11 +120,12 @@ export default class extends Core {
         if (target) {
             offset = target.getBoundingClientRect().top - offset;
         }
+        offset += this.instance.scroll.y;
 
         window.scrollTo({
             top: offset,
             behavior: 'smooth'
-        })
+        });
     }
 
     update() {
