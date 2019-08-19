@@ -1,4 +1,4 @@
-/* locomotive-scroll v3.0.5 | MIT License | https://github.com/locomotivemtl/locomotive-scroll */
+/* locomotive-scroll v3.0.6 | MIT License | https://github.com/locomotivemtl/locomotive-scroll */
 (function (global, factory) {
   typeof exports === 'object' && typeof module !== 'undefined' ? module.exports = factory() :
   typeof define === 'function' && define.amd ? define(factory) :
@@ -494,6 +494,7 @@
       value: function scrollTo(targetOption, offsetOption) {
         var target;
         var offset = offsetOption ? parseInt(offsetOption) : 0;
+        console.log(offset);
 
         if (typeof targetOption === 'string') {
           if (targetOption === 'top') {
@@ -502,8 +503,8 @@
             offset = document.offsetHeight;
             this.html.scrollIntoView({
               behavior: 'smooth',
-              block: "end",
-              inline: "nearest"
+              block: 'end',
+              inline: 'nearest'
             });
             return;
           } else {
@@ -514,10 +515,11 @@
         }
 
         if (target) {
-          offset = target.getBoundingClientRect().top + offset;
+          offset = target.getBoundingClientRect().top - offset;
         }
 
-        target.scrollIntoView({
+        window.scrollTo({
+          top: offset,
           behavior: 'smooth'
         });
       }

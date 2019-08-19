@@ -1,4 +1,4 @@
-/* locomotive-scroll v3.0.5 | MIT License | https://github.com/locomotivemtl/locomotive-scroll */
+/* locomotive-scroll v3.0.6 | MIT License | https://github.com/locomotivemtl/locomotive-scroll */
 function _classCallCheck(instance, Constructor) {
   if (!(instance instanceof Constructor)) {
     throw new TypeError("Cannot call a class as a function");
@@ -488,6 +488,7 @@ function (_Core) {
     value: function scrollTo(targetOption, offsetOption) {
       var target;
       var offset = offsetOption ? parseInt(offsetOption) : 0;
+      console.log(offset);
 
       if (typeof targetOption === 'string') {
         if (targetOption === 'top') {
@@ -496,8 +497,8 @@ function (_Core) {
           offset = document.offsetHeight;
           this.html.scrollIntoView({
             behavior: 'smooth',
-            block: "end",
-            inline: "nearest"
+            block: 'end',
+            inline: 'nearest'
           });
           return;
         } else {
@@ -508,10 +509,11 @@ function (_Core) {
       }
 
       if (target) {
-        offset = target.getBoundingClientRect().top + offset;
+        offset = target.getBoundingClientRect().top - offset;
       }
 
-      target.scrollIntoView({
+      window.scrollTo({
+        top: offset,
         behavior: 'smooth'
       });
     }

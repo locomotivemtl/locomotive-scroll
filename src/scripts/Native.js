@@ -97,6 +97,7 @@ export default class extends Core {
     scrollTo(targetOption, offsetOption) {
         let target;
         let offset = offsetOption ? parseInt(offsetOption) : 0;
+        console.log(offset);
 
         if(typeof targetOption === 'string') {
 
@@ -104,10 +105,10 @@ export default class extends Core {
                 target = this.html;
             } else if(targetOption === 'bottom') {
                 offset = document.offsetHeight;
-                this.html.scrollIntoView({ behavior: 'smooth', block: "end", inline: "nearest"});
+
+                this.html.scrollIntoView({ behavior: 'smooth', block: 'end', inline: 'nearest'});
 
                 return;
-
             } else {
                 target = document.querySelectorAll(targetOption)[0];
             }
@@ -117,10 +118,13 @@ export default class extends Core {
         }
 
         if (target) {
-            offset = target.getBoundingClientRect().top + offset;
+            offset = target.getBoundingClientRect().top - offset;
         }
 
-        target.scrollIntoView({ behavior: 'smooth'});
+        window.scrollTo({
+            top: offset,
+            behavior: 'smooth'
+        })
     }
 
     update() {
