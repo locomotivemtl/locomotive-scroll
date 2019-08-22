@@ -99,7 +99,9 @@ export default class extends Core {
                 setTimeout(() => {
                     document.documentElement.scrollTop = 0;
                     document.body.scrollTop = 0;
-                    this.scrollTo(document.activeElement, - window.innerHeight / 2);
+                    if(!(document.activeElement instanceof HTMLBodyElement)){
+                        this.scrollTo(document.activeElement, - window.innerHeight / 2);
+                    }
                 }, 0);
                 break;
             case keyCodes.UP:

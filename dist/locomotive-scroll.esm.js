@@ -1,4 +1,4 @@
-/* locomotive-scroll v3.1.0 | MIT License | https://github.com/locomotivemtl/locomotive-scroll */
+/* locomotive-scroll v3.1.1 | MIT License | https://github.com/locomotivemtl/locomotive-scroll */
 function _classCallCheck(instance, Constructor) {
   if (!(instance instanceof Constructor)) {
     throw new TypeError("Cannot call a class as a function");
@@ -1637,7 +1637,9 @@ function (_Core) {
             document.documentElement.scrollTop = 0;
             document.body.scrollTop = 0;
 
-            _this3.scrollTo(document.activeElement, -window.innerHeight / 2);
+            if (!(document.activeElement instanceof HTMLBodyElement)) {
+              _this3.scrollTo(document.activeElement, -window.innerHeight / 2);
+            }
           }, 0);
           break;
 
