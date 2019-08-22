@@ -4,6 +4,15 @@ import { lerp } from './utils/maths'
 import { getTranslate } from './utils/transform'
 import { getParents, queryClosestParent } from './utils/html';
 
+const keyCodes = {
+    LEFT: 37,
+    UP: 38,
+    RIGHT: 39,
+    DOWN: 40,
+    SPACE: 32,
+    TAB: 9
+};
+
 export default class extends Core {
     constructor(options = {}) {
         super(options);
@@ -36,7 +45,8 @@ export default class extends Core {
             el: this.el,
             mouseMultiplier: (navigator.platform.indexOf('Win') > -1) ? 1 : 0.4,
             touchMultiplier: 4,
-            firefoxMultiplier: 30
+            firefoxMultiplier: 30,
+            useKeyboard: false
         });
 
         this.vs.on((e) => {
@@ -83,14 +93,41 @@ export default class extends Core {
     }
 
     checkKey(e) {
-        if (e.keyCode == 9) {
-            setTimeout(() => {
-                document.documentElement.scrollTop = 0;
-                document.body.scrollTop = 0;
 
-                // this.scrollTo(document.activeElement);
-            }, 0);
+        switch(e.keyCode) {
+            case keyCodes.TAB:
+                setTimeout(() => {
+                    document.documentElement.scrollTop = 0;
+                    document.body.scrollTop = 0;
+                    this.scrollTo(document.activeElement, - window.innerHeight / 2);
+                }, 0);
+                break;
+            case keyCodes.UP:
+                this.instance.delta.y -= 240;
+                break;
+            case keyCodes.DOWN:
+                this.instance.delta.y += 240;
+                break;
+            case keyCodes.SPACE:
+                if(!(document.activeElement instanceof HTMLInputElement) && !(document.activeElement instanceof HTMLTextAreaElement)) {
+                    if(e.shiftKey) {
+                        this.instance.delta.y -= window.innerHeight;
+                    } else {
+                        this.instance.delta.y += window.innerHeight;
+                    }
+                }
+                break;
+            default:
+                return;
         }
+
+        if(this.instance.delta.y < 0) this.instance.delta.y = 0;
+        if(this.instance.delta.y > this.instance.limit) this.instance.delta.y = this.instance.limit;
+
+        this.isScrolling = true;
+        this.checkScroll();
+        this.html.classList.add(this.scrollingClass);
+
     }
 
     checkScroll() {

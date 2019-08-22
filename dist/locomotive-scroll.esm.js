@@ -1,4 +1,4 @@
-/* locomotive-scroll v3.0.8 | MIT License | https://github.com/locomotivemtl/locomotive-scroll */
+/* locomotive-scroll v3.1.0 | MIT License | https://github.com/locomotivemtl/locomotive-scroll */
 function _classCallCheck(instance, Constructor) {
   if (!(instance instanceof Constructor)) {
     throw new TypeError("Cannot call a class as a function");
@@ -1527,6 +1527,15 @@ function getParents(elem) {
   return parents;
 } // https://gomakethings.com/how-to-get-the-closest-parent-element-with-a-matching-selector-using-vanilla-javascript/
 
+var keyCodes$1 = {
+  LEFT: 37,
+  UP: 38,
+  RIGHT: 39,
+  DOWN: 40,
+  SPACE: 32,
+  TAB: 9
+};
+
 var _default$2 =
 /*#__PURE__*/
 function (_Core) {
@@ -1569,7 +1578,8 @@ function (_Core) {
         el: this.el,
         mouseMultiplier: navigator.platform.indexOf('Win') > -1 ? 1 : 0.4,
         touchMultiplier: 4,
-        firefoxMultiplier: 30
+        firefoxMultiplier: 30,
+        useKeyboard: false
       });
       this.vs.on(function (e) {
         if (_this2.stop) {
@@ -1619,22 +1629,56 @@ function (_Core) {
   }, {
     key: "checkKey",
     value: function checkKey(e) {
-      if (e.keyCode == 9) {
-        setTimeout(function () {
-          document.documentElement.scrollTop = 0;
-          document.body.scrollTop = 0; // this.scrollTo(document.activeElement);
-        }, 0);
+      var _this3 = this;
+
+      switch (e.keyCode) {
+        case keyCodes$1.TAB:
+          setTimeout(function () {
+            document.documentElement.scrollTop = 0;
+            document.body.scrollTop = 0;
+
+            _this3.scrollTo(document.activeElement, -window.innerHeight / 2);
+          }, 0);
+          break;
+
+        case keyCodes$1.UP:
+          this.instance.delta.y -= 240;
+          break;
+
+        case keyCodes$1.DOWN:
+          this.instance.delta.y += 240;
+          break;
+
+        case keyCodes$1.SPACE:
+          if (!(document.activeElement instanceof HTMLInputElement) && !(document.activeElement instanceof HTMLTextAreaElement)) {
+            if (e.shiftKey) {
+              this.instance.delta.y -= window.innerHeight;
+            } else {
+              this.instance.delta.y += window.innerHeight;
+            }
+          }
+
+          break;
+
+        default:
+          return;
       }
+
+      if (this.instance.delta.y < 0) this.instance.delta.y = 0;
+      if (this.instance.delta.y > this.instance.limit) this.instance.delta.y = this.instance.limit;
+      this.isScrolling = true;
+      this.checkScroll();
+      this.html.classList.add(this.scrollingClass);
     }
   }, {
     key: "checkScroll",
     value: function checkScroll() {
-      var _this3 = this;
+      var _this4 = this;
 
       if (this.isScrolling || this.isDraggingScrollbar) {
         if (!this.hasScrollTicking) {
           requestAnimationFrame(function () {
-            return _this3.checkScroll();
+            return _this4.checkScroll();
           });
           this.hasScrollTicking = true;
         }
@@ -1773,14 +1817,14 @@ function (_Core) {
   }, {
     key: "moveScrollBar",
     value: function moveScrollBar(e) {
-      var _this4 = this;
+      var _this5 = this;
 
       if (!this.isTicking && this.isDraggingScrollbar) {
         requestAnimationFrame(function () {
-          var y = e.clientY * 100 / window.innerHeight * _this4.instance.limit / 100;
+          var y = e.clientY * 100 / window.innerHeight * _this5.instance.limit / 100;
 
-          if (y > 0 && y < _this4.instance.limit) {
-            _this4.instance.delta.y = y;
+          if (y > 0 && y < _this5.instance.limit) {
+            _this5.instance.delta.y = y;
           }
         });
         this.isTicking = true;
@@ -1791,26 +1835,26 @@ function (_Core) {
   }, {
     key: "addElements",
     value: function addElements() {
-      var _this5 = this;
+      var _this6 = this;
 
       this.els = [];
       this.parallaxElements = [];
       var count = 0;
       this.sections.forEach(function (section, y) {
-        var els = _this5.sections[y].el.querySelectorAll("[data-".concat(_this5.name, "]"));
+        var els = _this6.sections[y].el.querySelectorAll("[data-".concat(_this6.name, "]"));
 
         els.forEach(function (el, i) {
-          var cl = el.dataset[_this5.name + 'Class'] || _this5["class"];
+          var cl = el.dataset[_this6.name + 'Class'] || _this6["class"];
           var top;
-          var repeat = el.dataset[_this5.name + 'Repeat'];
-          var call = el.dataset[_this5.name + 'Call'];
-          var position = el.dataset[_this5.name + 'Position'];
-          var delay = el.dataset[_this5.name + 'Delay'];
-          var direction = el.dataset[_this5.name + 'Direction'];
-          var sticky = typeof el.dataset[_this5.name + 'Sticky'] === 'string';
-          var speed = el.dataset[_this5.name + 'Speed'] ? parseFloat(el.dataset[_this5.name + 'Speed']) / 10 : false;
-          var offset = typeof el.dataset[_this5.name + 'Offset'] === 'string' ? el.dataset[_this5.name + 'Offset'].split(',') : false;
-          var target = el.dataset[_this5.name + 'Target'];
+          var repeat = el.dataset[_this6.name + 'Repeat'];
+          var call = el.dataset[_this6.name + 'Call'];
+          var position = el.dataset[_this6.name + 'Position'];
+          var delay = el.dataset[_this6.name + 'Delay'];
+          var direction = el.dataset[_this6.name + 'Direction'];
+          var sticky = typeof el.dataset[_this6.name + 'Sticky'] === 'string';
+          var speed = el.dataset[_this6.name + 'Speed'] ? parseFloat(el.dataset[_this6.name + 'Speed']) / 10 : false;
+          var offset = typeof el.dataset[_this6.name + 'Offset'] === 'string' ? el.dataset[_this6.name + 'Offset'].split(',') : false;
+          var target = el.dataset[_this6.name + 'Target'];
           var targetEl;
 
           if (target !== undefined) {
@@ -1819,10 +1863,10 @@ function (_Core) {
             targetEl = el;
           }
 
-          if (!_this5.sections[y].inView) {
-            top = targetEl.getBoundingClientRect().top - getTranslate(_this5.sections[y].el).y - getTranslate(targetEl).y;
+          if (!_this6.sections[y].inView) {
+            top = targetEl.getBoundingClientRect().top - getTranslate(_this6.sections[y].el).y - getTranslate(targetEl).y;
           } else {
-            top = targetEl.getBoundingClientRect().top + _this5.instance.scroll.y - getTranslate(targetEl).y;
+            top = targetEl.getBoundingClientRect().top + _this6.instance.scroll.y - getTranslate(targetEl).y;
           }
 
           var bottom = top + targetEl.offsetHeight;
@@ -1839,7 +1883,7 @@ function (_Core) {
           } else if (repeat != undefined) {
             repeat = true;
           } else {
-            repeat = _this5.repeat;
+            repeat = _this6.repeat;
           }
 
           var relativeOffset = [0, 0];
@@ -1847,7 +1891,7 @@ function (_Core) {
           if (offset) {
             for (var i = 0; i < offset.length; i++) {
               if (offset[i].includes('%')) {
-                relativeOffset[i] = parseInt(offset[i].replace('%', '') * _this5.windowHeight / 100);
+                relativeOffset[i] = parseInt(offset[i].replace('%', '') * _this6.windowHeight / 100);
               } else {
                 relativeOffset[i] = parseInt(offset[i]);
               }
@@ -1874,10 +1918,10 @@ function (_Core) {
           };
           count++;
 
-          _this5.els.push(mappedEl);
+          _this6.els.push(mappedEl);
 
           if (speed !== false || sticky) {
-            _this5.parallaxElements.push(mappedEl);
+            _this6.parallaxElements.push(mappedEl);
           }
         });
       });
@@ -1885,7 +1929,7 @@ function (_Core) {
   }, {
     key: "addSections",
     value: function addSections() {
-      var _this6 = this;
+      var _this7 = this;
 
       this.sections = [];
       var sections = this.el.querySelectorAll("[data-".concat(this.name, "-section]"));
@@ -1897,10 +1941,10 @@ function (_Core) {
       sections.forEach(function (section, i) {
         var offset = section.getBoundingClientRect().top - window.innerHeight * 1.5 - getTranslate(section).y;
         var limit = offset + section.getBoundingClientRect().height + window.innerHeight * 2;
-        var persistent = typeof section.dataset[_this6.name + 'Persistent'] === 'string';
+        var persistent = typeof section.dataset[_this7.name + 'Persistent'] === 'string';
         var inView = false;
 
-        if (_this6.instance.scroll.y >= offset && _this6.instance.scroll.y <= limit) {
+        if (_this7.instance.scroll.y >= offset && _this7.instance.scroll.y <= limit) {
           inView = true;
         }
 
@@ -1911,7 +1955,7 @@ function (_Core) {
           inView: inView,
           persistent: persistent
         };
-        _this6.sections[i] = mappedSection;
+        _this7.sections[i] = mappedSection;
       });
     }
   }, {
@@ -1935,7 +1979,7 @@ function (_Core) {
   }, {
     key: "transformElements",
     value: function transformElements(isForced) {
-      var _this7 = this;
+      var _this8 = this;
 
       var scrollBottom = this.instance.scroll.y + this.windowHeight;
       var scrollMiddle = this.instance.scroll.y + this.windowMiddle;
@@ -1949,11 +1993,11 @@ function (_Core) {
         if (current.inView) {
           switch (current.position) {
             case 'top':
-              transformDistance = _this7.instance.scroll.y * -current.speed;
+              transformDistance = _this8.instance.scroll.y * -current.speed;
               break;
 
             case 'bottom':
-              transformDistance = (_this7.instance.limit - scrollBottom + _this7.windowHeight) * current.speed;
+              transformDistance = (_this8.instance.limit - scrollBottom + _this8.windowHeight) * current.speed;
               break;
 
             default:
@@ -1964,11 +2008,11 @@ function (_Core) {
 
         if (current.sticky) {
           if (current.inView) {
-            transformDistance = _this7.instance.scroll.y - current.top + window.innerHeight;
+            transformDistance = _this8.instance.scroll.y - current.top + window.innerHeight;
           } else {
-            if (_this7.instance.scroll.y < current.top - window.innerHeight && _this7.instance.scroll.y < current.top - window.innerHeight / 2) {
+            if (_this8.instance.scroll.y < current.top - window.innerHeight && _this8.instance.scroll.y < current.top - window.innerHeight / 2) {
               transformDistance = 0;
-            } else if (_this7.instance.scroll.y > current.bottom && _this7.instance.scroll.y > current.bottom + 100) {
+            } else if (_this8.instance.scroll.y > current.bottom && _this8.instance.scroll.y > current.bottom + 100) {
               transformDistance = current.bottom - current.top + window.innerHeight;
             } else {
               transformDistance = false;
@@ -1978,9 +2022,9 @@ function (_Core) {
 
         if (transformDistance !== false) {
           if (current.direction === 'horizontal') {
-            _this7.transform(current.el, transformDistance, 0, isForced ? false : current.delay);
+            _this8.transform(current.el, transformDistance, 0, isForced ? false : current.delay);
           } else {
-            _this7.transform(current.el, 0, transformDistance, isForced ? false : current.delay);
+            _this8.transform(current.el, 0, transformDistance, isForced ? false : current.delay);
           }
         }
       });
@@ -1999,7 +2043,7 @@ function (_Core) {
   }, {
     key: "scrollTo",
     value: function scrollTo(targetOption, offsetOption) {
-      var _this8 = this;
+      var _this9 = this;
 
       var target;
       var offset = offsetOption ? parseInt(offsetOption) : 0;
@@ -2024,7 +2068,7 @@ function (_Core) {
 
         var targetParents = getParents(target);
         var parentSection = targetParents.find(function (candidate) {
-          return _this8.sections.find(function (section) {
+          return _this9.sections.find(function (section) {
             return section.el == candidate;
           });
         });
