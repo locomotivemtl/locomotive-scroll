@@ -34,21 +34,6 @@ import LocomotiveScroll from '../../../src/locomotive-scroll';
 
             document.documentElement.setAttribute('data-direction', instance.direction)
 
-            // if(instance.scroll.y >= instance.limit - 10) {
-            //     document.documentElement.classList.remove('is-ready');
-            //     scroll.stop();
-            //     scroll.setScroll(0,0);
-
-            //     setTimeout(() => {
-            //         scroll.update();
-            //         document.documentElement.classList.add('is-ready');
-            //     },100)
-
-            //     setTimeout(() => {
-            //         scroll.start();
-            //     },1000);
-            // }
-
         });
 
         scroll.on('call', (value, way, obj) => {

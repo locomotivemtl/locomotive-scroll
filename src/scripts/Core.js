@@ -131,16 +131,16 @@ export default class {
         if (this.callValue.length == 1) this.callValue = this.callValue[0];
 
         const callEvent = new Event(this.namespace + 'call');
-        window.dispatchEvent(callEvent);
+        this.el.dispatchEvent(callEvent);
     }
 
     dispatchScroll() {
         const scrollEvent = new Event(this.namespace + 'scroll');
-        window.dispatchEvent(scrollEvent);
+        this.el.dispatchEvent(scrollEvent);
     }
 
     setEvents(event, func) {
-        window.addEventListener(this.namespace + event, () => {
+        this.el.addEventListener(this.namespace + event, () => {
             switch (event) {
                 case 'scroll':
                     return func(this.instance);

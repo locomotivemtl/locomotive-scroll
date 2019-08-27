@@ -306,20 +306,20 @@ function () {
       this.callObj = current;
       if (this.callValue.length == 1) this.callValue = this.callValue[0];
       var callEvent = new Event(this.namespace + 'call');
-      window.dispatchEvent(callEvent);
+      this.el.dispatchEvent(callEvent);
     }
   }, {
     key: "dispatchScroll",
     value: function dispatchScroll() {
       var scrollEvent = new Event(this.namespace + 'scroll');
-      window.dispatchEvent(scrollEvent);
+      this.el.dispatchEvent(scrollEvent);
     }
   }, {
     key: "setEvents",
     value: function setEvents(event, func) {
       var _this3 = this;
 
-      window.addEventListener(this.namespace + event, function () {
+      this.el.addEventListener(this.namespace + event, function () {
         switch (event) {
           case 'scroll':
             return func(_this3.instance);
