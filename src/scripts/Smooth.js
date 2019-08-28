@@ -437,6 +437,10 @@ export default class extends Core {
                         transformDistance = this.instance.scroll.y * -current.speed;
                     break;
 
+                    case 'elementTop':
+                        transformDistance = (scrollBottom - current.top) * -current.speed;
+                    break;
+
                     case 'bottom':
                         transformDistance = (this.instance.limit - scrollBottom + this.windowHeight) * current.speed;
                     break;
