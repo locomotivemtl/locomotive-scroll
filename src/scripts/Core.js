@@ -147,10 +147,10 @@ export default class {
         }
 
         const list = this.listeners[event];
-              list.push(func);
+        list.push(func);
 
         if( list.length === 1 ) {
-            this.el.addEventListener(this.namespace + event, this._checkEvent, false);
+            this.el.addEventListener(this.namespace + event, this.checkEvent, false);
         }
 
         if (event === 'call') {
@@ -170,15 +170,15 @@ export default class {
         list.splice(index, 1);
 
         if( list.index === 0 ) {
-            this.el.removeEventListener(this.namespace + event, this._checkEvent, false);
+            this.el.removeEventListener(this.namespace + event, this.checkEvent, false);
         }
     }
 
     checkEvent(event) {
-        const name = event.name.replace(this.namespace, '');
-        const list = this.listeners[event];
+        const name = event.type.replace(this.namespace, '');
+        const list = this.listeners[name];
 
-        if( !list ) return;
+        if( !list || list.length === 0 ) return;
 
         list.forEach(func => {
             switch (name) {
@@ -207,7 +207,7 @@ export default class {
         window.removeEventListener('resize', this.checkResize, false);
 
         Object.keys(this.listeners).forEach(event => {
-            this.el.removeEventListener(this.namespace + event, this._checkEvent, false);
+            this.el.removeEventListener(this.namespace + event, this.checkEvent, false);
         });
         this.listeners = {};
 
