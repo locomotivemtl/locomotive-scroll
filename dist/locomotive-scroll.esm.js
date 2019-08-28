@@ -1,4 +1,4 @@
-/* locomotive-scroll v3.1.4 | MIT License | https://github.com/locomotivemtl/locomotive-scroll */
+/* locomotive-scroll v3.1.5 | MIT License | https://github.com/locomotivemtl/locomotive-scroll */
 function _classCallCheck(instance, Constructor) {
   if (!(instance instanceof Constructor)) {
     throw new TypeError("Cannot call a class as a function");
@@ -1441,8 +1441,9 @@ function (_Core) {
           var middle = (bottom - top) / 2 + top;
 
           if (sticky) {
+            var elDistance = el.getBoundingClientRect().top - top;
             top += window.innerHeight;
-            bottom = top + targetEl.offsetHeight - window.innerHeight - el.offsetHeight;
+            bottom = top + targetEl.offsetHeight - window.innerHeight - el.offsetHeight - elDistance;
             middle = (bottom - top) / 2 + top;
           }
 
