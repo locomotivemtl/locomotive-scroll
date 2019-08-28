@@ -52,6 +52,10 @@ export default class {
         this.scroll.setEvents(event, func);
     }
 
+    off(event, func) {
+        this.scroll.unsetEvents(event, func);
+    }
+
     destroy() {
         this.scroll.destroy();
     }
