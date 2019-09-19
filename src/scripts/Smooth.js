@@ -542,6 +542,7 @@ export default class extends Core {
         this.detectElements();
         this.updateScroll();
         this.transformElements(true);
+        this.reinitScrollBar();
     }
 
     startScroll() {
