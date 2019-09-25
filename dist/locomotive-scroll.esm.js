@@ -1,4 +1,4 @@
-/* locomotive-scroll v3.1.5 | MIT License | https://github.com/locomotivemtl/locomotive-scroll */
+/* locomotive-scroll v3.1.6 | MIT License | https://github.com/locomotivemtl/locomotive-scroll */
 function _classCallCheck(instance, Constructor) {
   if (!(instance instanceof Constructor)) {
     throw new TypeError("Cannot call a class as a function");
@@ -247,17 +247,20 @@ function () {
       var scrollTop = this.instance.scroll.y;
       var scrollBottom = scrollTop + this.windowHeight;
       this.els.forEach(function (el, i) {
-        if (!el.inView || hasCallEventSet) {
+        if (el && (!el.inView || hasCallEventSet)) {
           if (scrollBottom >= el.top && scrollTop < el.bottom) {
             _this2.setInView(el, i);
           }
         }
 
-        if (el.inView) {
+        if (el && el.inView) {
           if (scrollBottom < el.top || scrollTop > el.bottom) {
             _this2.setOutOfView(el, i);
           }
         }
+      });
+      this.els = this.els.filter(function (current, i) {
+        return current !== null;
       });
       this.hasScrollTicking = false;
     }
@@ -277,7 +280,7 @@ function () {
 
       if (!current.repeat && !current.speed && !current.sticky) {
         if (!current.call || current.call && this.hasCallEventSet) {
-          this.els.splice(i, 1);
+          this.els[i] = null;
         }
       }
     }
@@ -873,8 +876,7 @@ function VirtualScroll(options) {
         preventTouch: false,
         unpreventTouchClass: 'vs-touchmove-allowed',
         limitInertia: false,
-        useKeyboard: true,
-        useTouch: true
+        useKeyboard: true
     }, options);
 
     if (this.options.limitInertia) this._lethargy = new Lethargy();
@@ -1001,7 +1003,7 @@ VirtualScroll.prototype._bind = function() {
     if(support.hasWheelEvent) this.el.addEventListener('wheel', this._onWheel, this.listenerOptions);
     if(support.hasMouseWheelEvent) this.el.addEventListener('mousewheel', this._onMouseWheel, this.listenerOptions);
 
-    if(support.hasTouch && this.options.useTouch) {
+    if(support.hasTouch) {
         this.el.addEventListener('touchstart', this._onTouchStart, this.listenerOptions);
         this.el.addEventListener('touchmove', this._onTouchMove, this.listenerOptions);
     }
