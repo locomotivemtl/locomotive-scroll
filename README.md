@@ -1,5 +1,5 @@
 <p align="center">
-    <a href="https://github.com/locomotivemtl/locomotive-boilerplate">
+    <a href="https://github.com/locomotivemtl/locomotive-scroll">
         <img src="https://user-images.githubusercontent.com/4596862/58807621-67aeec00-85e6-11e9-8e3a-3fe4123ee76c.png" height="140">
     </a>
 </p>

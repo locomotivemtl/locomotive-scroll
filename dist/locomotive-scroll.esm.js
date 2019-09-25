@@ -1,4 +1,4 @@
-/* locomotive-scroll v3.1.6 | MIT License | https://github.com/locomotivemtl/locomotive-scroll */
+/* locomotive-scroll v3.1.7 | MIT License | https://github.com/locomotivemtl/locomotive-scroll */
 function _classCallCheck(instance, Constructor) {
   if (!(instance instanceof Constructor)) {
     throw new TypeError("Cannot call a class as a function");
@@ -402,9 +402,9 @@ function (_Core) {
 
       _get(_getPrototypeOf(_default.prototype), "checkScroll", this).call(this);
 
-      if (this.els.length) {
-        this.instance.scroll.y = window.scrollY;
+      this.instance.scroll.y = window.scrollY;
 
+      if (this.els.length) {
         if (!this.hasScrollTicking) {
           requestAnimationFrame(function () {
             _this2.detectElements();
