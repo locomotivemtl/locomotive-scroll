@@ -53,7 +53,7 @@ export default class {
         this.scrollToEls = this.el.querySelectorAll(`[data-${this.name}-to]`);
         this.setScrollTo = this.setScrollTo.bind(this);
 
-        this.scrollToEls.forEach((el) => {
+        Array.from(this.scrollToEls).forEach((el) => {
             el.addEventListener('click', this.setScrollTo, false);
         });
     }
@@ -73,7 +73,7 @@ export default class {
         const scrollTop = this.instance.scroll.y;
         const scrollBottom = scrollTop + this.windowHeight;
 
-        this.els.forEach((el, i) => {
+        Array.from(this.els).forEach((el, i) => {
             if (el && (!el.inView || hasCallEventSet)) {
                 if ((scrollBottom >= el.top) && (scrollTop < el.bottom)) {
                     this.setInView(el, i);
@@ -175,7 +175,7 @@ export default class {
     destroy() {
         window.removeEventListener('resize', this.checkResize, false);
 
-        this.scrollToEls.forEach((el) => {
+        Array.from(this.scrollToEls).forEach((el) => {
             el.removeEventListener('click', this.setScrollTo, false);
         });
     }

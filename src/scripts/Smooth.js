@@ -286,7 +286,7 @@ export default class extends Core {
         this.sections.forEach((section, y) => {
             const els = this.sections[y].el.querySelectorAll(`[data-${this.name}]`);
 
-            els.forEach((el, i) => {
+            Array.from(els).forEach((el, i) => {
                 let cl = el.dataset[this.name + 'Class'] || this.class;
                 let top;
                 let repeat = el.dataset[this.name + 'Repeat'];
@@ -381,7 +381,7 @@ export default class extends Core {
            sections = [this.el];
         }
 
-        sections.forEach((section, i) => {
+        Array.from(sections).forEach((section, i) => {
             let offset = section.getBoundingClientRect().top - (window.innerHeight * 1.5) - getTranslate(section).y;
             let limit = offset + section.getBoundingClientRect().height + (window.innerHeight * 2);
             let persistent = typeof section.dataset[this.name + 'Persistent'] === 'string';

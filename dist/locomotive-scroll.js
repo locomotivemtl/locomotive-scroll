@@ -232,7 +232,7 @@
 
         this.scrollToEls = this.el.querySelectorAll("[data-".concat(this.name, "-to]"));
         this.setScrollTo = this.setScrollTo.bind(this);
-        this.scrollToEls.forEach(function (el) {
+        Array.from(this.scrollToEls).forEach(function (el) {
           el.addEventListener('click', _this.setScrollTo, false);
         });
       }
@@ -252,7 +252,7 @@
 
         var scrollTop = this.instance.scroll.y;
         var scrollBottom = scrollTop + this.windowHeight;
-        this.els.forEach(function (el, i) {
+        Array.from(this.els).forEach(function (el, i) {
           if (el && (!el.inView || hasCallEventSet)) {
             if (scrollBottom >= el.top && scrollTop < el.bottom) {
               _this2.setInView(el, i);
@@ -366,7 +366,7 @@
         var _this4 = this;
 
         window.removeEventListener('resize', this.checkResize, false);
-        this.scrollToEls.forEach(function (el) {
+        Array.from(this.scrollToEls).forEach(function (el) {
           el.removeEventListener('click', _this4.setScrollTo, false);
         });
       }
@@ -441,7 +441,7 @@
         var _this4 = this;
 
         var els = this.el.querySelectorAll('[data-' + this.name + ']');
-        els.forEach(function (el, i) {
+        Array.from(els).forEach(function (el, i) {
           var cl = el.dataset[_this4.name + 'Class'] || _this4["class"];
 
           var top = el.getBoundingClientRect().top + _this4.instance.scroll.y;
@@ -476,7 +476,7 @@
       value: function updateElements() {
         var _this5 = this;
 
-        this.els.forEach(function (el, i) {
+        Array.from(this.els).forEach(function (el, i) {
           var top = el.el.getBoundingClientRect().top + _this5.instance.scroll.y;
 
           var bottom = top + el.el.offsetHeight;
@@ -882,7 +882,8 @@
           preventTouch: false,
           unpreventTouchClass: 'vs-touchmove-allowed',
           limitInertia: false,
-          useKeyboard: true
+          useKeyboard: true,
+          useTouch: true
       }, options);
 
       if (this.options.limitInertia) this._lethargy = new Lethargy();
@@ -1009,7 +1010,7 @@
       if(support.hasWheelEvent) this.el.addEventListener('wheel', this._onWheel, this.listenerOptions);
       if(support.hasMouseWheelEvent) this.el.addEventListener('mousewheel', this._onMouseWheel, this.listenerOptions);
 
-      if(support.hasTouch) {
+      if(support.hasTouch && this.options.useTouch) {
           this.el.addEventListener('touchstart', this._onTouchStart, this.listenerOptions);
           this.el.addEventListener('touchmove', this._onTouchMove, this.listenerOptions);
       }
@@ -1419,7 +1420,7 @@
         this.sections.forEach(function (section, y) {
           var els = _this6.sections[y].el.querySelectorAll("[data-".concat(_this6.name, "]"));
 
-          els.forEach(function (el, i) {
+          Array.from(els).forEach(function (el, i) {
             var cl = el.dataset[_this6.name + 'Class'] || _this6["class"];
             var top;
             var repeat = el.dataset[_this6.name + 'Repeat'];
@@ -1515,7 +1516,7 @@
           sections = [this.el];
         }
 
-        sections.forEach(function (section, i) {
+        Array.from(sections).forEach(function (section, i) {
           var offset = section.getBoundingClientRect().top - window.innerHeight * 1.5 - getTranslate(section).y;
           var limit = offset + section.getBoundingClientRect().height + window.innerHeight * 2;
           var persistent = typeof section.dataset[_this7.name + 'Persistent'] === 'string';

@@ -47,7 +47,7 @@ export default class extends Core {
     addElements() {
         const els = this.el.querySelectorAll('[data-'+this.name+']');
 
-        els.forEach((el, i) => {
+        Array.from(els).forEach((el, i) => {
             let cl = el.dataset[this.name + 'Class'] || this.class;
             let top = el.getBoundingClientRect().top + this.instance.scroll.y;
             let bottom = top + el.offsetHeight;
@@ -77,7 +77,7 @@ export default class extends Core {
     }
 
     updateElements() {
-        this.els.forEach((el, i) => {
+        Array.from(this.els).forEach((el, i) => {
             const top = el.el.getBoundingClientRect().top + this.instance.scroll.y;
             const bottom = top + el.el.offsetHeight;
 
