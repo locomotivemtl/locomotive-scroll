@@ -11,6 +11,8 @@ export default class {
     }
 
     init() {
+		if (typeof window === 'undefined') return;
+		
         if (!this.smoothMobile) {
             this.isMobile = (/Android|iPhone|iPad|iPod|BlackBerry|IEMobile|Opera Mini/i.test(navigator.userAgent));
         }
