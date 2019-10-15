@@ -46,7 +46,8 @@ export default class extends Core {
             mouseMultiplier: (navigator.platform.indexOf('Win') > -1) ? 1 : 0.4,
             touchMultiplier: 4,
             firefoxMultiplier: 30,
-            useKeyboard: false
+            useKeyboard: false,
+            passive: true
         });
 
         this.vs.on((e) => {
