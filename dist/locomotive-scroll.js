@@ -1,4 +1,4 @@
-/* locomotive-scroll v3.1.7 | MIT License | https://github.com/locomotivemtl/locomotive-scroll */
+/* locomotive-scroll v3.1.8 | MIT License | https://github.com/locomotivemtl/locomotive-scroll */
 (function (global, factory) {
   typeof exports === 'object' && typeof module !== 'undefined' ? module.exports = factory() :
   typeof define === 'function' && define.amd ? define(factory) :
@@ -758,7 +758,6 @@
           this.lastDownDeltas.shift();
           return this.isInertia(-1);
         }
-        return false;
       };
 
       Lethargy.prototype.isInertia = function(direction) {
