@@ -88,6 +88,7 @@ scroll.on('call', (func) => {
 | `draggingClass` | `string` | `has-scroll-dragging` | Is dragging class. |
 | `smoothClass` | `string` | `has-scroll-smooth` | Has smooth scrolling class. |
 | `scrollbarClass` | `string` | `c-scrollbar` | Scrollbar element class. |
+| `firefoxMultiplier` | `number` | `50` | Boost scrolling speed on Firefox. Only works on Windows. ([Virtual Scroll] parameter) |
 
 ## Element attributes
 | Attribute | Values | Description |

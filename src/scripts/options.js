@@ -15,5 +15,6 @@ export const defaults = {
     smoothClass: 'has-scroll-smooth',
     initClass: 'has-scroll-init',
     getSpeed: false,
-    getDirection: false
+    getDirection: false,
+    firefoxMultiplier: 50
 };

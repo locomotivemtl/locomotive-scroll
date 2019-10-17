@@ -164,7 +164,8 @@ var defaults = {
   smoothClass: 'has-scroll-smooth',
   initClass: 'has-scroll-init',
   getSpeed: false,
-  getDirection: false
+  getDirection: false,
+  firefoxMultiplier: 50
 };
 
 var _default =
@@ -1146,7 +1147,7 @@ function (_Core) {
         el: this.el,
         mouseMultiplier: navigator.platform.indexOf('Win') > -1 ? 1 : 0.4,
         touchMultiplier: 4,
-        firefoxMultiplier: 30,
+        firefoxMultiplier: this.firefoxMultiplier,
         useKeyboard: false,
         passive: true
       });
