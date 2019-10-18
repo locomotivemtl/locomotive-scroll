@@ -1,5 +1,5 @@
 <p align="center">
-    <a href="https://github.com/locomotivemtl/locomotive-boilerplate">
+    <a href="https://github.com/locomotivemtl/locomotive-scroll">
         <img src="https://user-images.githubusercontent.com/4596862/58807621-67aeec00-85e6-11e9-8e3a-3fe4123ee76c.png" height="140">
     </a>
 </p>
@@ -88,6 +88,7 @@ scroll.on('call', (func) => {
 | `draggingClass` | `string` | `has-scroll-dragging` | Is dragging class. |
 | `smoothClass` | `string` | `has-scroll-smooth` | Has smooth scrolling class. |
 | `scrollbarClass` | `string` | `c-scrollbar` | Scrollbar element class. |
+| `firefoxMultiplier` | `number` | `50` | Boost scrolling speed on Firefox. Only works on Windows. ([Virtual Scroll] parameter) |
 
 ## Element attributes
 | Attribute | Values | Description |
@@ -131,3 +132,14 @@ scroll.on('call', (func) => {
 [instance events]: #instance-events
 [Virtual Scroll]: https://github.com/ayamflow/virtual-scroll
 [modularScroll]:  https://github.com/modularorg/modularscroll
+
+## Browser support
+Works on most modern browsers. Chrome, Firefox, Safari, Edge...
+
+To get IE 11 support, you need polyfills.
+You can use your own or include these before this script.
+
+```html
+<script nomodule src="https://cdnjs.cloudflare.com/ajax/libs/babel-polyfill/7.6.0/polyfill.min.js" crossorigin="anonymous"></script>
+<script nomodule src="https://polyfill.io/v3/polyfill.min.js?features=Object.assign%2CElement.prototype.append%2CNodeList.prototype.forEach%2CCustomEvent" crossorigin="anonymous"></script>
+```

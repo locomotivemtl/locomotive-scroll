@@ -1,4 +1,4 @@
-/* locomotive-scroll v3.1.5 | MIT License | https://github.com/locomotivemtl/locomotive-scroll */
+/* locomotive-scroll v3.1.9 | MIT License | https://github.com/locomotivemtl/locomotive-scroll */
 (function (global, factory) {
   typeof exports === 'object' && typeof module !== 'undefined' ? module.exports = factory() :
   typeof define === 'function' && define.amd ? define(factory) :
@@ -170,7 +170,8 @@
     smoothClass: 'has-scroll-smooth',
     initClass: 'has-scroll-init',
     getSpeed: false,
-    getDirection: false
+    getDirection: false,
+    firefoxMultiplier: 50
   };
 
   var _default =
@@ -253,17 +254,20 @@
         var scrollTop = this.instance.scroll.y;
         var scrollBottom = scrollTop + this.windowHeight;
         this.els.forEach(function (el, i) {
-          if (!el.inView || hasCallEventSet) {
+          if (el && (!el.inView || hasCallEventSet)) {
             if (scrollBottom >= el.top && scrollTop < el.bottom) {
               _this2.setInView(el, i);
             }
           }
 
-          if (el.inView) {
+          if (el && el.inView) {
             if (scrollBottom < el.top || scrollTop > el.bottom) {
               _this2.setOutOfView(el, i);
             }
           }
+        });
+        this.els = this.els.filter(function (current, i) {
+          return current !== null;
         });
         this.hasScrollTicking = false;
       }
@@ -283,7 +287,7 @@
 
         if (!current.repeat && !current.speed && !current.sticky) {
           if (!current.call || current.call && this.hasCallEventSet) {
-            this.els.splice(i, 1);
+            this.els[i] = null;
           }
         }
       }
@@ -405,9 +409,9 @@
 
         _get(_getPrototypeOf(_default.prototype), "checkScroll", this).call(this);
 
-        if (this.els.length) {
-          this.instance.scroll.y = window.scrollY;
+        this.instance.scroll.y = window.scrollY;
 
+        if (this.els.length) {
           if (!this.hasScrollTicking) {
             requestAnimationFrame(function () {
               _this2.detectElements();
@@ -755,7 +759,6 @@
           this.lastDownDeltas.shift();
           return this.isInertia(-1);
         }
-        return false;
       };
 
       Lethargy.prototype.isInertia = function(direction) {
@@ -1150,8 +1153,9 @@
           el: this.el,
           mouseMultiplier: navigator.platform.indexOf('Win') > -1 ? 1 : 0.4,
           touchMultiplier: 4,
-          firefoxMultiplier: 30,
-          useKeyboard: false
+          firefoxMultiplier: this.firefoxMultiplier,
+          useKeyboard: false,
+          passive: true
         });
         this.vs.on(function (e) {
           if (_this2.stop) {
