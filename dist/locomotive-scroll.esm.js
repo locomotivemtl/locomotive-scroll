@@ -1,4 +1,4 @@
-/* locomotive-scroll v3.1.9 | MIT License | https://github.com/locomotivemtl/locomotive-scroll */
+/* locomotive-scroll v3.2.0 | MIT License | https://github.com/locomotivemtl/locomotive-scroll */
 function _classCallCheck(instance, Constructor) {
   if (!(instance instanceof Constructor)) {
     throw new TypeError("Cannot call a class as a function");
@@ -435,7 +435,9 @@ function (_Core) {
     value: function addElements() {
       var _this4 = this;
 
+      this.els = [];
       var els = this.el.querySelectorAll('[data-' + this.name + ']');
+      var count;
       els.forEach(function (el, i) {
         var cl = el.dataset[_this4.name + 'Class'] || _this4["class"];
 
@@ -456,6 +458,7 @@ function (_Core) {
 
         _this4.els[i] = {
           el: el,
+          id: count,
           "class": cl,
           top: top + offset,
           bottom: bottom,
@@ -464,6 +467,7 @@ function (_Core) {
           inView: false,
           call: call
         };
+        count++;
       });
     }
   }, {
@@ -518,6 +522,7 @@ function (_Core) {
   }, {
     key: "update",
     value: function update() {
+      this.addElements();
       this.updateElements();
     }
   }, {
@@ -753,6 +758,7 @@ var lethargy = createCommonjsModule(function (module, exports) {
         this.lastDownDeltas.shift();
         return this.isInertia(-1);
       }
+      return false;
     };
 
     Lethargy.prototype.isInertia = function(direction) {
@@ -876,8 +882,7 @@ function VirtualScroll(options) {
         preventTouch: false,
         unpreventTouchClass: 'vs-touchmove-allowed',
         limitInertia: false,
-        useKeyboard: true,
-        useTouch: true
+        useKeyboard: true
     }, options);
 
     if (this.options.limitInertia) this._lethargy = new Lethargy();
@@ -1004,7 +1009,7 @@ VirtualScroll.prototype._bind = function() {
     if(support.hasWheelEvent) this.el.addEventListener('wheel', this._onWheel, this.listenerOptions);
     if(support.hasMouseWheelEvent) this.el.addEventListener('mousewheel', this._onMouseWheel, this.listenerOptions);
 
-    if(support.hasTouch && this.options.useTouch) {
+    if(support.hasTouch) {
         this.el.addEventListener('touchstart', this._onTouchStart, this.listenerOptions);
         this.el.addEventListener('touchmove', this._onTouchMove, this.listenerOptions);
     }

@@ -45,7 +45,10 @@ export default class extends Core {
     }
 
     addElements() {
+        this.els = [];
         const els = this.el.querySelectorAll('[data-'+this.name+']');
+
+        let count;
 
         els.forEach((el, i) => {
             let cl = el.dataset[this.name + 'Class'] || this.class;
@@ -65,6 +68,7 @@ export default class extends Core {
 
             this.els[i] = {
                 el: el,
+                id: count,
                 class: cl,
                 top: top + offset,
                 bottom: bottom,
@@ -73,6 +77,8 @@ export default class extends Core {
                 inView: false,
                 call: call
             }
+
+            count++;
         });
     }
 
@@ -124,6 +130,7 @@ export default class extends Core {
     }
 
     update() {
+        this.addElements();
         this.updateElements();
     }
 
