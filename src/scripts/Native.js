@@ -48,8 +48,6 @@ export default class extends Core {
         this.els = [];
         const els = this.el.querySelectorAll('[data-'+this.name+']');
 
-        let count;
-
         els.forEach((el, i) => {
             let cl = el.dataset[this.name + 'Class'] || this.class;
             let top = el.getBoundingClientRect().top + this.instance.scroll.y;
@@ -66,9 +64,9 @@ export default class extends Core {
                 repeat = this.repeat;
             }
 
-            this.els[i] = {
+            const mappedEl = {
                 el: el,
-                id: count,
+                id: i,
                 class: cl,
                 top: top + offset,
                 bottom: bottom,
@@ -78,7 +76,7 @@ export default class extends Core {
                 call: call
             }
 
-            count++;
+            this.els.push(mappedEl);
         });
     }
 
@@ -131,7 +129,7 @@ export default class extends Core {
 
     update() {
         this.addElements();
-        this.updateElements();
+        this.detectElements();
     }
 
     destroy() {

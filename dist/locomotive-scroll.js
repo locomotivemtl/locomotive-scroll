@@ -1,4 +1,4 @@
-/* locomotive-scroll v3.2.0 | MIT License | https://github.com/locomotivemtl/locomotive-scroll */
+/* locomotive-scroll v3.2.1 | MIT License | https://github.com/locomotivemtl/locomotive-scroll */
 (function (global, factory) {
   typeof exports === 'object' && typeof module !== 'undefined' ? module.exports = factory() :
   typeof define === 'function' && define.amd ? define(factory) :
@@ -443,7 +443,6 @@
 
         this.els = [];
         var els = this.el.querySelectorAll('[data-' + this.name + ']');
-        var count;
         els.forEach(function (el, i) {
           var cl = el.dataset[_this4.name + 'Class'] || _this4["class"];
 
@@ -462,9 +461,9 @@
             repeat = _this4.repeat;
           }
 
-          _this4.els[i] = {
+          var mappedEl = {
             el: el,
-            id: count,
+            id: i,
             "class": cl,
             top: top + offset,
             bottom: bottom,
@@ -473,7 +472,8 @@
             inView: false,
             call: call
           };
-          count++;
+
+          _this4.els.push(mappedEl);
         });
       }
     }, {
@@ -529,7 +529,7 @@
       key: "update",
       value: function update() {
         this.addElements();
-        this.updateElements();
+        this.detectElements();
       }
     }, {
       key: "destroy",
@@ -1422,7 +1422,6 @@
 
         this.els = [];
         this.parallaxElements = [];
-        var count = 0;
         this.sections.forEach(function (section, y) {
           var els = _this6.sections[y].el.querySelectorAll("[data-".concat(_this6.name, "]"));
 
@@ -1484,7 +1483,7 @@
 
             var mappedEl = {
               el: el,
-              id: count,
+              id: i,
               "class": cl,
               top: top + relativeOffset[0],
               middle: middle,
@@ -1500,7 +1499,6 @@
               direction: direction,
               sticky: sticky
             };
-            count++;
 
             _this6.els.push(mappedEl);
 
@@ -1548,12 +1546,12 @@
         var transform;
 
         if (!delay) {
-          transform = "matrix(1,0,0,1,".concat(x, ",").concat(y, ")");
+          transform = "matrix3d(1,0,0.00,0,0.00,1,0.00,0,0,0,1,0,".concat(x, ",").concat(y, ",0,1)");
         } else {
           var start = getTranslate(element);
           var lerpX = lerp(start.x, x, delay);
           var lerpY = lerp(start.y, y, delay);
-          transform = "matrix(1,0,0,1,".concat(lerpX, ",").concat(lerpY, ")");
+          transform = "matrix3d(1,0,0.00,0,0.00,1,0.00,0,0,0,1,0,".concat(lerpX, ",").concat(lerpY, ",0,1)");
         }
 
         element.style.webkitTransform = transform;

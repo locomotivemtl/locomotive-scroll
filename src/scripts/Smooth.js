@@ -282,7 +282,6 @@ export default class extends Core {
     addElements() {
         this.els = []
         this.parallaxElements = []
-        let count = 0;
 
         this.sections.forEach((section, y) => {
             const els = this.sections[y].el.querySelectorAll(`[data-${this.name}]`);
@@ -346,7 +345,7 @@ export default class extends Core {
 
                 const mappedEl = {
                     el,
-                    id: count,
+                    id: i,
                     class: cl,
                     top: top + relativeOffset[0],
                     middle,
@@ -363,7 +362,6 @@ export default class extends Core {
                     sticky
                 }
 
-                count++;
                 this.els.push(mappedEl);
 
                 if(speed !== false || sticky) {
@@ -408,14 +406,13 @@ export default class extends Core {
         let transform;
 
         if(!delay) {
-            transform = `matrix(1,0,0,1,${x},${y})`
-
+            transform = `matrix3d(1,0,0.00,0,0.00,1,0.00,0,0,0,1,0,${x},${y},0,1)`;
         } else {
             let start = getTranslate(element);
             let lerpX = lerp(start.x, x, delay);
             let lerpY = lerp(start.y, y, delay);
 
-            transform = `matrix(1,0,0,1,${lerpX},${lerpY})`
+            transform = `matrix3d(1,0,0.00,0,0.00,1,0.00,0,0,0,1,0,${lerpX},${lerpY},0,1)`;
         }
 
         element.style.webkitTransform = transform;
