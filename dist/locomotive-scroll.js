@@ -163,6 +163,7 @@
     smoothMobile: false,
     direction: 'vertical',
     inertia: 1,
+    touchMultiplier: 4,
     "class": 'is-inview',
     scrollbarClass: 'c-scrollbar',
     scrollingClass: 'has-scroll-scrolling',
@@ -764,7 +765,6 @@
           this.lastDownDeltas.shift();
           return this.isInertia(-1);
         }
-        return false;
       };
 
       Lethargy.prototype.isInertia = function(direction) {
@@ -888,7 +888,8 @@
           preventTouch: false,
           unpreventTouchClass: 'vs-touchmove-allowed',
           limitInertia: false,
-          useKeyboard: true
+          useKeyboard: true,
+          useTouch: true
       }, options);
 
       if (this.options.limitInertia) this._lethargy = new Lethargy();
@@ -1015,7 +1016,7 @@
       if(support.hasWheelEvent) this.el.addEventListener('wheel', this._onWheel, this.listenerOptions);
       if(support.hasMouseWheelEvent) this.el.addEventListener('mousewheel', this._onMouseWheel, this.listenerOptions);
 
-      if(support.hasTouch) {
+      if(support.hasTouch && this.options.useTouch) {
           this.el.addEventListener('touchstart', this._onTouchStart, this.listenerOptions);
           this.el.addEventListener('touchmove', this._onTouchMove, this.listenerOptions);
       }
@@ -1157,7 +1158,7 @@
         this.vs = new src({
           el: this.el,
           mouseMultiplier: navigator.platform.indexOf('Win') > -1 ? 1 : 0.4,
-          touchMultiplier: 4,
+          touchMultiplier: this.touchMultiplier,
           firefoxMultiplier: this.firefoxMultiplier,
           useKeyboard: false,
           passive: true

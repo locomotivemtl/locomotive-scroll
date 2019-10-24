@@ -43,11 +43,11 @@ export default class extends Core {
 
         this.vs = new virtualScroll({
             el: this.el,
-            mouseMultiplier: (navigator.platform.indexOf('Win') > -1) ? 1 : 0.4,
-            touchMultiplier: 4,
+            mouseMultiplier: navigator.platform.indexOf('Win') > -1 ? 1 : 0.4,
+            touchMultiplier: this.touchMultiplier,
             firefoxMultiplier: this.firefoxMultiplier,
             useKeyboard: false,
-            passive: true
+            passive: true,
         });
 
         this.vs.on((e) => {
