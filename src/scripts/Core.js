@@ -146,6 +146,7 @@ export default class {
     }
 
     setEvents(event, func) {
+
         if(!this.listeners[event]) {
             this.listeners[event] = [];
         }
