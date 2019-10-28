@@ -1,4 +1,4 @@
-/* locomotive-scroll v3.2.1 | MIT License | https://github.com/locomotivemtl/locomotive-scroll */
+/* locomotive-scroll v3.2.2 | MIT License | https://github.com/locomotivemtl/locomotive-scroll */
 (function (global, factory) {
   typeof exports === 'object' && typeof module !== 'undefined' ? module.exports = factory() :
   typeof define === 'function' && define.amd ? define(factory) :
@@ -189,10 +189,12 @@
       this.windowHeight = window.innerHeight;
       this.windowMiddle = this.windowHeight / 2;
       this.els = [];
+      this.listeners = {};
       this.hasScrollTicking = false;
       this.hasCallEventSet = false;
       this.checkScroll = this.checkScroll.bind(this);
       this.checkResize = this.checkResize.bind(this);
+      this.checkEvent = this.checkEvent.bind(this);
       this.instance = {
         scroll: {
           x: 0,
@@ -327,10 +329,45 @@
     }, {
       key: "setEvents",
       value: function setEvents(event, func) {
+        if (!this.listeners[event]) {
+          this.listeners[event] = [];
+        }
+
+        var list = this.listeners[event];
+        list.push(func);
+
+        if (list.length === 1) {
+          this.el.addEventListener(this.namespace + event, this.checkEvent, false);
+        }
+
+        if (event === 'call') {
+          this.hasCallEventSet = true;
+          this.detectElements(true);
+        }
+      }
+    }, {
+      key: "unsetEvents",
+      value: function unsetEvents(event, func) {
+        if (!this.listeners[event]) return;
+        var list = this.listeners[event];
+        var index = list.indexOf(func);
+        if (index < 0) return;
+        list.splice(index, 1);
+
+        if (list.index === 0) {
+          this.el.removeEventListener(this.namespace + event, this.checkEvent, false);
+        }
+      }
+    }, {
+      key: "checkEvent",
+      value: function checkEvent(event) {
         var _this3 = this;
 
-        this.el.addEventListener(this.namespace + event, function () {
-          switch (event) {
+        var name = event.type.replace(this.namespace, '');
+        var list = this.listeners[name];
+        if (!list || list.length === 0) return;
+        list.forEach(function (func) {
+          switch (name) {
             case 'scroll':
               return func(_this3.instance);
 
@@ -340,12 +377,7 @@
             default:
               return func();
           }
-        }, false);
-
-        if (event === 'call') {
-          this.hasCallEventSet = true;
-          this.detectElements(true);
-        }
+        });
       }
     }, {
       key: "startScroll",
@@ -367,6 +399,10 @@
         var _this4 = this;
 
         window.removeEventListener('resize', this.checkResize, false);
+        Object.keys(this.listeners).forEach(function (event) {
+          _this4.el.removeEventListener(_this4.namespace + event, _this4.checkEvent, false);
+        });
+        this.listeners = {};
         this.scrollToEls.forEach(function (el) {
           el.removeEventListener('click', _this4.setScrollTo, false);
         });
@@ -1791,6 +1827,11 @@
       key: "on",
       value: function on(event, func) {
         this.scroll.setEvents(event, func);
+      }
+    }, {
+      key: "off",
+      value: function off(event, func) {
+        this.scroll.unsetEvents(event, func);
       }
     }, {
       key: "destroy",

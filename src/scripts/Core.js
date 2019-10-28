@@ -11,12 +11,14 @@ export default class {
         this.windowHeight = window.innerHeight;
         this.windowMiddle = this.windowHeight / 2;
         this.els = [];
+        this.listeners = {};
 
         this.hasScrollTicking = false;
         this.hasCallEventSet = false;
 
         this.checkScroll = this.checkScroll.bind(this);
         this.checkResize = this.checkResize.bind(this);
+        this.checkEvent = this.checkEvent.bind(this);
 
         this.instance = {
             scroll: {
@@ -144,8 +146,46 @@ export default class {
     }
 
     setEvents(event, func) {
-        this.el.addEventListener(this.namespace + event, () => {
-            switch (event) {
+        if(!this.listeners[event]) {
+            this.listeners[event] = [];
+        }
+
+        const list = this.listeners[event];
+        list.push(func);
+
+        if( list.length === 1 ) {
+            this.el.addEventListener(this.namespace + event, this.checkEvent, false);
+        }
+
+        if (event === 'call') {
+            this.hasCallEventSet = true;
+            this.detectElements(true);
+        }
+    }
+
+    unsetEvents(event, func) {
+        if( !this.listeners[event] ) return;
+
+        const list = this.listeners[event];
+        const index = list.indexOf(func);
+
+        if( index < 0 ) return;
+
+        list.splice(index, 1);
+
+        if( list.index === 0 ) {
+            this.el.removeEventListener(this.namespace + event, this.checkEvent, false);
+        }
+    }
+
+    checkEvent(event) {
+        const name = event.type.replace(this.namespace, '');
+        const list = this.listeners[name];
+
+        if(!list || list.length === 0) return;
+
+        list.forEach(func => {
+            switch (name) {
                 case 'scroll':
                     return func(this.instance);
                 case 'call':
@@ -153,12 +193,7 @@ export default class {
                 default:
                     return func();
             }
-        }, false);
-
-        if (event === 'call') {
-            this.hasCallEventSet = true;
-            this.detectElements(true);
-        }
+        });
     }
 
     startScroll() {}
@@ -174,6 +209,11 @@ export default class {
 
     destroy() {
         window.removeEventListener('resize', this.checkResize, false);
+
+        Object.keys(this.listeners).forEach(event => {
+            this.el.removeEventListener(this.namespace + event, this.checkEvent, false);
+        });
+        this.listeners = {};
 
         this.scrollToEls.forEach((el) => {
             el.removeEventListener('click', this.setScrollTo, false);
