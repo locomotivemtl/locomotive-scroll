@@ -1359,8 +1359,9 @@
         this.scrollbarThumb.classList.add("".concat(this.scrollbarClass, "_thumb"));
         this.scrollbar.append(this.scrollbarThumb);
         document.body.append(this.scrollbar);
-        this.scrollbarThumb.style.height = "".concat(window.innerHeight * window.innerHeight / (this.instance.limit + window.innerHeight), "px");
-        this.scrollBarLimit = window.innerHeight - this.scrollbarThumb.getBoundingClientRect().height;
+        this.scrollbarHeight = this.scrollbar.getBoundingClientRect().height;
+        this.scrollbarThumb.style.height = "".concat(this.scrollbarHeight * this.scrollbarHeight / (this.instance.limit + this.scrollbarHeight), "px");
+        this.scrollBarLimit = this.scrollbarHeight - this.scrollbarThumb.getBoundingClientRect().height;
         this.getScrollBar = this.getScrollBar.bind(this);
         this.releaseScrollBar = this.releaseScrollBar.bind(this);
         this.moveScrollBar = this.moveScrollBar.bind(this);
@@ -1371,8 +1372,9 @@
     }, {
       key: "reinitScrollBar",
       value: function reinitScrollBar() {
-        this.scrollbarThumb.style.height = "".concat(window.innerHeight * window.innerHeight / this.instance.limit, "px");
-        this.scrollBarLimit = window.innerHeight - this.scrollbarThumb.getBoundingClientRect().height;
+        this.scrollbarHeight = this.scrollbar.getBoundingClientRect().height;
+        this.scrollbarThumb.style.height = "".concat(this.scrollbarHeight * this.scrollbarHeight / this.instance.limit, "px");
+        this.scrollBarLimit = this.scrollbarHeight - this.scrollbarThumb.getBoundingClientRect().height;
       }
     }, {
       key: "destroyScrollBar",
@@ -1404,7 +1406,7 @@
 
         if (!this.isTicking && this.isDraggingScrollbar) {
           requestAnimationFrame(function () {
-            var y = e.clientY * 100 / window.innerHeight * _this5.instance.limit / 100;
+            var y = e.clientY * 100 / _this5.scrollbarHeight * _this5.instance.limit / 100;
 
             if (y > 0 && y < _this5.instance.limit) {
               _this5.instance.delta.y = y;
@@ -1686,6 +1688,7 @@
         this.detectElements();
         this.updateScroll();
         this.transformElements(true);
+        this.reinitScrollBar();
       }
     }, {
       key: "startScroll",

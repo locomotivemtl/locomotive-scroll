@@ -228,8 +228,10 @@ export default class extends Core {
 
         this.scrollbar.append(this.scrollbarThumb);
         document.body.append(this.scrollbar);
-        this.scrollbarThumb.style.height = `${(window.innerHeight * window.innerHeight) / (this.instance.limit + window.innerHeight)}px`;
-        this.scrollBarLimit = window.innerHeight - this.scrollbarThumb.getBoundingClientRect().height;
+
+        this.scrollbarHeight = this.scrollbar.getBoundingClientRect().height;
+        this.scrollbarThumb.style.height = `${(this.scrollbarHeight * this.scrollbarHeight) / (this.instance.limit + this.scrollbarHeight)}px`;
+        this.scrollBarLimit = this.scrollbarHeight - this.scrollbarThumb.getBoundingClientRect().height;
 
         this.getScrollBar = this.getScrollBar.bind(this);
         this.releaseScrollBar = this.releaseScrollBar.bind(this);
@@ -241,8 +243,9 @@ export default class extends Core {
     }
 
     reinitScrollBar() {
-        this.scrollbarThumb.style.height = `${(window.innerHeight * window.innerHeight) / this.instance.limit}px`;
-        this.scrollBarLimit = window.innerHeight - this.scrollbarThumb.getBoundingClientRect().height;
+        this.scrollbarHeight = this.scrollbar.getBoundingClientRect().height;
+        this.scrollbarThumb.style.height = `${(this.scrollbarHeight * this.scrollbarHeight) / this.instance.limit}px`;
+        this.scrollBarLimit = this.scrollbarHeight - this.scrollbarThumb.getBoundingClientRect().height;
     }
 
     destroyScrollBar() {
@@ -268,7 +271,7 @@ export default class extends Core {
     moveScrollBar(e) {
         if (!this.isTicking && this.isDraggingScrollbar) {
             requestAnimationFrame(() => {
-                let y = (e.clientY * 100 / (window.innerHeight)) * this.instance.limit / 100;
+                let y = (e.clientY * 100 / (this.scrollbarHeight)) * this.instance.limit / 100;
 
                 if(y > 0 && y < this.instance.limit) {
                     this.instance.delta.y = y;
@@ -540,6 +543,7 @@ export default class extends Core {
         this.detectElements();
         this.updateScroll();
         this.transformElements(true);
+        this.reinitScrollBar();
     }
 
     startScroll() {
