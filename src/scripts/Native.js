@@ -8,7 +8,7 @@ export default class extends Core {
     }
 
     init() {
-        this.instance.scroll.y = window.scrollY;
+        this.instance.scroll.y = window.pageYOffset;
 
         this.addElements();
         this.detectElements();
@@ -19,7 +19,7 @@ export default class extends Core {
     checkScroll() {
         super.checkScroll();
 
-        this.instance.scroll.y = window.scrollY;
+        this.instance.scroll.y = window.pageYOffset;
 
         if (this.els.length) {
             if(!this.hasScrollTicking) {

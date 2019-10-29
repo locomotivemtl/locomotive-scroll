@@ -432,7 +432,7 @@
     _createClass(_default, [{
       key: "init",
       value: function init() {
-        this.instance.scroll.y = window.scrollY;
+        this.instance.scroll.y = window.pageYOffset;
         this.addElements();
         this.detectElements();
 
@@ -445,7 +445,7 @@
 
         _get(_getPrototypeOf(_default.prototype), "checkScroll", this).call(this);
 
-        this.instance.scroll.y = window.scrollY;
+        this.instance.scroll.y = window.pageYOffset;
 
         if (this.els.length) {
           if (!this.hasScrollTicking) {
