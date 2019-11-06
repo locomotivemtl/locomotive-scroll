@@ -1,10 +1,6 @@
 import LocomotiveScroll from '../../../src/locomotive-scroll';
-import smoothscroll from 'smoothscroll-polyfill';
 
 (function() {
-
-    // add behavior polyfill for safari
-    smoothscroll.polyfill();
 
     document.documentElement.classList.add('is-loaded');
     document.documentElement.classList.remove('is-loading');

@@ -1,8 +1,12 @@
 import Core from './Core';
+import smoothscroll from 'smoothscroll-polyfill';
 
 export default class extends Core {
     constructor(options = {}) {
         super(options);
+
+        // add behavior polyfill for safari
+        smoothscroll.polyfill();
 
         window.addEventListener('scroll', this.checkScroll, false);
     }
