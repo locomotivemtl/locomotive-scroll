@@ -5,8 +5,8 @@
     "repository": "locomotivemtl/locomotive-scroll",
     "author": "Locomotive <info@locomotive.ca> (https://locomotive.ca)",
     "license": "MIT",
-    "main": "dist/locomotive-scroll.js",
-    "module": "dist/locomotive-scroll.esm.js",
+    "main": "./dist/locomotive-scroll.js",
+    "module": "./dist/locomotive-scroll.esm.js",
     "dependencies": {
         "smoothscroll-polyfill": "^0.4.4",
         "virtual-scroll": "git+https://github.com/ayamflow/virtual-scroll.git"
