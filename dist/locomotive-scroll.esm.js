@@ -165,7 +165,8 @@ var defaults = {
   initClass: 'has-scroll-init',
   getSpeed: false,
   getDirection: false,
-  firefoxMultiplier: 50
+  firefoxMultiplier: 50,
+  touchMultiplier: 2
 };
 
 var _default =
@@ -1229,7 +1230,6 @@ var lethargy = createCommonjsModule(function (module, exports) {
         this.lastDownDeltas.shift();
         return this.isInertia(-1);
       }
-      return false;
     };
 
     Lethargy.prototype.isInertia = function(direction) {
@@ -1353,7 +1353,8 @@ function VirtualScroll(options) {
         preventTouch: false,
         unpreventTouchClass: 'vs-touchmove-allowed',
         limitInertia: false,
-        useKeyboard: true
+        useKeyboard: true,
+        useTouch: true
     }, options);
 
     if (this.options.limitInertia) this._lethargy = new Lethargy();
@@ -1480,7 +1481,7 @@ VirtualScroll.prototype._bind = function() {
     if(support.hasWheelEvent) this.el.addEventListener('wheel', this._onWheel, this.listenerOptions);
     if(support.hasMouseWheelEvent) this.el.addEventListener('mousewheel', this._onMouseWheel, this.listenerOptions);
 
-    if(support.hasTouch) {
+    if(support.hasTouch && this.options.useTouch) {
         this.el.addEventListener('touchstart', this._onTouchStart, this.listenerOptions);
         this.el.addEventListener('touchmove', this._onTouchMove, this.listenerOptions);
     }
@@ -1622,8 +1623,8 @@ function (_Core) {
       this.vs = new src({
         el: this.el,
         mouseMultiplier: navigator.platform.indexOf('Win') > -1 ? 1 : 0.4,
-        touchMultiplier: 4,
         firefoxMultiplier: this.firefoxMultiplier,
+        touchMultiplier: this.touchMultiplier,
         useKeyboard: false,
         passive: true
       });
@@ -2212,7 +2213,7 @@ function () {
     key: "init",
     value: function init() {
       if (!this.smoothMobile) {
-        this.isMobile = /Android|iPhone|iPad|iPod|BlackBerry|IEMobile|Opera Mini/i.test(navigator.userAgent);
+        this.isMobile = /Android|iPhone|iPad|iPod|BlackBerry|IEMobile|Opera Mini/i.test(navigator.userAgent) || navigator.platform === 'MacIntel' && navigator.maxTouchPoints > 1;
       }
 
       if (this.smooth === true && !this.isMobile) {
