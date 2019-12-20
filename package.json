@@ -8,7 +8,6 @@
     "main": "./dist/locomotive-scroll.js",
     "module": "./dist/locomotive-scroll.esm.js",
     "dependencies": {
-        "smoothscroll-polyfill": "^0.4.4",
         "virtual-scroll": "git+https://github.com/ayamflow/virtual-scroll.git"
     },
     "devDependencies": {
