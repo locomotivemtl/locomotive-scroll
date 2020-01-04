@@ -41,7 +41,6 @@ export default class {
     }
 
     scrollTo(target, offset, noLerp) {
-        console.log(target, offset, noLerp)
         this.scroll.scrollTo(target, offset, noLerp);
     }
 
