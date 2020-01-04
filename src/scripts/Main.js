@@ -40,8 +40,8 @@ export default class {
         this.scroll.stopScroll();
     }
 
-    scrollTo(target, offset, noLerp) {
-        this.scroll.scrollTo(target, offset, noLerp);
+    scrollTo(target, offset, immediateScrollTo) {
+        this.scroll.scrollTo(target, offset, immediateScrollTo);
     }
 
     setScroll(x,y) {

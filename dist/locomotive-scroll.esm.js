@@ -1815,9 +1815,8 @@ function () {
     }
   }, {
     key: "scrollTo",
-    value: function scrollTo(target, offset, noLerp) {
-      console.log(target, offset, noLerp);
-      this.scroll.scrollTo(target, offset, noLerp);
+    value: function scrollTo(target, offset, immediateScrollTo) {
+      this.scroll.scrollTo(target, offset, immediateScrollTo);
     }
   }, {
     key: "setScroll",
