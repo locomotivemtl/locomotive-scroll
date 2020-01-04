@@ -3,7 +3,7 @@
   typeof exports === 'object' && typeof module !== 'undefined' ? module.exports = factory() :
   typeof define === 'function' && define.amd ? define(factory) :
   (global = global || self, global.LocomotiveScroll = factory());
-}(this, function () { 'use strict';
+}(this, (function () { 'use strict';
 
   function _classCallCheck(instance, Constructor) {
     if (!(instance instanceof Constructor)) {
@@ -61,13 +61,13 @@
       var source = arguments[i] != null ? arguments[i] : {};
 
       if (i % 2) {
-        ownKeys(source, true).forEach(function (key) {
+        ownKeys(Object(source), true).forEach(function (key) {
           _defineProperty(target, key, source[key]);
         });
       } else if (Object.getOwnPropertyDescriptors) {
         Object.defineProperties(target, Object.getOwnPropertyDescriptors(source));
       } else {
-        ownKeys(source).forEach(function (key) {
+        ownKeys(Object(source)).forEach(function (key) {
           Object.defineProperty(target, key, Object.getOwnPropertyDescriptor(source, key));
         });
       }
@@ -1661,13 +1661,13 @@
        *      Available options :
        *          {node, string, "top", "bottom"} targetOption - The DOM element we want to scroll to
        *          {int} offsetOption - An absolute vertical scroll value to reach, or an offset to apply on top of given `target` or `sourceElem`'s target
-       *          {boolean} toBottom - Set to true to scroll all the way to the bottom
+       *          {boolean} immediateScrollTo - Set to true to instantly jump to the section
        * @return {void}
        */
 
     }, {
       key: "scrollTo",
-      value: function scrollTo(targetOption, offsetOption) {
+      value: function scrollTo(targetOption, offsetOption, immediateScrollTo) {
         var _this9 = this;
 
         var target;
@@ -1708,9 +1708,14 @@
         }
 
         offset -= this.instance.scroll.y;
-        this.instance.delta.y = Math.min(offset, this.instance.limit); // Actual scrollTo (the lerp will do the animation itself)
+        this.instance.delta.y = immediateScrollTo ? offsetOption : Math.min(offset, this.instance.limit); // Actual scrollTo (the lerp will do the animation itself)
 
-        this.inertiaRatio = Math.min(4000 / Math.abs(this.instance.delta.y - this.instance.scroll.y), 0.8); // Update the scroll. If we were in idle state: we're not anymore
+        this.inertiaRatio = immediateScrollTo ? 1.0 : Math.min(4000 / Math.abs(this.instance.delta.y - this.instance.scroll.y), inertia);
+
+        if (immediateScrollTo) {
+          this.instance.scroll.y = this.instance.delta.y;
+        } // Update the scroll. If we were in idle state: we're not anymore
+
 
         this.isScrolling = true;
         this.checkScroll();
@@ -1816,8 +1821,9 @@
       }
     }, {
       key: "scrollTo",
-      value: function scrollTo(target, offset) {
-        this.scroll.scrollTo(target, offset);
+      value: function scrollTo(target, offset, noLerp) {
+        console.log(target, offset, noLerp);
+        this.scroll.scrollTo(target, offset, noLerp);
       }
     }, {
       key: "setScroll",
@@ -1846,4 +1852,4 @@
 
   return _default$3;
 
-}));
+})));

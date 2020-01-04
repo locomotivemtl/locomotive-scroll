@@ -488,10 +488,10 @@ export default class extends Core {
      *      Available options :
      *          {node, string, "top", "bottom"} targetOption - The DOM element we want to scroll to
      *          {int} offsetOption - An absolute vertical scroll value to reach, or an offset to apply on top of given `target` or `sourceElem`'s target
-     *          {boolean} toBottom - Set to true to scroll all the way to the bottom
+     *          {boolean} immediateScrollTo - Set to true to instantly jump to the section
      * @return {void}
      */
-    scrollTo(targetOption, offsetOption) {
+    scrollTo(targetOption, offsetOption, immediateScrollTo) {
         let target;
         let offset = offsetOption ? parseInt(offsetOption) : 0;
 
@@ -526,10 +526,12 @@ export default class extends Core {
             offset = offsetTop + offset - parentSectionOffset;
         }
         offset -= this.instance.scroll.y;
+        this.instance.delta.y = immediateScrollTo ? offsetOption : Math.min(offset, this.instance.limit); // Actual scrollTo (the lerp will do the animation itself)
+        this.inertiaRatio = immediateScrollTo ? 1.0 : Math.min(4000 / Math.abs(this.instance.delta.y - this.instance.scroll.y), inertia);
 
-        this.instance.delta.y = Math.min(offset, this.instance.limit); // Actual scrollTo (the lerp will do the animation itself)
-        this.inertiaRatio = Math.min(4000 / Math.abs(this.instance.delta.y - this.instance.scroll.y),0.8);
-
+        if (immediateScrollTo) {
+            this.instance.scroll.y = this.instance.delta.y;
+        }
         // Update the scroll. If we were in idle state: we're not anymore
         this.isScrolling = true;
         this.checkScroll();

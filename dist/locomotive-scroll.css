@@ -17,10 +17,15 @@ html.has-scroll-dragging {
   top: 0;
   width: 11px;
   height: 100vh;
+  -webkit-transform-origin: center right;
   transform-origin: center right;
+  -webkit-transition: opacity 0.3s, -webkit-transform 0.3s;
+  transition: opacity 0.3s, -webkit-transform 0.3s;
   transition: transform 0.3s, opacity 0.3s;
+  transition: transform 0.3s, opacity 0.3s, -webkit-transform 0.3s;
   opacity: 0; }
   .c-scrollbar:hover {
+    -webkit-transform: scaleX(1.45);
     transform: scaleX(1.45); }
   .c-scrollbar:hover, .has-scroll-scrolling .c-scrollbar, .has-scroll-dragging .c-scrollbar {
     opacity: 1; }
