@@ -1193,7 +1193,7 @@
         }, this.instance);
         this.vs = new src({
           el: this.el,
-          mouseMultiplier: navigator.platform.indexOf('Win') > -1 ? 1 : 0.4,
+          mouseMultiplier: (navigator.platform.indexOf('Win') > -1 ? 1 : 0.4) * this.mouseMultiplier,
           firefoxMultiplier: this.firefoxMultiplier,
           touchMultiplier: this.touchMultiplier,
           useKeyboard: false,
