@@ -1150,7 +1150,11 @@
     RIGHT: 39,
     DOWN: 40,
     SPACE: 32,
-    TAB: 9
+    TAB: 9,
+    PAGEUP: 33,
+    PAGEDOWN: 34,
+    HOME: 36,
+    END: 35
   };
 
   var _default$2 =
@@ -1267,6 +1271,22 @@
 
           case keyCodes$1.DOWN:
             this.instance.delta.y += 240;
+            break;
+
+          case keyCodes$1.PAGEUP:
+            this.instance.delta.y -= window.innerHeight;
+            break;
+
+          case keyCodes$1.PAGEDOWN:
+            this.instance.delta.y += window.innerHeight;
+            break;
+
+          case keyCodes$1.HOME:
+            this.instance.delta.y -= this.instance.limit;
+            break;
+
+          case keyCodes$1.END:
+            this.instance.delta.y += this.instance.limit;
             break;
 
           case keyCodes$1.SPACE:

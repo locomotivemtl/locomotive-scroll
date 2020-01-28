@@ -10,7 +10,11 @@ const keyCodes = {
     RIGHT: 39,
     DOWN: 40,
     SPACE: 32,
-    TAB: 9
+    TAB: 9,
+    PAGEUP: 33,
+    PAGEDOWN: 34,
+    HOME: 36,
+    END: 35
 };
 
 export default class extends Core {
@@ -94,7 +98,6 @@ export default class extends Core {
     }
 
     checkKey(e) {
-
         switch(e.keyCode) {
             case keyCodes.TAB:
                 setTimeout(() => {
@@ -110,6 +113,18 @@ export default class extends Core {
                 break;
             case keyCodes.DOWN:
                 this.instance.delta.y += 240;
+                break;
+            case keyCodes.PAGEUP:
+                this.instance.delta.y -= window.innerHeight;
+                break;
+            case keyCodes.PAGEDOWN:
+                this.instance.delta.y += window.innerHeight;
+                break;
+            case keyCodes.HOME:
+                this.instance.delta.y -= this.instance.limit;
+                break;
+            case keyCodes.END:
+                this.instance.delta.y += this.instance.limit;
                 break;
             case keyCodes.SPACE:
                 if(!(document.activeElement instanceof HTMLInputElement) && !(document.activeElement instanceof HTMLTextAreaElement)) {

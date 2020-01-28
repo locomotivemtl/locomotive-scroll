@@ -14,7 +14,8 @@ import LocomotiveScroll from '../../../src/locomotive-scroll';
             el: document.querySelector('#js-scroll'),
             smooth: true,
             getSpeed: true,
-            getDirection: true
+            getDirection: true,
+            useKeyboard: true
         });
 
         let dynamicBackgrounds = [];
