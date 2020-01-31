@@ -407,8 +407,8 @@ export default class extends Core {
 
                     top += window.innerHeight;
                     left += window.innerWidth;
-                    bottom = top + targetEl.offsetHeight - window.innerHeight - el.offsetHeight - elDistance;
-                    right = left + targetEl.offsetWidth - window.innerWidth - el.offsetWidth - elDistance;
+                    bottom = top + targetEl.offsetHeight - window.innerHeight - el.offsetHeight - elDistance[this.directionAxis];
+                    right = left + targetEl.offsetWidth - window.innerWidth - el.offsetWidth - elDistance[this.directionAxis];
                     middle = {
                         x: ((right - left) / 2) + left,
                         y: ((bottom - top) / 2) + top
