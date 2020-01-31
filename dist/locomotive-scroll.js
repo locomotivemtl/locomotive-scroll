@@ -188,7 +188,11 @@
       this.namespace = 'locomotive';
       this.html = document.documentElement;
       this.windowHeight = window.innerHeight;
-      this.windowMiddle = this.windowHeight / 2;
+      this.windowWidth = window.innerWidth;
+      this.windowMiddle = {
+        x: this.windowWidth / 2,
+        y: this.windowHeight / 2
+      };
       this.els = [];
       this.listeners = {};
       this.hasScrollTicking = false;
@@ -201,8 +205,17 @@
           x: 0,
           y: 0
         },
-        limit: this.html.offsetHeight
+        limit: {
+          x: this.html.offsetHeight,
+          y: this.html.offsetHeight
+        }
       };
+
+      if (this.direction === 'horizontal') {
+        this.directionAxis = 'x';
+      } else {
+        this.directionAxis = 'y';
+      }
 
       if (this.getDirection) {
         this.instance.direction = null;
@@ -256,16 +269,30 @@
 
         var scrollTop = this.instance.scroll.y;
         var scrollBottom = scrollTop + this.windowHeight;
+        var scrollLeft = this.instance.scroll.x;
+        var scrollRight = scrollLeft + this.windowWidth;
         this.els.forEach(function (el, i) {
           if (el && (!el.inView || hasCallEventSet)) {
-            if (scrollBottom >= el.top && scrollTop < el.bottom) {
-              _this2.setInView(el, i);
+            if (_this2.direction === 'horizontal') {
+              if (scrollRight >= el.left && scrollLeft < el.right) {
+                _this2.setInView(el, i);
+              }
+            } else {
+              if (scrollBottom >= el.top && scrollTop < el.bottom) {
+                _this2.setInView(el, i);
+              }
             }
           }
 
           if (el && el.inView) {
-            if (scrollBottom < el.top || scrollTop > el.bottom) {
-              _this2.setOutOfView(el, i);
+            if (_this2.direction === 'horizontal') {
+              if (scrollRight < el.left || scrollLeft > el.right) {
+                _this2.setOutOfView(el, i);
+              }
+            } else {
+              if (scrollBottom < el.top || scrollTop > el.bottom) {
+                _this2.setOutOfView(el, i);
+              }
             }
           }
         });
@@ -464,6 +491,7 @@
 
         if (this.els.length) {
           this.windowHeight = window.innerHeight;
+          this.windowWidth = window.innerWidth;
 
           if (!this.hasScrollTicking) {
             requestAnimationFrame(function () {
@@ -801,6 +829,7 @@
           this.lastDownDeltas.shift();
           return this.isInertia(-1);
         }
+        return false;
       };
 
       Lethargy.prototype.isInertia = function(direction) {
@@ -924,8 +953,7 @@
           preventTouch: false,
           unpreventTouchClass: 'vs-touchmove-allowed',
           limitInertia: false,
-          useKeyboard: true,
-          useTouch: true
+          useKeyboard: true
       }, options);
 
       if (this.options.limitInertia) this._lethargy = new Lethargy();
@@ -1052,7 +1080,7 @@
       if(support.hasWheelEvent) this.el.addEventListener('wheel', this._onWheel, this.listenerOptions);
       if(support.hasMouseWheelEvent) this.el.addEventListener('mousewheel', this._onMouseWheel, this.listenerOptions);
 
-      if(support.hasTouch && this.options.useTouch) {
+      if(support.hasTouch) {
           this.el.addEventListener('touchstart', this._onTouchStart, this.listenerOptions);
           this.el.addEventListener('touchmove', this._onTouchMove, this.listenerOptions);
       }
@@ -1189,6 +1217,7 @@
         var _this2 = this;
 
         this.html.classList.add(this.smoothClass);
+        this.html.setAttribute("data-".concat(this.name, "-direction"), this.direction);
         this.instance = _objectSpread2({
           delta: {
             x: 0,
@@ -1231,7 +1260,18 @@
     }, {
       key: "setScrollLimit",
       value: function setScrollLimit() {
-        this.instance.limit = this.el.offsetHeight - this.windowHeight;
+        this.instance.limit.y = this.el.offsetHeight - this.windowHeight;
+
+        if (this.direction === 'horizontal') {
+          var totalWidth = 0;
+          var nodes = this.el.children;
+
+          for (var i = 0; i < nodes.length; i++) {
+            totalWidth += nodes[i].offsetWidth;
+          }
+
+          this.instance.limit.x = totalWidth - this.windowWidth;
+        }
       }
     }, {
       key: "startScrolling",
@@ -1266,35 +1306,35 @@
             break;
 
           case keyCodes$1.UP:
-            this.instance.delta.y -= 240;
+            this.instance.delta[this.directionAxis] -= 240;
             break;
 
           case keyCodes$1.DOWN:
-            this.instance.delta.y += 240;
+            this.instance.delta[this.directionAxis] += 240;
             break;
 
           case keyCodes$1.PAGEUP:
-            this.instance.delta.y -= window.innerHeight;
+            this.instance.delta[this.directionAxis] -= window.innerHeight;
             break;
 
           case keyCodes$1.PAGEDOWN:
-            this.instance.delta.y += window.innerHeight;
+            this.instance.delta[this.directionAxis] += window.innerHeight;
             break;
 
           case keyCodes$1.HOME:
-            this.instance.delta.y -= this.instance.limit;
+            this.instance.delta[this.directionAxis] -= this.instance.limit[this.directionAxis];
             break;
 
           case keyCodes$1.END:
-            this.instance.delta.y += this.instance.limit;
+            this.instance.delta[this.directionAxis] += this.instance.limit[this.directionAxis];
             break;
 
           case keyCodes$1.SPACE:
             if (!(document.activeElement instanceof HTMLInputElement) && !(document.activeElement instanceof HTMLTextAreaElement)) {
               if (e.shiftKey) {
-                this.instance.delta.y -= window.innerHeight;
+                this.instance.delta[this.directionAxis] -= window.innerHeight;
               } else {
-                this.instance.delta.y += window.innerHeight;
+                this.instance.delta[this.directionAxis] += window.innerHeight;
               }
             }
 
@@ -1304,8 +1344,8 @@
             return;
         }
 
-        if (this.instance.delta.y < 0) this.instance.delta.y = 0;
-        if (this.instance.delta.y > this.instance.limit) this.instance.delta.y = this.instance.limit;
+        if (this.instance.delta[this.directionAxis] < 0) this.instance.delta[this.directionAxis] = 0;
+        if (this.instance.delta[this.directionAxis] > this.instance.limit) this.instance.delta[this.directionAxis] = this.instance.limit;
         this.isScrolling = true;
         this.checkScroll();
         this.html.classList.add(this.scrollingClass);
@@ -1332,8 +1372,13 @@
           this.updateScroll();
 
           for (var i = this.sections.length - 1; i >= 0; i--) {
-            if (this.sections[i].persistent || this.instance.scroll.y > this.sections[i].offset && this.instance.scroll.y < this.sections[i].limit) {
-              this.transform(this.sections[i].el, 0, -this.instance.scroll.y);
+            if (this.sections[i].persistent || this.instance.scroll[this.directionAxis] > this.sections[i].offset[this.directionAxis] && this.instance.scroll[this.directionAxis] < this.sections[i].limit[this.directionAxis]) {
+              if (this.direction === 'horizontal') {
+                this.transform(this.sections[i].el, -this.instance.scroll[this.directionAxis], 0);
+              } else {
+                this.transform(this.sections[i].el, 0, -this.instance.scroll[this.directionAxis]);
+              }
+
               this.sections[i].el.style.visibility = 'visible';
               this.sections[i].inView = true;
             } else {
@@ -1354,8 +1399,13 @@
 
           this.detectElements();
           this.transformElements();
-          var scrollBarTranslation = this.instance.scroll.y / this.instance.limit * this.scrollBarLimit;
-          this.transform(this.scrollbarThumb, 0, scrollBarTranslation);
+          var scrollBarTranslation = this.instance.scroll[this.directionAxis] / this.instance.limit[this.directionAxis] * this.scrollBarLimit[this.directionAxis];
+
+          if (this.direction === 'horizontal') {
+            this.transform(this.scrollbarThumb, scrollBarTranslation, 0);
+          } else {
+            this.transform(this.scrollbarThumb, 0, scrollBarTranslation);
+          }
 
           _get(_getPrototypeOf(_default.prototype), "checkScroll", this).call(this);
 
@@ -1366,23 +1416,27 @@
       key: "checkResize",
       value: function checkResize() {
         this.windowHeight = window.innerHeight;
-        this.windowMiddle = this.windowHeight / 2;
+        this.windowWidth = window.innerWidth;
+        this.windowMiddle = {
+          x: this.windowWidth / 2,
+          y: this.windowHeight / 2
+        };
         this.update();
       }
     }, {
       key: "updateDelta",
       value: function updateDelta(e) {
-        this.instance.delta.y -= e.deltaY;
-        if (this.instance.delta.y < 0) this.instance.delta.y = 0;
-        if (this.instance.delta.y > this.instance.limit) this.instance.delta.y = this.instance.limit;
+        this.instance.delta[this.directionAxis] -= e.deltaY;
+        if (this.instance.delta[this.directionAxis] < 0) this.instance.delta[this.directionAxis] = 0;
+        if (this.instance.delta[this.directionAxis] > this.instance.limit[this.directionAxis]) this.instance.delta[this.directionAxis] = this.instance.limit[this.directionAxis];
       }
     }, {
       key: "updateScroll",
       value: function updateScroll(e) {
         if (this.isScrolling || this.isDraggingScrollbar) {
-          this.instance.scroll.y = lerp(this.instance.scroll.y, this.instance.delta.y, this.inertia * this.inertiaRatio);
+          this.instance.scroll[this.directionAxis] = lerp(this.instance.scroll[this.directionAxis], this.instance.delta[this.directionAxis], this.inertia * this.inertiaRatio);
         } else {
-          this.instance.scroll.y = this.instance.delta.y;
+          this.instance.scroll[this.directionAxis] = this.instance.delta[this.directionAxis];
         }
       }
     }, {
@@ -1397,12 +1451,22 @@
             this.instance.direction = 'up';
           }
         }
+
+        if (this.instance.delta.x > this.instance.scroll.x) {
+          if (this.instance.direction !== 'right') {
+            this.instance.direction = 'right';
+          }
+        } else if (this.instance.delta.x < this.instance.scroll.x) {
+          if (this.instance.direction !== 'left') {
+            this.instance.direction = 'left';
+          }
+        }
       }
     }, {
       key: "addSpeed",
       value: function addSpeed() {
-        if (this.instance.delta.y != this.instance.scroll.y) {
-          this.instance.speed = (this.instance.delta.y - this.instance.scroll.y) / (Date.now() - this.timestamp);
+        if (this.instance.delta[this.directionAxis] != this.instance.scroll[this.directionAxis]) {
+          this.instance.speed = (this.instance.delta[this.directionAxis] - this.instance.scroll[this.directionAxis]) / (Date.now() - this.timestamp);
         } else {
           this.instance.speed = 0;
         }
@@ -1417,8 +1481,18 @@
         this.scrollbar.append(this.scrollbarThumb);
         document.body.append(this.scrollbar);
         this.scrollbarHeight = this.scrollbar.getBoundingClientRect().height;
-        this.scrollbarThumb.style.height = "".concat(this.scrollbarHeight * this.scrollbarHeight / (this.instance.limit + this.scrollbarHeight), "px");
-        this.scrollBarLimit = this.scrollbarHeight - this.scrollbarThumb.getBoundingClientRect().height;
+        this.scrollbarWidth = this.scrollbar.getBoundingClientRect().width;
+
+        if (this.direction === 'horizontal') {
+          this.scrollbarThumb.style.width = "".concat(this.scrollbarWidth * this.scrollbarWidth / (this.instance.limit.x + this.scrollbarWidth), "px");
+        } else {
+          this.scrollbarThumb.style.height = "".concat(this.scrollbarHeight * this.scrollbarHeight / (this.instance.limit.y + this.scrollbarHeight), "px");
+        }
+
+        this.scrollBarLimit = {
+          x: this.scrollbarWidth - this.scrollbarThumb.getBoundingClientRect().width,
+          y: this.scrollbarHeight - this.scrollbarThumb.getBoundingClientRect().height
+        };
         this.getScrollBar = this.getScrollBar.bind(this);
         this.releaseScrollBar = this.releaseScrollBar.bind(this);
         this.moveScrollBar = this.moveScrollBar.bind(this);
@@ -1430,8 +1504,18 @@
       key: "reinitScrollBar",
       value: function reinitScrollBar() {
         this.scrollbarHeight = this.scrollbar.getBoundingClientRect().height;
-        this.scrollbarThumb.style.height = "".concat(this.scrollbarHeight * this.scrollbarHeight / this.instance.limit, "px");
-        this.scrollBarLimit = this.scrollbarHeight - this.scrollbarThumb.getBoundingClientRect().height;
+        this.scrollbarWidth = this.scrollbar.getBoundingClientRect().width;
+
+        if (this.direction === 'horizontal') {
+          this.scrollbarThumb.style.width = "".concat(this.scrollbarWidth * this.scrollbarWidth / (this.instance.limit.x + this.scrollbarWidth), "px");
+        } else {
+          this.scrollbarThumb.style.height = "".concat(this.scrollbarHeight * this.scrollbarHeight / (this.instance.limit.y + this.scrollbarHeight), "px");
+        }
+
+        this.scrollBarLimit = {
+          x: this.scrollbarWidth - this.scrollbarThumb.getBoundingClientRect().width,
+          y: this.scrollbarHeight - this.scrollbarThumb.getBoundingClientRect().height
+        };
       }
     }, {
       key: "destroyScrollBar",
@@ -1463,10 +1547,15 @@
 
         if (!this.isTicking && this.isDraggingScrollbar) {
           requestAnimationFrame(function () {
-            var y = e.clientY * 100 / _this5.scrollbarHeight * _this5.instance.limit / 100;
+            var x = e.clientX * 100 / _this5.scrollbarWidth * _this5.instance.limit.x / 100;
+            var y = e.clientY * 100 / _this5.scrollbarHeight * _this5.instance.limit.y / 100;
 
-            if (y > 0 && y < _this5.instance.limit) {
+            if (y > 0 && y < _this5.instance.limit.y) {
               _this5.instance.delta.y = y;
+            }
+
+            if (x > 0 && x < _this5.instance.limit.x) {
+              _this5.instance.delta.x = x;
             }
           });
           this.isTicking = true;
@@ -1487,6 +1576,7 @@
           els.forEach(function (el, i) {
             var cl = el.dataset[_this6.name + 'Class'] || _this6["class"];
             var top;
+            var left;
             var repeat = el.dataset[_this6.name + 'Repeat'];
             var call = el.dataset[_this6.name + 'Call'];
             var position = el.dataset[_this6.name + 'Position'];
@@ -1506,18 +1596,32 @@
 
             if (!_this6.sections[y].inView) {
               top = targetEl.getBoundingClientRect().top - getTranslate(_this6.sections[y].el).y - getTranslate(targetEl).y;
+              left = targetEl.getBoundingClientRect().left - getTranslate(_this6.sections[y].el).x - getTranslate(targetEl).x;
             } else {
               top = targetEl.getBoundingClientRect().top + _this6.instance.scroll.y - getTranslate(targetEl).y;
+              left = targetEl.getBoundingClientRect().left + _this6.instance.scroll.x - getTranslate(targetEl).x;
             }
 
             var bottom = top + targetEl.offsetHeight;
-            var middle = (bottom - top) / 2 + top;
+            var right = left + targetEl.offsetWidth;
+            var middle = {
+              x: (right - left) / 2 + left,
+              y: (bottom - top) / 2 + top
+            };
 
             if (sticky) {
-              var elDistance = el.getBoundingClientRect().top - top;
+              var elDistance = {
+                x: el.getBoundingClientRect().left - left,
+                y: el.getBoundingClientRect().top - top
+              };
               top += window.innerHeight;
+              left += window.innerWidth;
               bottom = top + targetEl.offsetHeight - window.innerHeight - el.offsetHeight - elDistance;
-              middle = (bottom - top) / 2 + top;
+              right = left + targetEl.offsetWidth - window.innerWidth - el.offsetWidth - elDistance;
+              middle = {
+                x: (right - left) / 2 + left,
+                y: (bottom - top) / 2 + top
+              };
             }
 
             if (repeat == 'false') {
@@ -1531,12 +1635,28 @@
             var relativeOffset = [0, 0];
 
             if (offset) {
-              for (var i = 0; i < offset.length; i++) {
-                if (offset[i].includes('%')) {
-                  relativeOffset[i] = parseInt(offset[i].replace('%', '') * _this6.windowHeight / 100);
-                } else {
-                  relativeOffset[i] = parseInt(offset[i]);
+              if (_this6.direction === 'horizontal') {
+                for (var i = 0; i < offset.length; i++) {
+                  if (offset[i].includes('%')) {
+                    relativeOffset[i] = parseInt(offset[i].replace('%', '') * _this6.windowWidth / 100);
+                  } else {
+                    relativeOffset[i] = parseInt(offset[i]);
+                  }
                 }
+
+                left = left + relativeOffset[0];
+                right = right - relativeOffset[1];
+              } else {
+                for (var i = 0; i < offset.length; i++) {
+                  if (offset[i].includes('%')) {
+                    relativeOffset[i] = parseInt(offset[i].replace('%', '') * _this6.windowHeight / 100);
+                  } else {
+                    relativeOffset[i] = parseInt(offset[i]);
+                  }
+                }
+
+                top = top + relativeOffset[0];
+                bottom = bottom - relativeOffset[1];
               }
             }
 
@@ -1544,9 +1664,11 @@
               el: el,
               id: i,
               "class": cl,
-              top: top + relativeOffset[0],
+              top: top,
               middle: middle,
-              bottom: bottom - relativeOffset[1],
+              bottom: bottom,
+              left: left,
+              right: right,
               offset: offset,
               repeat: repeat,
               inView: false,
@@ -1580,12 +1702,18 @@
         }
 
         sections.forEach(function (section, i) {
-          var offset = section.getBoundingClientRect().top - window.innerHeight * 1.5 - getTranslate(section).y;
-          var limit = offset + section.getBoundingClientRect().height + window.innerHeight * 2;
+          var offset = {
+            x: section.getBoundingClientRect().left - window.innerWidth * 1.5 - getTranslate(section).x,
+            y: section.getBoundingClientRect().top - window.innerHeight * 1.5 - getTranslate(section).y
+          };
+          var limit = {
+            x: offset.x + section.getBoundingClientRect().width + window.innerWidth * 2,
+            y: offset.y + section.getBoundingClientRect().height + window.innerHeight * 2
+          };
           var persistent = typeof section.dataset[_this7.name + 'Persistent'] === 'string';
           var inView = false;
 
-          if (_this7.instance.scroll.y >= offset && _this7.instance.scroll.y <= limit) {
+          if (_this7.instance.scroll[_this7.directionAxis] >= offset[_this7.directionAxis] && _this7.instance.scroll[_this7.directionAxis] <= limit[_this7.directionAxis]) {
             inView = true;
           }
 
@@ -1622,8 +1750,12 @@
       value: function transformElements(isForced) {
         var _this8 = this;
 
+        var scrollRight = this.instance.scroll.x + this.windowWidth;
         var scrollBottom = this.instance.scroll.y + this.windowHeight;
-        var scrollMiddle = this.instance.scroll.y + this.windowMiddle;
+        var scrollMiddle = {
+          x: this.instance.scroll.x + this.windowMiddle.x,
+          y: this.instance.scroll.y + this.windowMiddle.y
+        };
         this.parallaxElements.forEach(function (current, i) {
           var transformDistance = false;
 
@@ -1634,7 +1766,7 @@
           if (current.inView) {
             switch (current.position) {
               case 'top':
-                transformDistance = _this8.instance.scroll.y * -current.speed;
+                transformDistance = _this8.instance.scroll[_this8.directionAxis] * -current.speed;
                 break;
 
               case 'elementTop':
@@ -1642,31 +1774,57 @@
                 break;
 
               case 'bottom':
-                transformDistance = (_this8.instance.limit - scrollBottom + _this8.windowHeight) * current.speed;
+                transformDistance = (_this8.instance.limit[_this8.directionAxis] - scrollBottom + _this8.windowHeight) * current.speed;
+                break;
+
+              case 'left':
+                transformDistance = _this8.instance.scroll[_this8.directionAxis] * -current.speed;
+                break;
+
+              case 'elementLeft':
+                transformDistance = (scrollRight - current.left) * -current.speed;
+                break;
+
+              case 'right':
+                transformDistance = (_this8.instance.limit[_this8.directionAxis] - scrollRight + _this8.windowHeight) * current.speed;
                 break;
 
               default:
-                transformDistance = (scrollMiddle - current.middle) * -current.speed;
+                transformDistance = (scrollMiddle[_this8.directionAxis] - current.middle[_this8.directionAxis]) * -current.speed;
                 break;
             }
           }
 
           if (current.sticky) {
             if (current.inView) {
-              transformDistance = _this8.instance.scroll.y - current.top + window.innerHeight;
-            } else {
-              if (_this8.instance.scroll.y < current.top - window.innerHeight && _this8.instance.scroll.y < current.top - window.innerHeight / 2) {
-                transformDistance = 0;
-              } else if (_this8.instance.scroll.y > current.bottom && _this8.instance.scroll.y > current.bottom + 100) {
-                transformDistance = current.bottom - current.top + window.innerHeight;
+              if (_this8.direction === 'horizontal') {
+                transformDistance = _this8.instance.scroll.x - current.left + window.innerWidth;
               } else {
-                transformDistance = false;
+                transformDistance = _this8.instance.scroll.y - current.top + window.innerHeight;
+              }
+            } else {
+              if (_this8.direction === 'horizontal') {
+                if (_this8.instance.scroll.x < current.left - window.innerWidth && _this8.instance.scroll.x < current.left - window.innerWidth / 2) {
+                  transformDistance = 0;
+                } else if (_this8.instance.scroll.x > current.right && _this8.instance.scroll.x > current.right + 100) {
+                  transformDistance = current.right - current.left + window.innerWidth;
+                } else {
+                  transformDistance = false;
+                }
+              } else {
+                if (_this8.instance.scroll.y < current.top - window.innerHeight && _this8.instance.scroll.y < current.top - window.innerHeight / 2) {
+                  transformDistance = 0;
+                } else if (_this8.instance.scroll.y > current.bottom && _this8.instance.scroll.y > current.bottom + 100) {
+                  transformDistance = current.bottom - current.top + window.innerHeight;
+                } else {
+                  transformDistance = false;
+                }
               }
             }
           }
 
           if (transformDistance !== false) {
-            if (current.direction === 'horizontal') {
+            if (current.direction === 'horizontal' || _this8.direction === 'horizontal' && current.direction !== 'vertical') {
               _this8.transform(current.el, transformDistance, 0, isForced ? false : current.delay);
             } else {
               _this8.transform(current.el, 0, transformDistance, isForced ? false : current.delay);
@@ -1697,7 +1855,11 @@
           if (targetOption === 'top') {
             offset = 0;
           } else if (targetOption === 'bottom') {
-            offset = this.instance.limit;
+            offset = this.instance.limit.y;
+          } else if (targetOption === 'left') {
+            offset = 0;
+          } else if (targetOption === 'right') {
+            offset = this.instance.limit.x;
           } else {
             target = document.querySelectorAll(targetOption)[0];
           }
@@ -1709,7 +1871,8 @@
         if (target) {
           // Get target offset from top
           var targetBCR = target.getBoundingClientRect();
-          var offsetTop = targetBCR.top + this.instance.scroll.y; // Try and find the target's parent section
+          var offsetTop = targetBCR.top + this.instance.scroll.y;
+          var offsetLeft = targetBCR.left + this.instance.scroll.x; // Try and find the target's parent section
 
           var targetParents = getParents(target);
           var parentSection = targetParents.find(function (candidate) {
@@ -1720,17 +1883,21 @@
           var parentSectionOffset = 0;
 
           if (parentSection) {
-            parentSectionOffset = getTranslate(parentSection).y; // We got a parent section, store it's current offset to remove it later
+            parentSectionOffset = getTranslate(parentSection)[this.directionAxis]; // We got a parent section, store it's current offset to remove it later
           } // Final value of scroll destination : offsetTop + (optional offset given in options) - (parent's section translate)
 
 
-          offset = offsetTop + offset - parentSectionOffset;
+          if (this.direction === 'horizontal') {
+            offset = offsetLeft + offset - parentSectionOffset;
+          } else {
+            offset = offsetTop + offset - parentSectionOffset;
+          }
         }
 
         offset -= this.instance.scroll.y;
-        this.instance.delta.y = Math.min(offset, this.instance.limit); // Actual scrollTo (the lerp will do the animation itself)
+        this.instance.delta[this.directionAxis] = Math.min(offset, this.instance.limit[this.directionAxis]); // Actual scrollTo (the lerp will do the animation itself)
 
-        this.inertiaRatio = Math.min(4000 / Math.abs(this.instance.delta.y - this.instance.scroll.y), 0.8); // Update the scroll. If we were in idle state: we're not anymore
+        this.inertiaRatio = Math.min(4000 / Math.abs(this.instance.delta[this.directionAxis] - this.instance.scroll[this.directionAxis]), 0.8); // Update the scroll. If we were in idle state: we're not anymore
 
         this.isScrolling = true;
         this.checkScroll();

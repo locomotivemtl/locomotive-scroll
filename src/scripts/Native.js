@@ -34,6 +34,7 @@ export default class extends Core {
     checkResize() {
         if (this.els.length) {
             this.windowHeight = window.innerHeight;
+            this.windowWidth = window.innerWidth;
 
             if(!this.hasScrollTicking) {
                 requestAnimationFrame(() => {

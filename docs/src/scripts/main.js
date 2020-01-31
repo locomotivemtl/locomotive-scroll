@@ -12,11 +12,14 @@ import LocomotiveScroll from '../../../src/locomotive-scroll';
     setTimeout(() => {
         const scroll = new LocomotiveScroll({
             el: document.querySelector('#js-scroll'),
+            direction: document.querySelector('#js-scroll').getAttribute('data-direction') ? document.querySelector('#js-scroll').getAttribute('data-direction') : 'vertical',
             smooth: true,
             getSpeed: true,
             getDirection: true,
             useKeyboard: true
         });
+
+        console.log(scroll.direction);
 
         let dynamicBackgrounds = [];
         let dynamicColorElements = [];

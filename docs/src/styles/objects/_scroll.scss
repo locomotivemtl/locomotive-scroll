@@ -7,6 +7,13 @@
     .has-scroll-smooth & {
         position: relative;
     }
+
+    [data-scroll-direction="horizontal"] & {
+        white-space: nowrap;
+        height: 100vh;
+        display: inline-block;
+        white-space: nowrap;
+    }
 }
 
 .c-scrollbar {
@@ -16,12 +23,27 @@
     top: 0;
     height: 100vh;
     transform-origin: center right;
-    transform: scaleX(1);
     transition: transform 0.2s linear;
 
+    transform: scaleX(1);
     &:hover {
         transform: scaleX(1.3);
+    }
+
+    &:hover {
         cursor: grab;
+    }
+
+    [data-scroll-direction="horizontal"] & {
+        width: 100vw;
+        height: 10px;
+        top: auto;
+        bottom: 0;
+
+        transform: scaleY(1);
+        &:hover {
+            transform: scaleY(1.3);
+        }
     }
 }
 
@@ -34,6 +56,20 @@
 
     &:hover {
         cursor: pointer;
+    }
+
+
+    [data-scroll-direction="horizontal"] & {
+        right: auto;
+        bottom: 0;
+    }
+}
+
+[data-scroll-section] {
+    [data-scroll-direction="horizontal"] & {
+        display: inline-block;
+        vertical-align: top;
+        white-space: nowrap;
     }
 }
 

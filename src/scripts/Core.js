@@ -9,7 +9,11 @@ export default class {
         this.namespace = 'locomotive';
         this.html = document.documentElement;
         this.windowHeight = window.innerHeight;
-        this.windowMiddle = this.windowHeight / 2;
+        this.windowWidth = window.innerWidth;
+        this.windowMiddle = {
+            x: this.windowWidth / 2,
+            y: this.windowHeight / 2
+        }
         this.els = [];
         this.listeners = {};
 
@@ -25,7 +29,16 @@ export default class {
                 x: 0,
                 y: 0
             },
-            limit: this.html.offsetHeight
+            limit: {
+                x: this.html.offsetHeight,
+                y: this.html.offsetHeight
+            }
+        }
+
+        if(this.direction === 'horizontal') {
+            this.directionAxis = 'x';
+        } else {
+            this.directionAxis = 'y';
         }
 
         if (this.getDirection) {
@@ -75,16 +88,31 @@ export default class {
         const scrollTop = this.instance.scroll.y;
         const scrollBottom = scrollTop + this.windowHeight;
 
+        const scrollLeft = this.instance.scroll.x;
+        const scrollRight = scrollLeft + this.windowWidth;
+
         this.els.forEach((el, i) => {
             if (el && (!el.inView || hasCallEventSet)) {
-                if ((scrollBottom >= el.top) && (scrollTop < el.bottom)) {
-                    this.setInView(el, i);
+                if(this.direction === 'horizontal') {
+                    if ((scrollRight >= el.left) && (scrollLeft < el.right)) {
+                        this.setInView(el, i);
+                    }
+                } else {
+                    if ((scrollBottom >= el.top) && (scrollTop < el.bottom)) {
+                        this.setInView(el, i);
+                    }
                 }
             }
 
             if (el && el.inView) {
-                if ((scrollBottom < el.top) || (scrollTop > el.bottom)) {
-                    this.setOutOfView(el, i);
+                if(this.direction === 'horizontal') {
+                    if ((scrollRight < el.left) || (scrollLeft > el.right)) {
+                        this.setOutOfView(el, i);
+                    }
+                } else {
+                    if ((scrollBottom < el.top) || (scrollTop > el.bottom)) {
+                        this.setOutOfView(el, i);
+                    }
                 }
             }
         });

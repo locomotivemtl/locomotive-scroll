@@ -36,6 +36,7 @@ export default class extends Core {
 
     init() {
         this.html.classList.add(this.smoothClass);
+        this.html.setAttribute(`data-${this.name}-direction`, this.direction)
 
         this.instance = {
             delta: {
@@ -81,7 +82,18 @@ export default class extends Core {
     }
 
     setScrollLimit() {
-        this.instance.limit = this.el.offsetHeight - this.windowHeight;
+
+        this.instance.limit.y = this.el.offsetHeight - this.windowHeight;
+
+        if(this.direction === 'horizontal') {
+            let totalWidth = 0;
+            let nodes = this.el.children;
+            for(let i = 0; i<nodes.length; i++) {
+                totalWidth += nodes[i].offsetWidth;
+            }
+
+            this.instance.limit.x = totalWidth - this.windowWidth;
+        }
     }
 
     startScrolling() {
@@ -109,29 +121,29 @@ export default class extends Core {
                 }, 0);
                 break;
             case keyCodes.UP:
-                this.instance.delta.y -= 240;
+                this.instance.delta[this.directionAxis] -= 240;
                 break;
             case keyCodes.DOWN:
-                this.instance.delta.y += 240;
+                this.instance.delta[this.directionAxis] += 240;
                 break;
             case keyCodes.PAGEUP:
-                this.instance.delta.y -= window.innerHeight;
+                this.instance.delta[this.directionAxis] -= window.innerHeight;
                 break;
             case keyCodes.PAGEDOWN:
-                this.instance.delta.y += window.innerHeight;
+                this.instance.delta[this.directionAxis] += window.innerHeight;
                 break;
             case keyCodes.HOME:
-                this.instance.delta.y -= this.instance.limit;
+                this.instance.delta[this.directionAxis] -= this.instance.limit[this.directionAxis];
                 break;
             case keyCodes.END:
-                this.instance.delta.y += this.instance.limit;
+                this.instance.delta[this.directionAxis] += this.instance.limit[this.directionAxis];
                 break;
             case keyCodes.SPACE:
                 if(!(document.activeElement instanceof HTMLInputElement) && !(document.activeElement instanceof HTMLTextAreaElement)) {
                     if(e.shiftKey) {
-                        this.instance.delta.y -= window.innerHeight;
+                        this.instance.delta[this.directionAxis] -= window.innerHeight;
                     } else {
-                        this.instance.delta.y += window.innerHeight;
+                        this.instance.delta[this.directionAxis] += window.innerHeight;
                     }
                 }
                 break;
@@ -139,8 +151,8 @@ export default class extends Core {
                 return;
         }
 
-        if(this.instance.delta.y < 0) this.instance.delta.y = 0;
-        if(this.instance.delta.y > this.instance.limit) this.instance.delta.y = this.instance.limit;
+        if(this.instance.delta[this.directionAxis] < 0) this.instance.delta[this.directionAxis] = 0;
+        if(this.instance.delta[this.directionAxis] > this.instance.limit) this.instance.delta[this.directionAxis] = this.instance.limit;
 
         this.isScrolling = true;
         this.checkScroll();
@@ -163,8 +175,12 @@ export default class extends Core {
             this.updateScroll();
 
             for (let i = this.sections.length - 1; i >= 0; i--) {
-                if(this.sections[i].persistent || (this.instance.scroll.y > this.sections[i].offset && this.instance.scroll.y < this.sections[i].limit)) {
-                    this.transform(this.sections[i].el, 0, -this.instance.scroll.y);
+                if(this.sections[i].persistent || (this.instance.scroll[this.directionAxis] > this.sections[i].offset[this.directionAxis] && this.instance.scroll[this.directionAxis] < this.sections[i].limit[this.directionAxis])) {
+                    if(this.direction === 'horizontal') {
+                        this.transform(this.sections[i].el, -this.instance.scroll[this.directionAxis], 0);
+                    } else {
+                        this.transform(this.sections[i].el, 0, -this.instance.scroll[this.directionAxis]);
+                    }
                     this.sections[i].el.style.visibility = 'visible';
                     this.sections[i].inView = true;
                 } else {
@@ -186,8 +202,12 @@ export default class extends Core {
             this.detectElements();
             this.transformElements();
 
-            const scrollBarTranslation = (this.instance.scroll.y / this.instance.limit) * this.scrollBarLimit;
-            this.transform(this.scrollbarThumb, 0, scrollBarTranslation);
+            const scrollBarTranslation = (this.instance.scroll[this.directionAxis] / this.instance.limit[this.directionAxis]) * this.scrollBarLimit[this.directionAxis];
+            if(this.direction === 'horizontal') {
+                this.transform(this.scrollbarThumb, scrollBarTranslation, 0);
+            } else {
+                this.transform(this.scrollbarThumb, 0, scrollBarTranslation);
+            }
 
             super.checkScroll();
 
@@ -197,21 +217,26 @@ export default class extends Core {
 
     checkResize() {
         this.windowHeight = window.innerHeight;
-        this.windowMiddle = this.windowHeight / 2;
+        this.windowWidth = window.innerWidth;
+        this.windowMiddle = {
+            x: this.windowWidth / 2,
+            y: this.windowHeight / 2
+        }
         this.update();
     }
 
     updateDelta(e) {
-        this.instance.delta.y -= e.deltaY;
-        if (this.instance.delta.y < 0) this.instance.delta.y = 0;
-        if (this.instance.delta.y > this.instance.limit) this.instance.delta.y = this.instance.limit;
+        this.instance.delta[this.directionAxis] -= e.deltaY;
+
+        if (this.instance.delta[this.directionAxis] < 0) this.instance.delta[this.directionAxis] = 0;
+        if (this.instance.delta[this.directionAxis] > this.instance.limit[this.directionAxis]) this.instance.delta[this.directionAxis] = this.instance.limit[this.directionAxis];
     }
 
     updateScroll(e) {
         if (this.isScrolling || this.isDraggingScrollbar) {
-            this.instance.scroll.y = lerp(this.instance.scroll.y, this.instance.delta.y, this.inertia * this.inertiaRatio);
+            this.instance.scroll[this.directionAxis] = lerp(this.instance.scroll[this.directionAxis], this.instance.delta[this.directionAxis], this.inertia * this.inertiaRatio);
         } else {
-            this.instance.scroll.y = this.instance.delta.y;
+            this.instance.scroll[this.directionAxis] = this.instance.delta[this.directionAxis];
         }
     }
 
@@ -225,11 +250,21 @@ export default class extends Core {
                 this.instance.direction = 'up';
             }
         }
+
+        if (this.instance.delta.x > this.instance.scroll.x) {
+            if (this.instance.direction !== 'right') {
+                this.instance.direction = 'right';
+            }
+        } else if (this.instance.delta.x < this.instance.scroll.x) {
+            if (this.instance.direction !== 'left') {
+                this.instance.direction = 'left';
+            }
+        }
     }
 
     addSpeed() {
-        if (this.instance.delta.y != this.instance.scroll.y) {
-            this.instance.speed = (this.instance.delta.y - this.instance.scroll.y) / (Date.now() - this.timestamp);
+        if (this.instance.delta[this.directionAxis] != this.instance.scroll[this.directionAxis]) {
+            this.instance.speed = (this.instance.delta[this.directionAxis] - this.instance.scroll[this.directionAxis]) / (Date.now() - this.timestamp);
         } else {
             this.instance.speed = 0;
         }
@@ -245,8 +280,18 @@ export default class extends Core {
         document.body.append(this.scrollbar);
 
         this.scrollbarHeight = this.scrollbar.getBoundingClientRect().height;
-        this.scrollbarThumb.style.height = `${(this.scrollbarHeight * this.scrollbarHeight) / (this.instance.limit + this.scrollbarHeight)}px`;
-        this.scrollBarLimit = this.scrollbarHeight - this.scrollbarThumb.getBoundingClientRect().height;
+        this.scrollbarWidth = this.scrollbar.getBoundingClientRect().width;
+
+        if(this.direction === 'horizontal') {
+            this.scrollbarThumb.style.width = `${(this.scrollbarWidth * this.scrollbarWidth) / (this.instance.limit.x + this.scrollbarWidth)}px`;
+        } else {
+            this.scrollbarThumb.style.height = `${(this.scrollbarHeight * this.scrollbarHeight) / (this.instance.limit.y + this.scrollbarHeight)}px`;
+        }
+
+        this.scrollBarLimit = {
+            x: this.scrollbarWidth - this.scrollbarThumb.getBoundingClientRect().width,
+            y: this.scrollbarHeight - this.scrollbarThumb.getBoundingClientRect().height
+        }
 
         this.getScrollBar = this.getScrollBar.bind(this);
         this.releaseScrollBar = this.releaseScrollBar.bind(this);
@@ -259,8 +304,17 @@ export default class extends Core {
 
     reinitScrollBar() {
         this.scrollbarHeight = this.scrollbar.getBoundingClientRect().height;
-        this.scrollbarThumb.style.height = `${(this.scrollbarHeight * this.scrollbarHeight) / this.instance.limit}px`;
-        this.scrollBarLimit = this.scrollbarHeight - this.scrollbarThumb.getBoundingClientRect().height;
+        this.scrollbarWidth = this.scrollbar.getBoundingClientRect().width;
+
+        if(this.direction === 'horizontal') {
+            this.scrollbarThumb.style.width = `${(this.scrollbarWidth * this.scrollbarWidth) / (this.instance.limit.x + this.scrollbarWidth)}px`;
+        } else {
+            this.scrollbarThumb.style.height = `${(this.scrollbarHeight * this.scrollbarHeight) / (this.instance.limit.y + this.scrollbarHeight)}px`;
+        }
+        this.scrollBarLimit = {
+            x: this.scrollbarWidth - this.scrollbarThumb.getBoundingClientRect().width,
+            y: this.scrollbarHeight - this.scrollbarThumb.getBoundingClientRect().height
+        }
     }
 
     destroyScrollBar() {
@@ -286,10 +340,14 @@ export default class extends Core {
     moveScrollBar(e) {
         if (!this.isTicking && this.isDraggingScrollbar) {
             requestAnimationFrame(() => {
-                let y = (e.clientY * 100 / (this.scrollbarHeight)) * this.instance.limit / 100;
+                let x = (e.clientX * 100 / (this.scrollbarWidth)) * this.instance.limit.x / 100;
+                let y = (e.clientY * 100 / (this.scrollbarHeight)) * this.instance.limit.y / 100;
 
-                if(y > 0 && y < this.instance.limit) {
+                if(y > 0 && y < this.instance.limit.y) {
                     this.instance.delta.y = y;
+                }
+                if(x > 0 && x < this.instance.limit.x) {
+                    this.instance.delta.x = x;
                 }
             });
             this.isTicking = true;
@@ -307,6 +365,7 @@ export default class extends Core {
             els.forEach((el, i) => {
                 let cl = el.dataset[this.name + 'Class'] || this.class;
                 let top;
+                let left;
                 let repeat = el.dataset[this.name + 'Repeat'];
                 let call = el.dataset[this.name + 'Call'];
                 let position = el.dataset[this.name + 'Position'];
@@ -327,19 +386,33 @@ export default class extends Core {
 
                 if(!this.sections[y].inView) {
                     top = targetEl.getBoundingClientRect().top - getTranslate(this.sections[y].el).y - getTranslate(targetEl).y;
+                    left = targetEl.getBoundingClientRect().left - getTranslate(this.sections[y].el).x - getTranslate(targetEl).x;
                 } else {
                     top = targetEl.getBoundingClientRect().top + this.instance.scroll.y - getTranslate(targetEl).y;
+                    left = targetEl.getBoundingClientRect().left + this.instance.scroll.x - getTranslate(targetEl).x;
                 }
 
                 let bottom = top + targetEl.offsetHeight;
-                let middle = ((bottom - top) / 2) + top;
+                let right = left + targetEl.offsetWidth;
+                let middle = {
+                    x: ((right - left) / 2) + left,
+                    y: ((bottom - top) / 2) + top
+                };
 
                 if(sticky) {
-                    const elDistance = el.getBoundingClientRect().top - top;
+                    const elDistance = {
+                        x: el.getBoundingClientRect().left - left,
+                        y: el.getBoundingClientRect().top - top
+                    }
 
                     top += window.innerHeight;
+                    left += window.innerWidth;
                     bottom = top + targetEl.offsetHeight - window.innerHeight - el.offsetHeight - elDistance;
-                    middle = ((bottom - top) / 2) + top;
+                    right = left + targetEl.offsetWidth - window.innerWidth - el.offsetWidth - elDistance;
+                    middle = {
+                        x: ((right - left) / 2) + left,
+                        y: ((bottom - top) / 2) + top
+                    };
                 }
 
                 if(repeat == 'false') {
@@ -352,22 +425,40 @@ export default class extends Core {
 
                 let relativeOffset = [0,0];
                 if(offset) {
-                    for (var i = 0; i < offset.length; i++) {
-                        if(offset[i].includes('%')) {
-                            relativeOffset[i] = parseInt(offset[i].replace('%','') * this.windowHeight / 100);
-                        } else {
-                            relativeOffset[i] = parseInt(offset[i]);
+                    if(this.direction === 'horizontal') {
+                        for (var i = 0; i < offset.length; i++) {
+                            if(offset[i].includes('%')) {
+                                relativeOffset[i] = parseInt(offset[i].replace('%','') * this.windowWidth / 100);
+                            } else {
+                                relativeOffset[i] = parseInt(offset[i]);
+                            }
                         }
+                        left = left + relativeOffset[0];
+                        right = right - relativeOffset[1];
+                    } else {
+                        for (var i = 0; i < offset.length; i++) {
+                            if(offset[i].includes('%')) {
+                                relativeOffset[i] = parseInt(offset[i].replace('%','') * this.windowHeight / 100);
+                            } else {
+                                relativeOffset[i] = parseInt(offset[i]);
+                            }
+                        }
+                        top = top + relativeOffset[0];
+                        bottom = bottom - relativeOffset[1];
                     }
                 }
+
+
 
                 const mappedEl = {
                     el,
                     id: i,
                     class: cl,
-                    top: top + relativeOffset[0],
+                    top,
                     middle,
-                    bottom: bottom - relativeOffset[1],
+                    bottom,
+                    left,
+                    right,
                     offset,
                     repeat,
                     inView: false,
@@ -399,12 +490,18 @@ export default class extends Core {
         }
 
         sections.forEach((section, i) => {
-            let offset = section.getBoundingClientRect().top - (window.innerHeight * 1.5) - getTranslate(section).y;
-            let limit = offset + section.getBoundingClientRect().height + (window.innerHeight * 2);
+            let offset = {
+                x: section.getBoundingClientRect().left - (window.innerWidth * 1.5) - getTranslate(section).x,
+                y: section.getBoundingClientRect().top - (window.innerHeight * 1.5) - getTranslate(section).y
+            };
+            let limit = {
+                x: offset.x + section.getBoundingClientRect().width + (window.innerWidth * 2),
+                y: offset.y + section.getBoundingClientRect().height + (window.innerHeight * 2)
+            }
             let persistent = typeof section.dataset[this.name + 'Persistent'] === 'string';
 
             let inView = false;
-            if(this.instance.scroll.y >= offset && this.instance.scroll.y <= limit) {
+            if(this.instance.scroll[this.directionAxis] >= offset[this.directionAxis] && this.instance.scroll[this.directionAxis] <= limit[this.directionAxis]) {
                 inView = true;
             }
 
@@ -439,8 +536,14 @@ export default class extends Core {
     }
 
     transformElements(isForced) {
+        const scrollRight = this.instance.scroll.x + this.windowWidth;
         const scrollBottom = this.instance.scroll.y + this.windowHeight;
-        const scrollMiddle = this.instance.scroll.y + this.windowMiddle;
+
+        const scrollMiddle = {
+            x: this.instance.scroll.x + this.windowMiddle.x,
+            y: this.instance.scroll.y + this.windowMiddle.y
+        };
+
 
         this.parallaxElements.forEach((current, i) => {
             let transformDistance = false;
@@ -452,7 +555,7 @@ export default class extends Core {
             if(current.inView) {
                 switch (current.position) {
                     case 'top':
-                        transformDistance = this.instance.scroll.y * -current.speed;
+                        transformDistance = this.instance.scroll[this.directionAxis] * -current.speed;
                     break;
 
                     case 'elementTop':
@@ -460,11 +563,23 @@ export default class extends Core {
                     break;
 
                     case 'bottom':
-                        transformDistance = (this.instance.limit - scrollBottom + this.windowHeight) * current.speed;
+                        transformDistance = (this.instance.limit[this.directionAxis] - scrollBottom + this.windowHeight) * current.speed;
+                    break;
+
+                    case 'left':
+                        transformDistance = this.instance.scroll[this.directionAxis] * -current.speed;
+                    break;
+
+                    case 'elementLeft':
+                        transformDistance = (scrollRight - current.left) * -current.speed;
+                    break;
+
+                    case 'right':
+                        transformDistance = (this.instance.limit[this.directionAxis] - scrollRight + this.windowHeight) * current.speed;
                     break;
 
                     default:
-                        transformDistance = (scrollMiddle - current.middle) * -current.speed;
+                        transformDistance = (scrollMiddle[this.directionAxis] - current.middle[this.directionAxis]) * -current.speed;
                     break;
                 }
             }
@@ -472,21 +587,36 @@ export default class extends Core {
             if(current.sticky) {
 
                 if(current.inView) {
-                    transformDistance = this.instance.scroll.y - current.top + window.innerHeight;
+
+                    if(this.direction === 'horizontal') {
+                        transformDistance = this.instance.scroll.x - current.left + window.innerWidth;
+                    } else {
+                        transformDistance = this.instance.scroll.y - current.top + window.innerHeight;
+                    }
 
                 } else {
-                    if(this.instance.scroll.y < current.top - window.innerHeight && this.instance.scroll.y < current.top - (window.innerHeight/2)) {
-                        transformDistance = 0;
-                    } else if(this.instance.scroll.y > current.bottom && this.instance.scroll.y > current.bottom + 100) {
-                        transformDistance = current.bottom - current.top + window.innerHeight;
+                    if(this.direction === 'horizontal') {
+                        if(this.instance.scroll.x < current.left - window.innerWidth && this.instance.scroll.x < current.left - (window.innerWidth/2)) {
+                            transformDistance = 0;
+                        } else if(this.instance.scroll.x > current.right && this.instance.scroll.x > current.right + 100) {
+                            transformDistance = current.right - current.left + window.innerWidth;
+                        } else {
+                            transformDistance = false;
+                        }
                     } else {
-                        transformDistance = false;
+                        if(this.instance.scroll.y < current.top - window.innerHeight && this.instance.scroll.y < current.top - (window.innerHeight/2)) {
+                            transformDistance = 0;
+                        } else if(this.instance.scroll.y > current.bottom && this.instance.scroll.y > current.bottom + 100) {
+                            transformDistance = current.bottom - current.top + window.innerHeight;
+                        } else {
+                            transformDistance = false;
+                        }
                     }
                 }
             }
 
             if(transformDistance !== false) {
-                if(current.direction === 'horizontal') {
+                if(current.direction === 'horizontal' || (this.direction === 'horizontal' && current.direction !== 'vertical' )) {
                     this.transform(current.el, transformDistance, 0, (isForced ? false : current.delay))
                 } else {
                     this.transform(current.el, 0, transformDistance, (isForced ? false : current.delay))
@@ -515,7 +645,11 @@ export default class extends Core {
             if(targetOption === 'top') {
                 offset = 0;
             } else if(targetOption === 'bottom') {
-                offset = this.instance.limit;
+                offset = this.instance.limit.y;
+            } else if(targetOption === 'left') {
+                offset = 0;
+            } else if(targetOption === 'right') {
+                offset = this.instance.limit.x;
             } else {
                 target = document.querySelectorAll(targetOption)[0];
             }
@@ -527,23 +661,29 @@ export default class extends Core {
         // We have a target, get it's coordinates
         if (target) {
             // Get target offset from top
-            const targetBCR = target.getBoundingClientRect()
-            const offsetTop = targetBCR.top + this.instance.scroll.y
+            const targetBCR = target.getBoundingClientRect();
+            const offsetTop = targetBCR.top + this.instance.scroll.y;
+            const offsetLeft = targetBCR.left + this.instance.scroll.x;
 
             // Try and find the target's parent section
             const targetParents = getParents(target)
             const parentSection = targetParents.find(candidate => this.sections.find(section => section.el == candidate))
             let parentSectionOffset = 0
             if(parentSection) {
-                parentSectionOffset = getTranslate(parentSection).y // We got a parent section, store it's current offset to remove it later
+                parentSectionOffset = getTranslate(parentSection)[this.directionAxis] // We got a parent section, store it's current offset to remove it later
             }
             // Final value of scroll destination : offsetTop + (optional offset given in options) - (parent's section translate)
-            offset = offsetTop + offset - parentSectionOffset;
+            if(this.direction === 'horizontal') {
+                offset = offsetLeft + offset - parentSectionOffset;
+            } else {
+                offset = offsetTop + offset - parentSectionOffset;
+            }
+
         }
         offset -= this.instance.scroll.y;
 
-        this.instance.delta.y = Math.min(offset, this.instance.limit); // Actual scrollTo (the lerp will do the animation itself)
-        this.inertiaRatio = Math.min(4000 / Math.abs(this.instance.delta.y - this.instance.scroll.y),0.8);
+        this.instance.delta[this.directionAxis] = Math.min(offset, this.instance.limit[this.directionAxis]); // Actual scrollTo (the lerp will do the animation itself)
+        this.inertiaRatio = Math.min(4000 / Math.abs(this.instance.delta[this.directionAxis] - this.instance.scroll[this.directionAxis]),0.8);
 
         // Update the scroll. If we were in idle state: we're not anymore
         this.isScrolling = true;
