@@ -1430,7 +1430,7 @@
       key: "reinitScrollBar",
       value: function reinitScrollBar() {
         this.scrollbarHeight = this.scrollbar.getBoundingClientRect().height;
-        this.scrollbarThumb.style.height = "".concat(this.scrollbarHeight * this.scrollbarHeight / this.instance.limit, "px");
+        this.scrollbarThumb.style.height = "".concat(this.scrollbarHeight * this.scrollbarHeight / (this.instance.limit + this.scrollbarHeight), "px");
         this.scrollBarLimit = this.scrollbarHeight - this.scrollbarThumb.getBoundingClientRect().height;
       }
     }, {
