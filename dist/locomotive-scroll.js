@@ -2032,6 +2032,9 @@
       if (options.smartphone) Object.assign(this.smartphone, options.smartphone);
       this.tablet = defaults.tablet;
       if (options.tablet) Object.assign(this.tablet, options.tablet);
+      if (!this.smooth && this.direction == 'horizontal') console.warn('🚨 `smooth` & `horizontal` direction are not yet compatible');
+      if (!this.tablet.smooth && this.tablet.direction == 'horizontal') console.warn('🚨 `smooth` & `horizontal` direction are not yet compatible (tablet)');
+      if (!this.smartphone.smooth && this.smartphone.direction == 'horizontal') console.warn('🚨 `smooth` & `horizontal` direction are not yet compatible (smartphone)');
       this.init();
     }
 

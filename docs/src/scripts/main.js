@@ -11,7 +11,6 @@ import LocomotiveScroll from '../../../src/locomotive-scroll';
 
     let options = {
         el: document.querySelector('#js-scroll'),
-        direction: document.querySelector('#js-scroll').getAttribute('data-direction') ? document.querySelector('#js-scroll').getAttribute('data-direction') : 'vertical',
         smooth: true,
         getSpeed: true,
         getDirection: true,
@@ -26,9 +25,7 @@ import LocomotiveScroll from '../../../src/locomotive-scroll';
             horizontalGesture: true
         }
         options.smartphone = {
-            smooth: false,
-            direction: 'horizontal',
-            horizontalGesture: false
+            smooth: false
         }
         options.reloadOnContextChange = true
     }
