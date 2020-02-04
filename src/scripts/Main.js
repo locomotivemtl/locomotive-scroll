@@ -5,17 +5,28 @@ import Smooth from './Smooth';
 export default class {
     constructor(options = {}) {
         this.options = options;
+
+        // Override default options with given ones
         Object.assign(this, defaults, options);
+        this.smartphone = defaults.smartphone
+        if(options.smartphone) Object.assign(this.smartphone, options.smartphone)
+        this.tablet = defaults.tablet
+        if(options.tablet) Object.assign(this.tablet, options.tablet)
 
         this.init();
     }
 
     init() {
-        if (!this.smoothMobile) {
-            this.isMobile = (/Android|iPhone|iPad|iPod|BlackBerry|IEMobile|Opera Mini/i.test(navigator.userAgent)) || (navigator.platform === 'MacIntel' && navigator.maxTouchPoints > 1);
-        }
+        this.options.isMobile = (/Android|iPhone|iPad|iPod|BlackBerry|IEMobile|Opera Mini/i.test(navigator.userAgent)) || (navigator.platform === 'MacIntel' && navigator.maxTouchPoints > 1) || window.innerWidth < this.tablet.breakpoint;
+        this.options.isTablet = this.options.isMobile && window.innerWidth >= this.tablet.breakpoint
 
-        if (this.smooth === true && !this.isMobile) {
+        if (
+            (this.smooth && !this.options.isMobile)
+            ||
+            (this.tablet.smooth && this.options.isTablet)
+            ||
+            (this.smartphone.smooth && this.options.isMobile && !this.options.isTablet)
+        ) {
             this.scroll = new Smooth(this.options);
         } else {
             this.scroll = new Scroll(this.options);

@@ -4,7 +4,12 @@ export default class {
     constructor(options = {}) {
         window.scrollTo(0,0);
 
+        // Override default options with given ones
         Object.assign(this, defaults, options);
+        this.smartphone = defaults.smartphone
+        if(options.smartphone) Object.assign(this.smartphone, options.smartphone)
+        this.tablet = defaults.tablet
+        if(options.tablet) Object.assign(this.tablet, options.tablet)
 
         this.namespace = 'locomotive';
         this.html = document.documentElement;
@@ -35,6 +40,17 @@ export default class {
             }
         }
 
+        if(this.isMobile) {
+            if(this.isTablet) {
+                this.context = 'tablet'
+            } else {
+                this.context = 'smartphone'
+            }
+        } else {
+            this.context = 'desktop'
+        }
+
+        if(this.isMobile) this.direction = this[this.context].direction
         if(this.direction === 'horizontal') {
             this.directionAxis = 'x';
         } else {
@@ -63,6 +79,32 @@ export default class {
     }
 
     checkResize() {}
+
+    checkContext() {
+        if(!this.reloadOnContextChange) return;
+
+        this.isMobile = (/Android|iPhone|iPad|iPod|BlackBerry|IEMobile|Opera Mini/i.test(navigator.userAgent)) || (navigator.platform === 'MacIntel' && navigator.maxTouchPoints > 1) || this.windowWidth < this.tablet.breakpoint;
+        this.isTablet = this.isMobile && this.windowWidth >= this.tablet.breakpoint
+
+        let oldContext = this.context
+        if(this.isMobile) {
+            if(this.isTablet) {
+                this.context = 'tablet'
+            } else {
+                this.context = 'smartphone'
+            }
+        } else {
+            this.context = 'desktop'
+        }
+
+        if(oldContext != this.context) {
+            let oldSmooth = (oldContext == 'desktop') ? this.smooth : this[oldContext].smooth
+            let newSmooth = (this.context == 'desktop') ? this.smooth : this[this.context].smooth
+
+            if(oldSmooth != newSmooth)
+                window.location.reload()
+        }
+    }
 
     initEvents() {
         this.scrollToEls = this.el.querySelectorAll(`[data-${this.name}-to]`);

@@ -79,26 +79,29 @@ scroll.on('call', func => {
 
 ## Instance options
 
-| Option              | Type      | Default                | Description                                                                           |
-| ------------------- | --------- | ---------------------- | ------------------------------------------------------------------------------------- |
-| `el`                | `object`  | `document`             | Scroll container element.                                                             |
-| `name`              | `string`  | `'scroll'`             | Data attribute prefix (`data-scroll-xxxx`).                                           |
-| `offset`            | `array`   | `0`                    | In-view trigger offset.                                                               |
-| `repeat`            | `boolean` | `false`                | Repeat in-view detection.                                                             |
-| `smooth`            | `boolean` | `false`                | Smooth scrolling.                                                                     |
-| `smoothMobile`      | `boolean` | `false`                | Smooth scrolling on iOS and Android devices.                                          |
-| `direction`         | `string`  | `vertical`             | Scroll direction.                                                                     |
-| `inertia`           | `number`  | `1`                    | Lerp intensity.                                                                       |
-| `getDirection`      | `boolean` | `false`                | Add direction to scroll event.                                                        |
-| `getSpeed`          | `boolean` | `false`                | Add speed to scroll event.                                                            |
-| `class`             | `string`  | `is-inview`            | Element in-view class.                                                                |
-| `initClass`         | `string`  | `has-scroll-init`      | Initialize class.                                                                     |
-| `scrollingClass`    | `string`  | `has-scroll-scrolling` | Is scrolling class.                                                                   |
-| `draggingClass`     | `string`  | `has-scroll-dragging`  | Is dragging class.                                                                    |
-| `smoothClass`       | `string`  | `has-scroll-smooth`    | Has smooth scrolling class.                                                           |
-| `scrollbarClass`    | `string`  | `c-scrollbar`          | Scrollbar element class.                                                              |
-| `firefoxMultiplier` | `number`  | `50`                   | Boost scrolling speed of Firefox on Windows.                                          |
-| `touchMultiplier`   | `number`  | `2`                    | Mutiply touch action to scroll faster than finger movement.                           |
+| Option                    | Type      | Default                | Description                                                                                                                              |
+| ------------------------- | --------- | ---------------------- | ---------------------------------------------------------------------------------------------------------------------------------------- |
+| `el`                      | `object`  | `document`             | Scroll container element.                                                                                                                |
+| `name`                    | `string`  | `'scroll'`             | Data attribute prefix (`data-scroll-xxxx`).                                                                                              |
+| `offset`                  | `array`   | `0`                    | In-view trigger offset.                                                                                                                  |
+| `repeat`                  | `boolean` | `false`                | Repeat in-view detection.                                                                                                                |
+| `smooth`                  | `boolean` | `false`                | Smooth scrolling.                                                                                                                        |
+| `direction`               | `string`  | `vertical`             | Scroll direction. Available values : `vertical`, `horizontal`                                                                            |
+| `horizontalGesture`       | `boolean` | `false`                | **Only affects "smooth" scrolling**. If true, uses horizontal data from mousewheel / touch to scroll                                     |
+| `reloadOnContextChange`   | `boolean` | `false`                | If true, reloads browser when a context change (between `smartphone`, `tablet` or `desktop`) implies swapping between smooth & native    |
+| `inertia`                 | `number`  | `1`                    | Lerp intensity.                                                                                                                          |
+| `getDirection`            | `boolean` | `false`                | Add direction to scroll event.                                                                                                           |
+| `getSpeed`                | `boolean` | `false`                | Add speed to scroll event.                                                                                                               |
+| `class`                   | `string`  | `is-inview`            | Element in-view class.                                                                                                                   |
+| `initClass`               | `string`  | `has-scroll-init`      | Initialize class.                                                                                                                        |
+| `scrollingClass`          | `string`  | `has-scroll-scrolling` | Is scrolling class.                                                                                                                      |
+| `draggingClass`           | `string`  | `has-scroll-dragging`  | Is dragging class.                                                                                                                       |
+| `smoothClass`             | `string`  | `has-scroll-smooth`    | Has smooth scrolling class.                                                                                                              |
+| `scrollbarClass`          | `string`  | `c-scrollbar`          | Scrollbar element class.                                                                                                                 |
+| `firefoxMultiplier`       | `number`  | `50`                   | Boost scrolling speed of Firefox on Windows.                                                                                             |
+| `touchMultiplier`         | `number`  | `2`                    | Mutiply touch action to scroll faster than finger movement.                                                                              |
+| `tablet`                  | `object`  | `{ smooth: false, direction: 'vertical', horizontalGesture: false, breakpoint: 1024 }`    | Allows to override `smooth`, `direction`, `horizontalGesture` options in "tablet" context. The property `breakpoint` allows to set the viewport width that delimits the context from "tablet" to "smartphone" |
+| `smartphone`              | `object`  | `{ smooth: false, direction: 'vertical', horizontalGesture: false }`                      | Allows to override `smooth`, `direction`, `horizontalGesture` options in "smartphone" context. |
 
 ## Element attributes
 

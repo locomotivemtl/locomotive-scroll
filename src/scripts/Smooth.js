@@ -167,8 +167,8 @@ export default class extends Core {
                 this.hasScrollTicking = true;
             }
 
-            const distance = (Math.abs(this.instance.delta.y - this.instance.scroll.y));
-            if ((distance < 0.5 && this.instance.delta.y != 0) || (distance < 0.5 && this.instance.delta.y == 0)) {
+            const distance = (Math.abs(this.instance.delta[this.directionAxis] - this.instance.scroll[this.directionAxis]));
+            if ((distance < 0.5 && this.instance.delta[this.directionAxis] != 0) || (distance < 0.5 && this.instance.delta[this.directionAxis] == 0)) {
                 this.stopScrolling();
             }
 
@@ -218,6 +218,9 @@ export default class extends Core {
     checkResize() {
         this.windowHeight = window.innerHeight;
         this.windowWidth = window.innerWidth;
+
+        this.checkContext()
+
         this.windowMiddle = {
             x: this.windowWidth / 2,
             y: this.windowHeight / 2
@@ -226,7 +229,14 @@ export default class extends Core {
     }
 
     updateDelta(e) {
-        this.instance.delta[this.directionAxis] -= e.deltaY;
+        let delta
+        if(this.isMobile) {
+            delta = this[this.context].horizontalGesture ? e.deltaX : e.deltaY
+        } else {
+            delta = this.horizontalGesture ? e.deltaX : e.deltaY
+        }
+
+        this.instance.delta[this.directionAxis] -= delta;
 
         if (this.instance.delta[this.directionAxis] < 0) this.instance.delta[this.directionAxis] = 0;
         if (this.instance.delta[this.directionAxis] > this.instance.limit[this.directionAxis]) this.instance.delta[this.directionAxis] = this.instance.limit[this.directionAxis];
@@ -680,7 +690,7 @@ export default class extends Core {
             }
 
         }
-        offset -= this.instance.scroll.y;
+        offset -= this.instance.scroll[this.directionAxis];
 
         this.instance.delta[this.directionAxis] = Math.min(offset, this.instance.limit[this.directionAxis]); // Actual scrollTo (the lerp will do the animation itself)
         this.inertiaRatio = Math.min(4000 / Math.abs(this.instance.delta[this.directionAxis] - this.instance.scroll[this.directionAxis]),0.8);

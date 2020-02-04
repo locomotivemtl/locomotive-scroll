@@ -5,8 +5,9 @@ export const defaults = {
     offset: 0,
     repeat: false,
     smooth: false,
-    smoothMobile: false,
     direction: 'vertical',
+    horizontalGesture: false,
+    reloadOnContextChange: false,
     inertia: 1,
     class: 'is-inview',
     scrollbarClass: 'c-scrollbar',
@@ -17,5 +18,16 @@ export const defaults = {
     getSpeed: false,
     getDirection: false,
     firefoxMultiplier: 50,
-    touchMultiplier: 2
+    touchMultiplier: 2,
+    tablet: {
+        smooth: false,
+        direction: 'vertical',
+        horizontalGesture: false,
+        breakpoint: 1024
+    },
+    smartphone: {
+        smooth: false,
+        direction: 'vertical',
+        horizontalGesture: false
+    }
 };

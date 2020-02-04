@@ -160,8 +160,9 @@
     offset: 0,
     repeat: false,
     smooth: false,
-    smoothMobile: false,
     direction: 'vertical',
+    horizontalGesture: false,
+    reloadOnContextChange: false,
     inertia: 1,
     "class": 'is-inview',
     scrollbarClass: 'c-scrollbar',
@@ -172,7 +173,18 @@
     getSpeed: false,
     getDirection: false,
     firefoxMultiplier: 50,
-    touchMultiplier: 2
+    touchMultiplier: 2,
+    tablet: {
+      smooth: false,
+      direction: 'vertical',
+      horizontalGesture: false,
+      breakpoint: 1024
+    },
+    smartphone: {
+      smooth: false,
+      direction: 'vertical',
+      horizontalGesture: false
+    }
   };
 
   var _default =
@@ -183,8 +195,13 @@
 
       _classCallCheck(this, _default);
 
-      window.scrollTo(0, 0);
+      window.scrollTo(0, 0); // Override default options with given ones
+
       Object.assign(this, defaults, options);
+      this.smartphone = defaults.smartphone;
+      if (options.smartphone) Object.assign(this.smartphone, options.smartphone);
+      this.tablet = defaults.tablet;
+      if (options.tablet) Object.assign(this.tablet, options.tablet);
       this.namespace = 'locomotive';
       this.html = document.documentElement;
       this.windowHeight = window.innerHeight;
@@ -210,6 +227,18 @@
           y: this.html.offsetHeight
         }
       };
+
+      if (this.isMobile) {
+        if (this.isTablet) {
+          this.context = 'tablet';
+        } else {
+          this.context = 'smartphone';
+        }
+      } else {
+        this.context = 'desktop';
+      }
+
+      if (this.isMobile) this.direction = this[this.context].direction;
 
       if (this.direction === 'horizontal') {
         this.directionAxis = 'x';
@@ -242,6 +271,30 @@
     }, {
       key: "checkResize",
       value: function checkResize() {}
+    }, {
+      key: "checkContext",
+      value: function checkContext() {
+        if (!this.reloadOnContextChange) return;
+        this.isMobile = /Android|iPhone|iPad|iPod|BlackBerry|IEMobile|Opera Mini/i.test(navigator.userAgent) || navigator.platform === 'MacIntel' && navigator.maxTouchPoints > 1 || this.windowWidth < this.tablet.breakpoint;
+        this.isTablet = this.isMobile && this.windowWidth >= this.tablet.breakpoint;
+        var oldContext = this.context;
+
+        if (this.isMobile) {
+          if (this.isTablet) {
+            this.context = 'tablet';
+          } else {
+            this.context = 'smartphone';
+          }
+        } else {
+          this.context = 'desktop';
+        }
+
+        if (oldContext != this.context) {
+          var oldSmooth = oldContext == 'desktop' ? this.smooth : this[oldContext].smooth;
+          var newSmooth = this.context == 'desktop' ? this.smooth : this[this.context].smooth;
+          if (oldSmooth != newSmooth) window.location.reload();
+        }
+      }
     }, {
       key: "initEvents",
       value: function initEvents() {
@@ -489,10 +542,11 @@
       value: function checkResize() {
         var _this3 = this;
 
-        if (this.els.length) {
-          this.windowHeight = window.innerHeight;
-          this.windowWidth = window.innerWidth;
+        this.windowHeight = window.innerHeight;
+        this.windowWidth = window.innerWidth;
+        this.checkContext();
 
+        if (this.els.length) {
           if (!this.hasScrollTicking) {
             requestAnimationFrame(function () {
               _this3.updateElements();
@@ -1363,9 +1417,9 @@
             this.hasScrollTicking = true;
           }
 
-          var distance = Math.abs(this.instance.delta.y - this.instance.scroll.y);
+          var distance = Math.abs(this.instance.delta[this.directionAxis] - this.instance.scroll[this.directionAxis]);
 
-          if (distance < 0.5 && this.instance.delta.y != 0 || distance < 0.5 && this.instance.delta.y == 0) {
+          if (distance < 0.5 && this.instance.delta[this.directionAxis] != 0 || distance < 0.5 && this.instance.delta[this.directionAxis] == 0) {
             this.stopScrolling();
           }
 
@@ -1417,6 +1471,7 @@
       value: function checkResize() {
         this.windowHeight = window.innerHeight;
         this.windowWidth = window.innerWidth;
+        this.checkContext();
         this.windowMiddle = {
           x: this.windowWidth / 2,
           y: this.windowHeight / 2
@@ -1426,7 +1481,15 @@
     }, {
       key: "updateDelta",
       value: function updateDelta(e) {
-        this.instance.delta[this.directionAxis] -= e.deltaY;
+        var delta;
+
+        if (this.isMobile) {
+          delta = this[this.context].horizontalGesture ? e.deltaX : e.deltaY;
+        } else {
+          delta = this.horizontalGesture ? e.deltaX : e.deltaY;
+        }
+
+        this.instance.delta[this.directionAxis] -= delta;
         if (this.instance.delta[this.directionAxis] < 0) this.instance.delta[this.directionAxis] = 0;
         if (this.instance.delta[this.directionAxis] > this.instance.limit[this.directionAxis]) this.instance.delta[this.directionAxis] = this.instance.limit[this.directionAxis];
       }
@@ -1894,7 +1957,7 @@
           }
         }
 
-        offset -= this.instance.scroll.y;
+        offset -= this.instance.scroll[this.directionAxis];
         this.instance.delta[this.directionAxis] = Math.min(offset, this.instance.limit[this.directionAxis]); // Actual scrollTo (the lerp will do the animation itself)
 
         this.inertiaRatio = Math.min(4000 / Math.abs(this.instance.delta[this.directionAxis] - this.instance.scroll[this.directionAxis]), 0.8); // Update the scroll. If we were in idle state: we're not anymore
@@ -1962,19 +2025,23 @@
 
       _classCallCheck(this, _default);
 
-      this.options = options;
+      this.options = options; // Override default options with given ones
+
       Object.assign(this, defaults, options);
+      this.smartphone = defaults.smartphone;
+      if (options.smartphone) Object.assign(this.smartphone, options.smartphone);
+      this.tablet = defaults.tablet;
+      if (options.tablet) Object.assign(this.tablet, options.tablet);
       this.init();
     }
 
     _createClass(_default, [{
       key: "init",
       value: function init() {
-        if (!this.smoothMobile) {
-          this.isMobile = /Android|iPhone|iPad|iPod|BlackBerry|IEMobile|Opera Mini/i.test(navigator.userAgent) || navigator.platform === 'MacIntel' && navigator.maxTouchPoints > 1;
-        }
+        this.options.isMobile = /Android|iPhone|iPad|iPod|BlackBerry|IEMobile|Opera Mini/i.test(navigator.userAgent) || navigator.platform === 'MacIntel' && navigator.maxTouchPoints > 1 || window.innerWidth < this.tablet.breakpoint;
+        this.options.isTablet = this.options.isMobile && window.innerWidth >= this.tablet.breakpoint;
 
-        if (this.smooth === true && !this.isMobile) {
+        if (this.smooth && !this.options.isMobile || this.tablet.smooth && this.options.isTablet || this.smartphone.smooth && this.options.isMobile && !this.options.isTablet) {
           this.scroll = new _default$2(this.options);
         } else {
           this.scroll = new _default$1(this.options);

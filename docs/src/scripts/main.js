@@ -9,17 +9,32 @@ import LocomotiveScroll from '../../../src/locomotive-scroll';
         document.documentElement.classList.add('is-ready');
     },300)
 
-    setTimeout(() => {
-        const scroll = new LocomotiveScroll({
-            el: document.querySelector('#js-scroll'),
-            direction: document.querySelector('#js-scroll').getAttribute('data-direction') ? document.querySelector('#js-scroll').getAttribute('data-direction') : 'vertical',
-            smooth: true,
-            getSpeed: true,
-            getDirection: true,
-            useKeyboard: true
-        });
+    let options = {
+        el: document.querySelector('#js-scroll'),
+        direction: document.querySelector('#js-scroll').getAttribute('data-direction') ? document.querySelector('#js-scroll').getAttribute('data-direction') : 'vertical',
+        smooth: true,
+        getSpeed: true,
+        getDirection: true,
+        useKeyboard: true
+    }
 
-        console.log(scroll.direction);
+    if(document.querySelector('#js-scroll').getAttribute('data-horizontal') == 'true') {
+        options.direction = 'horizontal';
+        options.tablet = {
+            smooth: true,
+            direction: 'horizontal',
+            horizontalGesture: true
+        }
+        options.smartphone = {
+            smooth: false,
+            direction: 'horizontal',
+            horizontalGesture: false
+        }
+        options.reloadOnContextChange = true
+    }
+
+    setTimeout(() => {
+        const scroll = new LocomotiveScroll(options);
 
         let dynamicBackgrounds = [];
         let dynamicColorElements = [];

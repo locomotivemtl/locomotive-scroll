@@ -32,10 +32,12 @@ export default class extends Core {
     }
 
     checkResize() {
-        if (this.els.length) {
-            this.windowHeight = window.innerHeight;
-            this.windowWidth = window.innerWidth;
+        this.windowHeight = window.innerHeight;
+        this.windowWidth = window.innerWidth;
 
+        this.checkContext()
+
+        if (this.els.length) {
             if(!this.hasScrollTicking) {
                 requestAnimationFrame(() => {
                     this.updateElements();
