@@ -52,7 +52,7 @@ export default class extends Core {
             let cl = el.dataset[this.name + 'Class'] || this.class;
             let top = el.getBoundingClientRect().top + this.instance.scroll.y;
             let bottom = top + el.offsetHeight;
-            let offset = parseInt(el.dataset[this.name + 'Offset']) || parseInt(this.offset);
+                let offset = (typeof el.dataset[this.name + 'Offset'] === 'string') ? el.dataset[this.name + 'Offset'].split(',') : false;
             let repeat = el.dataset[this.name + 'Repeat'];
             let call = el.dataset[this.name + 'Call'];
 
@@ -64,12 +64,24 @@ export default class extends Core {
                 repeat = this.repeat;
             }
 
+            let relativeOffset = [0,0];
+            if(offset) {
+                for (var i = 0; i < offset.length; i++) {
+                    if(offset[i].includes('%')) {
+                        relativeOffset[i] = parseInt(offset[i].replace('%','') * this.windowHeight / 100);
+
+                    } else {
+                        relativeOffset[i] = parseInt(offset[i]);
+                    }
+                }
+            }
+
             const mappedEl = {
                 el: el,
                 id: i,
                 class: cl,
-                top: top + offset,
-                bottom: bottom,
+                top: top + relativeOffset[0],
+                bottom: bottom - relativeOffset[1],
                 offset: offset,
                 repeat: repeat,
                 inView: false,
