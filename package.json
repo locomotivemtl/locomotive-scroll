@@ -7,9 +7,6 @@
     "license": "MIT",
     "main": "./dist/locomotive-scroll.js",
     "module": "./dist/locomotive-scroll.esm.js",
-    "dependencies": {
-        "virtual-scroll": "git+https://github.com/ayamflow/virtual-scroll.git"
-    },
     "devDependencies": {
         "@modularbp/gulp": "^1.0.5",
         "@modularbp/gulp-build": "^1.0.1",
@@ -24,5 +21,8 @@
         "mbp": "^1.1.3",
         "merge-stream": "^2.0.0",
         "normalize.css": "*"
+    },
+    "dependencies": {
+        "virtual-scroll": "^1.5.2"
     }
 }
