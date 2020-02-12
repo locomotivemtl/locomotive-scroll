@@ -1,9 +1,9 @@
-/* locomotive-scroll v3.2.8 | MIT License | https://github.com/locomotivemtl/locomotive-scroll */
+/* locomotive-scroll v3.2.9 | MIT License | https://github.com/locomotivemtl/locomotive-scroll */
 (function (global, factory) {
   typeof exports === 'object' && typeof module !== 'undefined' ? module.exports = factory() :
   typeof define === 'function' && define.amd ? define(factory) :
   (global = global || self, global.LocomotiveScroll = factory());
-}(this, function () { 'use strict';
+}(this, (function () { 'use strict';
 
   function _classCallCheck(instance, Constructor) {
     if (!(instance instanceof Constructor)) {
@@ -61,13 +61,13 @@
       var source = arguments[i] != null ? arguments[i] : {};
 
       if (i % 2) {
-        ownKeys(source, true).forEach(function (key) {
+        ownKeys(Object(source), true).forEach(function (key) {
           _defineProperty(target, key, source[key]);
         });
       } else if (Object.getOwnPropertyDescriptors) {
         Object.defineProperties(target, Object.getOwnPropertyDescriptors(source));
       } else {
-        ownKeys(source).forEach(function (key) {
+        ownKeys(Object(source)).forEach(function (key) {
           Object.defineProperty(target, key, Object.getOwnPropertyDescriptor(source, key));
         });
       }
@@ -813,7 +813,6 @@
           this.lastDownDeltas.shift();
           return this.isInertia(-1);
         }
-        return false;
       };
 
       Lethargy.prototype.isInertia = function(direction) {
@@ -937,7 +936,8 @@
           preventTouch: false,
           unpreventTouchClass: 'vs-touchmove-allowed',
           limitInertia: false,
-          useKeyboard: true
+          useKeyboard: true,
+          useTouch: true
       }, options);
 
       if (this.options.limitInertia) this._lethargy = new Lethargy();
@@ -1064,7 +1064,7 @@
       if(support.hasWheelEvent) this.el.addEventListener('wheel', this._onWheel, this.listenerOptions);
       if(support.hasMouseWheelEvent) this.el.addEventListener('mousewheel', this._onMouseWheel, this.listenerOptions);
 
-      if(support.hasTouch) {
+      if(support.hasTouch && this.options.useTouch) {
           this.el.addEventListener('touchstart', this._onTouchStart, this.listenerOptions);
           this.el.addEventListener('touchmove', this._onTouchMove, this.listenerOptions);
       }
@@ -1243,7 +1243,19 @@
     }, {
       key: "setScrollLimit",
       value: function setScrollLimit() {
-        this.instance.limit = this.el.offsetHeight - this.windowHeight;
+        var newLimit = this.el.offsetHeight - this.windowHeight;
+
+        if (this.instance.limit !== newLimit) {
+          this.instance.limit = newLimit;
+          var newDeltaY = newLimit * (this.instance.delta.y / this.instance.limit);
+
+          if (this.instance.delta.y !== newDeltaY) {
+            this.instance.delta.y = newDeltaY;
+            this.isScrolling = true;
+            this.checkScroll();
+            this.html.classList.add(this.scrollingClass);
+          }
+        }
       }
     }, {
       key: "startScrolling",
@@ -1394,7 +1406,14 @@
         if (this.isScrolling || this.isDraggingScrollbar) {
           this.instance.scroll.y = lerp(this.instance.scroll.y, this.instance.delta.y, this.inertia * this.inertiaRatio);
         } else {
-          this.instance.scroll.y = this.instance.delta.y;
+          if (this.instance.delta.y > this.instance.limit) {
+            this.instance.delta.y = this.instance.limit;
+            this.isScrolling = true;
+            this.checkScroll();
+            this.html.classList.add(this.scrollingClass);
+          } else {
+            this.instance.scroll.y = this.instance.delta.y;
+          }
         }
       }
     }, {
@@ -1878,4 +1897,4 @@
 
   return _default$3;
 
-}));
+})));

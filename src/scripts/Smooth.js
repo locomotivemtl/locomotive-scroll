@@ -81,7 +81,19 @@ export default class extends Core {
     }
 
     setScrollLimit() {
-        this.instance.limit = this.el.offsetHeight - this.windowHeight;
+        const newLimit = this.el.offsetHeight - this.windowHeight;
+
+        if (this.instance.limit !== newLimit) {
+            this.instance.limit = newLimit;
+            const newDeltaY = newLimit * (this.instance.delta.y / this.instance.limit);
+
+            if (this.instance.delta.y !== newDeltaY) {
+                this.instance.delta.y = newDeltaY;
+                this.isScrolling = true;
+                this.checkScroll();
+                this.html.classList.add(this.scrollingClass);
+            }
+        }
     }
 
     startScrolling() {
@@ -211,7 +223,15 @@ export default class extends Core {
         if (this.isScrolling || this.isDraggingScrollbar) {
             this.instance.scroll.y = lerp(this.instance.scroll.y, this.instance.delta.y, this.inertia * this.inertiaRatio);
         } else {
-            this.instance.scroll.y = this.instance.delta.y;
+            if (this.instance.delta.y > this.instance.limit) {
+                this.instance.delta.y = this.instance.limit;
+
+                this.isScrolling = true;
+                this.checkScroll();
+                this.html.classList.add(this.scrollingClass);
+            } else {
+                this.instance.scroll.y = this.instance.delta.y;
+            }
         }
     }
 
