@@ -314,7 +314,7 @@ export default class extends Core {
                 let direction = el.dataset[this.name + 'Direction'];
                 let sticky = typeof el.dataset[this.name + 'Sticky'] === 'string';
                 let speed = el.dataset[this.name + 'Speed'] ? parseFloat(el.dataset[this.name + 'Speed'])/10 : false;
-                let offset = (typeof el.dataset[this.name + 'Offset'] === 'string') ? el.dataset[this.name + 'Offset'].split(',') : false;
+                let offset = (typeof el.dataset[this.name + 'Offset'] === 'string') ? el.dataset[this.name + 'Offset'].split(',') : this.offset;
 
                 let target = el.dataset[this.name + 'Target'];
                 let targetEl;
@@ -353,10 +353,14 @@ export default class extends Core {
                 let relativeOffset = [0,0];
                 if(offset) {
                     for (var i = 0; i < offset.length; i++) {
-                        if(offset[i].includes('%')) {
-                            relativeOffset[i] = parseInt(offset[i].replace('%','') * this.windowHeight / 100);
+                        if(typeof offset[i] == 'string') {
+                            if(offset[i].includes('%')) {
+                                relativeOffset[i] = parseInt(offset[i].replace('%','') * this.windowHeight / 100);
+                            } else {
+                                relativeOffset[i] = parseInt(offset[i]);
+                            }
                         } else {
-                            relativeOffset[i] = parseInt(offset[i]);
+                            relativeOffset[i] = offset[i];
                         }
                     }
                 }

@@ -83,7 +83,7 @@ scroll.on('call', func => {
 | ------------------- | --------- | ---------------------- | ------------------------------------------------------------------------------------- |
 | `el`                | `object`  | `document`             | Scroll container element.                                                             |
 | `name`              | `string`  | `'scroll'`             | Data attribute prefix (`data-scroll-xxxx`).                                           |
-| `offset`            | `array`   | `0`                    | In-view trigger offset.                                                               |
+| `offset`            | `array(2)`| `[0,0]`                | Global in-view trigger offset : `[bottom,top]`<br>Use a string with `%` to use a percentage of the viewport height.<br>Use a numeric value for absolute pixels unit.<br>E.g. `["30%",0]`, `[100,0]`, `["30%", 100]`  |
 | `repeat`            | `boolean` | `false`                | Repeat in-view detection.                                                             |
 | `smooth`            | `boolean` | `false`                | Smooth scrolling.                                                                     |
 | `smoothMobile`      | `boolean` | `false`                | Smooth scrolling on iOS and Android devices.                                          |
@@ -107,7 +107,7 @@ scroll.on('call', func => {
 | `data-scroll`           |                          | Detect if in-view.                                                                       |
 | `data-scroll-section`   |                          | Defines a scrollable section. Splitting your page into sections may improve performance. |
 | `data-scroll-class`     | `string`                 | Element in-view class.                                                                   |
-| `data-scroll-offset`    | `string`                 | Element in-view trigger offset (ex.: `"10"`, `"100,50%"`, `"25%, 15%"`).                 |
+| `data-scroll-offset`    | `string`                 | Element in-view trigger offset : `bottom,top`<br>First value is `bottom` offset, second (optional) is `top` offset.<br> Percent is relative to viewport height, otherwise it's absolute pixels.<br>E.g. `"10"`, `"100,50%"`, `"25%, 15%"`  |
 | `data-scroll-repeat`    | `true`, `false`          | Element in-view detection repeat.                                                        |
 | `data-scroll-call`      | `string`                 | Element in-view trigger call event.                                                      |
 | `data-scroll-speed`     | `number`                 | Element parallax speed. A negative value will reverse the direction.                     |

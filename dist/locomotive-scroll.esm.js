@@ -151,7 +151,7 @@ var defaults = {
   el: document,
   elMobile: document,
   name: 'scroll',
-  offset: 0,
+  offset: [0, 0],
   repeat: false,
   smooth: false,
   smoothMobile: false,
@@ -480,7 +480,7 @@ function (_Core) {
         var top = el.getBoundingClientRect().top + _this4.instance.scroll.y;
 
         var bottom = top + el.offsetHeight;
-        var offset = typeof el.dataset[_this4.name + 'Offset'] === 'string' ? el.dataset[_this4.name + 'Offset'].split(',') : false;
+        var offset = typeof el.dataset[_this4.name + 'Offset'] === 'string' ? el.dataset[_this4.name + 'Offset'].split(',') : _this4.offset;
         var repeat = el.dataset[_this4.name + 'Repeat'];
         var call = el.dataset[_this4.name + 'Call'];
 
@@ -496,10 +496,14 @@ function (_Core) {
 
         if (offset) {
           for (var i = 0; i < offset.length; i++) {
-            if (offset[i].includes('%')) {
-              relativeOffset[i] = parseInt(offset[i].replace('%', '') * _this4.windowHeight / 100);
+            if (typeof offset[i] == 'string') {
+              if (offset[i].includes('%')) {
+                relativeOffset[i] = parseInt(offset[i].replace('%', '') * _this4.windowHeight / 100);
+              } else {
+                relativeOffset[i] = parseInt(offset[i]);
+              }
             } else {
-              relativeOffset[i] = parseInt(offset[i]);
+              relativeOffset[i] = offset[i];
             }
           }
         }
@@ -807,6 +811,7 @@ var lethargy = createCommonjsModule(function (module, exports) {
         this.lastDownDeltas.shift();
         return this.isInertia(-1);
       }
+      return false;
     };
 
     Lethargy.prototype.isInertia = function(direction) {
@@ -854,7 +859,7 @@ var support = (function getSupport() {
     return {
         hasWheelEvent: 'onwheel' in document,
         hasMouseWheelEvent: 'onmousewheel' in document,
-        hasTouch: ('ontouchstart' in window) || window.TouchEvent || window.DocumentTouch && document instanceof DocumentTouch,
+        hasTouch: 'ontouchstart' in document,
         hasTouchWin: navigator.msMaxTouchPoints && navigator.msMaxTouchPoints > 1,
         hasPointer: !!window.navigator.msPointerEnabled,
         hasKeyDown: 'onkeydown' in document,
@@ -930,8 +935,7 @@ function VirtualScroll(options) {
         preventTouch: false,
         unpreventTouchClass: 'vs-touchmove-allowed',
         limitInertia: false,
-        useKeyboard: true,
-        useTouch: true
+        useKeyboard: true
     }, options);
 
     if (this.options.limitInertia) this._lethargy = new Lethargy();
@@ -1058,7 +1062,7 @@ VirtualScroll.prototype._bind = function() {
     if(support.hasWheelEvent) this.el.addEventListener('wheel', this._onWheel, this.listenerOptions);
     if(support.hasMouseWheelEvent) this.el.addEventListener('mousewheel', this._onMouseWheel, this.listenerOptions);
 
-    if(support.hasTouch && this.options.useTouch) {
+    if(support.hasTouch) {
         this.el.addEventListener('touchstart', this._onTouchStart, this.listenerOptions);
         this.el.addEventListener('touchmove', this._onTouchMove, this.listenerOptions);
     }
@@ -1500,7 +1504,7 @@ function (_Core) {
           var direction = el.dataset[_this6.name + 'Direction'];
           var sticky = typeof el.dataset[_this6.name + 'Sticky'] === 'string';
           var speed = el.dataset[_this6.name + 'Speed'] ? parseFloat(el.dataset[_this6.name + 'Speed']) / 10 : false;
-          var offset = typeof el.dataset[_this6.name + 'Offset'] === 'string' ? el.dataset[_this6.name + 'Offset'].split(',') : false;
+          var offset = typeof el.dataset[_this6.name + 'Offset'] === 'string' ? el.dataset[_this6.name + 'Offset'].split(',') : _this6.offset;
           var target = el.dataset[_this6.name + 'Target'];
           var targetEl;
 
@@ -1538,10 +1542,14 @@ function (_Core) {
 
           if (offset) {
             for (var i = 0; i < offset.length; i++) {
-              if (offset[i].includes('%')) {
-                relativeOffset[i] = parseInt(offset[i].replace('%', '') * _this6.windowHeight / 100);
+              if (typeof offset[i] == 'string') {
+                if (offset[i].includes('%')) {
+                  relativeOffset[i] = parseInt(offset[i].replace('%', '') * _this6.windowHeight / 100);
+                } else {
+                  relativeOffset[i] = parseInt(offset[i]);
+                }
               } else {
-                relativeOffset[i] = parseInt(offset[i]);
+                relativeOffset[i] = offset[i];
               }
             }
           }

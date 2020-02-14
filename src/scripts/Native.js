@@ -52,7 +52,7 @@ export default class extends Core {
             let cl = el.dataset[this.name + 'Class'] || this.class;
             let top = el.getBoundingClientRect().top + this.instance.scroll.y;
             let bottom = top + el.offsetHeight;
-                let offset = (typeof el.dataset[this.name + 'Offset'] === 'string') ? el.dataset[this.name + 'Offset'].split(',') : false;
+                let offset = (typeof el.dataset[this.name + 'Offset'] === 'string') ? el.dataset[this.name + 'Offset'].split(',') : this.offset;
             let repeat = el.dataset[this.name + 'Repeat'];
             let call = el.dataset[this.name + 'Call'];
 
@@ -67,11 +67,14 @@ export default class extends Core {
             let relativeOffset = [0,0];
             if(offset) {
                 for (var i = 0; i < offset.length; i++) {
-                    if(offset[i].includes('%')) {
-                        relativeOffset[i] = parseInt(offset[i].replace('%','') * this.windowHeight / 100);
-
+                    if(typeof offset[i] == 'string') {
+                        if(offset[i].includes('%')) {
+                            relativeOffset[i] = parseInt(offset[i].replace('%','') * this.windowHeight / 100);
+                        } else {
+                            relativeOffset[i] = parseInt(offset[i]);
+                        }
                     } else {
-                        relativeOffset[i] = parseInt(offset[i]);
+                        relativeOffset[i] = offset[i];
                     }
                 }
             }
