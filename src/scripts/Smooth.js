@@ -524,6 +524,10 @@ export default class extends Core {
                 target = this.instance.limit;
             } else {
                 target = document.querySelector(targetOption);
+                // If the query fails, abort
+                if(!target)  {
+                    return;
+                }
             }
         } else if(typeof targetOption === 'number') { // Absolute coordinate
             target = parseInt(targetOption)
@@ -536,7 +540,7 @@ export default class extends Core {
         // We have a target that is not a coordinate yet, get it
         if (typeof target !== 'number') {
             // Verify the given target belongs to this scroll scope
-            let targetInScope = getParents(document.activeElement).includes(this.el)
+            let targetInScope = getParents(target).includes(this.el)
             if(!targetInScope) {
                 // If the target isn't inside our main element, abort any action
                 return;

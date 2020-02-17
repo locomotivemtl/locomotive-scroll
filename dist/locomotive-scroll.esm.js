@@ -1726,7 +1726,11 @@ function (_Core) {
         } else if (targetOption === 'bottom') {
           target = this.instance.limit;
         } else {
-          target = document.querySelector(targetOption);
+          target = document.querySelector(targetOption); // If the query fails, abort
+
+          if (!target) {
+            return;
+          }
         }
       } else if (typeof targetOption === 'number') {
         // Absolute coordinate
@@ -1741,7 +1745,7 @@ function (_Core) {
 
       if (typeof target !== 'number') {
         // Verify the given target belongs to this scroll scope
-        var targetInScope = getParents(document.activeElement).includes(this.el);
+        var targetInScope = getParents(target).includes(this.el);
 
         if (!targetInScope) {
           // If the target isn't inside our main element, abort any action
