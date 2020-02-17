@@ -110,31 +110,37 @@ export default class extends Core {
     /**
      * Scroll to a desired target.
      *
-     * @param  {object} options
+     * @param  Available options :
+     *          targetOption {node, string, "top", "bottom", int} - The DOM element we want to scroll to
+     *          offsetOption {int} - An absolute vertical scroll value to reach, or an offset to apply on top of given `target` or `sourceElem`'s target
      * @return {void}
      */
     scrollTo(targetOption, offsetOption) {
         let target;
         let offset = offsetOption ? parseInt(offsetOption) : 0;
 
-        if(typeof targetOption === 'string') {
-
+        if(typeof targetOption === 'string') { // Selector or boundaries
             if(targetOption === 'top') {
                 target = this.html;
             } else if(targetOption === 'bottom') {
-                offset = this.html.offsetHeight - window.innerHeight;
+                target = this.html.offsetHeight - window.innerHeight;
             } else {
-                target = document.querySelectorAll(targetOption)[0];
+                target = document.querySelector(targetOption);
             }
-
-        } else if(!targetOption.target) {
-            target = targetOption;
+        } else if(typeof targetOption === 'number') { // Absolute coordinate
+            target = parseInt(targetOption)
+        } else if(targetOption.tagName) { // DOM Element
+            target = targetOption
+        } else {
+            console.warn('Error: `targetOption` parameter is not valid')
         }
 
-        if (target) {
-            offset = target.getBoundingClientRect().top + offset;
+        // We have a target that is not a coordinate yet, get it
+        if (typeof target !== 'number') {
+            offset = target.getBoundingClientRect().top + offset + this.instance.scroll.y;
+        } else {
+            offset = target + offset
         }
-        offset += this.instance.scroll.y;
 
         window.scrollTo({
             top: offset,

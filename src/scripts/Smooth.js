@@ -100,13 +100,16 @@ export default class extends Core {
     checkKey(e) {
         switch(e.keyCode) {
             case keyCodes.TAB:
+                // Do not remove the setTimeout
+                // Even if its delay is null, it allows to override the browser's native scrollTo, which is essential
                 setTimeout(() => {
+                    // Make sure native scroll is always at top of page
                     document.documentElement.scrollTop = 0;
                     document.body.scrollTop = 0;
-                    if(!(document.activeElement instanceof HTMLBodyElement)){
-                        this.scrollTo(document.activeElement, - window.innerHeight / 2);
-                    }
-                }, 0);
+
+                    // Request scrollTo on the focusedElement, putting it at the center of the screen
+                    this.scrollTo(document.activeElement, - window.innerHeight / 2);
+                }, 0)
                 break;
             case keyCodes.UP:
                 this.instance.delta.y -= 240;
@@ -165,10 +168,12 @@ export default class extends Core {
             for (let i = this.sections.length - 1; i >= 0; i--) {
                 if(this.sections[i].persistent || (this.instance.scroll.y > this.sections[i].offset && this.instance.scroll.y < this.sections[i].limit)) {
                     this.transform(this.sections[i].el, 0, -this.instance.scroll.y);
-                    this.sections[i].el.style.visibility = 'visible';
+                    this.sections[i].el.style.opacity = 1;
+                    this.sections[i].el.style.pointerEvents = 'all';
                     this.sections[i].inView = true;
                 } else {
-                    this.sections[i].el.style.visibility = 'hidden';
+                    this.sections[i].el.style.opacity = 0;
+                    this.sections[i].el.style.pointerEvents = 'none';
                     this.sections[i].inView = false;
                     this.transform(this.sections[i].el, 0, 0);
                 }
@@ -503,36 +508,43 @@ export default class extends Core {
     /**
      * Scroll to a desired target.
      *
-     * @param  {object} options
-     *      Available options :
-     *          {node, string, "top", "bottom"} targetOption - The DOM element we want to scroll to
-     *          {int} offsetOption - An absolute vertical scroll value to reach, or an offset to apply on top of given `target` or `sourceElem`'s target
-     *          {boolean} toBottom - Set to true to scroll all the way to the bottom
+     * @param  Available options :
+     *          targetOption {node, string, "top", "bottom", int} - The DOM element we want to scroll to
+     *          offsetOption {int} - An absolute vertical scroll value to reach, or an offset to apply on top of given `target` or `sourceElem`'s target
      * @return {void}
      */
     scrollTo(targetOption, offsetOption) {
         let target;
         let offset = offsetOption ? parseInt(offsetOption) : 0;
 
-        if(typeof targetOption === 'string') {
-
+        if(typeof targetOption === 'string') { // Selector or boundaries
             if(targetOption === 'top') {
-                offset = 0;
+                target = 0;
             } else if(targetOption === 'bottom') {
-                offset = this.instance.limit;
+                target = this.instance.limit;
             } else {
-                target = document.querySelectorAll(targetOption)[0];
+                target = document.querySelector(targetOption);
             }
-
-        } else if(!targetOption.target) {
-            target = targetOption;
+        } else if(typeof targetOption === 'number') { // Absolute coordinate
+            target = parseInt(targetOption)
+        } else if(targetOption.tagName) { // DOM Element
+            target = targetOption
+        } else {
+            console.warn('Error: `targetOption` parameter is not valid')
         }
 
-        // We have a target, get it's coordinates
-        if (target) {
+        // We have a target that is not a coordinate yet, get it
+        if (typeof target !== 'number') {
+            // Verify the given target belongs to this scroll scope
+            let targetInScope = getParents(document.activeElement).includes(this.el)
+            if(!targetInScope) {
+                // If the target isn't inside our main element, abort any action
+                return;
+            }
+
             // Get target offset from top
             const targetBCR = target.getBoundingClientRect()
-            const offsetTop = targetBCR.top + this.instance.scroll.y
+            const offsetTop = targetBCR.top
 
             // Try and find the target's parent section
             const targetParents = getParents(target)
@@ -543,10 +555,12 @@ export default class extends Core {
             }
             // Final value of scroll destination : offsetTop + (optional offset given in options) - (parent's section translate)
             offset = offsetTop + offset - parentSectionOffset;
+        } else {
+            offset = target + offset;
         }
-        offset -= this.instance.scroll.y;
 
-        this.instance.delta.y = Math.min(offset, this.instance.limit); // Actual scrollTo (the lerp will do the animation itself)
+        // Actual scrollTo (the lerp will do the animation itself)
+        this.instance.delta.y = Math.max(0,Math.min(offset, this.instance.limit)); // We limit the value to scroll boundaries (between 0 and instance limit)
         this.inertiaRatio = Math.min(4000 / Math.abs(this.instance.delta.y - this.instance.scroll.y),0.8);
 
         // Update the scroll. If we were in idle state: we're not anymore
