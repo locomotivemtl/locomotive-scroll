@@ -1,4 +1,4 @@
-/* locomotive-scroll v3.2.11 | MIT License | https://github.com/locomotivemtl/locomotive-scroll */
+/* locomotive-scroll v3.3.0 | MIT License | https://github.com/locomotivemtl/locomotive-scroll */
 function _classCallCheck(instance, Constructor) {
   if (!(instance instanceof Constructor)) {
     throw new TypeError("Cannot call a class as a function");
