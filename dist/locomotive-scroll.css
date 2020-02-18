@@ -11,6 +11,9 @@ html.has-scroll-dragging {
 .has-scroll-smooth body {
   overflow: hidden; }
 
+.has-scroll-smooth [data-scroll-container] {
+  min-height: 100vh; }
+
 .c-scrollbar {
   position: absolute;
   right: 0;

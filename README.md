@@ -19,7 +19,7 @@ npm install locomotive-scroll
 ```html
 <html>
     <body>
-        <div class="o-scroll" id="js-scroll">
+        <div data-scroll-container id="js-scroll">
             <div data-scroll-section>
                 <h1 data-scroll data-scroll-speed="1">Hello</h1>
                 <p data-scroll data-scroll-speed="2">My friends</p>
@@ -128,6 +128,7 @@ scroll.on('call', func => {
 | Attribute               | Values                   | Description                                                                              |
 | ----------------------- | ------------------------ | ---------------------------------------------------------------------------------------- |
 | `data-scroll`           |                          | Detect if in-view.                                                                       |
+| `data-scroll-container` |                          | Defines the scroll container. Required for [basic styling](https://github.com/locomotivemtl/locomotive-scroll/blob/master/dist/locomotive-scroll.css).                                                                                      |
 | `data-scroll-section`   |                          | Defines a scrollable section. Splitting your page into sections may improve performance. |
 | `data-scroll-class`     | `string`                 | Element in-view class.                                                                   |
 | `data-scroll-offset`    | `string`                 | Element in-view trigger offset : `bottom,top`<br>First value is `bottom` offset, second (optional) is `top` offset.<br> Percent is relative to viewport height, otherwise it's absolute pixels.<br>E.g. `"10"`, `"100,50%"`, `"25%, 15%"`  |
