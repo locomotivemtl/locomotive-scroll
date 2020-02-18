@@ -12,20 +12,47 @@
 npm install locomotive-scroll
 ```
 
-## Usage
+## Basic example
+
+#### HTML
+
+```html
+<html>
+    <body>
+        <div class="o-scroll" id="js-scroll">
+            <div data-scroll-section>
+                <h1 data-scroll data-scroll-speed="1">Hello</h1>
+                <p data-scroll data-scroll-speed="2">My friends</p>
+            </div>
+
+            <div data-scroll-section>
+                <h2 data-scroll data-scroll-speed="1">I hope</h2>
+                <p>You are doing good</p>
+            </div>            
+        </div>
+    </body>
+</html>
+```
+Note : scroll-section are not required, however they improve performance a lot particularly on long pages
+
+#### CSS
+
+Import the basic styles [here](https://github.com/locomotivemtl/locomotive-scroll/blob/master/dist/locomotive-scroll.css)
+
+#### JS
 
 ```js
 import LocomotiveScroll from 'locomotive-scroll';
 
-const scroll = new LocomotiveScroll();
+const scroll = new LocomotiveScroll({
+    el: document.querySelector('#js-scroll'),
+    smooth: true
+});
 ```
 
-```html
-<h1 data-scroll>Hello</h1>
-<p data-scroll>Text</p>
-```
+## Usage
 
-#### With smooth scrolling
+#### With options
 
 ```js
 import LocomotiveScroll from 'locomotive-scroll';
@@ -33,12 +60,8 @@ import LocomotiveScroll from 'locomotive-scroll';
 const scroll = new LocomotiveScroll({
     el: document.querySelector('#js-scroll'),
     smooth: true,
+    scrollbarClass: 'my-scrollbar'
 });
-```
-
-```html
-<h1 data-scroll data-scroll-speed="1">Hello</h1>
-<p data-scroll data-scroll-speed="2">Text</p>
 ```
 
 #### With methods
