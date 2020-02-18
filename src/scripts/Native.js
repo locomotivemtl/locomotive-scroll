@@ -126,13 +126,18 @@ export default class extends Core {
                 target = this.html.offsetHeight - window.innerHeight;
             } else {
                 target = document.querySelector(targetOption);
+                // If the query fails, abort
+                if(!target)  {
+                    return;
+                }
             }
         } else if(typeof targetOption === 'number') { // Absolute coordinate
             target = parseInt(targetOption)
-        } else if(targetOption.tagName) { // DOM Element
+        } else if(targetOption && targetOption.tagName) { // DOM Element
             target = targetOption
         } else {
-            console.warn('Error: `targetOption` parameter is not valid')
+            console.warn('`targetOption` parameter is not valid')
+            return;
         }
 
         // We have a target that is not a coordinate yet, get it

@@ -565,16 +565,21 @@
           } else if (targetOption === 'bottom') {
             target = this.html.offsetHeight - window.innerHeight;
           } else {
-            target = document.querySelector(targetOption);
+            target = document.querySelector(targetOption); // If the query fails, abort
+
+            if (!target) {
+              return;
+            }
           }
         } else if (typeof targetOption === 'number') {
           // Absolute coordinate
           target = parseInt(targetOption);
-        } else if (targetOption.tagName) {
+        } else if (targetOption && targetOption.tagName) {
           // DOM Element
           target = targetOption;
         } else {
-          console.warn('Error: `targetOption` parameter is not valid');
+          console.warn('`targetOption` parameter is not valid');
+          return;
         } // We have a target that is not a coordinate yet, get it
 
 
@@ -1741,11 +1746,12 @@
         } else if (typeof targetOption === 'number') {
           // Absolute coordinate
           target = parseInt(targetOption);
-        } else if (targetOption.tagName) {
+        } else if (targetOption && targetOption.tagName) {
           // DOM Element
           target = targetOption;
         } else {
-          console.warn('Error: `targetOption` parameter is not valid');
+          console.warn('`targetOption` parameter is not valid');
+          return;
         } // We have a target that is not a coordinate yet, get it
 
 
@@ -1869,7 +1875,11 @@
         this.scroll.init();
 
         if (window.location.hash) {
-          this.scroll.scrollTo(window.location.hash);
+          // Get the hash without the '#' and find the matching element
+          var id = window.location.hash.slice(1, window.location.hash.length);
+          var target = document.getElementById(id); // If found, scroll to the element
+
+          if (target) this.scroll.scrollTo(target);
         }
       }
     }, {
