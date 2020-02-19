@@ -31,16 +31,10 @@ export default class extends Core {
         }
     }
 
-    checkResize() {
+    resize() {
         if (this.els.length) {
             this.windowHeight = window.innerHeight;
-
-            if(!this.hasScrollTicking) {
-                requestAnimationFrame(() => {
-                    this.updateElements();
-                });
-                this.hasScrollTicking = true;
-            }
+            this.updateElements();
         }
     }
 

@@ -222,16 +222,30 @@ function () {
     }
   }, {
     key: "checkResize",
-    value: function checkResize() {}
+    value: function checkResize() {
+      var _this = this;
+
+      if (!this.resizeTick) {
+        this.resizeTick = true;
+        requestAnimationFrame(function () {
+          _this.resize();
+
+          _this.resizeTick = false;
+        });
+      }
+    }
+  }, {
+    key: "resize",
+    value: function resize() {}
   }, {
     key: "initEvents",
     value: function initEvents() {
-      var _this = this;
+      var _this2 = this;
 
       this.scrollToEls = this.el.querySelectorAll("[data-".concat(this.name, "-to]"));
       this.setScrollTo = this.setScrollTo.bind(this);
       this.scrollToEls.forEach(function (el) {
-        el.addEventListener('click', _this.setScrollTo, false);
+        el.addEventListener('click', _this2.setScrollTo, false);
       });
     }
   }, {
@@ -246,20 +260,20 @@ function () {
   }, {
     key: "detectElements",
     value: function detectElements(hasCallEventSet) {
-      var _this2 = this;
+      var _this3 = this;
 
       var scrollTop = this.instance.scroll.y;
       var scrollBottom = scrollTop + this.windowHeight;
       this.els.forEach(function (el, i) {
         if (el && (!el.inView || hasCallEventSet)) {
           if (scrollBottom >= el.top && scrollTop < el.bottom) {
-            _this2.setInView(el, i);
+            _this3.setInView(el, i);
           }
         }
 
         if (el && el.inView) {
           if (scrollBottom < el.top || scrollTop > el.bottom) {
-            _this2.setOutOfView(el, i);
+            _this3.setOutOfView(el, i);
           }
         }
       });
@@ -356,7 +370,7 @@ function () {
   }, {
     key: "checkEvent",
     value: function checkEvent(event) {
-      var _this3 = this;
+      var _this4 = this;
 
       var name = event.type.replace(this.namespace, '');
       var list = this.listeners[name];
@@ -364,10 +378,10 @@ function () {
       list.forEach(function (func) {
         switch (name) {
           case 'scroll':
-            return func(_this3.instance);
+            return func(_this4.instance);
 
           case 'call':
-            return func(_this3.callValue, _this3.callWay, _this3.callObj);
+            return func(_this4.callValue, _this4.callWay, _this4.callObj);
 
           default:
             return func();
@@ -391,15 +405,15 @@ function () {
   }, {
     key: "destroy",
     value: function destroy() {
-      var _this4 = this;
+      var _this5 = this;
 
       window.removeEventListener('resize', this.checkResize, false);
       Object.keys(this.listeners).forEach(function (event) {
-        _this4.el.removeEventListener(_this4.namespace + event, _this4.checkEvent, false);
+        _this5.el.removeEventListener(_this5.namespace + event, _this5.checkEvent, false);
       });
       this.listeners = {};
       this.scrollToEls.forEach(function (el) {
-        el.removeEventListener('click', _this4.setScrollTo, false);
+        el.removeEventListener('click', _this5.setScrollTo, false);
       });
     }
   }]);
@@ -452,44 +466,36 @@ function (_Core) {
       }
     }
   }, {
-    key: "checkResize",
-    value: function checkResize() {
-      var _this3 = this;
-
+    key: "resize",
+    value: function resize() {
       if (this.els.length) {
         this.windowHeight = window.innerHeight;
-
-        if (!this.hasScrollTicking) {
-          requestAnimationFrame(function () {
-            _this3.updateElements();
-          });
-          this.hasScrollTicking = true;
-        }
+        this.updateElements();
       }
     }
   }, {
     key: "addElements",
     value: function addElements() {
-      var _this4 = this;
+      var _this3 = this;
 
       this.els = [];
       var els = this.el.querySelectorAll('[data-' + this.name + ']');
       els.forEach(function (el, i) {
-        var cl = el.dataset[_this4.name + 'Class'] || _this4["class"];
+        var cl = el.dataset[_this3.name + 'Class'] || _this3["class"];
 
-        var top = el.getBoundingClientRect().top + _this4.instance.scroll.y;
+        var top = el.getBoundingClientRect().top + _this3.instance.scroll.y;
 
         var bottom = top + el.offsetHeight;
-        var offset = typeof el.dataset[_this4.name + 'Offset'] === 'string' ? el.dataset[_this4.name + 'Offset'].split(',') : _this4.offset;
-        var repeat = el.dataset[_this4.name + 'Repeat'];
-        var call = el.dataset[_this4.name + 'Call'];
+        var offset = typeof el.dataset[_this3.name + 'Offset'] === 'string' ? el.dataset[_this3.name + 'Offset'].split(',') : _this3.offset;
+        var repeat = el.dataset[_this3.name + 'Repeat'];
+        var call = el.dataset[_this3.name + 'Call'];
 
         if (repeat == 'false') {
           repeat = false;
         } else if (repeat != undefined) {
           repeat = true;
         } else {
-          repeat = _this4.repeat;
+          repeat = _this3.repeat;
         }
 
         var relativeOffset = [0, 0];
@@ -498,7 +504,7 @@ function (_Core) {
           for (var i = 0; i < offset.length; i++) {
             if (typeof offset[i] == 'string') {
               if (offset[i].includes('%')) {
-                relativeOffset[i] = parseInt(offset[i].replace('%', '') * _this4.windowHeight / 100);
+                relativeOffset[i] = parseInt(offset[i].replace('%', '') * _this3.windowHeight / 100);
               } else {
                 relativeOffset[i] = parseInt(offset[i]);
               }
@@ -520,20 +526,20 @@ function (_Core) {
           call: call
         };
 
-        _this4.els.push(mappedEl);
+        _this3.els.push(mappedEl);
       });
     }
   }, {
     key: "updateElements",
     value: function updateElements() {
-      var _this5 = this;
+      var _this4 = this;
 
       this.els.forEach(function (el, i) {
-        var top = el.el.getBoundingClientRect().top + _this5.instance.scroll.y;
+        var top = el.el.getBoundingClientRect().top + _this4.instance.scroll.y;
 
         var bottom = top + el.el.offsetHeight;
-        _this5.els[i].top = top + el.offset;
-        _this5.els[i].bottom = bottom;
+        _this4.els[i].top = top + el.offset;
+        _this4.els[i].bottom = bottom;
       });
       this.hasScrollTicking = false;
     }
@@ -1342,7 +1348,9 @@ function (_Core) {
     value: function checkScroll() {
       var _this4 = this;
 
-      if (this.isScrolling || this.isDraggingScrollbar) {
+      var forced = arguments.length > 0 && arguments[0] !== undefined ? arguments[0] : false;
+
+      if (forced || this.isScrolling || this.isDraggingScrollbar) {
         if (!this.hasScrollTicking) {
           requestAnimationFrame(function () {
             return _this4.checkScroll();
@@ -1392,11 +1400,12 @@ function (_Core) {
       }
     }
   }, {
-    key: "checkResize",
-    value: function checkResize() {
+    key: "resize",
+    value: function resize() {
       this.windowHeight = window.innerHeight;
       this.windowMiddle = this.windowHeight / 2;
       this.update();
+      this.checkScroll(true);
     }
   }, {
     key: "updateDelta",
@@ -1411,7 +1420,13 @@ function (_Core) {
       if (this.isScrolling || this.isDraggingScrollbar) {
         this.instance.scroll.y = lerp(this.instance.scroll.y, this.instance.delta.y, this.inertia * this.inertiaRatio);
       } else {
-        this.instance.scroll.y = this.instance.delta.y;
+        if (this.instance.scroll.y > this.instance.limit) {
+          this.setScroll(this.instance.scroll.x, this.instance.limit);
+        } else if (this.instance.scroll.y < 0) {
+          this.setScroll(this.instance.scroll.x, 0);
+        } else {
+          this.instance.scroll.y = this.instance.delta.y;
+        }
       }
     }
   }, {
@@ -1813,7 +1828,7 @@ function (_Core) {
   }, {
     key: "setScroll",
     value: function setScroll(x, y) {
-      this.instance = {
+      this.instance = _objectSpread2({}, this.instance, {
         scroll: {
           x: x,
           y: y
@@ -1821,8 +1836,10 @@ function (_Core) {
         delta: {
           x: x,
           y: y
-        }
-      };
+        },
+        speed: 0
+      });
+      this.checkScroll(true);
     }
   }, {
     key: "destroy",

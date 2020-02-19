@@ -151,8 +151,8 @@ export default class extends Core {
 
     }
 
-    checkScroll() {
-        if (this.isScrolling || this.isDraggingScrollbar) {
+    checkScroll(forced = false) {
+        if (forced || this.isScrolling || this.isDraggingScrollbar) {
             if (!this.hasScrollTicking) {
                 requestAnimationFrame(() => this.checkScroll());
                 this.hasScrollTicking = true;
@@ -200,10 +200,11 @@ export default class extends Core {
         }
     }
 
-    checkResize() {
+    resize() {
         this.windowHeight = window.innerHeight;
         this.windowMiddle = this.windowHeight / 2;
         this.update();
+        this.checkScroll(true);
     }
 
     updateDelta(e) {
@@ -216,7 +217,13 @@ export default class extends Core {
         if (this.isScrolling || this.isDraggingScrollbar) {
             this.instance.scroll.y = lerp(this.instance.scroll.y, this.instance.delta.y, this.inertia * this.inertiaRatio);
         } else {
-            this.instance.scroll.y = this.instance.delta.y;
+            if (this.instance.scroll.y > this.instance.limit) {
+                this.setScroll(this.instance.scroll.x, this.instance.limit)
+            } else if(this.instance.scroll.y < 0) {
+                this.setScroll(this.instance.scroll.x, 0)
+            } else {
+                this.instance.scroll.y = this.instance.delta.y;
+            }
         }
     }
 
@@ -594,6 +601,7 @@ export default class extends Core {
 
     setScroll(x,y) {
         this.instance = {
+            ...this.instance,
             scroll: {
                 x: x,
                 y: y
@@ -601,8 +609,11 @@ export default class extends Core {
             delta: {
                 x: x,
                 y: y
-            }
+            },
+            speed: 0
         }
+
+        this.checkScroll(true)
     }
 
     destroy() {
