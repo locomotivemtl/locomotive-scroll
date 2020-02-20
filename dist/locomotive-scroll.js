@@ -1411,7 +1411,6 @@
         this.windowHeight = window.innerHeight;
         this.windowMiddle = this.windowHeight / 2;
         this.update();
-        this.checkScroll(true);
       }
     }, {
       key: "updateDelta",
@@ -1431,7 +1430,7 @@
           } else if (this.instance.scroll.y < 0) {
             this.setScroll(this.instance.scroll.x, 0);
           } else {
-            this.instance.scroll.y = this.instance.delta.y;
+            this.setScroll(this.instance.scroll.x, this.instance.delta.y);
           }
         }
       }
@@ -1820,6 +1819,7 @@
         this.updateScroll();
         this.transformElements(true);
         this.reinitScrollBar();
+        this.checkScroll(true);
       }
     }, {
       key: "startScroll",
@@ -1845,7 +1845,6 @@
           },
           speed: 0
         });
-        this.checkScroll(true);
       }
     }, {
       key: "destroy",
