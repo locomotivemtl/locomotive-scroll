@@ -42,7 +42,7 @@ export default class extends Core {
         this.els = [];
         const els = this.el.querySelectorAll('[data-'+this.name+']');
 
-        els.forEach((el, i) => {
+        els.forEach((el, id) => {
             let cl = el.dataset[this.name + 'Class'] || this.class;
             let top = el.getBoundingClientRect().top + this.instance.scroll.y;
             let bottom = top + el.offsetHeight;
@@ -75,7 +75,7 @@ export default class extends Core {
 
             const mappedEl = {
                 el: el,
-                id: i,
+                id: id,
                 class: cl,
                 top: top + relativeOffset[0],
                 bottom: bottom - relativeOffset[1],

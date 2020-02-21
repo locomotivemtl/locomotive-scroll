@@ -315,7 +315,7 @@ export default class extends Core {
         this.sections.forEach((section, y) => {
             const els = this.sections[y].el.querySelectorAll(`[data-${this.name}]`);
 
-            els.forEach((el, i) => {
+            els.forEach((el, id) => {
                 let cl = el.dataset[this.name + 'Class'] || this.class;
                 let top;
                 let repeat = el.dataset[this.name + 'Repeat'];
@@ -378,7 +378,7 @@ export default class extends Core {
 
                 const mappedEl = {
                     el,
-                    id: i,
+                    id: id,
                     class: cl,
                     top: top + relativeOffset[0],
                     middle,
