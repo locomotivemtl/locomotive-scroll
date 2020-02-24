@@ -46,7 +46,7 @@ export default class extends Core {
             let cl = el.dataset[this.name + 'Class'] || this.class;
             let top = el.getBoundingClientRect().top + this.instance.scroll.y;
             let bottom = top + el.offsetHeight;
-                let offset = (typeof el.dataset[this.name + 'Offset'] === 'string') ? el.dataset[this.name + 'Offset'].split(',') : this.offset;
+            let offset = (typeof el.dataset[this.name + 'Offset'] === 'string') ? el.dataset[this.name + 'Offset'].split(',') : this.offset;
             let repeat = el.dataset[this.name + 'Repeat'];
             let call = el.dataset[this.name + 'Call'];
 
@@ -58,20 +58,7 @@ export default class extends Core {
                 repeat = this.repeat;
             }
 
-            let relativeOffset = [0,0];
-            if(offset) {
-                for (var i = 0; i < offset.length; i++) {
-                    if(typeof offset[i] == 'string') {
-                        if(offset[i].includes('%')) {
-                            relativeOffset[i] = parseInt(offset[i].replace('%','') * this.windowHeight / 100);
-                        } else {
-                            relativeOffset[i] = parseInt(offset[i]);
-                        }
-                    } else {
-                        relativeOffset[i] = offset[i];
-                    }
-                }
-            }
+            let relativeOffset = this.getRelativeOffset(offset);
 
             const mappedEl = {
                 el: el,
@@ -93,12 +80,33 @@ export default class extends Core {
         this.els.forEach((el, i) => {
             const top = el.el.getBoundingClientRect().top + this.instance.scroll.y;
             const bottom = top + el.el.offsetHeight;
+            const relativeOffset = this.getRelativeOffset(el.offset)
 
-            this.els[i].top = top + el.offset;
-            this.els[i].bottom = bottom;
+            this.els[i].top = top + relativeOffset[0];
+            this.els[i].bottom = bottom - relativeOffset[1];
         });
 
         this.hasScrollTicking = false;
+    }
+
+    getRelativeOffset(offset) {
+        let relativeOffset = [0,0];
+
+        if(offset) {
+            for (var i = 0; i < offset.length; i++) {
+                if(typeof offset[i] == 'string') {
+                    if(offset[i].includes('%')) {
+                        relativeOffset[i] = parseInt(offset[i].replace('%','') * this.windowHeight / 100);
+                    } else {
+                        relativeOffset[i] = parseInt(offset[i]);
+                    }
+                } else {
+                    relativeOffset[i] = offset[i];
+                }
+            }
+        }
+
+        return relativeOffset;
     }
 
     /**

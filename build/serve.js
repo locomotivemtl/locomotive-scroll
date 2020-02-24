@@ -11,7 +11,9 @@ function serve(done) {
             serveStaticOptions: {
                 extensions: ['html']
             }
-        }
+        },
+        open: false,
+        ghostMode: false
     });
     done();
 }

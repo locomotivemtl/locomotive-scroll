@@ -504,21 +504,7 @@
             repeat = _this3.repeat;
           }
 
-          var relativeOffset = [0, 0];
-
-          if (offset) {
-            for (var i = 0; i < offset.length; i++) {
-              if (typeof offset[i] == 'string') {
-                if (offset[i].includes('%')) {
-                  relativeOffset[i] = parseInt(offset[i].replace('%', '') * _this3.windowHeight / 100);
-                } else {
-                  relativeOffset[i] = parseInt(offset[i]);
-                }
-              } else {
-                relativeOffset[i] = offset[i];
-              }
-            }
-          }
+          var relativeOffset = _this3.getRelativeOffset(offset);
 
           var mappedEl = {
             el: el,
@@ -544,10 +530,34 @@
           var top = el.el.getBoundingClientRect().top + _this4.instance.scroll.y;
 
           var bottom = top + el.el.offsetHeight;
-          _this4.els[i].top = top + el.offset;
-          _this4.els[i].bottom = bottom;
+
+          var relativeOffset = _this4.getRelativeOffset(el.offset);
+
+          _this4.els[i].top = top + relativeOffset[0];
+          _this4.els[i].bottom = bottom - relativeOffset[1];
         });
         this.hasScrollTicking = false;
+      }
+    }, {
+      key: "getRelativeOffset",
+      value: function getRelativeOffset(offset) {
+        var relativeOffset = [0, 0];
+
+        if (offset) {
+          for (var i = 0; i < offset.length; i++) {
+            if (typeof offset[i] == 'string') {
+              if (offset[i].includes('%')) {
+                relativeOffset[i] = parseInt(offset[i].replace('%', '') * this.windowHeight / 100);
+              } else {
+                relativeOffset[i] = parseInt(offset[i]);
+              }
+            } else {
+              relativeOffset[i] = offset[i];
+            }
+          }
+        }
+
+        return relativeOffset;
       }
       /**
        * Scroll to a desired target.
@@ -839,7 +849,6 @@
           this.lastDownDeltas.shift();
           return this.isInertia(-1);
         }
-        return false;
       };
 
       Lethargy.prototype.isInertia = function(direction) {
@@ -887,7 +896,7 @@
       return {
           hasWheelEvent: 'onwheel' in document,
           hasMouseWheelEvent: 'onmousewheel' in document,
-          hasTouch: 'ontouchstart' in document,
+          hasTouch: ('ontouchstart' in window) || window.TouchEvent || window.DocumentTouch && document instanceof DocumentTouch,
           hasTouchWin: navigator.msMaxTouchPoints && navigator.msMaxTouchPoints > 1,
           hasPointer: !!window.navigator.msPointerEnabled,
           hasKeyDown: 'onkeydown' in document,
@@ -963,7 +972,8 @@
           preventTouch: false,
           unpreventTouchClass: 'vs-touchmove-allowed',
           limitInertia: false,
-          useKeyboard: true
+          useKeyboard: true,
+          useTouch: true
       }, options);
 
       if (this.options.limitInertia) this._lethargy = new Lethargy();
@@ -1090,7 +1100,7 @@
       if(support.hasWheelEvent) this.el.addEventListener('wheel', this._onWheel, this.listenerOptions);
       if(support.hasMouseWheelEvent) this.el.addEventListener('mousewheel', this._onMouseWheel, this.listenerOptions);
 
-      if(support.hasTouch) {
+      if(support.hasTouch && this.options.useTouch) {
           this.el.addEventListener('touchstart', this._onTouchStart, this.listenerOptions);
           this.el.addEventListener('touchmove', this._onTouchMove, this.listenerOptions);
       }
