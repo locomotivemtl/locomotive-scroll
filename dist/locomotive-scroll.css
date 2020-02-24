@@ -1,4 +1,4 @@
-/*! locomotive-scroll v3.2.8 | MIT License | https://github.com/locomotivemtl/locomotive-scroll */
+/*! locomotive-scroll v3.3.5 | MIT License | https://github.com/locomotivemtl/locomotive-scroll */
 html.has-scroll-smooth {
   overflow: hidden; }
 
@@ -10,6 +10,9 @@ html.has-scroll-dragging {
 
 .has-scroll-smooth body {
   overflow: hidden; }
+
+.has-scroll-smooth [data-scroll-container] {
+  min-height: 100vh; }
 
 .c-scrollbar {
   position: absolute;

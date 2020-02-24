@@ -12,20 +12,47 @@
 npm install locomotive-scroll
 ```
 
-## Usage
+## Basic example
+
+#### HTML
+
+```html
+<html>
+    <body>
+        <div data-scroll-container id="js-scroll">
+            <div data-scroll-section>
+                <h1 data-scroll data-scroll-speed="1">Hello</h1>
+                <p data-scroll data-scroll-speed="2">My friends</p>
+            </div>
+
+            <div data-scroll-section>
+                <h2 data-scroll data-scroll-speed="1">I hope</h2>
+                <p>You are doing good</p>
+            </div>            
+        </div>
+    </body>
+</html>
+```
+Note : scroll-section are not required, however they improve performance a lot particularly on long pages
+
+#### CSS
+
+Import the basic styles [here](https://github.com/locomotivemtl/locomotive-scroll/blob/master/dist/locomotive-scroll.css)
+
+#### JS
 
 ```js
 import LocomotiveScroll from 'locomotive-scroll';
 
-const scroll = new LocomotiveScroll();
+const scroll = new LocomotiveScroll({
+    el: document.querySelector('#js-scroll'),
+    smooth: true
+});
 ```
 
-```html
-<h1 data-scroll>Hello</h1>
-<p data-scroll>Text</p>
-```
+## Usage
 
-#### With smooth scrolling
+#### With options
 
 ```js
 import LocomotiveScroll from 'locomotive-scroll';
@@ -33,12 +60,8 @@ import LocomotiveScroll from 'locomotive-scroll';
 const scroll = new LocomotiveScroll({
     el: document.querySelector('#js-scroll'),
     smooth: true,
+    scrollbarClass: 'my-scrollbar'
 });
-```
-
-```html
-<h1 data-scroll data-scroll-speed="1">Hello</h1>
-<p data-scroll data-scroll-speed="2">Text</p>
 ```
 
 #### With methods
@@ -83,7 +106,7 @@ scroll.on('call', func => {
 | ------------------- | --------- | ---------------------- | ------------------------------------------------------------------------------------- |
 | `el`                | `object`  | `document`             | Scroll container element.                                                             |
 | `name`              | `string`  | `'scroll'`             | Data attribute prefix (`data-scroll-xxxx`).                                           |
-| `offset`            | `array`   | `0`                    | In-view trigger offset.                                                               |
+| `offset`            | `array(2)`| `[0,0]`                | Global in-view trigger offset : `[bottom,top]`<br>Use a string with `%` to use a percentage of the viewport height.<br>Use a numeric value for absolute pixels unit.<br>E.g. `["30%",0]`, `[100,0]`, `["30%", 100]`  |
 | `repeat`            | `boolean` | `false`                | Repeat in-view detection.                                                             |
 | `smooth`            | `boolean` | `false`                | Smooth scrolling.                                                                     |
 | `smoothMobile`      | `boolean` | `false`                | Smooth scrolling on iOS and Android devices.                                          |
@@ -105,9 +128,10 @@ scroll.on('call', func => {
 | Attribute               | Values                   | Description                                                                              |
 | ----------------------- | ------------------------ | ---------------------------------------------------------------------------------------- |
 | `data-scroll`           |                          | Detect if in-view.                                                                       |
+| `data-scroll-container` |                          | Defines the scroll container. Required for [basic styling](https://github.com/locomotivemtl/locomotive-scroll/blob/master/dist/locomotive-scroll.css).                                                                                      |
 | `data-scroll-section`   |                          | Defines a scrollable section. Splitting your page into sections may improve performance. |
 | `data-scroll-class`     | `string`                 | Element in-view class.                                                                   |
-| `data-scroll-offset`    | `string`                 | Element in-view trigger offset (ex.: `"10"`, `"100,50%"`, `"25%, 15%"`).                 |
+| `data-scroll-offset`    | `string`                 | Element in-view trigger offset : `bottom,top`<br>First value is `bottom` offset, second (optional) is `top` offset.<br> Percent is relative to viewport height, otherwise it's absolute pixels.<br>E.g. `"10"`, `"100,50%"`, `"25%, 15%"`  |
 | `data-scroll-repeat`    | `true`, `false`          | Element in-view detection repeat.                                                        |
 | `data-scroll-call`      | `string`                 | Element in-view trigger call event.                                                      |
 | `data-scroll-speed`     | `number`                 | Element parallax speed. A negative value will reverse the direction.                     |
@@ -127,7 +151,7 @@ scroll.on('call', func => {
 | `destroy()`                | Destroys the scroll events.    |                                                                                 |
 | `start()`                  | Restarts the scroll events.    |                                                                                 |
 | `stop()`                   | Stops the scroll events.       |                                                                                 |
-| `scrollTo(target, offset)` | Scroll to an element.          | `target`: dom `object`, selector `string`, `top` or `bottom` `offset`: `number` |
+| `scrollTo(target, offset)` | Scroll to an element.          | `target`: Defines where you want to scroll. Available values types are :<ul><li>`node` : a dom element</li><li>`string` : you can type your own selector, or use values `"top"` and `"bottom"` to reach scroll boundaries</li><li>`int` : An absolute scroll coordinate in pixels</li></ul>`offset` (optionnal) : A `number` that defines an offset from your target. E.g. `-100` if you want to scroll 100 pixels above your target |
 
 ## Instance events
 

@@ -13,3 +13,9 @@ body {
         overflow: hidden;
     }
 }
+
+[data-scroll-container] {
+    .has-scroll-smooth & {
+        min-height: 100vh;
+    }
+}

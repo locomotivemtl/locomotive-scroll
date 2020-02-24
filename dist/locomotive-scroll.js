@@ -1,4 +1,4 @@
-/* locomotive-scroll v3.2.8 | MIT License | https://github.com/locomotivemtl/locomotive-scroll */
+/* locomotive-scroll v3.3.5 | MIT License | https://github.com/locomotivemtl/locomotive-scroll */
 (function (global, factory) {
   typeof exports === 'object' && typeof module !== 'undefined' ? module.exports = factory() :
   typeof define === 'function' && define.amd ? define(factory) :
@@ -157,7 +157,7 @@
     el: document,
     elMobile: document,
     name: 'scroll',
-    offset: 0,
+    offset: [0, 0],
     repeat: false,
     smooth: false,
     smoothMobile: false,
@@ -228,16 +228,30 @@
       }
     }, {
       key: "checkResize",
-      value: function checkResize() {}
+      value: function checkResize() {
+        var _this = this;
+
+        if (!this.resizeTick) {
+          this.resizeTick = true;
+          requestAnimationFrame(function () {
+            _this.resize();
+
+            _this.resizeTick = false;
+          });
+        }
+      }
+    }, {
+      key: "resize",
+      value: function resize() {}
     }, {
       key: "initEvents",
       value: function initEvents() {
-        var _this = this;
+        var _this2 = this;
 
         this.scrollToEls = this.el.querySelectorAll("[data-".concat(this.name, "-to]"));
         this.setScrollTo = this.setScrollTo.bind(this);
         this.scrollToEls.forEach(function (el) {
-          el.addEventListener('click', _this.setScrollTo, false);
+          el.addEventListener('click', _this2.setScrollTo, false);
         });
       }
     }, {
@@ -252,20 +266,20 @@
     }, {
       key: "detectElements",
       value: function detectElements(hasCallEventSet) {
-        var _this2 = this;
+        var _this3 = this;
 
         var scrollTop = this.instance.scroll.y;
         var scrollBottom = scrollTop + this.windowHeight;
         this.els.forEach(function (el, i) {
           if (el && (!el.inView || hasCallEventSet)) {
             if (scrollBottom >= el.top && scrollTop < el.bottom) {
-              _this2.setInView(el, i);
+              _this3.setInView(el, i);
             }
           }
 
           if (el && el.inView) {
             if (scrollBottom < el.top || scrollTop > el.bottom) {
-              _this2.setOutOfView(el, i);
+              _this3.setOutOfView(el, i);
             }
           }
         });
@@ -362,7 +376,7 @@
     }, {
       key: "checkEvent",
       value: function checkEvent(event) {
-        var _this3 = this;
+        var _this4 = this;
 
         var name = event.type.replace(this.namespace, '');
         var list = this.listeners[name];
@@ -370,10 +384,10 @@
         list.forEach(function (func) {
           switch (name) {
             case 'scroll':
-              return func(_this3.instance);
+              return func(_this4.instance);
 
             case 'call':
-              return func(_this3.callValue, _this3.callWay, _this3.callObj);
+              return func(_this4.callValue, _this4.callWay, _this4.callObj);
 
             default:
               return func();
@@ -397,15 +411,15 @@
     }, {
       key: "destroy",
       value: function destroy() {
-        var _this4 = this;
+        var _this5 = this;
 
         window.removeEventListener('resize', this.checkResize, false);
         Object.keys(this.listeners).forEach(function (event) {
-          _this4.el.removeEventListener(_this4.namespace + event, _this4.checkEvent, false);
+          _this5.el.removeEventListener(_this5.namespace + event, _this5.checkEvent, false);
         });
         this.listeners = {};
         this.scrollToEls.forEach(function (el) {
-          el.removeEventListener('click', _this4.setScrollTo, false);
+          el.removeEventListener('click', _this5.setScrollTo, false);
         });
       }
     }]);
@@ -458,54 +472,50 @@
         }
       }
     }, {
-      key: "checkResize",
-      value: function checkResize() {
-        var _this3 = this;
-
+      key: "resize",
+      value: function resize() {
         if (this.els.length) {
           this.windowHeight = window.innerHeight;
-
-          if (!this.hasScrollTicking) {
-            requestAnimationFrame(function () {
-              _this3.updateElements();
-            });
-            this.hasScrollTicking = true;
-          }
+          this.updateElements();
         }
       }
     }, {
       key: "addElements",
       value: function addElements() {
-        var _this4 = this;
+        var _this3 = this;
 
         this.els = [];
         var els = this.el.querySelectorAll('[data-' + this.name + ']');
         els.forEach(function (el, i) {
-          var cl = el.dataset[_this4.name + 'Class'] || _this4["class"];
+          var cl = el.dataset[_this3.name + 'Class'] || _this3["class"];
 
-          var top = el.getBoundingClientRect().top + _this4.instance.scroll.y;
+          var top = el.getBoundingClientRect().top + _this3.instance.scroll.y;
 
           var bottom = top + el.offsetHeight;
-          var offset = typeof el.dataset[_this4.name + 'Offset'] === 'string' ? el.dataset[_this4.name + 'Offset'].split(',') : false;
-          var repeat = el.dataset[_this4.name + 'Repeat'];
-          var call = el.dataset[_this4.name + 'Call'];
+          var offset = typeof el.dataset[_this3.name + 'Offset'] === 'string' ? el.dataset[_this3.name + 'Offset'].split(',') : _this3.offset;
+          var repeat = el.dataset[_this3.name + 'Repeat'];
+          var call = el.dataset[_this3.name + 'Call'];
 
           if (repeat == 'false') {
             repeat = false;
           } else if (repeat != undefined) {
             repeat = true;
           } else {
-            repeat = _this4.repeat;
+            repeat = _this3.repeat;
           }
 
           var relativeOffset = [0, 0];
 
           if (offset) {
             for (var i = 0; i < offset.length; i++) {
-              if (offset[i].includes('%')) {
-                relativeOffset[i] = parseInt(offset[i].replace('%', '') * _this4.windowHeight / 100);
+              if (typeof offset[i] == 'string') {
+                if (offset[i].includes('%')) {
+                  relativeOffset[i] = parseInt(offset[i].replace('%', '') * _this3.windowHeight / 100);
+                } else {
+                  relativeOffset[i] = parseInt(offset[i]);
+                }
               } else {
-                relativeOffset[i] = parseInt(offset[i]);
+                relativeOffset[i] = offset[i];
               }
             }
           }
@@ -522,27 +532,29 @@
             call: call
           };
 
-          _this4.els.push(mappedEl);
+          _this3.els.push(mappedEl);
         });
       }
     }, {
       key: "updateElements",
       value: function updateElements() {
-        var _this5 = this;
+        var _this4 = this;
 
         this.els.forEach(function (el, i) {
-          var top = el.el.getBoundingClientRect().top + _this5.instance.scroll.y;
+          var top = el.el.getBoundingClientRect().top + _this4.instance.scroll.y;
 
           var bottom = top + el.el.offsetHeight;
-          _this5.els[i].top = top + el.offset;
-          _this5.els[i].bottom = bottom;
+          _this4.els[i].top = top + el.offset;
+          _this4.els[i].bottom = bottom;
         });
         this.hasScrollTicking = false;
       }
       /**
        * Scroll to a desired target.
        *
-       * @param  {object} options
+       * @param  Available options :
+       *          targetOption {node, string, "top", "bottom", int} - The DOM element we want to scroll to
+       *          offsetOption {int} - An absolute vertical scroll value to reach, or an offset to apply on top of given `target` or `sourceElem`'s target
        * @return {void}
        */
 
@@ -553,22 +565,36 @@
         var offset = offsetOption ? parseInt(offsetOption) : 0;
 
         if (typeof targetOption === 'string') {
+          // Selector or boundaries
           if (targetOption === 'top') {
             target = this.html;
           } else if (targetOption === 'bottom') {
-            offset = this.html.offsetHeight - window.innerHeight;
+            target = this.html.offsetHeight - window.innerHeight;
           } else {
-            target = document.querySelectorAll(targetOption)[0];
+            target = document.querySelector(targetOption); // If the query fails, abort
+
+            if (!target) {
+              return;
+            }
           }
-        } else if (!targetOption.target) {
+        } else if (typeof targetOption === 'number') {
+          // Absolute coordinate
+          target = parseInt(targetOption);
+        } else if (targetOption && targetOption.tagName) {
+          // DOM Element
           target = targetOption;
+        } else {
+          console.warn('`targetOption` parameter is not valid');
+          return;
+        } // We have a target that is not a coordinate yet, get it
+
+
+        if (typeof target !== 'number') {
+          offset = target.getBoundingClientRect().top + offset + this.instance.scroll.y;
+        } else {
+          offset = target + offset;
         }
 
-        if (target) {
-          offset = target.getBoundingClientRect().top + offset;
-        }
-
-        offset += this.instance.scroll.y;
         window.scrollTo({
           top: offset,
           behavior: 'smooth'
@@ -813,7 +839,6 @@
           this.lastDownDeltas.shift();
           return this.isInertia(-1);
         }
-        return false;
       };
 
       Lethargy.prototype.isInertia = function(direction) {
@@ -861,7 +886,7 @@
       return {
           hasWheelEvent: 'onwheel' in document,
           hasMouseWheelEvent: 'onmousewheel' in document,
-          hasTouch: 'ontouchstart' in document,
+          hasTouch: ('ontouchstart' in window) || window.TouchEvent || window.DocumentTouch && document instanceof DocumentTouch,
           hasTouchWin: navigator.msMaxTouchPoints && navigator.msMaxTouchPoints > 1,
           hasPointer: !!window.navigator.msPointerEnabled,
           hasKeyDown: 'onkeydown' in document,
@@ -937,7 +962,8 @@
           preventTouch: false,
           unpreventTouchClass: 'vs-touchmove-allowed',
           limitInertia: false,
-          useKeyboard: true
+          useKeyboard: true,
+          useTouch: true
       }, options);
 
       if (this.options.limitInertia) this._lethargy = new Lethargy();
@@ -1064,7 +1090,7 @@
       if(support.hasWheelEvent) this.el.addEventListener('wheel', this._onWheel, this.listenerOptions);
       if(support.hasMouseWheelEvent) this.el.addEventListener('mousewheel', this._onMouseWheel, this.listenerOptions);
 
-      if(support.hasTouch) {
+      if(support.hasTouch && this.options.useTouch) {
           this.el.addEventListener('touchstart', this._onTouchStart, this.listenerOptions);
           this.el.addEventListener('touchmove', this._onTouchMove, this.listenerOptions);
       }
@@ -1267,13 +1293,14 @@
 
         switch (e.keyCode) {
           case keyCodes$1.TAB:
+            // Do not remove the setTimeout
+            // Even if its delay is null, it allows to override the browser's native scrollTo, which is essential
             setTimeout(function () {
+              // Make sure native scroll is always at top of page
               document.documentElement.scrollTop = 0;
-              document.body.scrollTop = 0;
+              document.body.scrollTop = 0; // Request scrollTo on the focusedElement, putting it at the center of the screen
 
-              if (!(document.activeElement instanceof HTMLBodyElement)) {
-                _this3.scrollTo(document.activeElement, -window.innerHeight / 2);
-              }
+              _this3.scrollTo(document.activeElement, -window.innerHeight / 2);
             }, 0);
             break;
 
@@ -1327,7 +1354,9 @@
       value: function checkScroll() {
         var _this4 = this;
 
-        if (this.isScrolling || this.isDraggingScrollbar) {
+        var forced = arguments.length > 0 && arguments[0] !== undefined ? arguments[0] : false;
+
+        if (forced || this.isScrolling || this.isDraggingScrollbar) {
           if (!this.hasScrollTicking) {
             requestAnimationFrame(function () {
               return _this4.checkScroll();
@@ -1346,10 +1375,12 @@
           for (var i = this.sections.length - 1; i >= 0; i--) {
             if (this.sections[i].persistent || this.instance.scroll.y > this.sections[i].offset && this.instance.scroll.y < this.sections[i].limit) {
               this.transform(this.sections[i].el, 0, -this.instance.scroll.y);
-              this.sections[i].el.style.visibility = 'visible';
+              this.sections[i].el.style.opacity = 1;
+              this.sections[i].el.style.pointerEvents = 'all';
               this.sections[i].inView = true;
             } else {
-              this.sections[i].el.style.visibility = 'hidden';
+              this.sections[i].el.style.opacity = 0;
+              this.sections[i].el.style.pointerEvents = 'none';
               this.sections[i].inView = false;
               this.transform(this.sections[i].el, 0, 0);
             }
@@ -1375,8 +1406,8 @@
         }
       }
     }, {
-      key: "checkResize",
-      value: function checkResize() {
+      key: "resize",
+      value: function resize() {
         this.windowHeight = window.innerHeight;
         this.windowMiddle = this.windowHeight / 2;
         this.update();
@@ -1394,7 +1425,13 @@
         if (this.isScrolling || this.isDraggingScrollbar) {
           this.instance.scroll.y = lerp(this.instance.scroll.y, this.instance.delta.y, this.inertia * this.inertiaRatio);
         } else {
-          this.instance.scroll.y = this.instance.delta.y;
+          if (this.instance.scroll.y > this.instance.limit) {
+            this.setScroll(this.instance.scroll.x, this.instance.limit);
+          } else if (this.instance.scroll.y < 0) {
+            this.setScroll(this.instance.scroll.x, 0);
+          } else {
+            this.setScroll(this.instance.scroll.x, this.instance.delta.y);
+          }
         }
       }
     }, {
@@ -1506,7 +1543,7 @@
             var direction = el.dataset[_this6.name + 'Direction'];
             var sticky = typeof el.dataset[_this6.name + 'Sticky'] === 'string';
             var speed = el.dataset[_this6.name + 'Speed'] ? parseFloat(el.dataset[_this6.name + 'Speed']) / 10 : false;
-            var offset = typeof el.dataset[_this6.name + 'Offset'] === 'string' ? el.dataset[_this6.name + 'Offset'].split(',') : false;
+            var offset = typeof el.dataset[_this6.name + 'Offset'] === 'string' ? el.dataset[_this6.name + 'Offset'].split(',') : _this6.offset;
             var target = el.dataset[_this6.name + 'Target'];
             var targetEl;
 
@@ -1544,10 +1581,14 @@
 
             if (offset) {
               for (var i = 0; i < offset.length; i++) {
-                if (offset[i].includes('%')) {
-                  relativeOffset[i] = parseInt(offset[i].replace('%', '') * _this6.windowHeight / 100);
+                if (typeof offset[i] == 'string') {
+                  if (offset[i].includes('%')) {
+                    relativeOffset[i] = parseInt(offset[i].replace('%', '') * _this6.windowHeight / 100);
+                  } else {
+                    relativeOffset[i] = parseInt(offset[i]);
+                  }
                 } else {
-                  relativeOffset[i] = parseInt(offset[i]);
+                  relativeOffset[i] = offset[i];
                 }
               }
             }
@@ -1689,11 +1730,9 @@
       /**
        * Scroll to a desired target.
        *
-       * @param  {object} options
-       *      Available options :
-       *          {node, string, "top", "bottom"} targetOption - The DOM element we want to scroll to
-       *          {int} offsetOption - An absolute vertical scroll value to reach, or an offset to apply on top of given `target` or `sourceElem`'s target
-       *          {boolean} toBottom - Set to true to scroll all the way to the bottom
+       * @param  Available options :
+       *          targetOption {node, string, "top", "bottom", int} - The DOM element we want to scroll to
+       *          offsetOption {int} - An absolute vertical scroll value to reach, or an offset to apply on top of given `target` or `sourceElem`'s target
        * @return {void}
        */
 
@@ -1706,22 +1745,42 @@
         var offset = offsetOption ? parseInt(offsetOption) : 0;
 
         if (typeof targetOption === 'string') {
+          // Selector or boundaries
           if (targetOption === 'top') {
-            offset = 0;
+            target = 0;
           } else if (targetOption === 'bottom') {
-            offset = this.instance.limit;
+            target = this.instance.limit;
           } else {
-            target = document.querySelectorAll(targetOption)[0];
+            target = document.querySelector(targetOption); // If the query fails, abort
+
+            if (!target) {
+              return;
+            }
           }
-        } else if (!targetOption.target) {
+        } else if (typeof targetOption === 'number') {
+          // Absolute coordinate
+          target = parseInt(targetOption);
+        } else if (targetOption && targetOption.tagName) {
+          // DOM Element
           target = targetOption;
-        } // We have a target, get it's coordinates
+        } else {
+          console.warn('`targetOption` parameter is not valid');
+          return;
+        } // We have a target that is not a coordinate yet, get it
 
 
-        if (target) {
-          // Get target offset from top
+        if (typeof target !== 'number') {
+          // Verify the given target belongs to this scroll scope
+          var targetInScope = getParents(target).includes(this.el);
+
+          if (!targetInScope) {
+            // If the target isn't inside our main element, abort any action
+            return;
+          } // Get target offset from top
+
+
           var targetBCR = target.getBoundingClientRect();
-          var offsetTop = targetBCR.top + this.instance.scroll.y; // Try and find the target's parent section
+          var offsetTop = targetBCR.top; // Try and find the target's parent section
 
           var targetParents = getParents(target);
           var parentSection = targetParents.find(function (candidate) {
@@ -1737,10 +1796,12 @@
 
 
           offset = offsetTop + offset - parentSectionOffset;
-        }
+        } else {
+          offset = target + offset;
+        } // Actual scrollTo (the lerp will do the animation itself)
 
-        offset -= this.instance.scroll.y;
-        this.instance.delta.y = Math.min(offset, this.instance.limit); // Actual scrollTo (the lerp will do the animation itself)
+
+        this.instance.delta.y = Math.max(0, Math.min(offset, this.instance.limit)); // We limit the value to scroll boundaries (between 0 and instance limit)
 
         this.inertiaRatio = Math.min(4000 / Math.abs(this.instance.delta.y - this.instance.scroll.y), 0.8); // Update the scroll. If we were in idle state: we're not anymore
 
@@ -1758,6 +1819,7 @@
         this.updateScroll();
         this.transformElements(true);
         this.reinitScrollBar();
+        this.checkScroll(true);
       }
     }, {
       key: "startScroll",
@@ -1772,7 +1834,7 @@
     }, {
       key: "setScroll",
       value: function setScroll(x, y) {
-        this.instance = {
+        this.instance = _objectSpread2({}, this.instance, {
           scroll: {
             x: x,
             y: y
@@ -1780,8 +1842,9 @@
           delta: {
             x: x,
             y: y
-          }
-        };
+          },
+          speed: 0
+        });
       }
     }, {
       key: "destroy",
@@ -1828,7 +1891,11 @@
         this.scroll.init();
 
         if (window.location.hash) {
-          this.scroll.scrollTo(window.location.hash);
+          // Get the hash without the '#' and find the matching element
+          var id = window.location.hash.slice(1, window.location.hash.length);
+          var target = document.getElementById(id); // If found, scroll to the element
+
+          if (target) this.scroll.scrollTo(target);
         }
       }
     }, {

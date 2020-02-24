@@ -46,7 +46,7 @@
 
 // Vendors
 // ==========================================================================
-// @import "vendors/vendor";
+@import "../../../src/styles/_base.scss";
 
 // Components
 // ==========================================================================
@@ -62,6 +62,7 @@
 @import "components/cta";
 @import "components/choochoo";
 @import "components/damn";
+@import "components/scrollbar";
 
 // Templates
 // ==========================================================================
