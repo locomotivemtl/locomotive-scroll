@@ -1267,6 +1267,7 @@ function (_Core) {
       this.addElements();
       this.detectElements();
       this.transformElements(true);
+      this.checkScroll(true);
 
       _get(_getPrototypeOf(_default.prototype), "init", this).call(this);
     }
@@ -1379,13 +1380,21 @@ function (_Core) {
         for (var i = this.sections.length - 1; i >= 0; i--) {
           if (this.sections[i].persistent || this.instance.scroll.y > this.sections[i].offset && this.instance.scroll.y < this.sections[i].limit) {
             this.transform(this.sections[i].el, 0, -this.instance.scroll.y);
-            this.sections[i].el.style.opacity = 1;
-            this.sections[i].el.style.pointerEvents = 'all';
-            this.sections[i].inView = true;
+
+            if (!this.sections[i].inView) {
+              this.sections[i].inView = true;
+              this.sections[i].el.style.opacity = 1;
+              this.sections[i].el.style.pointerEvents = 'all';
+              this.sections[i].el.setAttribute("data-".concat(this.name, "-section-inview"), '');
+            }
           } else {
-            this.sections[i].el.style.opacity = 0;
-            this.sections[i].el.style.pointerEvents = 'none';
-            this.sections[i].inView = false;
+            if (this.sections[i].inView) {
+              this.sections[i].inView = false;
+              this.sections[i].el.style.opacity = 0;
+              this.sections[i].el.style.pointerEvents = 'none';
+              this.sections[i].el.removeAttribute("data-".concat(this.name, "-section-inview"));
+            }
+
             this.transform(this.sections[i].el, 0, 0);
           }
         }
@@ -1640,17 +1649,11 @@ function (_Core) {
         var offset = section.getBoundingClientRect().top - window.innerHeight * 1.5 - getTranslate(section).y;
         var limit = offset + section.getBoundingClientRect().height + window.innerHeight * 2;
         var persistent = typeof section.dataset[_this7.name + 'Persistent'] === 'string';
-        var inView = false;
-
-        if (_this7.instance.scroll.y >= offset && _this7.instance.scroll.y <= limit) {
-          inView = true;
-        }
-
         var mappedSection = {
           el: section,
           offset: offset,
           limit: limit,
-          inView: inView,
+          inView: false,
           persistent: persistent
         };
         _this7.sections[i] = mappedSection;

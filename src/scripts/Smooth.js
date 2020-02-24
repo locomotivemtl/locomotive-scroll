@@ -77,6 +77,8 @@ export default class extends Core {
         this.detectElements();
         this.transformElements(true);
 
+        this.checkScroll(true);
+
         super.init();
     }
 
@@ -168,13 +170,21 @@ export default class extends Core {
             for (let i = this.sections.length - 1; i >= 0; i--) {
                 if(this.sections[i].persistent || (this.instance.scroll.y > this.sections[i].offset && this.instance.scroll.y < this.sections[i].limit)) {
                     this.transform(this.sections[i].el, 0, -this.instance.scroll.y);
-                    this.sections[i].el.style.opacity = 1;
-                    this.sections[i].el.style.pointerEvents = 'all';
-                    this.sections[i].inView = true;
+
+                    if(!this.sections[i].inView) {
+                        this.sections[i].inView = true;
+                        this.sections[i].el.style.opacity = 1;
+                        this.sections[i].el.style.pointerEvents = 'all';
+                        this.sections[i].el.setAttribute(`data-${this.name}-section-inview`,'')
+                    }
                 } else {
-                    this.sections[i].el.style.opacity = 0;
-                    this.sections[i].el.style.pointerEvents = 'none';
-                    this.sections[i].inView = false;
+                    if(this.sections[i].inView) {
+                        this.sections[i].inView = false;
+                        this.sections[i].el.style.opacity = 0;
+                        this.sections[i].el.style.pointerEvents = 'none';
+                        this.sections[i].el.removeAttribute(`data-${this.name}-section-inview`)
+                    }
+
                     this.transform(this.sections[i].el, 0, 0);
                 }
             }
@@ -418,16 +428,11 @@ export default class extends Core {
             let limit = offset + section.getBoundingClientRect().height + (window.innerHeight * 2);
             let persistent = typeof section.dataset[this.name + 'Persistent'] === 'string';
 
-            let inView = false;
-            if(this.instance.scroll.y >= offset && this.instance.scroll.y <= limit) {
-                inView = true;
-            }
-
             const mappedSection = {
                 el: section,
                 offset: offset,
                 limit: limit,
-                inView: inView,
+                inView: false,
                 persistent: persistent
             }
 
