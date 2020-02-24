@@ -1,4 +1,4 @@
-/* locomotive-scroll v3.3.5 | MIT License | https://github.com/locomotivemtl/locomotive-scroll */
+/* locomotive-scroll v3.3.6 | MIT License | https://github.com/locomotivemtl/locomotive-scroll */
 function _classCallCheck(instance, Constructor) {
   if (!(instance instanceof Constructor)) {
     throw new TypeError("Cannot call a class as a function");
@@ -480,7 +480,7 @@ function (_Core) {
 
       this.els = [];
       var els = this.el.querySelectorAll('[data-' + this.name + ']');
-      els.forEach(function (el, i) {
+      els.forEach(function (el, id) {
         var cl = el.dataset[_this3.name + 'Class'] || _this3["class"];
 
         var top = el.getBoundingClientRect().top + _this3.instance.scroll.y;
@@ -516,7 +516,7 @@ function (_Core) {
 
         var mappedEl = {
           el: el,
-          id: i,
+          id: id,
           "class": cl,
           top: top + relativeOffset[0],
           bottom: bottom - relativeOffset[1],
@@ -833,6 +833,7 @@ var lethargy = createCommonjsModule(function (module, exports) {
         this.lastDownDeltas.shift();
         return this.isInertia(-1);
       }
+      return false;
     };
 
     Lethargy.prototype.isInertia = function(direction) {
@@ -880,7 +881,7 @@ var support = (function getSupport() {
     return {
         hasWheelEvent: 'onwheel' in document,
         hasMouseWheelEvent: 'onmousewheel' in document,
-        hasTouch: ('ontouchstart' in window) || window.TouchEvent || window.DocumentTouch && document instanceof DocumentTouch,
+        hasTouch: 'ontouchstart' in document,
         hasTouchWin: navigator.msMaxTouchPoints && navigator.msMaxTouchPoints > 1,
         hasPointer: !!window.navigator.msPointerEnabled,
         hasKeyDown: 'onkeydown' in document,
@@ -956,8 +957,7 @@ function VirtualScroll(options) {
         preventTouch: false,
         unpreventTouchClass: 'vs-touchmove-allowed',
         limitInertia: false,
-        useKeyboard: true,
-        useTouch: true
+        useKeyboard: true
     }, options);
 
     if (this.options.limitInertia) this._lethargy = new Lethargy();
@@ -1084,7 +1084,7 @@ VirtualScroll.prototype._bind = function() {
     if(support.hasWheelEvent) this.el.addEventListener('wheel', this._onWheel, this.listenerOptions);
     if(support.hasMouseWheelEvent) this.el.addEventListener('mousewheel', this._onMouseWheel, this.listenerOptions);
 
-    if(support.hasTouch && this.options.useTouch) {
+    if(support.hasTouch) {
         this.el.addEventListener('touchstart', this._onTouchStart, this.listenerOptions);
         this.el.addEventListener('touchmove', this._onTouchMove, this.listenerOptions);
     }
@@ -1527,7 +1527,7 @@ function (_Core) {
       this.sections.forEach(function (section, y) {
         var els = _this6.sections[y].el.querySelectorAll("[data-".concat(_this6.name, "]"));
 
-        els.forEach(function (el, i) {
+        els.forEach(function (el, id) {
           var cl = el.dataset[_this6.name + 'Class'] || _this6["class"];
           var top;
           var repeat = el.dataset[_this6.name + 'Repeat'];
@@ -1589,7 +1589,7 @@ function (_Core) {
 
           var mappedEl = {
             el: el,
-            id: i,
+            id: id,
             "class": cl,
             top: top + relativeOffset[0],
             middle: middle,
