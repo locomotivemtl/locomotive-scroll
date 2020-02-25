@@ -12,59 +12,76 @@
 npm install locomotive-scroll
 ```
 
-## Basic example
+## Usage
+
+### Basic
+With simple detection.
 
 #### HTML
-
 ```html
-<html>
-    <body>
-        <div data-scroll-container id="js-scroll">
-            <div data-scroll-section>
-                <h1 data-scroll data-scroll-speed="1">Hello</h1>
-                <p data-scroll data-scroll-speed="2">My friends</p>
-            </div>
-
-            <div data-scroll-section>
-                <h2 data-scroll data-scroll-speed="1">I hope</h2>
-                <p>You are doing good</p>
-            </div>            
-        </div>
-    </body>
-</html>
+<h1 data-scroll>Hey</h1>
+<p data-scroll>👋</p>
 ```
-Note : scroll-section are not required, however they improve performance a lot particularly on long pages
 
 #### CSS
+Add the base styles to your CSS file.
 
-Import the basic styles [here](https://github.com/locomotivemtl/locomotive-scroll/blob/master/dist/locomotive-scroll.css)
+[`locomotive-scroll.css`](https://github.com/locomotivemtl/locomotive-scroll/blob/master/dist/locomotive-scroll.css)
 
 #### JS
+
+##### With a bundler
+```js
+import LocomotiveScroll from 'locomotive-scroll';
+
+const scroll = new LocomotiveScroll();
+```
+
+##### Or without
+```js
+<script src="locomotive-scroll.min.js"></script>
+<script>
+    (function () {
+        var scroll = new LocomotiveScroll();
+    })();
+</script>
+```
+_Get the [JS file](https://github.com/locomotivemtl/locomotive-scroll/blob/master/dist/locomotive-scroll.min.js)._
+
+### Smooth
+With smooth scrolling and parallax.
+
+```html
+<div data-scroll-container>
+    <div data-scroll-section>
+        <h1 data-scroll>Hey</h1>
+        <p data-scroll>👋</p>
+    </div>
+    <div data-scroll-section>
+        <h2 data-scroll data-scroll-speed="1">What's up?</h2>
+        <p data-scroll data-scroll-speed="2">😬</p>
+    </div>
+</div>
+```
 
 ```js
 import LocomotiveScroll from 'locomotive-scroll';
 
 const scroll = new LocomotiveScroll({
-    el: document.querySelector('#js-scroll'),
+    el: document.querySelector('[data-scroll-container]'),
     smooth: true
 });
 ```
 
-## Usage
+_Note: scroll-sections are optional but recommended to improve performance, particularly in long pages._
 
-#### With options
-
-```js
-import LocomotiveScroll from 'locomotive-scroll';
-
-const scroll = new LocomotiveScroll({
-    el: document.querySelector('#js-scroll'),
-    smooth: true,
-    scrollbarClass: 'my-scrollbar'
-});
-```
+### Advanced
+Make it do what you want.
 
 #### With methods
+```html
+<section id="js-target">Come here please.</section>
+```
 
 ```js
 import LocomotiveScroll from 'locomotive-scroll';
@@ -76,6 +93,15 @@ scroll.scrollTo(target);
 ```
 
 #### With events
+
+```html
+<!-- Using modularJS -->
+<div data-scroll data-scroll-call="function, module">Trigger</div>
+<!-- Using jQuery events -->
+<div data-scroll data-scroll-call="EVENT_NAME">Trigger</div>
+<!-- Or do it your own way 😎 -->
+<div data-scroll data-scroll-call="{y,o,l,o}">Trigger</div>
+```
 
 ```js
 import LocomotiveScroll from 'locomotive-scroll';
@@ -89,15 +115,6 @@ scroll.on('call', func => {
     $(document).trigger(func);
     // Or do it your own way 😎
 });
-```
-
-```html
-<!-- Using modularJS -->
-<div data-scroll data-scroll-call="function, module">Trigger</div>
-<!-- Using jQuery events -->
-<div data-scroll data-scroll-call="EVENT_NAME">Trigger</div>
-<!-- Or do it your own way 😎 -->
-<div data-scroll data-scroll-call="{y,o,l,o}">Trigger</div>
 ```
 
 ## Instance options
@@ -176,7 +193,7 @@ scroll.on('call', func => {
 Works on most modern browsers. Chrome, Firefox, Safari, Edge...
 
 To get IE 11 support, you need polyfills.
-You can use your own or include these before this script.
+You can use your own or include these before our script.
 
 ```html
 <script nomodule src="https://cdnjs.cloudflare.com/ajax/libs/babel-polyfill/7.6.0/polyfill.min.js" crossorigin="anonymous"></script>
