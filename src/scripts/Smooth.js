@@ -280,7 +280,7 @@ export default class extends Core {
 
     reinitScrollBar() {
         this.scrollbarHeight = this.scrollbar.getBoundingClientRect().height;
-        this.scrollbarThumb.style.height = `${(this.scrollbarHeight * this.scrollbarHeight) / this.instance.limit}px`;
+        this.scrollbarThumb.style.height = `${(this.scrollbarHeight * this.scrollbarHeight) / (this.instance.limit + this.scrollbarHeight)}px`;
         this.scrollBarLimit = this.scrollbarHeight - this.scrollbarThumb.getBoundingClientRect().height;
     }
 
