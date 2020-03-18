@@ -1,9 +1,9 @@
-/* locomotive-scroll v3.3.9 | MIT License | https://github.com/locomotivemtl/locomotive-scroll */
+/* locomotive-scroll v3.3.10 | MIT License | https://github.com/locomotivemtl/locomotive-scroll */
 (function (global, factory) {
   typeof exports === 'object' && typeof module !== 'undefined' ? module.exports = factory() :
   typeof define === 'function' && define.amd ? define(factory) :
   (global = global || self, global.LocomotiveScroll = factory());
-}(this, function () { 'use strict';
+}(this, (function () { 'use strict';
 
   function _classCallCheck(instance, Constructor) {
     if (!(instance instanceof Constructor)) {
@@ -61,13 +61,13 @@
       var source = arguments[i] != null ? arguments[i] : {};
 
       if (i % 2) {
-        ownKeys(source, true).forEach(function (key) {
+        ownKeys(Object(source), true).forEach(function (key) {
           _defineProperty(target, key, source[key]);
         });
       } else if (Object.getOwnPropertyDescriptors) {
         Object.defineProperties(target, Object.getOwnPropertyDescriptors(source));
       } else {
-        ownKeys(source).forEach(function (key) {
+        ownKeys(Object(source)).forEach(function (key) {
           Object.defineProperty(target, key, Object.getOwnPropertyDescriptor(source, key));
         });
       }
@@ -175,9 +175,7 @@
     touchMultiplier: 2
   };
 
-  var _default =
-  /*#__PURE__*/
-  function () {
+  var _default = /*#__PURE__*/function () {
     function _default() {
       var options = arguments.length > 0 && arguments[0] !== undefined ? arguments[0] : {};
 
@@ -427,9 +425,7 @@
     return _default;
   }();
 
-  var _default$1 =
-  /*#__PURE__*/
-  function (_Core) {
+  var _default$1 = /*#__PURE__*/function (_Core) {
     _inherits(_default, _Core);
 
     function _default() {
@@ -1205,9 +1201,7 @@
     END: 35
   };
 
-  var _default$2 =
-  /*#__PURE__*/
-  function (_Core) {
+  var _default$2 = /*#__PURE__*/function (_Core) {
     _inherits(_default, _Core);
 
     function _default() {
@@ -1875,9 +1869,7 @@
     return _default;
   }(_default);
 
-  var _default$3 =
-  /*#__PURE__*/
-  function () {
+  var _default$3 = /*#__PURE__*/function () {
     function _default() {
       var options = arguments.length > 0 && arguments[0] !== undefined ? arguments[0] : {};
 
@@ -1958,4 +1950,4 @@
 
   return _default$3;
 
-}));
+})));
