@@ -1,4 +1,4 @@
-/* locomotive-scroll v3.3.10 | MIT License | https://github.com/locomotivemtl/locomotive-scroll */
+/* locomotive-scroll v3.3.11 | MIT License | https://github.com/locomotivemtl/locomotive-scroll */
 function _classCallCheck(instance, Constructor) {
   if (!(instance instanceof Constructor)) {
     throw new TypeError("Cannot call a class as a function");
@@ -1312,8 +1312,8 @@ function (_Core) {
 
       switch (e.keyCode) {
         case keyCodes$1.TAB:
-          // Do not remove the setTimeout
-          // Even if its delay is null, it allows to override the browser's native scrollTo, which is essential
+          // Do not remove the RAF
+          // It allows to override the browser's native scrollTo, which is essential
           requestAnimationFrame(function () {
             // Make sure native scroll is always at top of page
             _this3.html.scrollTop = 0;
