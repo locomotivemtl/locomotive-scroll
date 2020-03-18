@@ -20,9 +20,10 @@
         "gulp-header": "^2.0.9",
         "mbp": "^1.1.3",
         "merge-stream": "^2.0.0",
-        "normalize.css": "*"
+        "normalize.css": "^8.0.1"
     },
     "dependencies": {
+        "gulp": "^4.0.2",
         "virtual-scroll": "^1.5.2"
     }
 }
