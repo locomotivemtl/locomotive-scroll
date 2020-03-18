@@ -3,7 +3,7 @@
   typeof exports === 'object' && typeof module !== 'undefined' ? module.exports = factory() :
   typeof define === 'function' && define.amd ? define(factory) :
   (global = global || self, global.LocomotiveScroll = factory());
-}(this, (function () { 'use strict';
+}(this, function () { 'use strict';
 
   function _classCallCheck(instance, Constructor) {
     if (!(instance instanceof Constructor)) {
@@ -61,13 +61,13 @@
       var source = arguments[i] != null ? arguments[i] : {};
 
       if (i % 2) {
-        ownKeys(Object(source), true).forEach(function (key) {
+        ownKeys(source, true).forEach(function (key) {
           _defineProperty(target, key, source[key]);
         });
       } else if (Object.getOwnPropertyDescriptors) {
         Object.defineProperties(target, Object.getOwnPropertyDescriptors(source));
       } else {
-        ownKeys(Object(source)).forEach(function (key) {
+        ownKeys(source).forEach(function (key) {
           Object.defineProperty(target, key, Object.getOwnPropertyDescriptor(source, key));
         });
       }
@@ -175,7 +175,9 @@
     touchMultiplier: 2
   };
 
-  var _default = /*#__PURE__*/function () {
+  var _default =
+  /*#__PURE__*/
+  function () {
     function _default() {
       var options = arguments.length > 0 && arguments[0] !== undefined ? arguments[0] : {};
 
@@ -425,7 +427,9 @@
     return _default;
   }();
 
-  var _default$1 = /*#__PURE__*/function (_Core) {
+  var _default$1 =
+  /*#__PURE__*/
+  function (_Core) {
     _inherits(_default, _Core);
 
     function _default() {
@@ -1201,7 +1205,9 @@
     END: 35
   };
 
-  var _default$2 = /*#__PURE__*/function (_Core) {
+  var _default$2 =
+  /*#__PURE__*/
+  function (_Core) {
     _inherits(_default, _Core);
 
     function _default() {
@@ -1296,17 +1302,31 @@
       value: function checkKey(e) {
         var _this3 = this;
 
+        if (this.stop) {
+          // If we are stopped, we don't want any scroll to occur because of a keypress
+          // Prevent tab to scroll to activeElement
+          if (e.keyCode == keyCodes$1.TAB) {
+            requestAnimationFrame(function () {
+              // Make sure native scroll is always at top of page
+              _this3.html.scrollTop = 0;
+              document.body.scrollTop = 0;
+            });
+          }
+
+          return;
+        }
+
         switch (e.keyCode) {
           case keyCodes$1.TAB:
             // Do not remove the setTimeout
             // Even if its delay is null, it allows to override the browser's native scrollTo, which is essential
-            setTimeout(function () {
+            requestAnimationFrame(function () {
               // Make sure native scroll is always at top of page
-              document.documentElement.scrollTop = 0;
+              _this3.html.scrollTop = 0;
               document.body.scrollTop = 0; // Request scrollTo on the focusedElement, putting it at the center of the screen
 
               _this3.scrollTo(document.activeElement, -window.innerHeight / 2);
-            }, 0);
+            });
             break;
 
           case keyCodes$1.UP:
@@ -1869,7 +1889,9 @@
     return _default;
   }(_default);
 
-  var _default$3 = /*#__PURE__*/function () {
+  var _default$3 =
+  /*#__PURE__*/
+  function () {
     function _default() {
       var options = arguments.length > 0 && arguments[0] !== undefined ? arguments[0] : {};
 
@@ -1950,4 +1972,4 @@
 
   return _default$3;
 
-})));
+}));

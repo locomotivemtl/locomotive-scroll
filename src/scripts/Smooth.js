@@ -100,18 +100,30 @@ export default class extends Core {
     }
 
     checkKey(e) {
+        if(this.stop) { // If we are stopped, we don't want any scroll to occur because of a keypress
+            // Prevent tab to scroll to activeElement
+            if(e.keyCode == keyCodes.TAB) {
+                requestAnimationFrame(() => {
+                    // Make sure native scroll is always at top of page
+                    this.html.scrollTop = 0;
+                    document.body.scrollTop = 0;
+                })
+            }
+            return
+        }
+
         switch(e.keyCode) {
             case keyCodes.TAB:
-                // Do not remove the setTimeout
-                // Even if its delay is null, it allows to override the browser's native scrollTo, which is essential
-                setTimeout(() => {
+                // Do not remove the RAF
+                // It allows to override the browser's native scrollTo, which is essential
+                requestAnimationFrame(() => {
                     // Make sure native scroll is always at top of page
-                    document.documentElement.scrollTop = 0;
+                    this.html.scrollTop = 0;
                     document.body.scrollTop = 0;
 
                     // Request scrollTo on the focusedElement, putting it at the center of the screen
                     this.scrollTo(document.activeElement, - window.innerHeight / 2);
-                }, 0)
+                })
                 break;
             case keyCodes.UP:
                 this.instance.delta.y -= 240;
