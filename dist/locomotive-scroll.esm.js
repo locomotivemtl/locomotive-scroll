@@ -1484,7 +1484,6 @@ function (_Core) {
         this.updateScroll();
 
         for (var i = this.sections.length - 1; i >= 0; i--) {
-          // <<<<<<< HEAD
           if (this.sections[i].persistent || this.instance.scroll[this.directionAxis] > this.sections[i].offset[this.directionAxis] && this.instance.scroll[this.directionAxis] < this.sections[i].limit[this.directionAxis]) {
             if (this.direction === 'horizontal') {
               this.transform(this.sections[i].el, -this.instance.scroll[this.directionAxis], 0);
@@ -1985,7 +1984,7 @@ function (_Core) {
     value: function scrollTo(targetOption, offsetOption) {
       var _this9 = this;
 
-      var target = 0;
+      var target;
       var offset = offsetOption ? parseInt(offsetOption) : 0;
 
       if (typeof targetOption === 'string') {
@@ -1993,11 +1992,11 @@ function (_Core) {
         if (targetOption === 'top') {
           target = 0;
         } else if (targetOption === 'bottom') {
-          offset = this.instance.limit.y;
+          target = this.instance.limit.y;
         } else if (targetOption === 'left') {
-          offset = 0;
+          target = 0;
         } else if (targetOption === 'right') {
-          offset = this.instance.limit.x;
+          target = this.instance.limit.x;
         } else {
           target = document.querySelector(targetOption); // If the query fails, abort
 

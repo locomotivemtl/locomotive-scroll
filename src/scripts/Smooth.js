@@ -192,7 +192,6 @@ export default class extends Core {
             this.updateScroll();
 
             for (let i = this.sections.length - 1; i >= 0; i--) {
-// <<<<<<< HEAD
                 if(this.sections[i].persistent || (this.instance.scroll[this.directionAxis] > this.sections[i].offset[this.directionAxis] && this.instance.scroll[this.directionAxis] < this.sections[i].limit[this.directionAxis])) {
                     if(this.direction === 'horizontal') {
                         this.transform(this.sections[i].el, -this.instance.scroll[this.directionAxis], 0);
@@ -501,8 +500,6 @@ export default class extends Core {
                     }
                 }
 
-
-
                 const mappedEl = {
                     el,
                     id: id,
@@ -683,18 +680,18 @@ export default class extends Core {
      * @return {void}
      */
     scrollTo(targetOption, offsetOption) {
-        let target = 0;
+        let target;
         let offset = offsetOption ? parseInt(offsetOption) : 0;
 
         if(typeof targetOption === 'string') { // Selector or boundaries
             if(targetOption === 'top') {
                 target = 0;
             } else if(targetOption === 'bottom') {
-                offset = this.instance.limit.y;
+                target = this.instance.limit.y;
             } else if(targetOption === 'left') {
-                offset = 0;
+                target = 0;
             } else if(targetOption === 'right') {
-                offset = this.instance.limit.x;
+                target = this.instance.limit.x;
             } else {
                 target = document.querySelector(targetOption);
                 // If the query fails, abort
