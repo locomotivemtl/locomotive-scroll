@@ -49,20 +49,6 @@ html {
         cursor: wait;
         overflow: hidden;
     }
-
-    &.has-scroll-smooth {
-        overflow: hidden;
-    }
-
-    &.has-scroll-dragging {
-        user-select: none;
-    }
-}
-
-body {
-    .has-scroll-smooth & {
-        overflow: hidden;
-    }
 }
 
 ::selection {

@@ -2,7 +2,7 @@ export const defaults = {
     el: document,
     elMobile: document,
     name: 'scroll',
-    offset: 0,
+    offset: [0,0],
     repeat: false,
     smooth: false,
     direction: 'vertical',

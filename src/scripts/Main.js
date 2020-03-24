@@ -39,7 +39,13 @@ export default class {
         this.scroll.init();
 
         if(window.location.hash) {
-            this.scroll.scrollTo(window.location.hash);
+            // Get the hash without the '#' and find the matching element
+            const id = window.location.hash.slice(1, window.location.hash.length)
+            let target = document.getElementById(id)
+
+            // If found, scroll to the element
+            if(target)
+                this.scroll.scrollTo(target);
         }
     }
 

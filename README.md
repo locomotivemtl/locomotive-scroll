@@ -14,34 +14,74 @@ npm install locomotive-scroll
 
 ## Usage
 
+### Basic
+With simple detection.
+
+#### HTML
+```html
+<h1 data-scroll>Hey</h1>
+<p data-scroll>👋</p>
+```
+
+#### CSS
+Add the base styles to your CSS file.
+
+[`locomotive-scroll.css`](https://github.com/locomotivemtl/locomotive-scroll/blob/master/dist/locomotive-scroll.css)
+
+#### JS
+
+##### With a bundler
 ```js
 import LocomotiveScroll from 'locomotive-scroll';
 
 const scroll = new LocomotiveScroll();
 ```
 
-```html
-<h1 data-scroll>Hello</h1>
-<p data-scroll>Text</p>
+##### Or without
+```js
+<script src="locomotive-scroll.min.js"></script>
+<script>
+    (function () {
+        var scroll = new LocomotiveScroll();
+    })();
+</script>
 ```
+_Get the [JS file](https://github.com/locomotivemtl/locomotive-scroll/blob/master/dist/locomotive-scroll.min.js)._
 
-#### With smooth scrolling
+### Smooth
+With smooth scrolling and parallax.
+
+```html
+<div data-scroll-container>
+    <div data-scroll-section>
+        <h1 data-scroll>Hey</h1>
+        <p data-scroll>👋</p>
+    </div>
+    <div data-scroll-section>
+        <h2 data-scroll data-scroll-speed="1">What's up?</h2>
+        <p data-scroll data-scroll-speed="2">😬</p>
+    </div>
+</div>
+```
 
 ```js
 import LocomotiveScroll from 'locomotive-scroll';
 
 const scroll = new LocomotiveScroll({
-    el: document.querySelector('#js-scroll'),
-    smooth: true,
+    el: document.querySelector('[data-scroll-container]'),
+    smooth: true
 });
 ```
 
-```html
-<h1 data-scroll data-scroll-speed="1">Hello</h1>
-<p data-scroll data-scroll-speed="2">Text</p>
-```
+_Note: scroll-sections are optional but recommended to improve performance, particularly in long pages._
+
+### Advanced
+Make it do what you want.
 
 #### With methods
+```html
+<section id="js-target">Come here please.</section>
+```
 
 ```js
 import LocomotiveScroll from 'locomotive-scroll';
@@ -53,6 +93,15 @@ scroll.scrollTo(target);
 ```
 
 #### With events
+
+```html
+<!-- Using modularJS -->
+<div data-scroll data-scroll-call="function, module">Trigger</div>
+<!-- Using jQuery events -->
+<div data-scroll data-scroll-call="EVENT_NAME">Trigger</div>
+<!-- Or do it your own way 😎 -->
+<div data-scroll data-scroll-call="{y,o,l,o}">Trigger</div>
+```
 
 ```js
 import LocomotiveScroll from 'locomotive-scroll';
@@ -68,49 +117,38 @@ scroll.on('call', func => {
 });
 ```
 
-```html
-<!-- Using modularJS -->
-<div data-scroll data-scroll-call="function, module">Trigger</div>
-<!-- Using jQuery events -->
-<div data-scroll data-scroll-call="EVENT_NAME">Trigger</div>
-<!-- Or do it your own way 😎 -->
-<div data-scroll data-scroll-call="{y,o,l,o}">Trigger</div>
-```
-
 ## Instance options
 
-| Option                    | Type      | Default                | Description                                                                                                                              |
-| ------------------------- | --------- | ---------------------- | ---------------------------------------------------------------------------------------------------------------------------------------- |
-| `el`                      | `object`  | `document`             | Scroll container element.                                                                                                                |
-| `name`                    | `string`  | `'scroll'`             | Data attribute prefix (`data-scroll-xxxx`).                                                                                              |
-| `offset`                  | `array`   | `0`                    | In-view trigger offset.                                                                                                                  |
-| `repeat`                  | `boolean` | `false`                | Repeat in-view detection.                                                                                                                |
-| `smooth`                  | `boolean` | `false`                | Smooth scrolling.                                                                                                                        |
-| `direction`               | `string`  | `vertical`             | Scroll direction. Available values : `vertical`, `horizontal`                                                                            |
-| `horizontalGesture`       | `boolean` | `false`                | **Only affects "smooth" scrolling**. If true, uses horizontal data from mousewheel / touch to scroll                                     |
-| `reloadOnContextChange`   | `boolean` | `false`                | If true, reloads browser when a context change (between `smartphone`, `tablet` or `desktop`) implies swapping between smooth & native    |
-| `inertia`                 | `number`  | `1`                    | Lerp intensity.                                                                                                                          |
-| `getDirection`            | `boolean` | `false`                | Add direction to scroll event.                                                                                                           |
-| `getSpeed`                | `boolean` | `false`                | Add speed to scroll event.                                                                                                               |
-| `class`                   | `string`  | `is-inview`            | Element in-view class.                                                                                                                   |
-| `initClass`               | `string`  | `has-scroll-init`      | Initialize class.                                                                                                                        |
-| `scrollingClass`          | `string`  | `has-scroll-scrolling` | Is scrolling class.                                                                                                                      |
-| `draggingClass`           | `string`  | `has-scroll-dragging`  | Is dragging class.                                                                                                                       |
-| `smoothClass`             | `string`  | `has-scroll-smooth`    | Has smooth scrolling class.                                                                                                              |
-| `scrollbarClass`          | `string`  | `c-scrollbar`          | Scrollbar element class.                                                                                                                 |
-| `firefoxMultiplier`       | `number`  | `50`                   | Boost scrolling speed of Firefox on Windows.                                                                                             |
-| `touchMultiplier`         | `number`  | `2`                    | Mutiply touch action to scroll faster than finger movement.                                                                              |
-| `tablet`                  | `object`  | `{ smooth: false, direction: 'vertical', horizontalGesture: false, breakpoint: 1024 }`    | Allows to override `smooth`, `direction`, `horizontalGesture` options in "tablet" context. The property `breakpoint` allows to set the viewport width that delimits the context from "tablet" to "smartphone" |
-| `smartphone`              | `object`  | `{ smooth: false, direction: 'vertical', horizontalGesture: false }`                      | Allows to override `smooth`, `direction`, `horizontalGesture` options in "smartphone" context. |
+| Option              | Type      | Default                | Description                                                                           |
+| ------------------- | --------- | ---------------------- | ------------------------------------------------------------------------------------- |
+| `el`                | `object`  | `document`             | Scroll container element.                                                             |
+| `name`              | `string`  | `'scroll'`             | Data attribute prefix (`data-scroll-xxxx`).                                           |
+| `offset`            | `array(2)`| `[0,0]`                | Global in-view trigger offset : `[bottom,top]`<br>Use a string with `%` to use a percentage of the viewport height.<br>Use a numeric value for absolute pixels unit.<br>E.g. `["30%",0]`, `[100,0]`, `["30%", 100]`  |
+| `repeat`            | `boolean` | `false`                | Repeat in-view detection.                                                             |
+| `smooth`            | `boolean` | `false`                | Smooth scrolling.                                                                     |
+| `smoothMobile`      | `boolean` | `false`                | Smooth scrolling on iOS and Android devices.                                          |
+| `direction`         | `string`  | `vertical`             | Scroll direction.                                                                     |
+| `inertia`           | `number`  | `1`                    | Lerp intensity.                                                                       |
+| `getDirection`      | `boolean` | `false`                | Add direction to scroll event.                                                        |
+| `getSpeed`          | `boolean` | `false`                | Add speed to scroll event.                                                            |
+| `class`             | `string`  | `is-inview`            | Element in-view class.                                                                |
+| `initClass`         | `string`  | `has-scroll-init`      | Initialize class.                                                                     |
+| `scrollingClass`    | `string`  | `has-scroll-scrolling` | Is scrolling class.                                                                   |
+| `draggingClass`     | `string`  | `has-scroll-dragging`  | Is dragging class.                                                                    |
+| `smoothClass`       | `string`  | `has-scroll-smooth`    | Has smooth scrolling class.                                                           |
+| `scrollbarClass`    | `string`  | `c-scrollbar`          | Scrollbar element class.                                                              |
+| `firefoxMultiplier` | `number`  | `50`                   | Boost scrolling speed of Firefox on Windows.                                          |
+| `touchMultiplier`   | `number`  | `2`                    | Mutiply touch action to scroll faster than finger movement.                           |
 
 ## Element attributes
 
 | Attribute               | Values                   | Description                                                                              |
 | ----------------------- | ------------------------ | ---------------------------------------------------------------------------------------- |
 | `data-scroll`           |                          | Detect if in-view.                                                                       |
+| `data-scroll-container` |                          | Defines the scroll container. Required for [basic styling](https://github.com/locomotivemtl/locomotive-scroll/blob/master/dist/locomotive-scroll.css).                                                                                      |
 | `data-scroll-section`   |                          | Defines a scrollable section. Splitting your page into sections may improve performance. |
 | `data-scroll-class`     | `string`                 | Element in-view class.                                                                   |
-| `data-scroll-offset`    | `string`                 | Element in-view trigger offset (ex.: `"10"`, `"100,50%"`, `"25%, 15%"`).                 |
+| `data-scroll-offset`    | `string`                 | Element in-view trigger offset : `bottom,top`<br>First value is `bottom` offset, second (optional) is `top` offset.<br> Percent is relative to viewport height, otherwise it's absolute pixels.<br>E.g. `"10"`, `"100,50%"`, `"25%, 15%"`  |
 | `data-scroll-repeat`    | `true`, `false`          | Element in-view detection repeat.                                                        |
 | `data-scroll-call`      | `string`                 | Element in-view trigger call event.                                                      |
 | `data-scroll-speed`     | `number`                 | Element parallax speed. A negative value will reverse the direction.                     |
@@ -130,7 +168,7 @@ scroll.on('call', func => {
 | `destroy()`                | Destroys the scroll events.    |                                                                                 |
 | `start()`                  | Restarts the scroll events.    |                                                                                 |
 | `stop()`                   | Stops the scroll events.       |                                                                                 |
-| `scrollTo(target, offset)` | Scroll to an element.          | `target`: dom `object`, selector `string`, `top` or `bottom` `offset`: `number` |
+| `scrollTo(target, offset)` | Scroll to an element.          | `target`: Defines where you want to scroll. Available values types are :<ul><li>`node` : a dom element</li><li>`string` : you can type your own selector, or use values `"top"` and `"bottom"` to reach scroll boundaries</li><li>`int` : An absolute scroll coordinate in pixels</li></ul>`offset` (optionnal) : A `number` that defines an offset from your target. E.g. `-100` if you want to scroll 100 pixels above your target |
 
 ## Instance events
 
@@ -155,9 +193,13 @@ scroll.on('call', func => {
 Works on most modern browsers. Chrome, Firefox, Safari, Edge...
 
 To get IE 11 support, you need polyfills.
-You can use your own or include these before this script.
+You can use your own or include these before our script.
 
 ```html
 <script nomodule src="https://cdnjs.cloudflare.com/ajax/libs/babel-polyfill/7.6.0/polyfill.min.js" crossorigin="anonymous"></script>
 <script nomodule src="https://polyfill.io/v3/polyfill.min.js?features=Object.assign%2CElement.prototype.append%2CNodeList.prototype.forEach%2CCustomEvent%2Csmoothscroll" crossorigin="anonymous"></script>
 ```
+
+## Related
+
+- [Locomotive Boilerplate 🚂](https://github.com/locomotivemtl/locomotive-boilerplate)

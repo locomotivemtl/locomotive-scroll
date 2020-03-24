@@ -78,7 +78,17 @@ export default class {
         this.dispatchScroll();
     }
 
-    checkResize() {}
+    checkResize() {
+        if(!this.resizeTick) {
+            this.resizeTick = true;
+            requestAnimationFrame(() => {
+                this.resize()
+                this.resizeTick = false
+            })
+        }
+    }
+
+    resize() {}
 
     checkContext() {
         if(!this.reloadOnContextChange) return;

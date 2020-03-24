@@ -31,19 +31,10 @@ export default class extends Core {
         }
     }
 
-    checkResize() {
-        this.windowHeight = window.innerHeight;
-        this.windowWidth = window.innerWidth;
-
-        this.checkContext()
-
+    resize() {
         if (this.els.length) {
-            if(!this.hasScrollTicking) {
-                requestAnimationFrame(() => {
-                    this.updateElements();
-                });
-                this.hasScrollTicking = true;
-            }
+            this.windowHeight = window.innerHeight;
+            this.updateElements();
         }
     }
 
@@ -51,11 +42,11 @@ export default class extends Core {
         this.els = [];
         const els = this.el.querySelectorAll('[data-'+this.name+']');
 
-        els.forEach((el, i) => {
+        els.forEach((el, id) => {
             let cl = el.dataset[this.name + 'Class'] || this.class;
             let top = el.getBoundingClientRect().top + this.instance.scroll.y;
             let bottom = top + el.offsetHeight;
-            let offset = parseInt(el.dataset[this.name + 'Offset']) || parseInt(this.offset);
+            let offset = (typeof el.dataset[this.name + 'Offset'] === 'string') ? el.dataset[this.name + 'Offset'].split(',') : this.offset;
             let repeat = el.dataset[this.name + 'Repeat'];
             let call = el.dataset[this.name + 'Call'];
 
@@ -67,12 +58,14 @@ export default class extends Core {
                 repeat = this.repeat;
             }
 
+            let relativeOffset = this.getRelativeOffset(offset);
+
             const mappedEl = {
                 el: el,
-                id: i,
+                id: id,
                 class: cl,
-                top: top + offset,
-                bottom: bottom,
+                top: top + relativeOffset[0],
+                bottom: bottom - relativeOffset[1],
                 offset: offset,
                 repeat: repeat,
                 inView: false,
@@ -87,42 +80,74 @@ export default class extends Core {
         this.els.forEach((el, i) => {
             const top = el.el.getBoundingClientRect().top + this.instance.scroll.y;
             const bottom = top + el.el.offsetHeight;
+            const relativeOffset = this.getRelativeOffset(el.offset)
 
-            this.els[i].top = top + el.offset;
-            this.els[i].bottom = bottom;
+            this.els[i].top = top + relativeOffset[0];
+            this.els[i].bottom = bottom - relativeOffset[1];
         });
 
         this.hasScrollTicking = false;
     }
 
+    getRelativeOffset(offset) {
+        let relativeOffset = [0,0];
+
+        if(offset) {
+            for (var i = 0; i < offset.length; i++) {
+                if(typeof offset[i] == 'string') {
+                    if(offset[i].includes('%')) {
+                        relativeOffset[i] = parseInt(offset[i].replace('%','') * this.windowHeight / 100);
+                    } else {
+                        relativeOffset[i] = parseInt(offset[i]);
+                    }
+                } else {
+                    relativeOffset[i] = offset[i];
+                }
+            }
+        }
+
+        return relativeOffset;
+    }
+
     /**
      * Scroll to a desired target.
      *
-     * @param  {object} options
+     * @param  Available options :
+     *          targetOption {node, string, "top", "bottom", int} - The DOM element we want to scroll to
+     *          offsetOption {int} - An absolute vertical scroll value to reach, or an offset to apply on top of given `target` or `sourceElem`'s target
      * @return {void}
      */
     scrollTo(targetOption, offsetOption) {
         let target;
         let offset = offsetOption ? parseInt(offsetOption) : 0;
 
-        if(typeof targetOption === 'string') {
-
+        if(typeof targetOption === 'string') { // Selector or boundaries
             if(targetOption === 'top') {
                 target = this.html;
             } else if(targetOption === 'bottom') {
-                offset = this.html.offsetHeight - window.innerHeight;
+                target = this.html.offsetHeight - window.innerHeight;
             } else {
-                target = document.querySelectorAll(targetOption)[0];
+                target = document.querySelector(targetOption);
+                // If the query fails, abort
+                if(!target)  {
+                    return;
+                }
             }
-
-        } else if(!targetOption.target) {
-            target = targetOption;
+        } else if(typeof targetOption === 'number') { // Absolute coordinate
+            target = parseInt(targetOption)
+        } else if(targetOption && targetOption.tagName) { // DOM Element
+            target = targetOption
+        } else {
+            console.warn('`targetOption` parameter is not valid')
+            return;
         }
 
-        if (target) {
-            offset = target.getBoundingClientRect().top + offset;
+        // We have a target that is not a coordinate yet, get it
+        if (typeof target !== 'number') {
+            offset = target.getBoundingClientRect().top + offset + this.instance.scroll.y;
+        } else {
+            offset = target + offset
         }
-        offset += this.instance.scroll.y;
 
         window.scrollTo({
             top: offset,

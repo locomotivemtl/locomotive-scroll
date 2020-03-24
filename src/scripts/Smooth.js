@@ -78,6 +78,8 @@ export default class extends Core {
         this.detectElements();
         this.transformElements(true);
 
+        this.checkScroll(true);
+
         super.init();
     }
 
@@ -110,15 +112,30 @@ export default class extends Core {
     }
 
     checkKey(e) {
+        if(this.stop) { // If we are stopped, we don't want any scroll to occur because of a keypress
+            // Prevent tab to scroll to activeElement
+            if(e.keyCode == keyCodes.TAB) {
+                requestAnimationFrame(() => {
+                    // Make sure native scroll is always at top of page
+                    this.html.scrollTop = 0;
+                    document.body.scrollTop = 0;
+                })
+            }
+            return
+        }
+
         switch(e.keyCode) {
             case keyCodes.TAB:
-                setTimeout(() => {
-                    document.documentElement.scrollTop = 0;
+                // Do not remove the RAF
+                // It allows to override the browser's native scrollTo, which is essential
+                requestAnimationFrame(() => {
+                    // Make sure native scroll is always at top of page
+                    this.html.scrollTop = 0;
                     document.body.scrollTop = 0;
-                    if(!(document.activeElement instanceof HTMLBodyElement)){
-                        this.scrollTo(document.activeElement, - window.innerHeight / 2);
-                    }
-                }, 0);
+
+                    // Request scrollTo on the focusedElement, putting it at the center of the screen
+                    this.scrollTo(document.activeElement, - window.innerHeight / 2);
+                })
                 break;
             case keyCodes.UP:
                 this.instance.delta[this.directionAxis] -= 240;
@@ -160,8 +177,8 @@ export default class extends Core {
 
     }
 
-    checkScroll() {
-        if (this.isScrolling || this.isDraggingScrollbar) {
+    checkScroll(forced = false) {
+        if (forced || this.isScrolling || this.isDraggingScrollbar) {
             if (!this.hasScrollTicking) {
                 requestAnimationFrame(() => this.checkScroll());
                 this.hasScrollTicking = true;
@@ -175,17 +192,28 @@ export default class extends Core {
             this.updateScroll();
 
             for (let i = this.sections.length - 1; i >= 0; i--) {
+// <<<<<<< HEAD
                 if(this.sections[i].persistent || (this.instance.scroll[this.directionAxis] > this.sections[i].offset[this.directionAxis] && this.instance.scroll[this.directionAxis] < this.sections[i].limit[this.directionAxis])) {
                     if(this.direction === 'horizontal') {
                         this.transform(this.sections[i].el, -this.instance.scroll[this.directionAxis], 0);
                     } else {
                         this.transform(this.sections[i].el, 0, -this.instance.scroll[this.directionAxis]);
                     }
-                    this.sections[i].el.style.visibility = 'visible';
-                    this.sections[i].inView = true;
+
+                    if(!this.sections[i].inView) {
+                        this.sections[i].inView = true;
+                        this.sections[i].el.style.opacity = 1;
+                        this.sections[i].el.style.pointerEvents = 'all';
+                        this.sections[i].el.setAttribute(`data-${this.name}-section-inview`,'')
+                    }
                 } else {
-                    this.sections[i].el.style.visibility = 'hidden';
-                    this.sections[i].inView = false;
+                    if(this.sections[i].inView) {
+                        this.sections[i].inView = false;
+                        this.sections[i].el.style.opacity = 0;
+                        this.sections[i].el.style.pointerEvents = 'none';
+                        this.sections[i].el.removeAttribute(`data-${this.name}-section-inview`)
+                    }
+
                     this.transform(this.sections[i].el, 0, 0);
                 }
             }
@@ -215,7 +243,7 @@ export default class extends Core {
         }
     }
 
-    checkResize() {
+    resize() {
         this.windowHeight = window.innerHeight;
         this.windowWidth = window.innerWidth;
 
@@ -246,7 +274,14 @@ export default class extends Core {
         if (this.isScrolling || this.isDraggingScrollbar) {
             this.instance.scroll[this.directionAxis] = lerp(this.instance.scroll[this.directionAxis], this.instance.delta[this.directionAxis], this.inertia * this.inertiaRatio);
         } else {
-            this.instance.scroll[this.directionAxis] = this.instance.delta[this.directionAxis];
+
+            if (this.instance.scroll[this.directionAxis] > this.instance.limit[this.directionAxis]) {
+                this.setScroll(this.instance.scroll[this.directionAxis], this.instance.limit[this.directionAxis])
+            } else if(this.instance.scroll.y < 0) {
+                this.setScroll(this.instance.scroll[this.directionAxis], 0)
+            } else {
+                this.setScroll(this.instance.scroll[this.directionAxis], this.instance.delta[this.directionAxis])
+            }
         }
     }
 
@@ -372,7 +407,7 @@ export default class extends Core {
         this.sections.forEach((section, y) => {
             const els = this.sections[y].el.querySelectorAll(`[data-${this.name}]`);
 
-            els.forEach((el, i) => {
+            els.forEach((el, id) => {
                 let cl = el.dataset[this.name + 'Class'] || this.class;
                 let top;
                 let left;
@@ -383,7 +418,7 @@ export default class extends Core {
                 let direction = el.dataset[this.name + 'Direction'];
                 let sticky = typeof el.dataset[this.name + 'Sticky'] === 'string';
                 let speed = el.dataset[this.name + 'Speed'] ? parseFloat(el.dataset[this.name + 'Speed'])/10 : false;
-                let offset = (typeof el.dataset[this.name + 'Offset'] === 'string') ? el.dataset[this.name + 'Offset'].split(',') : false;
+                let offset = (typeof el.dataset[this.name + 'Offset'] === 'string') ? el.dataset[this.name + 'Offset'].split(',') : this.offset;
 
                 let target = el.dataset[this.name + 'Target'];
                 let targetEl;
@@ -437,20 +472,28 @@ export default class extends Core {
                 if(offset) {
                     if(this.direction === 'horizontal') {
                         for (var i = 0; i < offset.length; i++) {
-                            if(offset[i].includes('%')) {
-                                relativeOffset[i] = parseInt(offset[i].replace('%','') * this.windowWidth / 100);
+                            if(typeof offset[i] == 'string') {
+                                if(offset[i].includes('%')) {
+                                    relativeOffset[i] = parseInt(offset[i].replace('%','') * this.windowWidth / 100);
+                                } else {
+                                    relativeOffset[i] = parseInt(offset[i]);
+                                }
                             } else {
-                                relativeOffset[i] = parseInt(offset[i]);
+                                relativeOffset[i] = offset[i];
                             }
                         }
                         left = left + relativeOffset[0];
                         right = right - relativeOffset[1];
                     } else {
                         for (var i = 0; i < offset.length; i++) {
-                            if(offset[i].includes('%')) {
-                                relativeOffset[i] = parseInt(offset[i].replace('%','') * this.windowHeight / 100);
+                            if(typeof offset[i] == 'string') {
+                                if(offset[i].includes('%')) {
+                                    relativeOffset[i] = parseInt(offset[i].replace('%','') * this.windowHeight / 100);
+                                } else {
+                                    relativeOffset[i] = parseInt(offset[i]);
+                                }
                             } else {
-                                relativeOffset[i] = parseInt(offset[i]);
+                                relativeOffset[i] = offset[i];
                             }
                         }
                         top = top + relativeOffset[0];
@@ -462,7 +505,7 @@ export default class extends Core {
 
                 const mappedEl = {
                     el,
-                    id: i,
+                    id: id,
                     class: cl,
                     top,
                     middle,
@@ -510,16 +553,11 @@ export default class extends Core {
             }
             let persistent = typeof section.dataset[this.name + 'Persistent'] === 'string';
 
-            let inView = false;
-            if(this.instance.scroll[this.directionAxis] >= offset[this.directionAxis] && this.instance.scroll[this.directionAxis] <= limit[this.directionAxis]) {
-                inView = true;
-            }
-
             const mappedSection = {
                 el: section,
                 offset: offset,
                 limit: limit,
-                inView: inView,
+                inView: false,
                 persistent: persistent
             }
 
@@ -639,21 +677,18 @@ export default class extends Core {
     /**
      * Scroll to a desired target.
      *
-     * @param  {object} options
-     *      Available options :
-     *          {node, string, "top", "bottom"} targetOption - The DOM element we want to scroll to
-     *          {int} offsetOption - An absolute vertical scroll value to reach, or an offset to apply on top of given `target` or `sourceElem`'s target
-     *          {boolean} toBottom - Set to true to scroll all the way to the bottom
+     * @param  Available options :
+     *          targetOption {node, string, "top", "bottom", int} - The DOM element we want to scroll to
+     *          offsetOption {int} - An absolute vertical scroll value to reach, or an offset to apply on top of given `target` or `sourceElem`'s target
      * @return {void}
      */
     scrollTo(targetOption, offsetOption) {
-        let target;
+        let target = 0;
         let offset = offsetOption ? parseInt(offsetOption) : 0;
 
-        if(typeof targetOption === 'string') {
-
+        if(typeof targetOption === 'string') { // Selector or boundaries
             if(targetOption === 'top') {
-                offset = 0;
+                target = 0;
             } else if(targetOption === 'bottom') {
                 offset = this.instance.limit.y;
             } else if(targetOption === 'left') {
@@ -661,19 +696,34 @@ export default class extends Core {
             } else if(targetOption === 'right') {
                 offset = this.instance.limit.x;
             } else {
-                target = document.querySelectorAll(targetOption)[0];
+                target = document.querySelector(targetOption);
+                // If the query fails, abort
+                if(!target)  {
+                    return;
+                }
             }
-
-        } else if(!targetOption.target) {
-            target = targetOption;
+        } else if(typeof targetOption === 'number') { // Absolute coordinate
+            target = parseInt(targetOption)
+        } else if(targetOption && targetOption.tagName) { // DOM Element
+            target = targetOption
+        } else {
+            console.warn('`targetOption` parameter is not valid')
+            return;
         }
 
-        // We have a target, get it's coordinates
-        if (target) {
+        // We have a target that is not a coordinate yet, get it
+        if (typeof target !== 'number') {
+            // Verify the given target belongs to this scroll scope
+            let targetInScope = getParents(target).includes(this.el)
+            if(!targetInScope) {
+                // If the target isn't inside our main element, abort any action
+                return;
+            }
+
             // Get target offset from top
-            const targetBCR = target.getBoundingClientRect();
-            const offsetTop = targetBCR.top + this.instance.scroll.y;
-            const offsetLeft = targetBCR.left + this.instance.scroll.x;
+            const targetBCR = target.getBoundingClientRect()
+            const offsetTop = targetBCR.top
+            const offsetLeft = targetBCR.left;
 
             // Try and find the target's parent section
             const targetParents = getParents(target)
@@ -688,11 +738,12 @@ export default class extends Core {
             } else {
                 offset = offsetTop + offset - parentSectionOffset;
             }
-
+        } else {
+            offset = target + offset;
         }
-        offset -= this.instance.scroll[this.directionAxis];
 
-        this.instance.delta[this.directionAxis] = Math.min(offset, this.instance.limit[this.directionAxis]); // Actual scrollTo (the lerp will do the animation itself)
+        // Actual scrollTo (the lerp will do the animation itself)
+        this.instance.delta[this.directionAxis] = Math.max(0,Math.min(offset, this.instance.limit[this.directionAxis])); // We limit the value to scroll boundaries (between 0 and instance limit)
         this.inertiaRatio = Math.min(4000 / Math.abs(this.instance.delta[this.directionAxis] - this.instance.scroll[this.directionAxis]),0.8);
 
         // Update the scroll. If we were in idle state: we're not anymore
@@ -709,6 +760,8 @@ export default class extends Core {
         this.updateScroll();
         this.transformElements(true);
         this.reinitScrollBar();
+
+        this.checkScroll(true);
     }
 
     startScroll() {
@@ -721,6 +774,7 @@ export default class extends Core {
 
     setScroll(x,y) {
         this.instance = {
+            ...this.instance,
             scroll: {
                 x: x,
                 y: y
@@ -728,7 +782,8 @@ export default class extends Core {
             delta: {
                 x: x,
                 y: y
-            }
+            },
+            speed: 0
         }
     }
 

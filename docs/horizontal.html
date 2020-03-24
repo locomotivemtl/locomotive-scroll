@@ -25,13 +25,13 @@
         </script>
     </head>
     <body>
-        <div class="o-scroll" id="js-scroll" data-horizontal="true">
+        <div class="o-scroll" data-scroll-container id="js-scroll" data-horizontal="true">
 
             <div data-scroll-section>
 
                 <div>
                     <h1>
-                        Horizontal scrolling
+                        <button data-scroll-to data-scroll-href="right" type="button">Scroll to right</a>Horizontal scrolling
                     </h1>
                     <h1 data-scroll data-scroll-speed="2" data-scroll-position="left">
                         Horizontal scrolling Parallax
@@ -50,7 +50,7 @@
             <div data-scroll-section>
 
                 <div data-scroll class="c-image" data-scroll-repeat>
-                    <img src="https://source.unsplash.com/random" alt="Random image">
+                    <img data-scroll-to data-scroll-href="left" src="https://source.unsplash.com/random" alt="Random image">
                 </div>
             </div>
 
