@@ -55,13 +55,13 @@ function _objectSpread2(target) {
     var source = arguments[i] != null ? arguments[i] : {};
 
     if (i % 2) {
-      ownKeys(source, true).forEach(function (key) {
+      ownKeys(Object(source), true).forEach(function (key) {
         _defineProperty(target, key, source[key]);
       });
     } else if (Object.getOwnPropertyDescriptors) {
       Object.defineProperties(target, Object.getOwnPropertyDescriptors(source));
     } else {
-      ownKeys(source).forEach(function (key) {
+      ownKeys(Object(source)).forEach(function (key) {
         Object.defineProperty(target, key, Object.getOwnPropertyDescriptor(source, key));
       });
     }
@@ -169,9 +169,7 @@ var defaults = {
   touchMultiplier: 2
 };
 
-var _default =
-/*#__PURE__*/
-function () {
+var _default = /*#__PURE__*/function () {
   function _default() {
     var options = arguments.length > 0 && arguments[0] !== undefined ? arguments[0] : {};
 
@@ -421,9 +419,7 @@ function () {
   return _default;
 }();
 
-var _default$1 =
-/*#__PURE__*/
-function (_Core) {
+var _default$1 = /*#__PURE__*/function (_Core) {
   _inherits(_default, _Core);
 
   function _default() {
@@ -1199,9 +1195,7 @@ var keyCodes$1 = {
   END: 35
 };
 
-var _default$2 =
-/*#__PURE__*/
-function (_Core) {
+var _default$2 = /*#__PURE__*/function (_Core) {
   _inherits(_default, _Core);
 
   function _default() {
@@ -1590,9 +1584,10 @@ function (_Core) {
           var middle = (bottom - top) / 2 + top;
 
           if (sticky) {
-            var elDistance = el.getBoundingClientRect().top - top;
+            var elTop = el.getBoundingClientRect().top;
+            var elDistance = elTop - top;
             top += window.innerHeight;
-            bottom = top + targetEl.offsetHeight - window.innerHeight - el.offsetHeight - elDistance;
+            bottom = elTop + targetEl.offsetHeight - el.offsetHeight - elDistance;
             middle = (bottom - top) / 2 + top;
           }
 
@@ -1883,9 +1878,7 @@ function (_Core) {
   return _default;
 }(_default);
 
-var _default$3 =
-/*#__PURE__*/
-function () {
+var _default$3 = /*#__PURE__*/function () {
   function _default() {
     var options = arguments.length > 0 && arguments[0] !== undefined ? arguments[0] : {};
 
