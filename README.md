@@ -168,7 +168,7 @@ scroll.on('call', func => {
 | `destroy()`                | Destroys the scroll events.    |                                                                                 |
 | `start()`                  | Restarts the scroll events.    |                                                                                 |
 | `stop()`                   | Stops the scroll events.       |                                                                                 |
-| `scrollTo(target, offset)` | Scroll to an element.          | `target`: Defines where you want to scroll. Available values types are :<ul><li>`node` : a dom element</li><li>`string` : you can type your own selector, or use values `"top"` and `"bottom"` to reach scroll boundaries</li><li>`int` : An absolute scroll coordinate in pixels</li></ul>`offset` (optionnal) : A `number` that defines an offset from your target. E.g. `-100` if you want to scroll 100 pixels above your target |
+| `scrollTo(target, offset)` | Scroll to an element.          | `target`: Defines where you want to scroll. Available values types are :<ul><li>`node` : a dom element</li><li>`string` : you can type your own selector, or use values `"top"` and `"bottom"` to reach scroll boundaries</li><li>`int` : An absolute scroll coordinate in pixels</li></ul>`offset` (optional) : A `number` that defines an offset from your target. E.g. `-100` if you want to scroll 100 pixels above your target |
 
 ## Instance events
 
