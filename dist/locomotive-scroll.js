@@ -3,7 +3,7 @@
   typeof exports === 'object' && typeof module !== 'undefined' ? module.exports = factory() :
   typeof define === 'function' && define.amd ? define(factory) :
   (global = global || self, global.LocomotiveScroll = factory());
-}(this, function () { 'use strict';
+}(this, (function () { 'use strict';
 
   function _classCallCheck(instance, Constructor) {
     if (!(instance instanceof Constructor)) {
@@ -61,13 +61,13 @@
       var source = arguments[i] != null ? arguments[i] : {};
 
       if (i % 2) {
-        ownKeys(source, true).forEach(function (key) {
+        ownKeys(Object(source), true).forEach(function (key) {
           _defineProperty(target, key, source[key]);
         });
       } else if (Object.getOwnPropertyDescriptors) {
         Object.defineProperties(target, Object.getOwnPropertyDescriptors(source));
       } else {
-        ownKeys(source).forEach(function (key) {
+        ownKeys(Object(source)).forEach(function (key) {
           Object.defineProperty(target, key, Object.getOwnPropertyDescriptor(source, key));
         });
       }
@@ -153,6 +153,26 @@
     return _get(target, property, receiver || target);
   }
 
+  function _toConsumableArray(arr) {
+    return _arrayWithoutHoles(arr) || _iterableToArray(arr) || _nonIterableSpread();
+  }
+
+  function _arrayWithoutHoles(arr) {
+    if (Array.isArray(arr)) {
+      for (var i = 0, arr2 = new Array(arr.length); i < arr.length; i++) arr2[i] = arr[i];
+
+      return arr2;
+    }
+  }
+
+  function _iterableToArray(iter) {
+    if (Symbol.iterator in Object(iter) || Object.prototype.toString.call(iter) === "[object Arguments]") return Array.from(iter);
+  }
+
+  function _nonIterableSpread() {
+    throw new TypeError("Invalid attempt to spread non-iterable instance");
+  }
+
   var defaults = {
     el: document,
     elMobile: document,
@@ -175,9 +195,7 @@
     touchMultiplier: 2
   };
 
-  var _default =
-  /*#__PURE__*/
-  function () {
+  var _default = /*#__PURE__*/function () {
     function _default() {
       var options = arguments.length > 0 && arguments[0] !== undefined ? arguments[0] : {};
 
@@ -427,9 +445,7 @@
     return _default;
   }();
 
-  var _default$1 =
-  /*#__PURE__*/
-  function (_Core) {
+  var _default$1 = /*#__PURE__*/function (_Core) {
     _inherits(_default, _Core);
 
     function _default() {
@@ -1192,6 +1208,114 @@
     return parents;
   } // https://gomakethings.com/how-to-get-the-closest-parent-element-with-a-matching-selector-using-vanilla-javascript/
 
+  /**
+   * https://github.com/gre/bezier-easing
+   * BezierEasing - use bezier curve for transition easing function
+   * by Gaëtan Renaudeau 2014 - 2015 – MIT License
+   */
+
+  // These values are established by empiricism with tests (tradeoff: performance VS precision)
+  var NEWTON_ITERATIONS = 4;
+  var NEWTON_MIN_SLOPE = 0.001;
+  var SUBDIVISION_PRECISION = 0.0000001;
+  var SUBDIVISION_MAX_ITERATIONS = 10;
+
+  var kSplineTableSize = 11;
+  var kSampleStepSize = 1.0 / (kSplineTableSize - 1.0);
+
+  var float32ArraySupported = typeof Float32Array === 'function';
+
+  function A (aA1, aA2) { return 1.0 - 3.0 * aA2 + 3.0 * aA1; }
+  function B (aA1, aA2) { return 3.0 * aA2 - 6.0 * aA1; }
+  function C (aA1)      { return 3.0 * aA1; }
+
+  // Returns x(t) given t, x1, and x2, or y(t) given t, y1, and y2.
+  function calcBezier (aT, aA1, aA2) { return ((A(aA1, aA2) * aT + B(aA1, aA2)) * aT + C(aA1)) * aT; }
+
+  // Returns dx/dt given t, x1, and x2, or dy/dt given t, y1, and y2.
+  function getSlope (aT, aA1, aA2) { return 3.0 * A(aA1, aA2) * aT * aT + 2.0 * B(aA1, aA2) * aT + C(aA1); }
+
+  function binarySubdivide (aX, aA, aB, mX1, mX2) {
+    var currentX, currentT, i = 0;
+    do {
+      currentT = aA + (aB - aA) / 2.0;
+      currentX = calcBezier(currentT, mX1, mX2) - aX;
+      if (currentX > 0.0) {
+        aB = currentT;
+      } else {
+        aA = currentT;
+      }
+    } while (Math.abs(currentX) > SUBDIVISION_PRECISION && ++i < SUBDIVISION_MAX_ITERATIONS);
+    return currentT;
+  }
+
+  function newtonRaphsonIterate (aX, aGuessT, mX1, mX2) {
+   for (var i = 0; i < NEWTON_ITERATIONS; ++i) {
+     var currentSlope = getSlope(aGuessT, mX1, mX2);
+     if (currentSlope === 0.0) {
+       return aGuessT;
+     }
+     var currentX = calcBezier(aGuessT, mX1, mX2) - aX;
+     aGuessT -= currentX / currentSlope;
+   }
+   return aGuessT;
+  }
+
+  function LinearEasing (x) {
+    return x;
+  }
+
+  var src$1 = function bezier (mX1, mY1, mX2, mY2) {
+    if (!(0 <= mX1 && mX1 <= 1 && 0 <= mX2 && mX2 <= 1)) {
+      throw new Error('bezier x values must be in [0, 1] range');
+    }
+
+    if (mX1 === mY1 && mX2 === mY2) {
+      return LinearEasing;
+    }
+
+    // Precompute samples table
+    var sampleValues = float32ArraySupported ? new Float32Array(kSplineTableSize) : new Array(kSplineTableSize);
+    for (var i = 0; i < kSplineTableSize; ++i) {
+      sampleValues[i] = calcBezier(i * kSampleStepSize, mX1, mX2);
+    }
+
+    function getTForX (aX) {
+      var intervalStart = 0.0;
+      var currentSample = 1;
+      var lastSample = kSplineTableSize - 1;
+
+      for (; currentSample !== lastSample && sampleValues[currentSample] <= aX; ++currentSample) {
+        intervalStart += kSampleStepSize;
+      }
+      --currentSample;
+
+      // Interpolate to provide an initial guess for t
+      var dist = (aX - sampleValues[currentSample]) / (sampleValues[currentSample + 1] - sampleValues[currentSample]);
+      var guessForT = intervalStart + dist * kSampleStepSize;
+
+      var initialSlope = getSlope(guessForT, mX1, mX2);
+      if (initialSlope >= NEWTON_MIN_SLOPE) {
+        return newtonRaphsonIterate(aX, guessForT, mX1, mX2);
+      } else if (initialSlope === 0.0) {
+        return guessForT;
+      } else {
+        return binarySubdivide(aX, intervalStart, intervalStart + kSampleStepSize, mX1, mX2);
+      }
+    }
+
+    return function BezierEasing (x) {
+      // Because JavaScript number are imprecise, we should guarantee the extremes are right.
+      if (x === 0) {
+        return 0;
+      }
+      if (x === 1) {
+        return 1;
+      }
+      return calcBezier(getTForX(x), mY1, mY2);
+    };
+  };
+
   var keyCodes$1 = {
     LEFT: 37,
     UP: 38,
@@ -1205,9 +1329,7 @@
     END: 35
   };
 
-  var _default$2 =
-  /*#__PURE__*/
-  function (_Core) {
+  var _default$2 = /*#__PURE__*/function (_Core) {
     _inherits(_default, _Core);
 
     function _default() {
@@ -1224,7 +1346,6 @@
       _this.isTicking = false;
       _this.hasScrollTicking = false;
       _this.parallaxElements = [];
-      _this.inertiaRatio = 1;
       _this.stop = false;
       _this.checkKey = _this.checkKey.bind(_assertThisInitialized(_this));
       window.addEventListener('keydown', _this.checkKey, false);
@@ -1292,8 +1413,12 @@
     }, {
       key: "stopScrolling",
       value: function stopScrolling() {
+        if (this.scrollToRaf) {
+          cancelAnimationFrame(this.scrollToRaf);
+          this.scrollToRaf = null;
+        }
+
         this.isScrolling = false;
-        this.inertiaRatio = 1;
         this.instance.scroll.y = Math.round(this.instance.scroll.y);
         this.html.classList.remove(this.scrollingClass);
       }
@@ -1391,7 +1516,7 @@
 
           var distance = Math.abs(this.instance.delta.y - this.instance.scroll.y);
 
-          if (distance < 0.5 && this.instance.delta.y != 0 || distance < 0.5 && this.instance.delta.y == 0) {
+          if (!this.animatingScroll && (distance < 0.5 && this.instance.delta.y != 0 || distance < 0.5 && this.instance.delta.y == 0)) {
             this.stopScrolling();
           }
 
@@ -1456,7 +1581,7 @@
       key: "updateScroll",
       value: function updateScroll(e) {
         if (this.isScrolling || this.isDraggingScrollbar) {
-          this.instance.scroll.y = lerp(this.instance.scroll.y, this.instance.delta.y, this.inertia * this.inertiaRatio);
+          this.instance.scroll.y = lerp(this.instance.scroll.y, this.instance.delta.y, this.inertia);
         } else {
           if (this.instance.scroll.y > this.instance.limit) {
             this.setScroll(this.instance.scroll.x, this.instance.limit);
@@ -1759,7 +1884,9 @@
        *
        * @param  Available options :
        *          targetOption {node, string, "top", "bottom", int} - The DOM element we want to scroll to
-       *          offsetOption {int} - An absolute vertical scroll value to reach, or an offset to apply on top of given `target` or `sourceElem`'s target
+       *          offsetOption {int} - An offset to apply on top of given `target` or `sourceElem`'s target
+       *          duration {int} - Duration of the scroll animation in milliseconds
+       *          easing {array} - An array of 4 floats between 0 and 1 defining the bezier curve for the animation's easing. See http://greweb.me/bezier-easing-editor/example/
        * @return {void}
        */
 
@@ -1768,8 +1895,11 @@
       value: function scrollTo(targetOption, offsetOption) {
         var _this9 = this;
 
+        var duration = arguments.length > 2 && arguments[2] !== undefined ? arguments[2] : 1000;
+        var easing = arguments.length > 3 && arguments[3] !== undefined ? arguments[3] : [0.25, 0.00, 0.35, 1.00];
         var target;
         var offset = offsetOption ? parseInt(offsetOption) : 0;
+        easing = src$1.apply(void 0, _toConsumableArray(easing));
 
         if (typeof targetOption === 'string') {
           // Selector or boundaries
@@ -1825,16 +1955,44 @@
           offset = offsetTop + offset - parentSectionOffset;
         } else {
           offset = target + offset;
-        } // Actual scrollTo (the lerp will do the animation itself)
+        } // Actual scrollto
+        // ==========================================================================
+        // Setup
 
 
-        this.instance.delta.y = Math.max(0, Math.min(offset, this.instance.limit)); // We limit the value to scroll boundaries (between 0 and instance limit)
+        var scrollStart = parseFloat(this.instance.delta.y);
+        var scrollTarget = Math.max(0, Math.min(offset, this.instance.limit)); // Make sure our target is in the scroll boundaries
 
-        this.inertiaRatio = Math.min(4000 / Math.abs(this.instance.delta.y - this.instance.scroll.y), 0.8); // Update the scroll. If we were in idle state: we're not anymore
+        var scrollDiff = scrollTarget - scrollStart;
 
-        this.isScrolling = true;
-        this.checkScroll();
-        this.html.classList.add(this.scrollingClass);
+        var render = function render(p) {
+          _this9.instance.delta.y = scrollStart + scrollDiff * p;
+        }; // Prepare the scroll
+
+
+        this.animatingScroll = true; // This boolean allows to prevent `checkScroll()` from calling `stopScrolling` when the animation is slow (i.e. at the beginning of an EaseIn)
+
+        this.stopScrolling(); // Stop any movement, allows to kill any other `scrollTo` still happening
+
+        this.startScrolling(); // Restart the scroll
+        // Start the animation loop
+
+        var start = Date.now();
+
+        var loop = function loop() {
+          var p = (Date.now() - start) / duration; // Animation progress
+
+          if (p > 1) {
+            // Animation ends
+            render(1);
+            _this9.animatingScroll = false;
+          } else {
+            _this9.scrollToRaf = requestAnimationFrame(loop);
+            render(easing(p));
+          }
+        };
+
+        loop();
       }
     }, {
       key: "update",
@@ -1889,9 +2047,7 @@
     return _default;
   }(_default);
 
-  var _default$3 =
-  /*#__PURE__*/
-  function () {
+  var _default$3 = /*#__PURE__*/function () {
     function _default() {
       var options = arguments.length > 0 && arguments[0] !== undefined ? arguments[0] : {};
 
@@ -1942,8 +2098,8 @@
       }
     }, {
       key: "scrollTo",
-      value: function scrollTo(target, offset) {
-        this.scroll.scrollTo(target, offset);
+      value: function scrollTo(target, offset, duration, easing) {
+        this.scroll.scrollTo(target, offset, duration, easing);
       }
     }, {
       key: "setScroll",
@@ -1972,4 +2128,4 @@
 
   return _default$3;
 
-}));
+})));

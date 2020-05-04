@@ -46,8 +46,8 @@ export default class {
         this.scroll.stopScroll();
     }
 
-    scrollTo(target, offset) {
-        this.scroll.scrollTo(target, offset);
+    scrollTo(target, offset, duration, easing) {
+        this.scroll.scrollTo(target, offset, duration, easing);
     }
 
     setScroll(x,y) {
