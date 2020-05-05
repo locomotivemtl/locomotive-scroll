@@ -3,6 +3,7 @@ import Core from './Core';
 import { lerp } from './utils/maths'
 import { getTranslate } from './utils/transform'
 import { getParents, queryClosestParent } from './utils/html';
+import BezierEasing from 'bezier-easing';
 
 const keyCodes = {
     LEFT: 37,
@@ -27,7 +28,6 @@ export default class extends Core {
         this.isTicking = false;
         this.hasScrollTicking = false;
         this.parallaxElements = [];
-        this.inertiaRatio = 1;
         this.stop = false;
 
         this.checkKey = this.checkKey.bind(this);
@@ -93,8 +93,12 @@ export default class extends Core {
     }
 
     stopScrolling() {
+        if(this.scrollToRaf) {
+            cancelAnimationFrame(this.scrollToRaf)
+            this.scrollToRaf = null
+        }
+
         this.isScrolling = false;
-        this.inertiaRatio = 1;
         this.instance.scroll.y = Math.round(this.instance.scroll.y);
         this.html.classList.remove(this.scrollingClass);
     }
@@ -173,7 +177,7 @@ export default class extends Core {
             }
 
             const distance = (Math.abs(this.instance.delta.y - this.instance.scroll.y));
-            if ((distance < 0.5 && this.instance.delta.y != 0) || (distance < 0.5 && this.instance.delta.y == 0)) {
+            if (!this.animatingScroll && ((distance < 0.5 && this.instance.delta.y != 0) || (distance < 0.5 && this.instance.delta.y == 0))) {
                 this.stopScrolling();
             }
 
@@ -236,7 +240,7 @@ export default class extends Core {
 
     updateScroll(e) {
         if (this.isScrolling || this.isDraggingScrollbar) {
-            this.instance.scroll.y = lerp(this.instance.scroll.y, this.instance.delta.y, this.inertia * this.inertiaRatio);
+            this.instance.scroll.y = lerp(this.instance.scroll.y, this.instance.delta.y, this.inertia);
         } else {
             if (this.instance.scroll.y > this.instance.limit) {
                 this.setScroll(this.instance.scroll.x, this.instance.limit)
@@ -533,12 +537,15 @@ export default class extends Core {
      *
      * @param  Available options :
      *          targetOption {node, string, "top", "bottom", int} - The DOM element we want to scroll to
-     *          offsetOption {int} - An absolute vertical scroll value to reach, or an offset to apply on top of given `target` or `sourceElem`'s target
+     *          offsetOption {int} - An offset to apply on top of given `target` or `sourceElem`'s target
+     *          duration {int} - Duration of the scroll animation in milliseconds
+     *          easing {array} - An array of 4 floats between 0 and 1 defining the bezier curve for the animation's easing. See http://greweb.me/bezier-easing-editor/example/
      * @return {void}
      */
-    scrollTo(targetOption, offsetOption) {
+    scrollTo(targetOption, offsetOption, duration = 1000, easing = [0.25, 0.00, 0.35, 1.00]) {
         let target;
         let offset = offsetOption ? parseInt(offsetOption) : 0;
+        easing = BezierEasing(...easing)
 
         if(typeof targetOption === 'string') { // Selector or boundaries
             if(targetOption === 'top') {
@@ -587,14 +594,37 @@ export default class extends Core {
             offset = target + offset;
         }
 
-        // Actual scrollTo (the lerp will do the animation itself)
-        this.instance.delta.y = Math.max(0,Math.min(offset, this.instance.limit)); // We limit the value to scroll boundaries (between 0 and instance limit)
-        this.inertiaRatio = Math.min(4000 / Math.abs(this.instance.delta.y - this.instance.scroll.y),0.8);
+        // Actual scrollto
+        // ==========================================================================
 
-        // Update the scroll. If we were in idle state: we're not anymore
-        this.isScrolling = true;
-        this.checkScroll();
-        this.html.classList.add(this.scrollingClass);
+        // Setup
+        const scrollStart = parseFloat(this.instance.delta.y)
+        const scrollTarget = Math.max(0,Math.min(offset, this.instance.limit)) // Make sure our target is in the scroll boundaries
+        const scrollDiff = scrollTarget - scrollStart
+        const render = (p) => {
+            this.instance.delta.y = scrollStart + (scrollDiff * p)
+        }
+
+        // Prepare the scroll
+        this.animatingScroll = true // This boolean allows to prevent `checkScroll()` from calling `stopScrolling` when the animation is slow (i.e. at the beginning of an EaseIn)
+        this.stopScrolling() // Stop any movement, allows to kill any other `scrollTo` still happening
+        this.startScrolling() // Restart the scroll
+
+        // Start the animation loop
+        const start = Date.now();
+        const loop = () => {
+            var p = (Date.now()-start)/duration; // Animation progress
+
+            if (p > 1) { // Animation ends
+              render(1);
+              this.animatingScroll = false
+            }
+            else {
+              this.scrollToRaf = requestAnimationFrame(loop);
+              render(easing(p));
+            }
+        }
+        loop()
     }
 
     update() {

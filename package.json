@@ -23,6 +23,7 @@
         "normalize.css": "^8.0.1"
     },
     "dependencies": {
+        "bezier-easing": "^2.1.0",
         "virtual-scroll": "^1.5.2"
     }
 }
