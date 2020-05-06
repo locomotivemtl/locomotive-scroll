@@ -179,14 +179,17 @@ scroll.on('call', func => {
 
 ## Dependencies
 
-| Name             | Description                                                       |
-| ---------------- | ----------------------------------------------------------------- |
-| [Virtual Scroll] | Custom scroll event with inertia/momentum.                        |
-| [modularScroll]  | Elements in viewport detection. Forked from it, not a dependency. |
+| Name             | Description                                                        |
+| ---------------- | ------------------------------------------------------------------ |
+| [Virtual Scroll] | Custom scroll event with inertia/momentum.                         |
+| [modularScroll]  | Elements in viewport detection. Forked from it, not a dependency.  |
+| [bezier-easing]  | Improve `scrollTo` system and add `duration` & `easing` parameters |
 
 [instance events]: #instance-events
 [Virtual Scroll]: https://github.com/ayamflow/virtual-scroll
 [modularScroll]: https://github.com/modularorg/modularscroll
+[bezier-easing]: https://github.com/gre/bezier-easing
+
 
 ## Browser support
 
