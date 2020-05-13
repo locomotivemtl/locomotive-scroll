@@ -21,6 +21,15 @@ export default class extends Core {
     checkScroll() {
         super.checkScroll();
 
+        if (this.getDirection) {
+            this.addDirection();
+        }
+
+        if (this.getSpeed) {
+            this.addSpeed();
+            this.timestamp = Date.now();
+        }
+
         this.instance.scroll.y = window.pageYOffset;
 
         if (this.els.length) {
@@ -30,6 +39,26 @@ export default class extends Core {
                 });
                 this.hasScrollTicking = true;
             }
+        }
+    }
+
+    addDirection() {
+        if (window.pageYOffset > this.instance.scroll.y) {
+            if (this.instance.direction !== 'down') {
+                this.instance.direction = 'down';
+            }
+        } else if (window.pageYOffset < this.instance.scroll.y) {
+            if (this.instance.direction !== 'up') {
+                this.instance.direction = 'up';
+            }
+        }
+    }
+
+    addSpeed() {
+        if (window.pageYOffset != this.instance.scroll.y) {
+            this.instance.speed = (window.pageYOffset - this.instance.scroll.y) / (Date.now() - this.timestamp);
+        } else {
+            this.instance.speed = 0;
         }
     }
 

@@ -916,6 +916,15 @@
 
         _get(_getPrototypeOf(_default.prototype), "checkScroll", this).call(this);
 
+        if (this.getDirection) {
+          this.addDirection();
+        }
+
+        if (this.getSpeed) {
+          this.addSpeed();
+          this.timestamp = Date.now();
+        }
+
         this.instance.scroll.y = window.pageYOffset;
 
         if (this.els.length) {
@@ -925,6 +934,28 @@
             });
             this.hasScrollTicking = true;
           }
+        }
+      }
+    }, {
+      key: "addDirection",
+      value: function addDirection() {
+        if (window.pageYOffset > this.instance.scroll.y) {
+          if (this.instance.direction !== 'down') {
+            this.instance.direction = 'down';
+          }
+        } else if (window.pageYOffset < this.instance.scroll.y) {
+          if (this.instance.direction !== 'up') {
+            this.instance.direction = 'up';
+          }
+        }
+      }
+    }, {
+      key: "addSpeed",
+      value: function addSpeed() {
+        if (window.pageYOffset != this.instance.scroll.y) {
+          this.instance.speed = (window.pageYOffset - this.instance.scroll.y) / (Date.now() - this.timestamp);
+        } else {
+          this.instance.speed = 0;
         }
       }
     }, {
