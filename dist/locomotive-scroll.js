@@ -2155,9 +2155,10 @@
             var middle = (bottom - top) / 2 + top;
 
             if (sticky) {
-              var elDistance = el.getBoundingClientRect().top - top;
+              var elTop = el.getBoundingClientRect().top;
+              var elDistance = elTop - top;
               top += window.innerHeight;
-              bottom = top + targetEl.offsetHeight - window.innerHeight - el.offsetHeight - elDistance;
+              bottom = elTop + targetEl.offsetHeight - el.offsetHeight - elDistance;
               middle = (bottom - top) / 2 + top;
             }
 

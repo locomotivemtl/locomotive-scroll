@@ -372,10 +372,11 @@ export default class extends Core {
                 let middle = ((bottom - top) / 2) + top;
 
                 if(sticky) {
-                    const elDistance = el.getBoundingClientRect().top - top;
+                    const elTop = el.getBoundingClientRect().top;
+                    const elDistance = elTop - top;
 
                     top += window.innerHeight;
-                    bottom = top + targetEl.offsetHeight - window.innerHeight - el.offsetHeight - elDistance;
+                    bottom = elTop + targetEl.offsetHeight - el.offsetHeight - elDistance;
                     middle = ((bottom - top) / 2) + top;
                 }
 
