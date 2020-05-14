@@ -1,4 +1,7 @@
-<p align="center">
+[![](https://img.shields.io/npm/v/locomotive-scroll)](https://www.npmjs.com/package/locomotive-scroll)
+[![](https://img.shields.io/npm/dm/locomotive-scroll)](https://www.npmjs.com/package/locomotive-scroll)
+
+<p align="center">        
     <a href="https://github.com/locomotivemtl/locomotive-scroll">
         <img src="https://user-images.githubusercontent.com/4596862/58807621-67aeec00-85e6-11e9-8e3a-3fe4123ee76c.png" height="140">
     </a>
