@@ -1649,10 +1649,16 @@
     var style = getComputedStyle(el);
     var transform = style.transform || style.webkitTransform || style.mozTransform;
     var mat = transform.match(/^matrix3d\((.+)\)$/);
-    if (mat) return parseFloat(mat[1].split(', ')[13]);
-    mat = transform.match(/^matrix\((.+)\)$/);
-    translate.x = mat ? parseFloat(mat[1].split(', ')[4]) : 0;
-    translate.y = mat ? parseFloat(mat[1].split(', ')[5]) : 0;
+
+    if (mat) {
+      translate.x = mat ? parseFloat(mat[1].split(', ')[12]) : 0;
+      translate.y = mat ? parseFloat(mat[1].split(', ')[13]) : 0;
+    } else {
+      mat = transform.match(/^matrix\((.+)\)$/);
+      translate.x = mat ? parseFloat(mat[1].split(', ')[4]) : 0;
+      translate.y = mat ? parseFloat(mat[1].split(', ')[5]) : 0;
+    }
+
     return translate;
   }
 
