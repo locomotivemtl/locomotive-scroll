@@ -206,6 +206,23 @@ You can use your own or include these before our script.
 <script nomodule src="https://polyfill.io/v3/polyfill.min.js?features=Object.assign%2CElement.prototype.append%2CNodeList.prototype.forEach%2CCustomEvent%2Csmoothscroll" crossorigin="anonymous"></script>
 ```
 
+## Who's using Locomotive Scroll?
+- [thierrychopain.com](https://thierrychopain.com/)
+- [clmt.paris](https://clmt.paris/)
+- [miragefestival.com/2020](https://www.miragefestival.com/2020/)
+- [mazellier.design](https://www.mazellier.design/)
+- [ccccontemple.com](https://ccccontemple.com/)
+- [abhishekjha.me/muteza](https://abhishekjha.me/muteza/)
+- [normal.studio](https://normal.studio/en/)
+- [mixlegno.com](https://www.mixlegno.com/)
+- [nfq.group](https://nfq.group/)
+- [works.studio](https://works.studio/)
+- [beangels.eu](https://www.beangels.eu/)
+- [izakaya-caen.fr](https://www.izakaya-caen.fr/)
+- [white-elephant.fr](https://www.white-elephant.fr/)
+- [henge07.com](https://www.henge07.com/)
+- [loirevalleylodges.com](https://loirevalleylodges.com/)
+
 ## Related
 
 - [Locomotive Boilerplate 🚂](https://github.com/locomotivemtl/locomotive-boilerplate)
