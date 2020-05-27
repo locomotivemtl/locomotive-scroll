@@ -192,7 +192,8 @@
     getSpeed: false,
     getDirection: false,
     firefoxMultiplier: 50,
-    touchMultiplier: 2
+    touchMultiplier: 2,
+    scrollFromAnywhere: false
   };
 
   var _default = /*#__PURE__*/function () {
@@ -1836,7 +1837,7 @@
           }
         }, this.instance);
         this.vs = new src({
-          el: this.el,
+          el: this.scrollFromAnywhere ? document : this.el,
           mouseMultiplier: navigator.platform.indexOf('Win') > -1 ? 1 : 0.4,
           firefoxMultiplier: this.firefoxMultiplier,
           touchMultiplier: this.touchMultiplier,

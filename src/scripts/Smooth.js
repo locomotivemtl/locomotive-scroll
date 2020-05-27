@@ -48,7 +48,7 @@ export default class extends Core {
         }
 
         this.vs = new virtualScroll({
-            el: this.el,
+            el: this.scrollFromAnywhere ? document : this.el,
             mouseMultiplier: navigator.platform.indexOf('Win') > -1 ? 1 : 0.4,
             firefoxMultiplier: this.firefoxMultiplier,
             touchMultiplier: this.touchMultiplier,

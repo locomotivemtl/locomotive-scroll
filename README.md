@@ -142,6 +142,7 @@ scroll.on('call', func => {
 | `scrollbarClass`    | `string`  | `c-scrollbar`          | Scrollbar element class.                                                              |
 | `firefoxMultiplier` | `number`  | `50`                   | Boost scrolling speed of Firefox on Windows.                                          |
 | `touchMultiplier`   | `number`  | `2`                    | Mutiply touch action to scroll faster than finger movement.                           |
+| `scrollFromAnywhere`| `boolean` | `false`                | (_smooth only_)<br>By default locomotive-scroll listens for scroll events only on the scroll container (`el` option). With this option set to true, it listens on the whole document instead. |
 
 ## Element attributes
 

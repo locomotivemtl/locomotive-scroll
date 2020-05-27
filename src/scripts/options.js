@@ -17,5 +17,6 @@ export const defaults = {
     getSpeed: false,
     getDirection: false,
     firefoxMultiplier: 50,
-    touchMultiplier: 2
+    touchMultiplier: 2,
+    scrollFromAnywhere: false
 };
