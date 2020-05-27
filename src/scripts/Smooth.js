@@ -77,7 +77,7 @@ export default class extends Core {
         this.addSections();
         this.addElements();
         this.detectElements();
-        this.transformElements(true);
+        this.transformElements(true, true);
 
         this.checkScroll(true);
 
@@ -307,7 +307,7 @@ export default class extends Core {
         if((this.instance.limit + this.windowHeight) <= this.windowHeight) {
             return;
         }
-        
+
         this.scrollbarHeight = this.scrollbar.getBoundingClientRect().height;
         this.scrollbarThumb.style.height = `${(this.scrollbarHeight * this.scrollbarHeight) / (this.instance.limit + this.scrollbarHeight)}px`;
         this.scrollBarLimit = this.scrollbarHeight - this.scrollbarThumb.getBoundingClientRect().height;
@@ -488,7 +488,7 @@ export default class extends Core {
         element.style.transform = transform;
     }
 
-    transformElements(isForced) {
+    transformElements(isForced, setAllElements = false) {
         const scrollBottom = this.instance.scroll.y + this.windowHeight;
         const scrollMiddle = this.instance.scroll.y + this.windowMiddle;
 
@@ -499,7 +499,7 @@ export default class extends Core {
                 transformDistance = 0
             }
 
-            if(current.inView) {
+            if(current.inView || setAllElements) {
                 switch (current.position) {
                     case 'top':
                         transformDistance = this.instance.scroll.y * -current.speed;

@@ -1859,7 +1859,7 @@ var _default$2 = /*#__PURE__*/function (_Core) {
       this.addSections();
       this.addElements();
       this.detectElements();
-      this.transformElements(true);
+      this.transformElements(true, true);
       this.checkScroll(true);
 
       _get(_getPrototypeOf(_default.prototype), "init", this).call(this);
@@ -2304,6 +2304,7 @@ var _default$2 = /*#__PURE__*/function (_Core) {
     value: function transformElements(isForced) {
       var _this8 = this;
 
+      var setAllElements = arguments.length > 1 && arguments[1] !== undefined ? arguments[1] : false;
       var scrollBottom = this.instance.scroll.y + this.windowHeight;
       var scrollMiddle = this.instance.scroll.y + this.windowMiddle;
       this.parallaxElements.forEach(function (current, i) {
@@ -2313,7 +2314,7 @@ var _default$2 = /*#__PURE__*/function (_Core) {
           transformDistance = 0;
         }
 
-        if (current.inView) {
+        if (current.inView || setAllElements) {
           switch (current.position) {
             case 'top':
               transformDistance = _this8.instance.scroll.y * -current.speed;
