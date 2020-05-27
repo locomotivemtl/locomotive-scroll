@@ -2,8 +2,6 @@ import { defaults } from './options';
 
 export default class {
     constructor(options = {}) {
-        window.scrollTo(0,0);
-
         Object.assign(this, defaults, options);
 
         this.namespace = 'locomotive';

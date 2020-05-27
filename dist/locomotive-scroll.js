@@ -201,7 +201,6 @@
 
       _classCallCheck(this, _default);
 
-      window.scrollTo(0, 0);
       Object.assign(this, defaults, options);
       this.namespace = 'locomotive';
       this.html = document.documentElement;
@@ -1810,6 +1809,7 @@
 
       _classCallCheck(this, _default);
 
+      window.scrollTo(0, 0);
       _this = _possibleConstructorReturn(this, _getPrototypeOf(_default).call(this, options));
       _this.inertia = _this.inertia * 0.1;
       _this.isScrolling = false;

@@ -20,6 +20,8 @@ const keyCodes = {
 
 export default class extends Core {
     constructor(options = {}) {
+        window.scrollTo(0,0);
+
         super(options);
 
         this.inertia = this.inertia * 0.1;
