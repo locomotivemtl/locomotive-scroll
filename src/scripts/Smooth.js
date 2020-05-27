@@ -266,7 +266,7 @@ export default class extends Core {
 
     addSpeed() {
         if (this.instance.delta.y != this.instance.scroll.y) {
-            this.instance.speed = (this.instance.delta.y - this.instance.scroll.y) / (Date.now() - this.timestamp);
+            this.instance.speed = (this.instance.delta.y - this.instance.scroll.y) / Math.max(1,(Date.now() - this.timestamp));
         } else {
             this.instance.speed = 0;
         }
