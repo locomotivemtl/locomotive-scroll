@@ -24,7 +24,7 @@ export default class extends Core {
 
         super(options);
 
-        this.inertia = this.inertia * 0.1;
+        if(this.inertia) this.lerp = this.inertia * 0.1
         this.isScrolling = false;
         this.isDraggingScrollbar = false;
         this.isTicking = false;
@@ -235,14 +235,14 @@ export default class extends Core {
     }
 
     updateDelta(e) {
-        this.instance.delta.y -= e.deltaY;
+        this.instance.delta.y -= e.deltaY * this.multiplier;
         if (this.instance.delta.y < 0) this.instance.delta.y = 0;
         if (this.instance.delta.y > this.instance.limit) this.instance.delta.y = this.instance.limit;
     }
 
     updateScroll(e) {
         if (this.isScrolling || this.isDraggingScrollbar) {
-            this.instance.scroll.y = lerp(this.instance.scroll.y, this.instance.delta.y, this.inertia);
+            this.instance.scroll.y = lerp(this.instance.scroll.y, this.instance.delta.y, this.lerp);
         } else {
             if (this.instance.scroll.y > this.instance.limit) {
                 this.setScroll(this.instance.scroll.x, this.instance.limit)

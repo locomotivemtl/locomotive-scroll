@@ -131,7 +131,8 @@ scroll.on('call', func => {
 | `smooth`            | `boolean` | `false`                | Smooth scrolling.                                                                     |
 | `smoothMobile`      | `boolean` | `false`                | Smooth scrolling on iOS and Android devices.                                          |
 | `direction`         | `string`  | `vertical`             | Scroll direction.                                                                     |
-| `inertia`           | `number`  | `1`                    | Lerp intensity.                                                                       |
+| ~~`inertia`~~       | ~~`number`~~  | ~~`1`~~            | ⚠️ **Deprecated**, use option `lerp` instead                                          |
+| `lerp`              | `number`  | `0.1`                  | Linear interpolation (lerp) intensity. Float between `0` and `1`.<br>This defines the "smoothness" intensity. The closer to `0`, the smoother. |
 | `getDirection`      | `boolean` | `false`                | Add direction to scroll event.                                                        |
 | `getSpeed`          | `boolean` | `false`                | Add speed to scroll event.                                                            |
 | `class`             | `string`  | `is-inview`            | Element in-view class.                                                                |
@@ -140,6 +141,7 @@ scroll.on('call', func => {
 | `draggingClass`     | `string`  | `has-scroll-dragging`  | Is dragging class.                                                                    |
 | `smoothClass`       | `string`  | `has-scroll-smooth`    | Has smooth scrolling class.                                                           |
 | `scrollbarClass`    | `string`  | `c-scrollbar`          | Scrollbar element class.                                                              |
+| `multiplier`        | `number`  | `1`                    | Factor applied to the scroll delta, allowing to boost/reduce scrolling speed (regardless of the platform). |
 | `firefoxMultiplier` | `number`  | `50`                   | Boost scrolling speed of Firefox on Windows.                                          |
 | `touchMultiplier`   | `number`  | `2`                    | Mutiply touch action to scroll faster than finger movement.                           |
 | `scrollFromAnywhere`| `boolean` | `false`                | (_smooth only_)<br>By default locomotive-scroll listens for scroll events only on the scroll container (`el` option). With this option set to true, it listens on the whole document instead. |
@@ -172,7 +174,7 @@ scroll.on('call', func => {
 | `destroy()`                | Destroys the scroll events.    |                                                                                 |
 | `start()`                  | Restarts the scroll events.    |                                                                                 |
 | `stop()`                   | Stops the scroll events.       |                                                                                 |
-| `scrollTo(target, offset, duration, easing)` | Scroll to an element.          | <div>`target`: Defines where you want to scroll. Available values types are :<ul><li>`node` : a dom element</li><li>`string` : you can type your own selector, or use values `"top"` and `"bottom"` to reach scroll boundaries</li><li>`int` : An absolute scroll coordinate in pixels</li></ul></div><div>`offset` (optional) : A `number` that defines an offset from your target. E.g. `-100` if you want to scroll 100 pixels above your target</div><br><div>`duration` (optional, **smooth only**) : An integer defining the duration of the scroll animation in milliseconds. Defaults to `1000`</div><br><div>`easing` (optional, **smooth only**) : An array of 4 floats between 0 and 1 defining the bezier curve for the animation's easing.<br>Defaults to `[0.25, 0.00, 0.35, 1.00]`<br>See [http://greweb.me/bezier-easing-editor/example/](http://greweb.me/bezier-easing-editor/example/)<br>Keep in mind this will also be affected by the inertia.</div> |
+| `scrollTo(target, offset, duration, easing)` | Scroll to an element.          | <div>`target`: Defines where you want to scroll. Available values types are :<ul><li>`node` : a dom element</li><li>`string` : you can type your own selector, or use values `"top"` and `"bottom"` to reach scroll boundaries</li><li>`int` : An absolute scroll coordinate in pixels</li></ul></div><div>`offset` (optional) : A `number` that defines an offset from your target. E.g. `-100` if you want to scroll 100 pixels above your target</div><br><div>`duration` (optional, **smooth only**) : An integer defining the duration of the scroll animation in milliseconds. Defaults to `1000`</div><br><div>`easing` (optional, **smooth only**) : An array of 4 floats between 0 and 1 defining the bezier curve for the animation's easing.<br>Defaults to `[0.25, 0.00, 0.35, 1.00]`<br>See [http://greweb.me/bezier-easing-editor/example/](http://greweb.me/bezier-easing-editor/example/)<br>Keep in mind this will also be affected by the lerp.</div> |
 
 ## Instance events
 

@@ -7,7 +7,7 @@ export const defaults = {
     smooth: false,
     smoothMobile: false,
     direction: 'vertical',
-    inertia: 1,
+    lerp: 0.1,
     class: 'is-inview',
     scrollbarClass: 'c-scrollbar',
     scrollingClass: 'has-scroll-scrolling',
@@ -16,6 +16,7 @@ export const defaults = {
     initClass: 'has-scroll-init',
     getSpeed: false,
     getDirection: false,
+    multiplier: 1,
     firefoxMultiplier: 50,
     touchMultiplier: 2,
     scrollFromAnywhere: false

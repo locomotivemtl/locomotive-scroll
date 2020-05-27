@@ -182,7 +182,7 @@
     smooth: false,
     smoothMobile: false,
     direction: 'vertical',
-    inertia: 1,
+    lerp: 0.1,
     "class": 'is-inview',
     scrollbarClass: 'c-scrollbar',
     scrollingClass: 'has-scroll-scrolling',
@@ -191,6 +191,7 @@
     initClass: 'has-scroll-init',
     getSpeed: false,
     getDirection: false,
+    multiplier: 1,
     firefoxMultiplier: 50,
     touchMultiplier: 2,
     scrollFromAnywhere: false
@@ -1812,7 +1813,7 @@
 
       window.scrollTo(0, 0);
       _this = _possibleConstructorReturn(this, _getPrototypeOf(_default).call(this, options));
-      _this.inertia = _this.inertia * 0.1;
+      if (_this.inertia) _this.lerp = _this.inertia * 0.1;
       _this.isScrolling = false;
       _this.isDraggingScrollbar = false;
       _this.isTicking = false;
@@ -2045,7 +2046,7 @@
     }, {
       key: "updateDelta",
       value: function updateDelta(e) {
-        this.instance.delta.y -= e.deltaY;
+        this.instance.delta.y -= e.deltaY * this.multiplier;
         if (this.instance.delta.y < 0) this.instance.delta.y = 0;
         if (this.instance.delta.y > this.instance.limit) this.instance.delta.y = this.instance.limit;
       }
@@ -2053,7 +2054,7 @@
       key: "updateScroll",
       value: function updateScroll(e) {
         if (this.isScrolling || this.isDraggingScrollbar) {
-          this.instance.scroll.y = lerp(this.instance.scroll.y, this.instance.delta.y, this.inertia);
+          this.instance.scroll.y = lerp(this.instance.scroll.y, this.instance.delta.y, this.lerp);
         } else {
           if (this.instance.scroll.y > this.instance.limit) {
             this.setScroll(this.instance.scroll.x, this.instance.limit);
