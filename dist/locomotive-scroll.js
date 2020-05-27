@@ -2093,20 +2093,30 @@
         this.scrollbar.classList.add("".concat(this.scrollbarClass));
         this.scrollbarThumb.classList.add("".concat(this.scrollbarClass, "_thumb"));
         this.scrollbar.append(this.scrollbarThumb);
-        document.body.append(this.scrollbar);
-        this.scrollbarHeight = this.scrollbar.getBoundingClientRect().height;
-        this.scrollbarThumb.style.height = "".concat(this.scrollbarHeight * this.scrollbarHeight / (this.instance.limit + this.scrollbarHeight), "px");
-        this.scrollBarLimit = this.scrollbarHeight - this.scrollbarThumb.getBoundingClientRect().height;
+        document.body.append(this.scrollbar); // Scrollbar Events
+
         this.getScrollBar = this.getScrollBar.bind(this);
         this.releaseScrollBar = this.releaseScrollBar.bind(this);
         this.moveScrollBar = this.moveScrollBar.bind(this);
         this.scrollbarThumb.addEventListener('mousedown', this.getScrollBar);
         window.addEventListener('mouseup', this.releaseScrollBar);
-        window.addEventListener('mousemove', this.moveScrollBar);
+        window.addEventListener('mousemove', this.moveScrollBar); // Set scrollbar values
+
+        if (this.instance.limit + this.windowHeight <= this.windowHeight) {
+          return;
+        }
+
+        this.scrollbarHeight = this.scrollbar.getBoundingClientRect().height;
+        this.scrollbarThumb.style.height = "".concat(this.scrollbarHeight * this.scrollbarHeight / (this.instance.limit + this.scrollbarHeight), "px");
+        this.scrollBarLimit = this.scrollbarHeight - this.scrollbarThumb.getBoundingClientRect().height;
       }
     }, {
       key: "reinitScrollBar",
       value: function reinitScrollBar() {
+        if (this.instance.limit + this.windowHeight <= this.windowHeight) {
+          return;
+        }
+
         this.scrollbarHeight = this.scrollbar.getBoundingClientRect().height;
         this.scrollbarThumb.style.height = "".concat(this.scrollbarHeight * this.scrollbarHeight / (this.instance.limit + this.scrollbarHeight), "px");
         this.scrollBarLimit = this.scrollbarHeight - this.scrollbarThumb.getBoundingClientRect().height;

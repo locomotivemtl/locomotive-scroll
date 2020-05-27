@@ -281,10 +281,7 @@ export default class extends Core {
         this.scrollbar.append(this.scrollbarThumb);
         document.body.append(this.scrollbar);
 
-        this.scrollbarHeight = this.scrollbar.getBoundingClientRect().height;
-        this.scrollbarThumb.style.height = `${(this.scrollbarHeight * this.scrollbarHeight) / (this.instance.limit + this.scrollbarHeight)}px`;
-        this.scrollBarLimit = this.scrollbarHeight - this.scrollbarThumb.getBoundingClientRect().height;
-
+        // Scrollbar Events
         this.getScrollBar = this.getScrollBar.bind(this);
         this.releaseScrollBar = this.releaseScrollBar.bind(this);
         this.moveScrollBar = this.moveScrollBar.bind(this);
@@ -292,9 +289,23 @@ export default class extends Core {
         this.scrollbarThumb.addEventListener('mousedown', this.getScrollBar);
         window.addEventListener('mouseup', this.releaseScrollBar);
         window.addEventListener('mousemove', this.moveScrollBar);
+
+        // Set scrollbar values
+        if((this.instance.limit + this.windowHeight) <= this.windowHeight) {
+            return;
+        }
+
+        this.scrollbarHeight = this.scrollbar.getBoundingClientRect().height;
+        this.scrollbarThumb.style.height = `${(this.scrollbarHeight * this.scrollbarHeight) / (this.instance.limit + this.scrollbarHeight)}px`;
+        this.scrollBarLimit = this.scrollbarHeight - this.scrollbarThumb.getBoundingClientRect().height;
+
     }
 
     reinitScrollBar() {
+        if((this.instance.limit + this.windowHeight) <= this.windowHeight) {
+            return;
+        }
+        
         this.scrollbarHeight = this.scrollbar.getBoundingClientRect().height;
         this.scrollbarThumb.style.height = `${(this.scrollbarHeight * this.scrollbarHeight) / (this.instance.limit + this.scrollbarHeight)}px`;
         this.scrollBarLimit = this.scrollbarHeight - this.scrollbarThumb.getBoundingClientRect().height;
