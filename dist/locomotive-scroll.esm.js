@@ -1846,9 +1846,9 @@ var _default$2 = /*#__PURE__*/function (_Core) {
 
         if (!_this2.isTicking && !_this2.isDraggingScrollbar) {
           requestAnimationFrame(function () {
-            if (!_this2.isScrolling) _this2.startScrolling();
-
             _this2.updateDelta(e);
+
+            if (!_this2.isScrolling) _this2.startScrolling();
           });
           _this2.isTicking = true;
         }
@@ -1981,13 +1981,12 @@ var _default$2 = /*#__PURE__*/function (_Core) {
           this.hasScrollTicking = true;
         }
 
+        this.updateScroll();
         var distance = Math.abs(this.instance.delta.y - this.instance.scroll.y);
 
         if (!this.animatingScroll && (distance < 0.5 && this.instance.delta.y != 0 || distance < 0.5 && this.instance.delta.y == 0)) {
           this.stopScrolling();
         }
-
-        this.updateScroll();
 
         for (var i = this.sections.length - 1; i >= 0; i--) {
           if (this.sections[i].persistent || this.instance.scroll.y > this.sections[i].offset && this.instance.scroll.y < this.sections[i].limit) {

@@ -57,15 +57,15 @@ export default class extends Core {
         });
 
         this.vs.on((e) => {
+            
             if (this.stop) {
                 return;
             }
 
             if (!this.isTicking && !this.isDraggingScrollbar) {
                 requestAnimationFrame(() => {
-                    if (!this.isScrolling) this.startScrolling();
-
                     this.updateDelta(e);
+                    if (!this.isScrolling) this.startScrolling();
                 });
                 this.isTicking = true;
             }
@@ -178,12 +178,13 @@ export default class extends Core {
                 this.hasScrollTicking = true;
             }
 
+            this.updateScroll();
+
             const distance = (Math.abs(this.instance.delta.y - this.instance.scroll.y));
+            
             if (!this.animatingScroll && ((distance < 0.5 && this.instance.delta.y != 0) || (distance < 0.5 && this.instance.delta.y == 0))) {
                 this.stopScrolling();
             }
-
-            this.updateScroll();
 
             for (let i = this.sections.length - 1; i >= 0; i--) {
                 if(this.sections[i].persistent || (this.instance.scroll.y > this.sections[i].offset && this.instance.scroll.y < this.sections[i].limit)) {
@@ -236,6 +237,7 @@ export default class extends Core {
 
     updateDelta(e) {
         this.instance.delta.y -= e.deltaY * this.multiplier;
+
         if (this.instance.delta.y < 0) this.instance.delta.y = 0;
         if (this.instance.delta.y > this.instance.limit) this.instance.delta.y = this.instance.limit;
     }
