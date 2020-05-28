@@ -15,8 +15,7 @@ import LocomotiveScroll from '../../../src/locomotive-scroll';
             smooth: true,
             getSpeed: true,
             getDirection: true,
-            useKeyboard: true,
-            offset: ['25%']
+            useKeyboard: true
         });
 
         let dynamicBackgrounds = [];
