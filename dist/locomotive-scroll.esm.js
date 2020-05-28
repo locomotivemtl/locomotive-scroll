@@ -1,4 +1,4 @@
-/* locomotive-scroll v3.5.3 | MIT License | https://github.com/locomotivemtl/locomotive-scroll */
+/* locomotive-scroll v3.5.2 | MIT License | https://github.com/locomotivemtl/locomotive-scroll */
 function _classCallCheck(instance, Constructor) {
   if (!(instance instanceof Constructor)) {
     throw new TypeError("Cannot call a class as a function");
@@ -1820,6 +1820,7 @@ var _default$2 = /*#__PURE__*/function (_Core) {
     _classCallCheck(this, _default);
 
     window.scrollTo(0, 0);
+    history.scrollRestoration = 'manual';
     _this = _possibleConstructorReturn(this, _getPrototypeOf(_default).call(this, options));
     if (_this.inertia) _this.lerp = _this.inertia * 0.1;
     _this.isScrolling = false;

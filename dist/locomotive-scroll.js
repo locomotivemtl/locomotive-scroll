@@ -1,4 +1,4 @@
-/* locomotive-scroll v3.5.3 | MIT License | https://github.com/locomotivemtl/locomotive-scroll */
+/* locomotive-scroll v3.5.2 | MIT License | https://github.com/locomotivemtl/locomotive-scroll */
 (function (global, factory) {
   typeof exports === 'object' && typeof module !== 'undefined' ? module.exports = factory() :
   typeof define === 'function' && define.amd ? define(factory) :
@@ -1826,6 +1826,7 @@
       _classCallCheck(this, _default);
 
       window.scrollTo(0, 0);
+      history.scrollRestoration = 'manual';
       _this = _possibleConstructorReturn(this, _getPrototypeOf(_default).call(this, options));
       if (_this.inertia) _this.lerp = _this.inertia * 0.1;
       _this.isScrolling = false;

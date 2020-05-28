@@ -21,7 +21,8 @@ const keyCodes = {
 export default class extends Core {
     constructor(options = {}) {
         window.scrollTo(0,0);
-
+        history.scrollRestoration = 'manual'
+        
         super(options);
 
         if(this.inertia) this.lerp = this.inertia * 0.1
