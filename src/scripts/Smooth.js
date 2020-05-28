@@ -425,7 +425,7 @@ export default class extends Core {
                     bottom: bottom - relativeOffset[1],
                     offset,
                     repeat,
-                    inView: false,
+                    inView: (el.classList.contains(cl)) ? true : false,
                     call,
                     speed,
                     delay,

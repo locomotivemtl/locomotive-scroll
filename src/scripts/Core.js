@@ -109,6 +109,7 @@ export default class {
         current.el.classList.add(current.class);
 
         if (current.call && this.hasCallEventSet) {
+
             this.dispatchCall(current, 'enter');
 
             if (!current.repeat) {

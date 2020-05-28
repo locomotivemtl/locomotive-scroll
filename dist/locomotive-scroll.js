@@ -1002,7 +1002,7 @@
             bottom: bottom - relativeOffset[1],
             offset: offset,
             repeat: repeat,
-            inView: false,
+            inView: el.classList.contains(cl) ? true : false,
             call: call
           };
 
@@ -2244,7 +2244,7 @@
               bottom: bottom - relativeOffset[1],
               offset: offset,
               repeat: repeat,
-              inView: false,
+              inView: el.classList.contains(cl) ? true : false,
               call: call,
               speed: speed,
               delay: delay,

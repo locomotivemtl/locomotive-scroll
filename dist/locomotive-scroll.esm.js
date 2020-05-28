@@ -996,7 +996,7 @@ var _default$1 = /*#__PURE__*/function (_Core) {
           bottom: bottom - relativeOffset[1],
           offset: offset,
           repeat: repeat,
-          inView: false,
+          inView: el.classList.contains(cl) ? true : false,
           call: call
         };
 
@@ -2238,7 +2238,7 @@ var _default$2 = /*#__PURE__*/function (_Core) {
             bottom: bottom - relativeOffset[1],
             offset: offset,
             repeat: repeat,
-            inView: false,
+            inView: el.classList.contains(cl) ? true : false,
             call: call,
             speed: speed,
             delay: delay,
