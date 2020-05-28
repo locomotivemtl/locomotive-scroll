@@ -61,8 +61,8 @@ export default class {
         this.scroll.stopScroll();
     }
 
-    scrollTo(target, offset) {
-        this.scroll.scrollTo(target, offset);
+    scrollTo(target, offset, duration, easing, disableLerp, callback) { // TODO - In next breaking update, use an object as 2nd parameter for options (offset, duration, easing, disableLerp, callback)
+        this.scroll.scrollTo(target, offset, duration, easing, disableLerp, callback);
     }
 
     setScroll(x,y) {

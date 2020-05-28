@@ -1,9 +1,9 @@
-/* locomotive-scroll v3.3.11 | MIT License | https://github.com/locomotivemtl/locomotive-scroll */
+/* locomotive-scroll v3.5.4 | MIT License | https://github.com/locomotivemtl/locomotive-scroll */
 (function (global, factory) {
   typeof exports === 'object' && typeof module !== 'undefined' ? module.exports = factory() :
   typeof define === 'function' && define.amd ? define(factory) :
   (global = global || self, global.LocomotiveScroll = factory());
-}(this, function () { 'use strict';
+}(this, (function () { 'use strict';
 
   function _classCallCheck(instance, Constructor) {
     if (!(instance instanceof Constructor)) {
@@ -61,13 +61,13 @@
       var source = arguments[i] != null ? arguments[i] : {};
 
       if (i % 2) {
-        ownKeys(source, true).forEach(function (key) {
+        ownKeys(Object(source), true).forEach(function (key) {
           _defineProperty(target, key, source[key]);
         });
       } else if (Object.getOwnPropertyDescriptors) {
         Object.defineProperties(target, Object.getOwnPropertyDescriptors(source));
       } else {
-        ownKeys(source).forEach(function (key) {
+        ownKeys(Object(source)).forEach(function (key) {
           Object.defineProperty(target, key, Object.getOwnPropertyDescriptor(source, key));
         });
       }
@@ -153,6 +153,26 @@
     return _get(target, property, receiver || target);
   }
 
+  function _toConsumableArray(arr) {
+    return _arrayWithoutHoles(arr) || _iterableToArray(arr) || _nonIterableSpread();
+  }
+
+  function _arrayWithoutHoles(arr) {
+    if (Array.isArray(arr)) {
+      for (var i = 0, arr2 = new Array(arr.length); i < arr.length; i++) arr2[i] = arr[i];
+
+      return arr2;
+    }
+  }
+
+  function _iterableToArray(iter) {
+    if (Symbol.iterator in Object(iter) || Object.prototype.toString.call(iter) === "[object Arguments]") return Array.from(iter);
+  }
+
+  function _nonIterableSpread() {
+    throw new TypeError("Invalid attempt to spread non-iterable instance");
+  }
+
   var defaults = {
     el: document,
     elMobile: document,
@@ -163,7 +183,7 @@
     direction: 'vertical',
     horizontalGesture: false,
     reloadOnContextChange: false,
-    inertia: 1,
+    lerp: 0.1,
     "class": 'is-inview',
     scrollbarClass: 'c-scrollbar',
     scrollingClass: 'has-scroll-scrolling',
@@ -172,6 +192,8 @@
     initClass: 'has-scroll-init',
     getSpeed: false,
     getDirection: false,
+    scrollFromAnywhere: false,
+    multiplier: 1,
     firefoxMultiplier: 50,
     touchMultiplier: 2,
     tablet: {
@@ -187,15 +209,11 @@
     }
   };
 
-  var _default =
-  /*#__PURE__*/
-  function () {
+  var _default = /*#__PURE__*/function () {
     function _default() {
       var options = arguments.length > 0 && arguments[0] !== undefined ? arguments[0] : {};
 
       _classCallCheck(this, _default);
-
-      window.scrollTo(0, 0); // Override default options with given ones
 
       Object.assign(this, defaults, options);
       this.smartphone = defaults.smartphone;
@@ -507,9 +525,446 @@
     return _default;
   }();
 
-  var _default$1 =
-  /*#__PURE__*/
-  function (_Core) {
+  var commonjsGlobal = typeof globalThis !== 'undefined' ? globalThis : typeof window !== 'undefined' ? window : typeof global !== 'undefined' ? global : typeof self !== 'undefined' ? self : {};
+
+  function createCommonjsModule(fn, module) {
+  	return module = { exports: {} }, fn(module, module.exports), module.exports;
+  }
+
+  var smoothscroll = createCommonjsModule(function (module, exports) {
+  /* smoothscroll v0.4.4 - 2019 - Dustan Kasten, Jeremias Menichelli - MIT License */
+  (function () {
+
+    // polyfill
+    function polyfill() {
+      // aliases
+      var w = window;
+      var d = document;
+
+      // return if scroll behavior is supported and polyfill is not forced
+      if (
+        'scrollBehavior' in d.documentElement.style &&
+        w.__forceSmoothScrollPolyfill__ !== true
+      ) {
+        return;
+      }
+
+      // globals
+      var Element = w.HTMLElement || w.Element;
+      var SCROLL_TIME = 468;
+
+      // object gathering original scroll methods
+      var original = {
+        scroll: w.scroll || w.scrollTo,
+        scrollBy: w.scrollBy,
+        elementScroll: Element.prototype.scroll || scrollElement,
+        scrollIntoView: Element.prototype.scrollIntoView
+      };
+
+      // define timing method
+      var now =
+        w.performance && w.performance.now
+          ? w.performance.now.bind(w.performance)
+          : Date.now;
+
+      /**
+       * indicates if a the current browser is made by Microsoft
+       * @method isMicrosoftBrowser
+       * @param {String} userAgent
+       * @returns {Boolean}
+       */
+      function isMicrosoftBrowser(userAgent) {
+        var userAgentPatterns = ['MSIE ', 'Trident/', 'Edge/'];
+
+        return new RegExp(userAgentPatterns.join('|')).test(userAgent);
+      }
+
+      /*
+       * IE has rounding bug rounding down clientHeight and clientWidth and
+       * rounding up scrollHeight and scrollWidth causing false positives
+       * on hasScrollableSpace
+       */
+      var ROUNDING_TOLERANCE = isMicrosoftBrowser(w.navigator.userAgent) ? 1 : 0;
+
+      /**
+       * changes scroll position inside an element
+       * @method scrollElement
+       * @param {Number} x
+       * @param {Number} y
+       * @returns {undefined}
+       */
+      function scrollElement(x, y) {
+        this.scrollLeft = x;
+        this.scrollTop = y;
+      }
+
+      /**
+       * returns result of applying ease math function to a number
+       * @method ease
+       * @param {Number} k
+       * @returns {Number}
+       */
+      function ease(k) {
+        return 0.5 * (1 - Math.cos(Math.PI * k));
+      }
+
+      /**
+       * indicates if a smooth behavior should be applied
+       * @method shouldBailOut
+       * @param {Number|Object} firstArg
+       * @returns {Boolean}
+       */
+      function shouldBailOut(firstArg) {
+        if (
+          firstArg === null ||
+          typeof firstArg !== 'object' ||
+          firstArg.behavior === undefined ||
+          firstArg.behavior === 'auto' ||
+          firstArg.behavior === 'instant'
+        ) {
+          // first argument is not an object/null
+          // or behavior is auto, instant or undefined
+          return true;
+        }
+
+        if (typeof firstArg === 'object' && firstArg.behavior === 'smooth') {
+          // first argument is an object and behavior is smooth
+          return false;
+        }
+
+        // throw error when behavior is not supported
+        throw new TypeError(
+          'behavior member of ScrollOptions ' +
+            firstArg.behavior +
+            ' is not a valid value for enumeration ScrollBehavior.'
+        );
+      }
+
+      /**
+       * indicates if an element has scrollable space in the provided axis
+       * @method hasScrollableSpace
+       * @param {Node} el
+       * @param {String} axis
+       * @returns {Boolean}
+       */
+      function hasScrollableSpace(el, axis) {
+        if (axis === 'Y') {
+          return el.clientHeight + ROUNDING_TOLERANCE < el.scrollHeight;
+        }
+
+        if (axis === 'X') {
+          return el.clientWidth + ROUNDING_TOLERANCE < el.scrollWidth;
+        }
+      }
+
+      /**
+       * indicates if an element has a scrollable overflow property in the axis
+       * @method canOverflow
+       * @param {Node} el
+       * @param {String} axis
+       * @returns {Boolean}
+       */
+      function canOverflow(el, axis) {
+        var overflowValue = w.getComputedStyle(el, null)['overflow' + axis];
+
+        return overflowValue === 'auto' || overflowValue === 'scroll';
+      }
+
+      /**
+       * indicates if an element can be scrolled in either axis
+       * @method isScrollable
+       * @param {Node} el
+       * @param {String} axis
+       * @returns {Boolean}
+       */
+      function isScrollable(el) {
+        var isScrollableY = hasScrollableSpace(el, 'Y') && canOverflow(el, 'Y');
+        var isScrollableX = hasScrollableSpace(el, 'X') && canOverflow(el, 'X');
+
+        return isScrollableY || isScrollableX;
+      }
+
+      /**
+       * finds scrollable parent of an element
+       * @method findScrollableParent
+       * @param {Node} el
+       * @returns {Node} el
+       */
+      function findScrollableParent(el) {
+        while (el !== d.body && isScrollable(el) === false) {
+          el = el.parentNode || el.host;
+        }
+
+        return el;
+      }
+
+      /**
+       * self invoked function that, given a context, steps through scrolling
+       * @method step
+       * @param {Object} context
+       * @returns {undefined}
+       */
+      function step(context) {
+        var time = now();
+        var value;
+        var currentX;
+        var currentY;
+        var elapsed = (time - context.startTime) / SCROLL_TIME;
+
+        // avoid elapsed times higher than one
+        elapsed = elapsed > 1 ? 1 : elapsed;
+
+        // apply easing to elapsed time
+        value = ease(elapsed);
+
+        currentX = context.startX + (context.x - context.startX) * value;
+        currentY = context.startY + (context.y - context.startY) * value;
+
+        context.method.call(context.scrollable, currentX, currentY);
+
+        // scroll more if we have not reached our destination
+        if (currentX !== context.x || currentY !== context.y) {
+          w.requestAnimationFrame(step.bind(w, context));
+        }
+      }
+
+      /**
+       * scrolls window or element with a smooth behavior
+       * @method smoothScroll
+       * @param {Object|Node} el
+       * @param {Number} x
+       * @param {Number} y
+       * @returns {undefined}
+       */
+      function smoothScroll(el, x, y) {
+        var scrollable;
+        var startX;
+        var startY;
+        var method;
+        var startTime = now();
+
+        // define scroll context
+        if (el === d.body) {
+          scrollable = w;
+          startX = w.scrollX || w.pageXOffset;
+          startY = w.scrollY || w.pageYOffset;
+          method = original.scroll;
+        } else {
+          scrollable = el;
+          startX = el.scrollLeft;
+          startY = el.scrollTop;
+          method = scrollElement;
+        }
+
+        // scroll looping over a frame
+        step({
+          scrollable: scrollable,
+          method: method,
+          startTime: startTime,
+          startX: startX,
+          startY: startY,
+          x: x,
+          y: y
+        });
+      }
+
+      // ORIGINAL METHODS OVERRIDES
+      // w.scroll and w.scrollTo
+      w.scroll = w.scrollTo = function() {
+        // avoid action when no arguments are passed
+        if (arguments[0] === undefined) {
+          return;
+        }
+
+        // avoid smooth behavior if not required
+        if (shouldBailOut(arguments[0]) === true) {
+          original.scroll.call(
+            w,
+            arguments[0].left !== undefined
+              ? arguments[0].left
+              : typeof arguments[0] !== 'object'
+                ? arguments[0]
+                : w.scrollX || w.pageXOffset,
+            // use top prop, second argument if present or fallback to scrollY
+            arguments[0].top !== undefined
+              ? arguments[0].top
+              : arguments[1] !== undefined
+                ? arguments[1]
+                : w.scrollY || w.pageYOffset
+          );
+
+          return;
+        }
+
+        // LET THE SMOOTHNESS BEGIN!
+        smoothScroll.call(
+          w,
+          d.body,
+          arguments[0].left !== undefined
+            ? ~~arguments[0].left
+            : w.scrollX || w.pageXOffset,
+          arguments[0].top !== undefined
+            ? ~~arguments[0].top
+            : w.scrollY || w.pageYOffset
+        );
+      };
+
+      // w.scrollBy
+      w.scrollBy = function() {
+        // avoid action when no arguments are passed
+        if (arguments[0] === undefined) {
+          return;
+        }
+
+        // avoid smooth behavior if not required
+        if (shouldBailOut(arguments[0])) {
+          original.scrollBy.call(
+            w,
+            arguments[0].left !== undefined
+              ? arguments[0].left
+              : typeof arguments[0] !== 'object' ? arguments[0] : 0,
+            arguments[0].top !== undefined
+              ? arguments[0].top
+              : arguments[1] !== undefined ? arguments[1] : 0
+          );
+
+          return;
+        }
+
+        // LET THE SMOOTHNESS BEGIN!
+        smoothScroll.call(
+          w,
+          d.body,
+          ~~arguments[0].left + (w.scrollX || w.pageXOffset),
+          ~~arguments[0].top + (w.scrollY || w.pageYOffset)
+        );
+      };
+
+      // Element.prototype.scroll and Element.prototype.scrollTo
+      Element.prototype.scroll = Element.prototype.scrollTo = function() {
+        // avoid action when no arguments are passed
+        if (arguments[0] === undefined) {
+          return;
+        }
+
+        // avoid smooth behavior if not required
+        if (shouldBailOut(arguments[0]) === true) {
+          // if one number is passed, throw error to match Firefox implementation
+          if (typeof arguments[0] === 'number' && arguments[1] === undefined) {
+            throw new SyntaxError('Value could not be converted');
+          }
+
+          original.elementScroll.call(
+            this,
+            // use left prop, first number argument or fallback to scrollLeft
+            arguments[0].left !== undefined
+              ? ~~arguments[0].left
+              : typeof arguments[0] !== 'object' ? ~~arguments[0] : this.scrollLeft,
+            // use top prop, second argument or fallback to scrollTop
+            arguments[0].top !== undefined
+              ? ~~arguments[0].top
+              : arguments[1] !== undefined ? ~~arguments[1] : this.scrollTop
+          );
+
+          return;
+        }
+
+        var left = arguments[0].left;
+        var top = arguments[0].top;
+
+        // LET THE SMOOTHNESS BEGIN!
+        smoothScroll.call(
+          this,
+          this,
+          typeof left === 'undefined' ? this.scrollLeft : ~~left,
+          typeof top === 'undefined' ? this.scrollTop : ~~top
+        );
+      };
+
+      // Element.prototype.scrollBy
+      Element.prototype.scrollBy = function() {
+        // avoid action when no arguments are passed
+        if (arguments[0] === undefined) {
+          return;
+        }
+
+        // avoid smooth behavior if not required
+        if (shouldBailOut(arguments[0]) === true) {
+          original.elementScroll.call(
+            this,
+            arguments[0].left !== undefined
+              ? ~~arguments[0].left + this.scrollLeft
+              : ~~arguments[0] + this.scrollLeft,
+            arguments[0].top !== undefined
+              ? ~~arguments[0].top + this.scrollTop
+              : ~~arguments[1] + this.scrollTop
+          );
+
+          return;
+        }
+
+        this.scroll({
+          left: ~~arguments[0].left + this.scrollLeft,
+          top: ~~arguments[0].top + this.scrollTop,
+          behavior: arguments[0].behavior
+        });
+      };
+
+      // Element.prototype.scrollIntoView
+      Element.prototype.scrollIntoView = function() {
+        // avoid smooth behavior if not required
+        if (shouldBailOut(arguments[0]) === true) {
+          original.scrollIntoView.call(
+            this,
+            arguments[0] === undefined ? true : arguments[0]
+          );
+
+          return;
+        }
+
+        // LET THE SMOOTHNESS BEGIN!
+        var scrollableParent = findScrollableParent(this);
+        var parentRects = scrollableParent.getBoundingClientRect();
+        var clientRects = this.getBoundingClientRect();
+
+        if (scrollableParent !== d.body) {
+          // reveal element inside parent
+          smoothScroll.call(
+            this,
+            scrollableParent,
+            scrollableParent.scrollLeft + clientRects.left - parentRects.left,
+            scrollableParent.scrollTop + clientRects.top - parentRects.top
+          );
+
+          // reveal parent in viewport unless is fixed
+          if (w.getComputedStyle(scrollableParent).position !== 'fixed') {
+            w.scrollBy({
+              left: parentRects.left,
+              top: parentRects.top,
+              behavior: 'smooth'
+            });
+          }
+        } else {
+          // reveal element in viewport
+          w.scrollBy({
+            left: clientRects.left,
+            top: clientRects.top,
+            behavior: 'smooth'
+          });
+        }
+      };
+    }
+
+    {
+      // commonjs
+      module.exports = { polyfill: polyfill };
+    }
+
+  }());
+  });
+  var smoothscroll_1 = smoothscroll.polyfill;
+
+  var _default$1 = /*#__PURE__*/function (_Core) {
     _inherits(_default, _Core);
 
     function _default() {
@@ -521,6 +976,7 @@
 
       _this = _possibleConstructorReturn(this, _getPrototypeOf(_default).call(this, options));
       window.addEventListener('scroll', _this.checkScroll, false);
+      smoothscroll.polyfill();
       return _this;
     }
 
@@ -540,6 +996,15 @@
 
         _get(_getPrototypeOf(_default.prototype), "checkScroll", this).call(this);
 
+        if (this.getDirection) {
+          this.addDirection();
+        }
+
+        if (this.getSpeed) {
+          this.addSpeed();
+          this.timestamp = Date.now();
+        }
+
         this.instance.scroll.y = window.pageYOffset;
 
         if (this.els.length) {
@@ -549,6 +1014,28 @@
             });
             this.hasScrollTicking = true;
           }
+        }
+      }
+    }, {
+      key: "addDirection",
+      value: function addDirection() {
+        if (window.pageYOffset > this.instance.scroll.y) {
+          if (this.instance.direction !== 'down') {
+            this.instance.direction = 'down';
+          }
+        } else if (window.pageYOffset < this.instance.scroll.y) {
+          if (this.instance.direction !== 'up') {
+            this.instance.direction = 'up';
+          }
+        }
+      }
+    }, {
+      key: "addSpeed",
+      value: function addSpeed() {
+        if (window.pageYOffset != this.instance.scroll.y) {
+          this.instance.speed = (window.pageYOffset - this.instance.scroll.y) / (Date.now() - this.timestamp);
+        } else {
+          this.instance.speed = 0;
         }
       }
     }, {
@@ -594,7 +1081,7 @@
             bottom: bottom - relativeOffset[1],
             offset: offset,
             repeat: repeat,
-            inView: false,
+            inView: el.classList.contains(cl) ? true : false,
             call: call
           };
 
@@ -650,7 +1137,8 @@
 
     }, {
       key: "scrollTo",
-      value: function scrollTo(targetOption, offsetOption) {
+      value: function scrollTo(targetOption, offsetOption, duration, easing, disableLerp, callback) {
+        // TODO - In next breaking update, use an object as 2nd parameter for options (offset, duration, easing, disableLerp, callback)
         var target;
         var offset = offsetOption ? parseInt(offsetOption) : 0;
 
@@ -683,6 +1171,19 @@
           offset = target.getBoundingClientRect().top + offset + this.instance.scroll.y;
         } else {
           offset = target + offset;
+        }
+
+        if (callback) {
+          offset = offset.toFixed();
+
+          var onScroll = function onScroll() {
+            if (window.pageYOffset.toFixed() === offset) {
+              window.removeEventListener('scroll', onScroll);
+              callback();
+            }
+          };
+
+          window.addEventListener('scroll', onScroll);
         }
 
         window.scrollTo({
@@ -863,12 +1364,6 @@
 
   var tinyEmitter = E;
 
-  var commonjsGlobal = typeof globalThis !== 'undefined' ? globalThis : typeof window !== 'undefined' ? window : typeof global !== 'undefined' ? global : typeof self !== 'undefined' ? self : {};
-
-  function createCommonjsModule(fn, module) {
-  	return module = { exports: {} }, fn(module, module.exports), module.exports;
-  }
-
   var lethargy = createCommonjsModule(function (module, exports) {
   // Generated by CoffeeScript 1.9.2
   (function() {
@@ -929,7 +1424,6 @@
           this.lastDownDeltas.shift();
           return this.isInertia(-1);
         }
-        return false;
       };
 
       Lethargy.prototype.isInertia = function(direction) {
@@ -977,7 +1471,7 @@
       return {
           hasWheelEvent: 'onwheel' in document,
           hasMouseWheelEvent: 'onmousewheel' in document,
-          hasTouch: 'ontouchstart' in document,
+          hasTouch: ('ontouchstart' in window) || window.TouchEvent || window.DocumentTouch && document instanceof DocumentTouch,
           hasTouchWin: navigator.msMaxTouchPoints && navigator.msMaxTouchPoints > 1,
           hasPointer: !!window.navigator.msPointerEnabled,
           hasKeyDown: 'onkeydown' in document,
@@ -1053,7 +1547,8 @@
           preventTouch: false,
           unpreventTouchClass: 'vs-touchmove-allowed',
           limitInertia: false,
-          useKeyboard: true
+          useKeyboard: true,
+          useTouch: true
       }, options);
 
       if (this.options.limitInertia) this._lethargy = new Lethargy();
@@ -1180,7 +1675,7 @@
       if(support.hasWheelEvent) this.el.addEventListener('wheel', this._onWheel, this.listenerOptions);
       if(support.hasMouseWheelEvent) this.el.addEventListener('mousewheel', this._onMouseWheel, this.listenerOptions);
 
-      if(support.hasTouch) {
+      if(support.hasTouch && this.options.useTouch) {
           this.el.addEventListener('touchstart', this._onTouchStart, this.listenerOptions);
           this.el.addEventListener('touchmove', this._onTouchMove, this.listenerOptions);
       }
@@ -1248,10 +1743,16 @@
     var style = getComputedStyle(el);
     var transform = style.transform || style.webkitTransform || style.mozTransform;
     var mat = transform.match(/^matrix3d\((.+)\)$/);
-    if (mat) return parseFloat(mat[1].split(', ')[13]);
-    mat = transform.match(/^matrix\((.+)\)$/);
-    translate.x = mat ? parseFloat(mat[1].split(', ')[4]) : 0;
-    translate.y = mat ? parseFloat(mat[1].split(', ')[5]) : 0;
+
+    if (mat) {
+      translate.x = mat ? parseFloat(mat[1].split(', ')[12]) : 0;
+      translate.y = mat ? parseFloat(mat[1].split(', ')[13]) : 0;
+    } else {
+      mat = transform.match(/^matrix\((.+)\)$/);
+      translate.x = mat ? parseFloat(mat[1].split(', ')[4]) : 0;
+      translate.y = mat ? parseFloat(mat[1].split(', ')[5]) : 0;
+    }
+
     return translate;
   }
 
@@ -1272,6 +1773,114 @@
     return parents;
   } // https://gomakethings.com/how-to-get-the-closest-parent-element-with-a-matching-selector-using-vanilla-javascript/
 
+  /**
+   * https://github.com/gre/bezier-easing
+   * BezierEasing - use bezier curve for transition easing function
+   * by Gaëtan Renaudeau 2014 - 2015 – MIT License
+   */
+
+  // These values are established by empiricism with tests (tradeoff: performance VS precision)
+  var NEWTON_ITERATIONS = 4;
+  var NEWTON_MIN_SLOPE = 0.001;
+  var SUBDIVISION_PRECISION = 0.0000001;
+  var SUBDIVISION_MAX_ITERATIONS = 10;
+
+  var kSplineTableSize = 11;
+  var kSampleStepSize = 1.0 / (kSplineTableSize - 1.0);
+
+  var float32ArraySupported = typeof Float32Array === 'function';
+
+  function A (aA1, aA2) { return 1.0 - 3.0 * aA2 + 3.0 * aA1; }
+  function B (aA1, aA2) { return 3.0 * aA2 - 6.0 * aA1; }
+  function C (aA1)      { return 3.0 * aA1; }
+
+  // Returns x(t) given t, x1, and x2, or y(t) given t, y1, and y2.
+  function calcBezier (aT, aA1, aA2) { return ((A(aA1, aA2) * aT + B(aA1, aA2)) * aT + C(aA1)) * aT; }
+
+  // Returns dx/dt given t, x1, and x2, or dy/dt given t, y1, and y2.
+  function getSlope (aT, aA1, aA2) { return 3.0 * A(aA1, aA2) * aT * aT + 2.0 * B(aA1, aA2) * aT + C(aA1); }
+
+  function binarySubdivide (aX, aA, aB, mX1, mX2) {
+    var currentX, currentT, i = 0;
+    do {
+      currentT = aA + (aB - aA) / 2.0;
+      currentX = calcBezier(currentT, mX1, mX2) - aX;
+      if (currentX > 0.0) {
+        aB = currentT;
+      } else {
+        aA = currentT;
+      }
+    } while (Math.abs(currentX) > SUBDIVISION_PRECISION && ++i < SUBDIVISION_MAX_ITERATIONS);
+    return currentT;
+  }
+
+  function newtonRaphsonIterate (aX, aGuessT, mX1, mX2) {
+   for (var i = 0; i < NEWTON_ITERATIONS; ++i) {
+     var currentSlope = getSlope(aGuessT, mX1, mX2);
+     if (currentSlope === 0.0) {
+       return aGuessT;
+     }
+     var currentX = calcBezier(aGuessT, mX1, mX2) - aX;
+     aGuessT -= currentX / currentSlope;
+   }
+   return aGuessT;
+  }
+
+  function LinearEasing (x) {
+    return x;
+  }
+
+  var src$1 = function bezier (mX1, mY1, mX2, mY2) {
+    if (!(0 <= mX1 && mX1 <= 1 && 0 <= mX2 && mX2 <= 1)) {
+      throw new Error('bezier x values must be in [0, 1] range');
+    }
+
+    if (mX1 === mY1 && mX2 === mY2) {
+      return LinearEasing;
+    }
+
+    // Precompute samples table
+    var sampleValues = float32ArraySupported ? new Float32Array(kSplineTableSize) : new Array(kSplineTableSize);
+    for (var i = 0; i < kSplineTableSize; ++i) {
+      sampleValues[i] = calcBezier(i * kSampleStepSize, mX1, mX2);
+    }
+
+    function getTForX (aX) {
+      var intervalStart = 0.0;
+      var currentSample = 1;
+      var lastSample = kSplineTableSize - 1;
+
+      for (; currentSample !== lastSample && sampleValues[currentSample] <= aX; ++currentSample) {
+        intervalStart += kSampleStepSize;
+      }
+      --currentSample;
+
+      // Interpolate to provide an initial guess for t
+      var dist = (aX - sampleValues[currentSample]) / (sampleValues[currentSample + 1] - sampleValues[currentSample]);
+      var guessForT = intervalStart + dist * kSampleStepSize;
+
+      var initialSlope = getSlope(guessForT, mX1, mX2);
+      if (initialSlope >= NEWTON_MIN_SLOPE) {
+        return newtonRaphsonIterate(aX, guessForT, mX1, mX2);
+      } else if (initialSlope === 0.0) {
+        return guessForT;
+      } else {
+        return binarySubdivide(aX, intervalStart, intervalStart + kSampleStepSize, mX1, mX2);
+      }
+    }
+
+    return function BezierEasing (x) {
+      // Because JavaScript number are imprecise, we should guarantee the extremes are right.
+      if (x === 0) {
+        return 0;
+      }
+      if (x === 1) {
+        return 1;
+      }
+      return calcBezier(getTForX(x), mY1, mY2);
+    };
+  };
+
   var keyCodes$1 = {
     LEFT: 37,
     UP: 38,
@@ -1285,9 +1894,7 @@
     END: 35
   };
 
-  var _default$2 =
-  /*#__PURE__*/
-  function (_Core) {
+  var _default$2 = /*#__PURE__*/function (_Core) {
     _inherits(_default, _Core);
 
     function _default() {
@@ -1297,14 +1904,15 @@
 
       _classCallCheck(this, _default);
 
+      window.scrollTo(0, 0);
+      history.scrollRestoration = 'manual';
       _this = _possibleConstructorReturn(this, _getPrototypeOf(_default).call(this, options));
-      _this.inertia = _this.inertia * 0.1;
+      if (_this.inertia) _this.lerp = _this.inertia * 0.1;
       _this.isScrolling = false;
       _this.isDraggingScrollbar = false;
       _this.isTicking = false;
       _this.hasScrollTicking = false;
       _this.parallaxElements = [];
-      _this.inertiaRatio = 1;
       _this.stop = false;
       _this.checkKey = _this.checkKey.bind(_assertThisInitialized(_this));
       window.addEventListener('keydown', _this.checkKey, false);
@@ -1325,7 +1933,7 @@
           }
         }, this.instance);
         this.vs = new src({
-          el: this.el,
+          el: this.scrollFromAnywhere ? document : this.el,
           mouseMultiplier: navigator.platform.indexOf('Win') > -1 ? 1 : 0.4,
           firefoxMultiplier: this.firefoxMultiplier,
           touchMultiplier: this.touchMultiplier,
@@ -1339,9 +1947,9 @@
 
           if (!_this2.isTicking && !_this2.isDraggingScrollbar) {
             requestAnimationFrame(function () {
-              if (!_this2.isScrolling) _this2.startScrolling();
-
               _this2.updateDelta(e);
+
+              if (!_this2.isScrolling) _this2.startScrolling();
             });
             _this2.isTicking = true;
           }
@@ -1353,7 +1961,7 @@
         this.addSections();
         this.addElements();
         this.detectElements();
-        this.transformElements(true);
+        this.transformElements(true, true);
         this.checkScroll(true);
 
         _get(_getPrototypeOf(_default.prototype), "init", this).call(this);
@@ -1384,8 +1992,12 @@
     }, {
       key: "stopScrolling",
       value: function stopScrolling() {
+        if (this.scrollToRaf) {
+          cancelAnimationFrame(this.scrollToRaf);
+          this.scrollToRaf = null;
+        }
+
         this.isScrolling = false;
-        this.inertiaRatio = 1;
         this.instance.scroll.y = Math.round(this.instance.scroll.y);
         this.html.classList.remove(this.scrollingClass);
       }
@@ -1481,13 +2093,12 @@
             this.hasScrollTicking = true;
           }
 
+          this.updateScroll();
           var distance = Math.abs(this.instance.delta[this.directionAxis] - this.instance.scroll[this.directionAxis]);
 
-          if (distance < 0.5 && this.instance.delta[this.directionAxis] != 0 || distance < 0.5 && this.instance.delta[this.directionAxis] == 0) {
+          if (!this.animatingScroll && (distance < 0.5 && this.instance.delta[this.directionAxis] != 0 || distance < 0.5 && this.instance.delta[this.directionAxis] == 0)) {
             this.stopScrolling();
           }
-
-          this.updateScroll();
 
           for (var i = this.sections.length - 1; i >= 0; i--) {
             if (this.sections[i].persistent || this.instance.scroll[this.directionAxis] > this.sections[i].offset[this.directionAxis] && this.instance.scroll[this.directionAxis] < this.sections[i].limit[this.directionAxis]) {
@@ -1562,7 +2173,7 @@
           delta = this.horizontalGesture ? e.deltaX : e.deltaY;
         }
 
-        this.instance.delta[this.directionAxis] -= delta;
+        this.instance.delta[this.directionAxis] -= delta * this.multiplier;
         if (this.instance.delta[this.directionAxis] < 0) this.instance.delta[this.directionAxis] = 0;
         if (this.instance.delta[this.directionAxis] > this.instance.limit[this.directionAxis]) this.instance.delta[this.directionAxis] = this.instance.limit[this.directionAxis];
       }
@@ -1570,7 +2181,7 @@
       key: "updateScroll",
       value: function updateScroll(e) {
         if (this.isScrolling || this.isDraggingScrollbar) {
-          this.instance.scroll[this.directionAxis] = lerp(this.instance.scroll[this.directionAxis], this.instance.delta[this.directionAxis], this.inertia * this.inertiaRatio);
+          this.instance.scroll[this.directionAxis] = lerp(this.instance.scroll[this.directionAxis], this.instance.delta[this.directionAxis], this.lerp);
         } else {
           if (this.instance.scroll[this.directionAxis] > this.instance.limit[this.directionAxis]) {
             this.setScroll(this.instance.scroll[this.directionAxis], this.instance.limit[this.directionAxis]);
@@ -1608,7 +2219,7 @@
       key: "addSpeed",
       value: function addSpeed() {
         if (this.instance.delta[this.directionAxis] != this.instance.scroll[this.directionAxis]) {
-          this.instance.speed = (this.instance.delta[this.directionAxis] - this.instance.scroll[this.directionAxis]) / (Date.now() - this.timestamp);
+          this.instance.speed = (this.instance.delta[this.directionAxis] - this.instance.scroll[this.directionAxis]) / Math.max(1, Date.now() - this.timestamp);
         } else {
           this.instance.speed = 0;
         }
@@ -1621,7 +2232,25 @@
         this.scrollbar.classList.add("".concat(this.scrollbarClass));
         this.scrollbarThumb.classList.add("".concat(this.scrollbarClass, "_thumb"));
         this.scrollbar.append(this.scrollbarThumb);
-        document.body.append(this.scrollbar);
+        document.body.append(this.scrollbar); // Scrollbar Events
+
+        this.getScrollBar = this.getScrollBar.bind(this);
+        this.releaseScrollBar = this.releaseScrollBar.bind(this);
+        this.moveScrollBar = this.moveScrollBar.bind(this);
+        this.scrollbarThumb.addEventListener('mousedown', this.getScrollBar);
+        window.addEventListener('mouseup', this.releaseScrollBar);
+        window.addEventListener('mousemove', this.moveScrollBar); // Set scrollbar values
+
+        if (this.direction == 'horizontal') {
+          if (this.instance.limit.x + this.windowWidth <= this.windowWidth) {
+            return;
+          }
+        } else {
+          if (this.instance.limit.y + this.windowHeight <= this.windowHeight) {
+            return;
+          }
+        }
+
         this.scrollbarHeight = this.scrollbar.getBoundingClientRect().height;
         this.scrollbarWidth = this.scrollbar.getBoundingClientRect().width;
 
@@ -1635,16 +2264,14 @@
           x: this.scrollbarWidth - this.scrollbarThumb.getBoundingClientRect().width,
           y: this.scrollbarHeight - this.scrollbarThumb.getBoundingClientRect().height
         };
-        this.getScrollBar = this.getScrollBar.bind(this);
-        this.releaseScrollBar = this.releaseScrollBar.bind(this);
-        this.moveScrollBar = this.moveScrollBar.bind(this);
-        this.scrollbarThumb.addEventListener('mousedown', this.getScrollBar);
-        window.addEventListener('mouseup', this.releaseScrollBar);
-        window.addEventListener('mousemove', this.moveScrollBar);
       }
     }, {
       key: "reinitScrollBar",
       value: function reinitScrollBar() {
+        if (this.instance.limit + this.windowHeight <= this.windowHeight) {
+          return;
+        }
+
         this.scrollbarHeight = this.scrollbar.getBoundingClientRect().height;
         this.scrollbarWidth = this.scrollbar.getBoundingClientRect().width;
 
@@ -1752,14 +2379,16 @@
             };
 
             if (sticky) {
+              var elTop = el.getBoundingClientRect().top;
+              var elLeft = el.getBoundingClientRect().left;
               var elDistance = {
-                x: el.getBoundingClientRect().left - left,
-                y: el.getBoundingClientRect().top - top
+                x: elLeft - left,
+                y: elTop - top
               };
               top += window.innerHeight;
               left += window.innerWidth;
-              bottom = top + targetEl.offsetHeight - window.innerHeight - el.offsetHeight - elDistance[_this6.directionAxis];
-              right = left + targetEl.offsetWidth - window.innerWidth - el.offsetWidth - elDistance[_this6.directionAxis];
+              bottom = elTop + targetEl.offsetHeight - el.offsetHeight - elDistance[_this6.directionAxis];
+              right = elLeft + targetEl.offsetWidth - el.offsetWidth - elDistance[_this6.directionAxis];
               middle = {
                 x: (right - left) / 2 + left,
                 y: (bottom - top) / 2 + top
@@ -1821,7 +2450,7 @@
               right: right,
               offset: offset,
               repeat: repeat,
-              inView: false,
+              inView: el.classList.contains(cl) ? true : false,
               call: call,
               speed: speed,
               delay: delay,
@@ -1894,6 +2523,7 @@
       value: function transformElements(isForced) {
         var _this8 = this;
 
+        var setAllElements = arguments.length > 1 && arguments[1] !== undefined ? arguments[1] : false;
         var scrollRight = this.instance.scroll.x + this.windowWidth;
         var scrollBottom = this.instance.scroll.y + this.windowHeight;
         var scrollMiddle = {
@@ -1907,7 +2537,7 @@
             transformDistance = 0;
           }
 
-          if (current.inView) {
+          if (current.inView || setAllElements) {
             switch (current.position) {
               case 'top':
                 transformDistance = _this8.instance.scroll[_this8.directionAxis] * -current.speed;
@@ -1981,7 +2611,9 @@
        *
        * @param  Available options :
        *          targetOption {node, string, "top", "bottom", int} - The DOM element we want to scroll to
-       *          offsetOption {int} - An absolute vertical scroll value to reach, or an offset to apply on top of given `target` or `sourceElem`'s target
+       *          offsetOption {int} - An offset to apply on top of given `target` or `sourceElem`'s target
+       *          duration {int} - Duration of the scroll animation in milliseconds
+       *          easing {array} - An array of 4 floats between 0 and 1 defining the bezier curve for the animation's easing. See http://greweb.me/bezier-easing-editor/example/
        * @return {void}
        */
 
@@ -1990,8 +2622,14 @@
       value: function scrollTo(targetOption, offsetOption) {
         var _this9 = this;
 
+        var duration = arguments.length > 2 && arguments[2] !== undefined ? arguments[2] : 1000;
+        var easing = arguments.length > 3 && arguments[3] !== undefined ? arguments[3] : [0.25, 0.00, 0.35, 1.00];
+        var disableLerp = arguments.length > 4 && arguments[4] !== undefined ? arguments[4] : false;
+        var callback = arguments.length > 5 ? arguments[5] : undefined;
+        // TODO - In next breaking update, use an object as 2nd parameter for options (offset, duration, easing, disableLerp, callback)
         var target;
         var offset = offsetOption ? parseInt(offsetOption) : 0;
+        easing = src$1.apply(void 0, _toConsumableArray(easing));
 
         if (typeof targetOption === 'string') {
           // Selector or boundaries
@@ -2056,16 +2694,54 @@
           }
         } else {
           offset = target + offset;
-        } // Actual scrollTo (the lerp will do the animation itself)
+        } // Actual scrollto
+        // ==========================================================================
+        // Setup
 
 
-        this.instance.delta[this.directionAxis] = Math.max(0, Math.min(offset, this.instance.limit[this.directionAxis])); // We limit the value to scroll boundaries (between 0 and instance limit)
+        var scrollStart = parseFloat(this.instance.delta[this.directionAxis]);
+        var scrollTarget = Math.max(0, Math.min(offset, this.instance.limit[this.directionAxis])); // Make sure our target is in the scroll boundaries
 
-        this.inertiaRatio = Math.min(4000 / Math.abs(this.instance.delta[this.directionAxis] - this.instance.scroll[this.directionAxis]), 0.8); // Update the scroll. If we were in idle state: we're not anymore
+        var scrollDiff = scrollTarget - scrollStart;
 
-        this.isScrolling = true;
-        this.checkScroll();
-        this.html.classList.add(this.scrollingClass);
+        var render = function render(p) {
+          if (disableLerp) {
+            if (_this9.direction === 'horizontal') {
+              _this9.setScroll(scrollStart + scrollDiff * p, _this9.instance.delta.y);
+            } else {
+              _this9.setScroll(_this9.instance.delta.x, scrollStart + scrollDiff * p);
+            }
+          } else {
+            _this9.instance.delta[_this9.directionAxis] = scrollStart + scrollDiff * p;
+          }
+        }; // Prepare the scroll
+
+
+        this.animatingScroll = true; // This boolean allows to prevent `checkScroll()` from calling `stopScrolling` when the animation is slow (i.e. at the beginning of an EaseIn)
+
+        this.stopScrolling(); // Stop any movement, allows to kill any other `scrollTo` still happening
+
+        this.startScrolling(); // Restart the scroll
+        // Start the animation loop
+
+        var start = Date.now();
+
+        var loop = function loop() {
+          var p = (Date.now() - start) / duration; // Animation progress
+
+          if (p > 1) {
+            // Animation ends
+            render(1);
+            _this9.animatingScroll = false;
+            if (duration == 0) _this9.update();
+            if (callback) callback();
+          } else {
+            _this9.scrollToRaf = requestAnimationFrame(loop);
+            render(easing(p));
+          }
+        };
+
+        loop();
       }
     }, {
       key: "update",
@@ -2120,9 +2796,7 @@
     return _default;
   }(_default);
 
-  var _default$3 =
-  /*#__PURE__*/
-  function () {
+  var _default$3 = /*#__PURE__*/function () {
     function _default() {
       var options = arguments.length > 0 && arguments[0] !== undefined ? arguments[0] : {};
 
@@ -2180,8 +2854,9 @@
       }
     }, {
       key: "scrollTo",
-      value: function scrollTo(target, offset) {
-        this.scroll.scrollTo(target, offset);
+      value: function scrollTo(target, offset, duration, easing, disableLerp, callback) {
+        // TODO - In next breaking update, use an object as 2nd parameter for options (offset, duration, easing, disableLerp, callback)
+        this.scroll.scrollTo(target, offset, duration, easing, disableLerp, callback);
       }
     }, {
       key: "setScroll",
@@ -2210,4 +2885,4 @@
 
   return _default$3;
 
-}));
+})));

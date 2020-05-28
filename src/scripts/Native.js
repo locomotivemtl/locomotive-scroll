@@ -1,10 +1,12 @@
 import Core from './Core';
+import smoothscroll from 'smoothscroll-polyfill';
 
 export default class extends Core {
     constructor(options = {}) {
         super(options);
 
         window.addEventListener('scroll', this.checkScroll, false);
+        smoothscroll.polyfill();
     }
 
     init() {
@@ -19,6 +21,15 @@ export default class extends Core {
     checkScroll() {
         super.checkScroll();
 
+        if (this.getDirection) {
+            this.addDirection();
+        }
+
+        if (this.getSpeed) {
+            this.addSpeed();
+            this.timestamp = Date.now();
+        }
+
         this.instance.scroll.y = window.pageYOffset;
 
         if (this.els.length) {
@@ -28,6 +39,26 @@ export default class extends Core {
                 });
                 this.hasScrollTicking = true;
             }
+        }
+    }
+
+    addDirection() {
+        if (window.pageYOffset > this.instance.scroll.y) {
+            if (this.instance.direction !== 'down') {
+                this.instance.direction = 'down';
+            }
+        } else if (window.pageYOffset < this.instance.scroll.y) {
+            if (this.instance.direction !== 'up') {
+                this.instance.direction = 'up';
+            }
+        }
+    }
+
+    addSpeed() {
+        if (window.pageYOffset != this.instance.scroll.y) {
+            this.instance.speed = (window.pageYOffset - this.instance.scroll.y) / (Date.now() - this.timestamp);
+        } else {
+            this.instance.speed = 0;
         }
     }
 
@@ -68,7 +99,7 @@ export default class extends Core {
                 bottom: bottom - relativeOffset[1],
                 offset: offset,
                 repeat: repeat,
-                inView: false,
+                inView: (el.classList.contains(cl)) ? true : false,
                 call: call
             }
 
@@ -117,7 +148,7 @@ export default class extends Core {
      *          offsetOption {int} - An absolute vertical scroll value to reach, or an offset to apply on top of given `target` or `sourceElem`'s target
      * @return {void}
      */
-    scrollTo(targetOption, offsetOption) {
+    scrollTo(targetOption, offsetOption, duration, easing, disableLerp, callback) { // TODO - In next breaking update, use an object as 2nd parameter for options (offset, duration, easing, disableLerp, callback)
         let target;
         let offset = offsetOption ? parseInt(offsetOption) : 0;
 
@@ -147,6 +178,17 @@ export default class extends Core {
             offset = target.getBoundingClientRect().top + offset + this.instance.scroll.y;
         } else {
             offset = target + offset
+        }
+
+        if(callback) {
+            offset = offset.toFixed()
+            let onScroll = function () {
+                if (window.pageYOffset.toFixed() === offset) {
+                    window.removeEventListener('scroll', onScroll)
+                    callback()
+                }
+            }
+            window.addEventListener('scroll', onScroll)
         }
 
         window.scrollTo({

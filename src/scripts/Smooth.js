@@ -3,6 +3,7 @@ import Core from './Core';
 import { lerp } from './utils/maths'
 import { getTranslate } from './utils/transform'
 import { getParents, queryClosestParent } from './utils/html';
+import BezierEasing from 'bezier-easing';
 
 const keyCodes = {
     LEFT: 37,
@@ -19,15 +20,17 @@ const keyCodes = {
 
 export default class extends Core {
     constructor(options = {}) {
+        window.scrollTo(0,0);
+        history.scrollRestoration = 'manual'
+
         super(options);
 
-        this.inertia = this.inertia * 0.1;
+        if(this.inertia) this.lerp = this.inertia * 0.1
         this.isScrolling = false;
         this.isDraggingScrollbar = false;
         this.isTicking = false;
         this.hasScrollTicking = false;
         this.parallaxElements = [];
-        this.inertiaRatio = 1;
         this.stop = false;
 
         this.checkKey = this.checkKey.bind(this);
@@ -47,7 +50,7 @@ export default class extends Core {
         }
 
         this.vs = new virtualScroll({
-            el: this.el,
+            el: this.scrollFromAnywhere ? document : this.el,
             mouseMultiplier: navigator.platform.indexOf('Win') > -1 ? 1 : 0.4,
             firefoxMultiplier: this.firefoxMultiplier,
             touchMultiplier: this.touchMultiplier,
@@ -62,9 +65,8 @@ export default class extends Core {
 
             if (!this.isTicking && !this.isDraggingScrollbar) {
                 requestAnimationFrame(() => {
-                    if (!this.isScrolling) this.startScrolling();
-
                     this.updateDelta(e);
+                    if (!this.isScrolling) this.startScrolling();
                 });
                 this.isTicking = true;
             }
@@ -76,7 +78,7 @@ export default class extends Core {
         this.addSections();
         this.addElements();
         this.detectElements();
-        this.transformElements(true);
+        this.transformElements(true, true);
 
         this.checkScroll(true);
 
@@ -105,8 +107,12 @@ export default class extends Core {
     }
 
     stopScrolling() {
+        if(this.scrollToRaf) {
+            cancelAnimationFrame(this.scrollToRaf)
+            this.scrollToRaf = null
+        }
+
         this.isScrolling = false;
-        this.inertiaRatio = 1;
         this.instance.scroll.y = Math.round(this.instance.scroll.y);
         this.html.classList.remove(this.scrollingClass);
     }
@@ -184,12 +190,12 @@ export default class extends Core {
                 this.hasScrollTicking = true;
             }
 
+            this.updateScroll();
+
             const distance = (Math.abs(this.instance.delta[this.directionAxis] - this.instance.scroll[this.directionAxis]));
-            if ((distance < 0.5 && this.instance.delta[this.directionAxis] != 0) || (distance < 0.5 && this.instance.delta[this.directionAxis] == 0)) {
+            if (!this.animatingScroll && ((distance < 0.5 && this.instance.delta[this.directionAxis] != 0) || (distance < 0.5 && this.instance.delta[this.directionAxis] == 0))) {
                 this.stopScrolling();
             }
-
-            this.updateScroll();
 
             for (let i = this.sections.length - 1; i >= 0; i--) {
                 if(this.sections[i].persistent || (this.instance.scroll[this.directionAxis] > this.sections[i].offset[this.directionAxis] && this.instance.scroll[this.directionAxis] < this.sections[i].limit[this.directionAxis])) {
@@ -263,7 +269,7 @@ export default class extends Core {
             delta = this.horizontalGesture ? e.deltaX : e.deltaY
         }
 
-        this.instance.delta[this.directionAxis] -= delta;
+        this.instance.delta[this.directionAxis] -= delta * this.multiplier;
 
         if (this.instance.delta[this.directionAxis] < 0) this.instance.delta[this.directionAxis] = 0;
         if (this.instance.delta[this.directionAxis] > this.instance.limit[this.directionAxis]) this.instance.delta[this.directionAxis] = this.instance.limit[this.directionAxis];
@@ -271,7 +277,7 @@ export default class extends Core {
 
     updateScroll(e) {
         if (this.isScrolling || this.isDraggingScrollbar) {
-            this.instance.scroll[this.directionAxis] = lerp(this.instance.scroll[this.directionAxis], this.instance.delta[this.directionAxis], this.inertia * this.inertiaRatio);
+            this.instance.scroll[this.directionAxis] = lerp(this.instance.scroll[this.directionAxis], this.instance.delta[this.directionAxis], this.lerp);
         } else {
 
             if (this.instance.scroll[this.directionAxis] > this.instance.limit[this.directionAxis]) {
@@ -308,7 +314,7 @@ export default class extends Core {
 
     addSpeed() {
         if (this.instance.delta[this.directionAxis] != this.instance.scroll[this.directionAxis]) {
-            this.instance.speed = (this.instance.delta[this.directionAxis] - this.instance.scroll[this.directionAxis]) / (Date.now() - this.timestamp);
+            this.instance.speed = (this.instance.delta[this.directionAxis] - this.instance.scroll[this.directionAxis]) / Math.max(1,(Date.now() - this.timestamp));
         } else {
             this.instance.speed = 0;
         }
@@ -322,6 +328,26 @@ export default class extends Core {
 
         this.scrollbar.append(this.scrollbarThumb);
         document.body.append(this.scrollbar);
+
+        // Scrollbar Events
+        this.getScrollBar = this.getScrollBar.bind(this);
+        this.releaseScrollBar = this.releaseScrollBar.bind(this);
+        this.moveScrollBar = this.moveScrollBar.bind(this);
+
+        this.scrollbarThumb.addEventListener('mousedown', this.getScrollBar);
+        window.addEventListener('mouseup', this.releaseScrollBar);
+        window.addEventListener('mousemove', this.moveScrollBar);
+
+        // Set scrollbar values
+        if(this.direction == 'horizontal') {
+            if((this.instance.limit.x + this.windowWidth) <= this.windowWidth) {
+                return;
+            }
+        } else {
+            if((this.instance.limit.y + this.windowHeight) <= this.windowHeight) {
+                return;
+            }
+        }
 
         this.scrollbarHeight = this.scrollbar.getBoundingClientRect().height;
         this.scrollbarWidth = this.scrollbar.getBoundingClientRect().width;
@@ -337,16 +363,13 @@ export default class extends Core {
             y: this.scrollbarHeight - this.scrollbarThumb.getBoundingClientRect().height
         }
 
-        this.getScrollBar = this.getScrollBar.bind(this);
-        this.releaseScrollBar = this.releaseScrollBar.bind(this);
-        this.moveScrollBar = this.moveScrollBar.bind(this);
-
-        this.scrollbarThumb.addEventListener('mousedown', this.getScrollBar);
-        window.addEventListener('mouseup', this.releaseScrollBar);
-        window.addEventListener('mousemove', this.moveScrollBar);
     }
 
     reinitScrollBar() {
+        if((this.instance.limit + this.windowHeight) <= this.windowHeight) {
+            return;
+        }
+
         this.scrollbarHeight = this.scrollbar.getBoundingClientRect().height;
         this.scrollbarWidth = this.scrollbar.getBoundingClientRect().width;
 
@@ -444,15 +467,18 @@ export default class extends Core {
                 };
 
                 if(sticky) {
+                    const elTop = el.getBoundingClientRect().top
+                    const elLeft = el.getBoundingClientRect().left
+
                     const elDistance = {
-                        x: el.getBoundingClientRect().left - left,
-                        y: el.getBoundingClientRect().top - top
+                        x: elLeft - left,
+                        y: elTop - top
                     }
 
                     top += window.innerHeight;
                     left += window.innerWidth;
-                    bottom = top + targetEl.offsetHeight - window.innerHeight - el.offsetHeight - elDistance[this.directionAxis];
-                    right = left + targetEl.offsetWidth - window.innerWidth - el.offsetWidth - elDistance[this.directionAxis];
+                    bottom = elTop + targetEl.offsetHeight - el.offsetHeight - elDistance[this.directionAxis];
+                    right = elLeft + targetEl.offsetWidth - el.offsetWidth - elDistance[this.directionAxis];
                     middle = {
                         x: ((right - left) / 2) + left,
                         y: ((bottom - top) / 2) + top
@@ -511,7 +537,7 @@ export default class extends Core {
                     right,
                     offset,
                     repeat,
-                    inView: false,
+                    inView: (el.classList.contains(cl)) ? true : false,
                     call,
                     speed,
                     delay,
@@ -580,7 +606,7 @@ export default class extends Core {
         element.style.transform = transform;
     }
 
-    transformElements(isForced) {
+    transformElements(isForced, setAllElements = false) {
         const scrollRight = this.instance.scroll.x + this.windowWidth;
         const scrollBottom = this.instance.scroll.y + this.windowHeight;
 
@@ -597,7 +623,7 @@ export default class extends Core {
                 transformDistance = 0
             }
 
-            if(current.inView) {
+            if(current.inView || setAllElements) {
                 switch (current.position) {
                     case 'top':
                         transformDistance = this.instance.scroll[this.directionAxis] * -current.speed;
@@ -676,12 +702,15 @@ export default class extends Core {
      *
      * @param  Available options :
      *          targetOption {node, string, "top", "bottom", int} - The DOM element we want to scroll to
-     *          offsetOption {int} - An absolute vertical scroll value to reach, or an offset to apply on top of given `target` or `sourceElem`'s target
+     *          offsetOption {int} - An offset to apply on top of given `target` or `sourceElem`'s target
+     *          duration {int} - Duration of the scroll animation in milliseconds
+     *          easing {array} - An array of 4 floats between 0 and 1 defining the bezier curve for the animation's easing. See http://greweb.me/bezier-easing-editor/example/
      * @return {void}
      */
-    scrollTo(targetOption, offsetOption) {
+    scrollTo(targetOption, offsetOption, duration = 1000, easing = [0.25, 0.00, 0.35, 1.00], disableLerp = false, callback) { // TODO - In next breaking update, use an object as 2nd parameter for options (offset, duration, easing, disableLerp, callback)
         let target;
         let offset = offsetOption ? parseInt(offsetOption) : 0;
+        easing = BezierEasing(...easing)
 
         if(typeof targetOption === 'string') { // Selector or boundaries
             if(targetOption === 'top') {
@@ -739,14 +768,49 @@ export default class extends Core {
             offset = target + offset;
         }
 
-        // Actual scrollTo (the lerp will do the animation itself)
-        this.instance.delta[this.directionAxis] = Math.max(0,Math.min(offset, this.instance.limit[this.directionAxis])); // We limit the value to scroll boundaries (between 0 and instance limit)
-        this.inertiaRatio = Math.min(4000 / Math.abs(this.instance.delta[this.directionAxis] - this.instance.scroll[this.directionAxis]),0.8);
+        // Actual scrollto
+        // ==========================================================================
 
-        // Update the scroll. If we were in idle state: we're not anymore
-        this.isScrolling = true;
-        this.checkScroll();
-        this.html.classList.add(this.scrollingClass);
+        // Setup
+        const scrollStart = parseFloat(this.instance.delta[this.directionAxis])
+        const scrollTarget = Math.max(0,Math.min(offset, this.instance.limit[this.directionAxis])) // Make sure our target is in the scroll boundaries
+        const scrollDiff = scrollTarget - scrollStart
+        const render = (p) => {
+            if(disableLerp) {
+                if(this.direction === 'horizontal') {
+                    this.setScroll(scrollStart + (scrollDiff * p), this.instance.delta.y)
+                } else {
+                    this.setScroll(this.instance.delta.x, scrollStart + (scrollDiff * p))
+                }
+            }
+            else {
+                this.instance.delta[this.directionAxis] = scrollStart + (scrollDiff * p)
+            }
+        }
+
+        // Prepare the scroll
+        this.animatingScroll = true // This boolean allows to prevent `checkScroll()` from calling `stopScrolling` when the animation is slow (i.e. at the beginning of an EaseIn)
+        this.stopScrolling() // Stop any movement, allows to kill any other `scrollTo` still happening
+        this.startScrolling() // Restart the scroll
+
+        // Start the animation loop
+        const start = Date.now();
+        const loop = () => {
+            var p = (Date.now()-start)/duration; // Animation progress
+
+            if (p > 1) { // Animation ends
+                render(1);
+                this.animatingScroll = false
+
+                if(duration == 0) this.update()
+                if(callback) callback()
+            }
+            else {
+              this.scrollToRaf = requestAnimationFrame(loop);
+              render(easing(p));
+            }
+        }
+        loop()
     }
 
     update() {

@@ -2,9 +2,6 @@ import { defaults } from './options';
 
 export default class {
     constructor(options = {}) {
-        window.scrollTo(0,0);
-
-        // Override default options with given ones
         Object.assign(this, defaults, options);
         this.smartphone = defaults.smartphone
         if(options.smartphone) Object.assign(this.smartphone, options.smartphone)
@@ -181,6 +178,7 @@ export default class {
         current.el.classList.add(current.class);
 
         if (current.call && this.hasCallEventSet) {
+
             this.dispatchCall(current, 'enter');
 
             if (!current.repeat) {

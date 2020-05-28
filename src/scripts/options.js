@@ -8,7 +8,7 @@ export const defaults = {
     direction: 'vertical',
     horizontalGesture: false,
     reloadOnContextChange: false,
-    inertia: 1,
+    lerp: 0.1,
     class: 'is-inview',
     scrollbarClass: 'c-scrollbar',
     scrollingClass: 'has-scroll-scrolling',
@@ -17,6 +17,8 @@ export const defaults = {
     initClass: 'has-scroll-init',
     getSpeed: false,
     getDirection: false,
+    scrollFromAnywhere: false,
+    multiplier: 1,
     firefoxMultiplier: 50,
     touchMultiplier: 2,
     tablet: {
