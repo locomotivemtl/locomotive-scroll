@@ -1058,7 +1058,8 @@
 
     }, {
       key: "scrollTo",
-      value: function scrollTo(targetOption, offsetOption) {
+      value: function scrollTo(targetOption, offsetOption, duration, easing, disableLerp, callback) {
+        // TODO - In next breaking update, use an object as 2nd parameter for options (offset, duration, easing, disableLerp, callback)
         var target;
         var offset = offsetOption ? parseInt(offsetOption) : 0;
 
@@ -1091,6 +1092,19 @@
           offset = target.getBoundingClientRect().top + offset + this.instance.scroll.y;
         } else {
           offset = target + offset;
+        }
+
+        if (callback) {
+          offset = offset.toFixed();
+
+          var onScroll = function onScroll() {
+            if (window.pageYOffset.toFixed() === offset) {
+              window.removeEventListener('scroll', onScroll);
+              callback();
+            }
+          };
+
+          window.addEventListener('scroll', onScroll);
         }
 
         window.scrollTo({
@@ -2381,6 +2395,9 @@
 
         var duration = arguments.length > 2 && arguments[2] !== undefined ? arguments[2] : 1000;
         var easing = arguments.length > 3 && arguments[3] !== undefined ? arguments[3] : [0.25, 0.00, 0.35, 1.00];
+        var disableLerp = arguments.length > 4 && arguments[4] !== undefined ? arguments[4] : false;
+        var callback = arguments.length > 5 ? arguments[5] : undefined;
+        // TODO - In next breaking update, use an object as 2nd parameter for options (offset, duration, easing, disableLerp, callback)
         var target;
         var offset = offsetOption ? parseInt(offsetOption) : 0;
         easing = src$1.apply(void 0, _toConsumableArray(easing));
@@ -2450,7 +2467,7 @@
         var scrollDiff = scrollTarget - scrollStart;
 
         var render = function render(p) {
-          _this9.instance.delta.y = scrollStart + scrollDiff * p;
+          if (disableLerp) _this9.setScroll(_this9.instance.delta.x, scrollStart + scrollDiff * p);else _this9.instance.delta.y = scrollStart + scrollDiff * p;
         }; // Prepare the scroll
 
 
@@ -2470,6 +2487,8 @@
             // Animation ends
             render(1);
             _this9.animatingScroll = false;
+            if (duration == 0) _this9.update();
+            if (callback) callback();
           } else {
             _this9.scrollToRaf = requestAnimationFrame(loop);
             render(easing(p));
@@ -2582,8 +2601,9 @@
       }
     }, {
       key: "scrollTo",
-      value: function scrollTo(target, offset, duration, easing) {
-        this.scroll.scrollTo(target, offset, duration, easing);
+      value: function scrollTo(target, offset, duration, easing, disableLerp, callback) {
+        // TODO - In next breaking update, use an object as 2nd parameter for options (offset, duration, easing, disableLerp, callback)
+        this.scroll.scrollTo(target, offset, duration, easing, disableLerp, callback);
       }
     }, {
       key: "setScroll",

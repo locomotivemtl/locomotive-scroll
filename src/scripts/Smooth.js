@@ -558,7 +558,7 @@ export default class extends Core {
      *          easing {array} - An array of 4 floats between 0 and 1 defining the bezier curve for the animation's easing. See http://greweb.me/bezier-easing-editor/example/
      * @return {void}
      */
-    scrollTo(targetOption, offsetOption, duration = 1000, easing = [0.25, 0.00, 0.35, 1.00]) {
+    scrollTo(targetOption, offsetOption, duration = 1000, easing = [0.25, 0.00, 0.35, 1.00], disableLerp = false, callback) { // TODO - In next breaking update, use an object as 2nd parameter for options (offset, duration, easing, disableLerp, callback)
         let target;
         let offset = offsetOption ? parseInt(offsetOption) : 0;
         easing = BezierEasing(...easing)
@@ -618,7 +618,10 @@ export default class extends Core {
         const scrollTarget = Math.max(0,Math.min(offset, this.instance.limit)) // Make sure our target is in the scroll boundaries
         const scrollDiff = scrollTarget - scrollStart
         const render = (p) => {
-            this.instance.delta.y = scrollStart + (scrollDiff * p)
+            if(disableLerp)
+                this.setScroll(this.instance.delta.x, scrollStart + (scrollDiff * p))
+            else
+                this.instance.delta.y = scrollStart + (scrollDiff * p)
         }
 
         // Prepare the scroll
@@ -632,8 +635,11 @@ export default class extends Core {
             var p = (Date.now()-start)/duration; // Animation progress
 
             if (p > 1) { // Animation ends
-              render(1);
-              this.animatingScroll = false
+                render(1);
+                this.animatingScroll = false
+
+                if(duration == 0) this.update()
+                if(callback) callback()
             }
             else {
               this.scrollToRaf = requestAnimationFrame(loop);

@@ -148,7 +148,7 @@ export default class extends Core {
      *          offsetOption {int} - An absolute vertical scroll value to reach, or an offset to apply on top of given `target` or `sourceElem`'s target
      * @return {void}
      */
-    scrollTo(targetOption, offsetOption) {
+    scrollTo(targetOption, offsetOption, duration, easing, disableLerp, callback) { // TODO - In next breaking update, use an object as 2nd parameter for options (offset, duration, easing, disableLerp, callback)
         let target;
         let offset = offsetOption ? parseInt(offsetOption) : 0;
 
@@ -178,6 +178,17 @@ export default class extends Core {
             offset = target.getBoundingClientRect().top + offset + this.instance.scroll.y;
         } else {
             offset = target + offset
+        }
+
+        if(callback) {
+            offset = offset.toFixed()
+            let onScroll = function () {
+                if (window.pageYOffset.toFixed() === offset) {
+                    window.removeEventListener('scroll', onScroll)
+                    callback()
+                }
+            }
+            window.addEventListener('scroll', onScroll)
         }
 
         window.scrollTo({
