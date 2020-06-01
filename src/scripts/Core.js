@@ -127,7 +127,7 @@ export default class {
 
         this.scrollTo(
             event.currentTarget.getAttribute(`data-${this.name}-href`) || event.currentTarget.getAttribute('href'),
-            event.currentTarget.getAttribute(`data-${this.name}-offset`)
+            { offset: event.currentTarget.getAttribute(`data-${this.name}-offset`) }
         );
     }
 

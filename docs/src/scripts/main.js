@@ -13,8 +13,7 @@ import LocomotiveScroll from '../../../src/locomotive-scroll';
         el: document.querySelector('#js-scroll'),
         smooth: true,
         getSpeed: true,
-        getDirection: true,
-        useKeyboard: true
+        getDirection: true
     }
 
     if(document.querySelector('#js-scroll').getAttribute('data-horizontal') == 'true') {

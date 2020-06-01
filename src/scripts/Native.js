@@ -144,32 +144,33 @@ export default class extends Core {
      * Scroll to a desired target.
      *
      * @param  Available options :
-     *          targetOption {node, string, "top", "bottom", int} - The DOM element we want to scroll to
-     *          offsetOption {int} - An absolute vertical scroll value to reach, or an offset to apply on top of given `target` or `sourceElem`'s target
+     *          target {node, string, "top", "bottom", int} - The DOM element we want to scroll to
+     *          options {object} - Options object for additionnal settings.
      * @return {void}
      */
-    scrollTo(targetOption, offsetOption, duration, easing, disableLerp, callback) { // TODO - In next breaking update, use an object as 2nd parameter for options (offset, duration, easing, disableLerp, callback)
-        let target;
-        let offset = offsetOption ? parseInt(offsetOption) : 0;
+    scrollTo(target, options = {}) {
+        // Parse options
+        const offset = parseInt(options.offset) || 0; // An offset to apply on top of given `target` or `sourceElem`'s target
+        const callback = options.callback ? options.callback : false; // function called when scrollTo completes (note that it won't wait for lerp to stabilize)
 
-        if(typeof targetOption === 'string') { // Selector or boundaries
-            if(targetOption === 'top') {
+        if(typeof target === 'string') { // Selector or boundaries
+            if(target === 'top') {
                 target = this.html;
-            } else if(targetOption === 'bottom') {
+            } else if(target === 'bottom') {
                 target = this.html.offsetHeight - window.innerHeight;
             } else {
-                target = document.querySelector(targetOption);
+                target = document.querySelector(target);
                 // If the query fails, abort
                 if(!target)  {
                     return;
                 }
             }
-        } else if(typeof targetOption === 'number') { // Absolute coordinate
-            target = parseInt(targetOption)
-        } else if(targetOption && targetOption.tagName) { // DOM Element
-            target = targetOption
+        } else if(typeof target === 'number') { // Absolute coordinate
+            target = parseInt(target)
+        } else if(target && target.tagName) { // DOM Element
+            // We good 👍
         } else {
-            console.warn('`targetOption` parameter is not valid')
+            console.warn('`target` parameter is not valid')
             return;
         }
 

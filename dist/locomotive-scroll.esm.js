@@ -1,4 +1,4 @@
-/* locomotive-scroll v3.5.4 | MIT License | https://github.com/locomotivemtl/locomotive-scroll */
+/* locomotive-scroll v4.0-b1 | MIT License | https://github.com/locomotivemtl/locomotive-scroll */
 function _classCallCheck(instance, Constructor) {
   if (!(instance instanceof Constructor)) {
     throw new TypeError("Cannot call a class as a function");
@@ -145,6 +145,10 @@ function _get(target, property, receiver) {
   }
 
   return _get(target, property, receiver || target);
+}
+
+function _readOnlyError(name) {
+  throw new Error("\"" + name + "\" is read-only");
 }
 
 function _toConsumableArray(arr) {
@@ -336,7 +340,9 @@ var _default = /*#__PURE__*/function () {
     key: "setScrollTo",
     value: function setScrollTo(event) {
       event.preventDefault();
-      this.scrollTo(event.currentTarget.getAttribute("data-".concat(this.name, "-href")) || event.currentTarget.getAttribute('href'), event.currentTarget.getAttribute("data-".concat(this.name, "-offset")));
+      this.scrollTo(event.currentTarget.getAttribute("data-".concat(this.name, "-href")) || event.currentTarget.getAttribute('href'), {
+        offset: event.currentTarget.getAttribute("data-".concat(this.name, "-offset"))
+      });
     }
   }, {
     key: "addElements",
@@ -1124,51 +1130,50 @@ var _default$1 = /*#__PURE__*/function (_Core) {
      * Scroll to a desired target.
      *
      * @param  Available options :
-     *          targetOption {node, string, "top", "bottom", int} - The DOM element we want to scroll to
-     *          offsetOption {int} - An absolute vertical scroll value to reach, or an offset to apply on top of given `target` or `sourceElem`'s target
+     *          target {node, string, "top", "bottom", int} - The DOM element we want to scroll to
+     *          options {object} - Options object for additionnal settings.
      * @return {void}
      */
 
   }, {
     key: "scrollTo",
-    value: function scrollTo(targetOption, offsetOption, duration, easing, disableLerp, callback) {
-      // TODO - In next breaking update, use an object as 2nd parameter for options (offset, duration, easing, disableLerp, callback)
-      var target;
-      var offset = offsetOption ? parseInt(offsetOption) : 0;
+    value: function scrollTo(target) {
+      var options = arguments.length > 1 && arguments[1] !== undefined ? arguments[1] : {};
+      // Parse options
+      var offset = parseInt(options.offset) || 0; // An offset to apply on top of given `target` or `sourceElem`'s target
 
-      if (typeof targetOption === 'string') {
+      var callback = options.callback ? options.callback : false; // function called when scrollTo completes (note that it won't wait for lerp to stabilize)
+
+      if (typeof target === 'string') {
         // Selector or boundaries
-        if (targetOption === 'top') {
+        if (target === 'top') {
           target = this.html;
-        } else if (targetOption === 'bottom') {
+        } else if (target === 'bottom') {
           target = this.html.offsetHeight - window.innerHeight;
         } else {
-          target = document.querySelector(targetOption); // If the query fails, abort
+          target = document.querySelector(target); // If the query fails, abort
 
           if (!target) {
             return;
           }
         }
-      } else if (typeof targetOption === 'number') {
+      } else if (typeof target === 'number') {
         // Absolute coordinate
-        target = parseInt(targetOption);
-      } else if (targetOption && targetOption.tagName) {
-        // DOM Element
-        target = targetOption;
-      } else {
-        console.warn('`targetOption` parameter is not valid');
+        target = parseInt(target);
+      } else if (target && target.tagName) ; else {
+        console.warn('`target` parameter is not valid');
         return;
       } // We have a target that is not a coordinate yet, get it
 
 
       if (typeof target !== 'number') {
-        offset = target.getBoundingClientRect().top + offset + this.instance.scroll.y;
+        offset = (_readOnlyError("offset"), target.getBoundingClientRect().top + offset + this.instance.scroll.y);
       } else {
-        offset = target + offset;
+        offset = (_readOnlyError("offset"), target + offset);
       }
 
       if (callback) {
-        offset = offset.toFixed();
+        offset = (_readOnlyError("offset"), offset.toFixed());
 
         var onScroll = function onScroll() {
           if (window.pageYOffset.toFixed() === offset) {
@@ -2604,52 +2609,52 @@ var _default$2 = /*#__PURE__*/function (_Core) {
      * Scroll to a desired target.
      *
      * @param  Available options :
-     *          targetOption {node, string, "top", "bottom", int} - The DOM element we want to scroll to
-     *          offsetOption {int} - An offset to apply on top of given `target` or `sourceElem`'s target
-     *          duration {int} - Duration of the scroll animation in milliseconds
-     *          easing {array} - An array of 4 floats between 0 and 1 defining the bezier curve for the animation's easing. See http://greweb.me/bezier-easing-editor/example/
+     *          target {node, string, "top", "bottom", int} - The DOM element we want to scroll to
+     *          options {object} - Options object for additionnal settings.
      * @return {void}
      */
 
   }, {
     key: "scrollTo",
-    value: function scrollTo(targetOption, offsetOption) {
+    value: function scrollTo(target) {
       var _this9 = this;
 
-      var duration = arguments.length > 2 && arguments[2] !== undefined ? arguments[2] : 1000;
-      var easing = arguments.length > 3 && arguments[3] !== undefined ? arguments[3] : [0.25, 0.00, 0.35, 1.00];
-      var disableLerp = arguments.length > 4 && arguments[4] !== undefined ? arguments[4] : false;
-      var callback = arguments.length > 5 ? arguments[5] : undefined;
-      // TODO - In next breaking update, use an object as 2nd parameter for options (offset, duration, easing, disableLerp, callback)
-      var target;
-      var offset = offsetOption ? parseInt(offsetOption) : 0;
+      var options = arguments.length > 1 && arguments[1] !== undefined ? arguments[1] : {};
+      // Parse options
+      var offset = parseInt(options.offset) || 0; // An offset to apply on top of given `target` or `sourceElem`'s target
+
+      var duration = options.duration || 1000; // Duration of the scroll animation in milliseconds
+
+      var easing = options.easing || [0.25, 0.00, 0.35, 1.00]; // An array of 4 floats between 0 and 1 defining the bezier curve for the animation's easing. See http://greweb.me/bezier-easing-editor/example/
+
+      var disableLerp = options.disableLerp ? true : false; // Lerp effect won't be applied if set to true
+
+      var callback = options.callback ? options.callback : false; // function called when scrollTo completes (note that it won't wait for lerp to stabilize)
+
       easing = src$1.apply(void 0, _toConsumableArray(easing));
 
-      if (typeof targetOption === 'string') {
+      if (typeof target === 'string') {
         // Selector or boundaries
-        if (targetOption === 'top') {
+        if (target === 'top') {
           target = 0;
-        } else if (targetOption === 'bottom') {
+        } else if (target === 'bottom') {
           target = this.instance.limit.y;
-        } else if (targetOption === 'left') {
+        } else if (target === 'left') {
           target = 0;
-        } else if (targetOption === 'right') {
+        } else if (target === 'right') {
           target = this.instance.limit.x;
         } else {
-          target = document.querySelector(targetOption); // If the query fails, abort
+          target = document.querySelector(target); // If the query fails, abort
 
           if (!target) {
             return;
           }
         }
-      } else if (typeof targetOption === 'number') {
+      } else if (typeof target === 'number') {
         // Absolute coordinate
-        target = parseInt(targetOption);
-      } else if (targetOption && targetOption.tagName) {
-        // DOM Element
-        target = targetOption;
-      } else {
-        console.warn('`targetOption` parameter is not valid');
+        target = parseInt(target);
+      } else if (target && target.tagName) ; else {
+        console.warn('`target` parameter is not valid');
         return;
       } // We have a target that is not a coordinate yet, get it
 
@@ -2848,9 +2853,8 @@ var _default$3 = /*#__PURE__*/function () {
     }
   }, {
     key: "scrollTo",
-    value: function scrollTo(target, offset, duration, easing, disableLerp, callback) {
-      // TODO - In next breaking update, use an object as 2nd parameter for options (offset, duration, easing, disableLerp, callback)
-      this.scroll.scrollTo(target, offset, duration, easing, disableLerp, callback);
+    value: function scrollTo(target, options) {
+      this.scroll.scrollTo(target, options);
     }
   }, {
     key: "setScroll",

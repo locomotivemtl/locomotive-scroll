@@ -701,39 +701,42 @@ export default class extends Core {
      * Scroll to a desired target.
      *
      * @param  Available options :
-     *          targetOption {node, string, "top", "bottom", int} - The DOM element we want to scroll to
-     *          offsetOption {int} - An offset to apply on top of given `target` or `sourceElem`'s target
-     *          duration {int} - Duration of the scroll animation in milliseconds
-     *          easing {array} - An array of 4 floats between 0 and 1 defining the bezier curve for the animation's easing. See http://greweb.me/bezier-easing-editor/example/
+     *          target {node, string, "top", "bottom", int} - The DOM element we want to scroll to
+     *          options {object} - Options object for additionnal settings.
      * @return {void}
      */
-    scrollTo(targetOption, offsetOption, duration = 1000, easing = [0.25, 0.00, 0.35, 1.00], disableLerp = false, callback) { // TODO - In next breaking update, use an object as 2nd parameter for options (offset, duration, easing, disableLerp, callback)
-        let target;
-        let offset = offsetOption ? parseInt(offsetOption) : 0;
+    scrollTo(target, options = {}) {
+        // Parse options
+        let offset = parseInt(options.offset) || 0; // An offset to apply on top of given `target` or `sourceElem`'s target
+        const duration = options.duration || 1000; // Duration of the scroll animation in milliseconds
+        let easing = options.easing || [0.25, 0.00, 0.35, 1.00]; // An array of 4 floats between 0 and 1 defining the bezier curve for the animation's easing. See http://greweb.me/bezier-easing-editor/example/
+        const disableLerp = options.disableLerp ? true : false; // Lerp effect won't be applied if set to true
+        const callback = options.callback ? options.callback : false; // function called when scrollTo completes (note that it won't wait for lerp to stabilize)
+
         easing = BezierEasing(...easing)
 
-        if(typeof targetOption === 'string') { // Selector or boundaries
-            if(targetOption === 'top') {
+        if(typeof target === 'string') { // Selector or boundaries
+            if(target === 'top') {
                 target = 0;
-            } else if(targetOption === 'bottom') {
+            } else if(target === 'bottom') {
                 target = this.instance.limit.y;
-            } else if(targetOption === 'left') {
+            } else if(target === 'left') {
                 target = 0;
-            } else if(targetOption === 'right') {
+            } else if(target === 'right') {
                 target = this.instance.limit.x;
             } else {
-                target = document.querySelector(targetOption);
+                target = document.querySelector(target);
                 // If the query fails, abort
                 if(!target)  {
                     return;
                 }
             }
-        } else if(typeof targetOption === 'number') { // Absolute coordinate
-            target = parseInt(targetOption)
-        } else if(targetOption && targetOption.tagName) { // DOM Element
-            target = targetOption
+        } else if(typeof target === 'number') { // Absolute coordinate
+            target = parseInt(target)
+        } else if(target && target.tagName) { // DOM Element
+            // We good 👍
         } else {
-            console.warn('`targetOption` parameter is not valid')
+            console.warn('`target` parameter is not valid')
             return;
         }
 
