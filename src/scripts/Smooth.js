@@ -20,8 +20,8 @@ const keyCodes = {
 
 export default class extends Core {
     constructor(options = {}) {
+        history.scrollRestoration = 'manual';
         window.scrollTo(0,0);
-        history.scrollRestoration = 'manual'
 
         super(options);
 
@@ -536,6 +536,7 @@ export default class extends Core {
                     left,
                     right,
                     offset,
+                    progress: {x: 0, y: 0},
                     repeat,
                     inView: (el.classList.contains(cl)) ? true : false,
                     call,

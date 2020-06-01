@@ -155,10 +155,20 @@ export default class {
 
             if (el && el.inView) {
                 if(this.direction === 'horizontal') {
+                    let width = el.right - el.left;
+                    el.progress.x = (this.instance.scroll.x - (el.left - this.windowWidth)) / (width + this.windowWidth);
+
+                    if(el.el.classList.contains('helico')) {
+                        console.log(el.progress);
+                    }
+                    
                     if ((scrollRight < el.left) || (scrollLeft > el.right)) {
                         this.setOutOfView(el, i);
                     }
                 } else {
+                    let height = el.bottom - el.top;
+                    el.progress.y = (this.instance.scroll.y - (el.top - this.windowHeight)) / (height + this.windowHeight);
+
                     if ((scrollBottom < el.top) || (scrollTop > el.bottom)) {
                         this.setOutOfView(el, i);
                     }
@@ -186,11 +196,11 @@ export default class {
             }
         }
 
-        if (!current.repeat && !current.speed && !current.sticky) {
-            if (!current.call || current.call && this.hasCallEventSet) {
-                this.els[i] = null
-            }
-        }
+        // if (!current.repeat && !current.speed && !current.sticky) {
+        //     if (!current.call || current.call && this.hasCallEventSet) {
+        //        this.els[i] = null
+        //     }
+        // }
     }
 
     setOutOfView(current, i) {
