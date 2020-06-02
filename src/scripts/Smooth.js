@@ -429,8 +429,9 @@ export default class extends Core {
         this.sections.forEach((section, y) => {
             const els = this.sections[y].el.querySelectorAll(`[data-${this.name}]`);
 
-            els.forEach((el, id) => {
+            els.forEach((el, index) => {
                 let cl = el.dataset[this.name + 'Class'] || this.class;
+                let id = (typeof el.dataset[this.name + 'Id'] === 'string') ? el.dataset[this.name + 'Id'] : index;
                 let top;
                 let left;
                 let repeat = el.dataset[this.name + 'Repeat'];

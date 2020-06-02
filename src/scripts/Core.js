@@ -17,6 +17,7 @@ export default class {
             y: this.windowHeight / 2
         }
         this.els = [];
+        this.currentElements = [];
         this.listeners = {};
 
         this.hasScrollTicking = false;
@@ -34,7 +35,8 @@ export default class {
             limit: {
                 x: this.html.offsetHeight,
                 y: this.html.offsetHeight
-            }
+            },
+            currentElements: this.currentElements
         }
 
         if(this.isMobile) {
@@ -158,10 +160,6 @@ export default class {
                     let width = el.right - el.left;
                     el.progress.x = (this.instance.scroll.x - (el.left - this.windowWidth)) / (width + this.windowWidth);
 
-                    if(el.el.classList.contains('helico')) {
-                        console.log(el.progress);
-                    }
-                    
                     if ((scrollRight < el.left) || (scrollLeft > el.right)) {
                         this.setOutOfView(el, i);
                     }
@@ -176,7 +174,7 @@ export default class {
             }
         });
 
-        this.els = this.els.filter(function(current, i) {
+        this.els = this.els.filter((current, i) => {
             return current !== null;
         });
 
@@ -186,6 +184,8 @@ export default class {
     setInView(current, i) {
         this.els[i].inView = true;
         current.el.classList.add(current.class);
+
+        this.currentElements.push(current);
 
         if (current.call && this.hasCallEventSet) {
 
@@ -204,8 +204,14 @@ export default class {
     }
 
     setOutOfView(current, i) {
-        if (current.repeat || current.speed !== undefined) {
+        // if (current.repeat || current.speed !== undefined) {
             this.els[i].inView = false;
+        // }
+
+        for (let i = 0; i < this.currentElements.length; i++) {
+            if(this.currentElements[i].id === current.id) {
+                this.currentElements.splice(i,1);
+            }
         }
 
         if (current.call && this.hasCallEventSet) {
@@ -215,6 +221,7 @@ export default class {
         if (current.repeat) {
             current.el.classList.remove(current.class);
         }
+
     }
 
     dispatchCall(current, way) {

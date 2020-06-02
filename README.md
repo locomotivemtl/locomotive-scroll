@@ -153,6 +153,7 @@ scroll.on('call', func => {
 | Attribute               | Values                   | Description                                                                              |
 | ----------------------- | ------------------------ | ---------------------------------------------------------------------------------------- |
 | `data-scroll`           |                          | Detect if in-view.                                                                       |
+| `data-scroll-id`        | `string`                 | (Optionnal) Usefull if you want to scope your element and get the progress of your element in the viewport for example. |
 | `data-scroll-container` |                          | Defines the scroll container. Required for [basic styling](https://github.com/locomotivemtl/locomotive-scroll/blob/master/dist/locomotive-scroll.css).                                                                                     |
 | `data-scroll-section`   |                          | Defines a scrollable section. Splitting your page into sections may improve performance. |
 | `data-scroll-class`     | `string`                 | Element in-view class.                                                                   |
@@ -161,7 +162,7 @@ scroll.on('call', func => {
 | `data-scroll-call`      | `string`                 | Element in-view trigger call event.                                                      |
 | `data-scroll-speed`     | `number`                 | Element parallax speed. A negative value will reverse the direction.                     |
 | `data-scroll-target`    | `string`                 | Target element's in-view position.                                                       |
-| `data-scroll-position`  | `top`, `bottom`          | Window position of in-view trigger.                                                      |
+| `data-scroll-position`  | `top`, `bottom`, `left`, `right` | Window position of in-view trigger.                                                      |
 | `data-scroll-direction` | `vertical`, `horizontal` | Element's parallax direction.                                                            |
 | `data-scroll-delay`     | `number`                 | Element's parallax lerp delay.                                                           |
 | `data-scroll-sticky`    |                          | Sticky element. Starts and stops at `data-scroll-target` position.                       |
@@ -182,7 +183,7 @@ scroll.on('call', func => {
 
 | Event    | Arguments | Description                                                           |
 | -------- | --------- | --------------------------------------------------------------------- |
-| `scroll` | `obj`     | Returns scroll instance (position, limit, speed, direction).          |
+| `scroll` | `obj`     | Returns scroll instance (position, limit, speed, direction and current in-view elements).          |
 | `call`   | `func`    | Trigger if in-view. Returns your `string` or `array` if contains `,`. |
 
 ## Dependencies

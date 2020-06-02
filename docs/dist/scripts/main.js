@@ -230,6 +230,7 @@
         y: this.windowHeight / 2
       };
       this.els = [];
+      this.currentElements = [];
       this.listeners = {};
       this.hasScrollTicking = false;
       this.hasCallEventSet = false;
@@ -244,7 +245,8 @@
         limit: {
           x: this.html.offsetHeight,
           y: this.html.offsetHeight
-        }
+        },
+        currentElements: this.currentElements
       };
 
       if (this.isMobile) {
@@ -377,10 +379,6 @@
               var width = el.right - el.left;
               el.progress.x = (_this3.instance.scroll.x - (el.left - _this3.windowWidth)) / (width + _this3.windowWidth);
 
-              if (el.el.classList.contains('helico')) {
-                console.log(el.progress);
-              }
-
               if (scrollRight < el.left || scrollLeft > el.right) {
                 _this3.setOutOfView(el, i);
               }
@@ -404,6 +402,7 @@
       value: function setInView(current, i) {
         this.els[i].inView = true;
         current.el.classList.add(current["class"]);
+        this.currentElements.push(current);
 
         if (current.call && this.hasCallEventSet) {
           this.dispatchCall(current, 'enter');
@@ -421,8 +420,13 @@
     }, {
       key: "setOutOfView",
       value: function setOutOfView(current, i) {
-        if (current.repeat || current.speed !== undefined) {
-          this.els[i].inView = false;
+        // if (current.repeat || current.speed !== undefined) {
+        this.els[i].inView = false; // }
+
+        for (var _i = 0; _i < this.currentElements.length; _i++) {
+          if (this.currentElements[_i].id === current.id) {
+            this.currentElements.splice(_i, 1);
+          }
         }
 
         if (current.call && this.hasCallEventSet) {
@@ -1045,7 +1049,7 @@
       key: "addSpeed",
       value: function addSpeed() {
         if (window.pageYOffset != this.instance.scroll.y) {
-          this.instance.speed = (window.pageYOffset - this.instance.scroll.y) / (Date.now() - this.timestamp);
+          this.instance.speed = (window.pageYOffset - this.instance.scroll.y) / Math.max(1, Date.now() - this.timestamp);
         } else {
           this.instance.speed = 0;
         }
@@ -1065,8 +1069,9 @@
 
         this.els = [];
         var els = this.el.querySelectorAll('[data-' + this.name + ']');
-        els.forEach(function (el, id) {
+        els.forEach(function (el, index) {
           var cl = el.dataset[_this3.name + 'Class'] || _this3["class"];
+          var id = typeof el.dataset[_this3.name + 'Id'] === 'string' ? el.dataset[_this3.name + 'Id'] : index;
 
           var top = el.getBoundingClientRect().top + _this3.instance.scroll.y;
 
@@ -2357,8 +2362,9 @@
         this.sections.forEach(function (section, y) {
           var els = _this6.sections[y].el.querySelectorAll("[data-".concat(_this6.name, "]"));
 
-          els.forEach(function (el, id) {
+          els.forEach(function (el, index) {
             var cl = el.dataset[_this6.name + 'Class'] || _this6["class"];
+            var id = typeof el.dataset[_this6.name + 'Id'] === 'string' ? el.dataset[_this6.name + 'Id'] : index;
             var top;
             var left;
             var repeat = el.dataset[_this6.name + 'Repeat'];

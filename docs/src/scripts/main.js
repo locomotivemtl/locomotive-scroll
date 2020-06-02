@@ -36,6 +36,7 @@ import LocomotiveScroll from '../../../src/locomotive-scroll';
         let dynamicColorElements = [];
 
         scroll.on('scroll', (instance) => {
+
             const progress = 360 * instance.scroll.y / instance.limit;
 
             scroll.el.style.backgroundColor = `hsl(${progress}, 11%, 81%)`;
