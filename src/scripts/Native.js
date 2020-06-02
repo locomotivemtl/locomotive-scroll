@@ -56,7 +56,7 @@ export default class extends Core {
 
     addSpeed() {
         if (window.pageYOffset != this.instance.scroll.y) {
-            this.instance.speed = (window.pageYOffset - this.instance.scroll.y) / (Date.now() - this.timestamp);
+            this.instance.speed = (window.pageYOffset - this.instance.scroll.y) / Math.max(1,(Date.now() - this.timestamp));
         } else {
             this.instance.speed = 0;
         }
@@ -73,8 +73,9 @@ export default class extends Core {
         this.els = [];
         const els = this.el.querySelectorAll('[data-'+this.name+']');
 
-        els.forEach((el, id) => {
+        els.forEach((el, index) => {
             let cl = el.dataset[this.name + 'Class'] || this.class;
+            let id = (typeof el.dataset[this.name + 'Id'] === 'string') ? el.dataset[this.name + 'Id'] : index;
             let top = el.getBoundingClientRect().top + this.instance.scroll.y;
             let bottom = top + el.offsetHeight;
             let offset = (typeof el.dataset[this.name + 'Offset'] === 'string') ? el.dataset[this.name + 'Offset'].split(',') : this.offset;
