@@ -186,6 +186,27 @@ scroll.on('call', func => {
 | `scroll` | `obj`     | Returns scroll instance (position, limit, speed, direction and current in-view elements).          |
 | `call`   | `func`    | Trigger if in-view. Returns your `string` or `array` if contains `,`. |
 
+## Progressive playing animations example (like gsap)
+All `data-scroll` elements have a progress value. 
+In the on scroll event you can get all current in-view elements. 
+#### HTML
+```html
+<h1 data-scroll data-scroll-id="hey">Hey</h1>
+```
+#### JS
+```js
+scroll.on('scroll', (args) => {
+    // Get all current elements : args.currentElements
+    if(args.currentElements.find(item => item.id === 'hey') !== undefined) {
+        let progress = args.currentElements.find(item => item.id === 'hey').progress
+        console.log(progress)
+        // ouput log example: 0.34
+        // gsap example : myGsapAnimation.progress(progress);
+    }
+}
+```
+
+
 ## Dependencies
 
 | Name             | Description                                                        |

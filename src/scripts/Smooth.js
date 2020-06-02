@@ -537,7 +537,7 @@ export default class extends Core {
                     left,
                     right,
                     offset,
-                    progress: {x: 0, y: 0},
+                    progress: 0,
                     repeat,
                     inView: (el.classList.contains(cl)) ? true : false,
                     call,

@@ -377,14 +377,14 @@
           if (el && el.inView) {
             if (_this3.direction === 'horizontal') {
               var width = el.right - el.left;
-              el.progress.x = (_this3.instance.scroll.x - (el.left - _this3.windowWidth)) / (width + _this3.windowWidth);
+              el.progress = (_this3.instance.scroll.x - (el.left - _this3.windowWidth)) / (width + _this3.windowWidth);
 
               if (scrollRight < el.left || scrollLeft > el.right) {
                 _this3.setOutOfView(el, i);
               }
             } else {
               var height = el.bottom - el.top;
-              el.progress.y = (_this3.instance.scroll.y - (el.top - _this3.windowHeight)) / (height + _this3.windowHeight);
+              el.progress = (_this3.instance.scroll.y - (el.top - _this3.windowHeight)) / (height + _this3.windowHeight);
 
               if (scrollBottom < el.top || scrollTop > el.bottom) {
                 _this3.setOutOfView(el, i);
@@ -1097,10 +1097,7 @@
             top: top + relativeOffset[0],
             bottom: bottom - relativeOffset[1],
             offset: offset,
-            progress: {
-              x: 0,
-              y: 0
-            },
+            progress: 0,
             repeat: repeat,
             inView: el.classList.contains(cl) ? true : false,
             call: call
@@ -2470,10 +2467,7 @@
               left: left,
               right: right,
               offset: offset,
-              progress: {
-                x: 0,
-                y: 0
-              },
+              progress: 0,
               repeat: repeat,
               inView: el.classList.contains(cl) ? true : false,
               call: call,

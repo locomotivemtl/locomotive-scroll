@@ -158,14 +158,14 @@ export default class {
             if (el && el.inView) {
                 if(this.direction === 'horizontal') {
                     let width = el.right - el.left;
-                    el.progress.x = (this.instance.scroll.x - (el.left - this.windowWidth)) / (width + this.windowWidth);
+                    el.progress = (this.instance.scroll.x - (el.left - this.windowWidth)) / (width + this.windowWidth);
 
                     if ((scrollRight < el.left) || (scrollLeft > el.right)) {
                         this.setOutOfView(el, i);
                     }
                 } else {
                     let height = el.bottom - el.top;
-                    el.progress.y = (this.instance.scroll.y - (el.top - this.windowHeight)) / (height + this.windowHeight);
+                    el.progress = (this.instance.scroll.y - (el.top - this.windowHeight)) / (height + this.windowHeight);
 
                     if ((scrollBottom < el.top) || (scrollTop > el.bottom)) {
                         this.setOutOfView(el, i);
