@@ -1,2 +1,3 @@
 export { default } from './scripts/Main';
-export { LocomotiveNativeScroll } from './scripts/NativeMain';
+export { Native } from './scripts/NativeMain';
+export { Smooth } from './scripts/Main';
