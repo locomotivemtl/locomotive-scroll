@@ -23,7 +23,8 @@ html.has-scroll-dragging {
 [data-scroll-direction="horizontal"] [data-scroll-section] {
   display: inline-block;
   vertical-align: top;
-  white-space: nowrap; }
+  white-space: nowrap;
+  height: 100%; }
 
 .c-scrollbar {
   position: absolute;

@@ -1,7 +1,7 @@
 import { defaults } from './options';
 import Scroll from './Native';
 
-export class LocomotiveNativeScroll {
+export class Native {
     constructor(options = {}) {
         this.options = options;
 

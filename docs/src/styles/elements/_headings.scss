@@ -42,6 +42,10 @@ h1, .o-h1 {
 
     @media (min-width: $from-small) and (max-width: $to-huge) {
         font-size: $font-size-h1;
+
+        &.-huge {
+            font-size: 36vh;
+        }
     }
 
     @media (min-width: $from-huge) {

@@ -1,8 +1,8 @@
 import { defaults } from './options';
-import Scroll from './Native';
-import Smooth from './Smooth';
+import NativeScroll from './Native';
+import SmoothScroll from './Smooth';
 
-export default class {
+export class Smooth {
     constructor(options = {}) {
         this.options = options;
 
@@ -13,9 +13,9 @@ export default class {
         this.tablet = defaults.tablet
         if(options.tablet) Object.assign(this.tablet, options.tablet)
 
-        if(!this.smooth && this.direction == 'horizontal') console.warn('🚨 `smooth` & `horizontal` direction are not yet compatible')
-        if(!this.tablet.smooth && this.tablet.direction == 'horizontal') console.warn('🚨 `smooth` & `horizontal` direction are not yet compatible (tablet)')
-        if(!this.smartphone.smooth && this.smartphone.direction == 'horizontal') console.warn('🚨 `smooth` & `horizontal` direction are not yet compatible (smartphone)')
+        if(!this.smooth && this.direction == 'horizontal') console.warn('🚨 `smooth:false` & `horizontal` direction are not yet compatible')
+        if(!this.tablet.smooth && this.tablet.direction == 'horizontal') console.warn('🚨 `smooth:false` & `horizontal` direction are not yet compatible (tablet)')
+        if(!this.smartphone.smooth && this.smartphone.direction == 'horizontal') console.warn('🚨 `smooth:false` & `horizontal` direction are not yet compatible (smartphone)')
 
         this.init();
     }
@@ -31,9 +31,9 @@ export default class {
             ||
             (this.smartphone.smooth && this.options.isMobile && !this.options.isTablet)
         ) {
-            this.scroll = new Smooth(this.options);
+            this.scroll = new SmoothScroll(this.options);
         } else {
-            this.scroll = new Scroll(this.options);
+            this.scroll = new NativeScroll(this.options);
         }
 
         this.scroll.init();
@@ -81,3 +81,5 @@ export default class {
         this.scroll.destroy();
     }
 }
+
+export default Smooth;

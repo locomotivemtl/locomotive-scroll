@@ -2812,11 +2812,11 @@ var _default$2 = /*#__PURE__*/function (_Core) {
   return _default;
 }(_default);
 
-var _default$3 = /*#__PURE__*/function () {
-  function _default() {
+var Smooth = /*#__PURE__*/function () {
+  function Smooth() {
     var options = arguments.length > 0 && arguments[0] !== undefined ? arguments[0] : {};
 
-    _classCallCheck(this, _default);
+    _classCallCheck(this, Smooth);
 
     this.options = options; // Override default options with given ones
 
@@ -2825,13 +2825,13 @@ var _default$3 = /*#__PURE__*/function () {
     if (options.smartphone) Object.assign(this.smartphone, options.smartphone);
     this.tablet = defaults.tablet;
     if (options.tablet) Object.assign(this.tablet, options.tablet);
-    if (!this.smooth && this.direction == 'horizontal') console.warn('🚨 `smooth` & `horizontal` direction are not yet compatible');
-    if (!this.tablet.smooth && this.tablet.direction == 'horizontal') console.warn('🚨 `smooth` & `horizontal` direction are not yet compatible (tablet)');
-    if (!this.smartphone.smooth && this.smartphone.direction == 'horizontal') console.warn('🚨 `smooth` & `horizontal` direction are not yet compatible (smartphone)');
+    if (!this.smooth && this.direction == 'horizontal') console.warn('🚨 `smooth:false` & `horizontal` direction are not yet compatible');
+    if (!this.tablet.smooth && this.tablet.direction == 'horizontal') console.warn('🚨 `smooth:false` & `horizontal` direction are not yet compatible (tablet)');
+    if (!this.smartphone.smooth && this.smartphone.direction == 'horizontal') console.warn('🚨 `smooth:false` & `horizontal` direction are not yet compatible (smartphone)');
     this.init();
   }
 
-  _createClass(_default, [{
+  _createClass(Smooth, [{
     key: "init",
     value: function init() {
       this.options.isMobile = /Android|iPhone|iPad|iPod|BlackBerry|IEMobile|Opera Mini/i.test(navigator.userAgent) || navigator.platform === 'MacIntel' && navigator.maxTouchPoints > 1 || window.innerWidth < this.tablet.breakpoint;
@@ -2895,14 +2895,14 @@ var _default$3 = /*#__PURE__*/function () {
     }
   }]);
 
-  return _default;
+  return Smooth;
 }();
 
-var LocomotiveNativeScroll = /*#__PURE__*/function () {
-  function LocomotiveNativeScroll() {
+var Native = /*#__PURE__*/function () {
+  function Native() {
     var options = arguments.length > 0 && arguments[0] !== undefined ? arguments[0] : {};
 
-    _classCallCheck(this, LocomotiveNativeScroll);
+    _classCallCheck(this, Native);
 
     this.options = options; // Override default options with given ones
 
@@ -2914,7 +2914,7 @@ var LocomotiveNativeScroll = /*#__PURE__*/function () {
     this.init();
   }
 
-  _createClass(LocomotiveNativeScroll, [{
+  _createClass(Native, [{
     key: "init",
     value: function init() {
       this.scroll = new _default$1(this.options);
@@ -2970,8 +2970,8 @@ var LocomotiveNativeScroll = /*#__PURE__*/function () {
     }
   }]);
 
-  return LocomotiveNativeScroll;
+  return Native;
 }();
 
-export default _default$3;
-export { LocomotiveNativeScroll };
+export default Smooth;
+export { Native, Smooth };

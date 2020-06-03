@@ -3,6 +3,17 @@
     overflow: hidden;
     background-color: hsl(0,11%, 81%);
 
+    &.-full {
+        height: 100%;
+        margin: 0 rem(100px);
+        display: flex;
+        align-content: center;
+
+        
+        @media (max-width: $to-small) {
+            margin: rem($unit/2) 0;
+        }
+    }
 }
 
 .o-image {
@@ -22,5 +33,10 @@
             transform: scale(1);
             transition-delay: 0.6s;
         }
+    }
+
+    .o-image_wrapper.-full & {
+        align-self: center;
+
     }
 }
