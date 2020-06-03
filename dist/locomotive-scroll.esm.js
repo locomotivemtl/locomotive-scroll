@@ -173,7 +173,6 @@ function _nonIterableSpread() {
 
 var defaults = {
   el: document,
-  elMobile: document,
   name: 'scroll',
   offset: [0, 0],
   repeat: false,

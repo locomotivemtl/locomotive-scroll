@@ -1,6 +1,5 @@
 export const defaults = {
     el: document,
-    elMobile: document,
     name: 'scroll',
     offset: [0,0],
     repeat: false,

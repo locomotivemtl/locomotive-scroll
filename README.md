@@ -129,7 +129,6 @@ scroll.on('call', func => {
 | `offset`                | `array(2)`| `[0,0]`                | Global in-view trigger offset : `[bottom,top]`<br>Use a string with `%` to use a percentage of the viewport height.<br>Use a numeric value for absolute pixels unit.<br>E.g. `["30%",0]`, `[100,0]`, `["30%", 100]`                                                                                |
 | `repeat`                | `boolean` | `false`                | Repeat in-view detection.                                                                                                                                                                                                                                                                          |
 | `smooth`                | `boolean` | `false`                | Smooth scrolling.                                                                                                                                                                                                                                                                                  |
-| `smoothMobile`          | `boolean` | `false`                | Smooth scrolling on iOS and Android devices.                                                                                                                                                                                                                                                       |
 | `direction`             | `string`  | `vertical`             | Scroll direction: `vertical` or `horizontal`                                                                                                                                                                                                                                                       |
 | `lerp`                  | `number`  | `0.1`                  | Linear interpolation (lerp) intensity. Float between `0` and `1`.<br>This defines the "smoothness" intensity. The closer to `0`, the smoother.                                                                                                                                                     |
 | `getDirection`          | `boolean` | `false`                | Add direction to scroll event.                                                                                                                                                                                                                                                                     |
@@ -213,7 +212,7 @@ scroll.on('scroll', (args) => {
 | ---------------- | ------------------------------------------------------------------ |
 | [Virtual Scroll] | Custom scroll event with inertia/momentum.                         |
 | [modularScroll]  | Elements in viewport detection. Forked from it, not a dependency.  |
-| [bezier-easing]  | Improve `scrollTo` system and add `duration` & `easing` parameters |
+| [bezier-easing]  | Allows to define an easing to `scrollTo` movement                  |
 
 [instance events]: #instance-events
 [Virtual Scroll]: https://github.com/ayamflow/virtual-scroll
