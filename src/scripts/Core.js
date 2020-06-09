@@ -208,11 +208,10 @@ export default class {
             this.els[i].inView = false;
         // }
 
-        for (let i = 0; i < this.currentElements.length; i++) {
-            if(this.currentElements[i].id === current.id) {
-                this.currentElements.splice(i,1);
-            }
-        }
+        Object.keys(this.currentElements).forEach(el => {
+            el === i &&
+                delete this.currentElements[el];
+        });
 
         if (current.call && this.hasCallEventSet) {
             this.dispatchCall(current, 'exit');

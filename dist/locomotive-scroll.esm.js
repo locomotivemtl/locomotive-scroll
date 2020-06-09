@@ -462,14 +462,14 @@ var _default = /*#__PURE__*/function () {
   }, {
     key: "setOutOfView",
     value: function setOutOfView(current, i) {
+      var _this4 = this;
+
       // if (current.repeat || current.speed !== undefined) {
       this.els[i].inView = false; // }
 
-      for (var _i = 0; _i < this.currentElements.length; _i++) {
-        if (this.currentElements[_i].id === current.id) {
-          this.currentElements.splice(_i, 1);
-        }
-      }
+      Object.keys(this.currentElements).forEach(function (el) {
+        el === i && delete _this4.currentElements[el];
+      });
 
       if (current.call && this.hasCallEventSet) {
         this.dispatchCall(current, 'exit');
@@ -532,7 +532,7 @@ var _default = /*#__PURE__*/function () {
   }, {
     key: "checkEvent",
     value: function checkEvent(event) {
-      var _this4 = this;
+      var _this5 = this;
 
       var name = event.type.replace(this.namespace, '');
       var list = this.listeners[name];
@@ -540,10 +540,10 @@ var _default = /*#__PURE__*/function () {
       list.forEach(function (func) {
         switch (name) {
           case 'scroll':
-            return func(_this4.instance);
+            return func(_this5.instance);
 
           case 'call':
-            return func(_this4.callValue, _this4.callWay, _this4.callObj);
+            return func(_this5.callValue, _this5.callWay, _this5.callObj);
 
           default:
             return func();
@@ -567,15 +567,15 @@ var _default = /*#__PURE__*/function () {
   }, {
     key: "destroy",
     value: function destroy() {
-      var _this5 = this;
+      var _this6 = this;
 
       window.removeEventListener('resize', this.checkResize, false);
       Object.keys(this.listeners).forEach(function (event) {
-        _this5.el.removeEventListener(_this5.namespace + event, _this5.checkEvent, false);
+        _this6.el.removeEventListener(_this6.namespace + event, _this6.checkEvent, false);
       });
       this.listeners = {};
       this.scrollToEls.forEach(function (el) {
-        el.removeEventListener('click', _this5.setScrollTo, false);
+        el.removeEventListener('click', _this6.setScrollTo, false);
       });
     }
   }]);
