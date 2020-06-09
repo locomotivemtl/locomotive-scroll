@@ -1,7 +1,7 @@
 export const defaults = {
     el: document,
     name: 'scroll',
-    offset: [0,0],
+    offset: [0, 0],
     repeat: false,
     smooth: false,
     direction: 'vertical',

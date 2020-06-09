@@ -33,7 +33,7 @@ export default class extends Core {
         this.instance.scroll.y = window.pageYOffset;
 
         if (this.els.length) {
-            if(!this.hasScrollTicking) {
+            if (!this.hasScrollTicking) {
                 requestAnimationFrame(() => {
                     this.detectElements();
                 });
@@ -56,7 +56,9 @@ export default class extends Core {
 
     addSpeed() {
         if (window.pageYOffset != this.instance.scroll.y) {
-            this.instance.speed = (window.pageYOffset - this.instance.scroll.y) / Math.max(1,(Date.now() - this.timestamp));
+            this.instance.speed =
+                (window.pageYOffset - this.instance.scroll.y) /
+                Math.max(1, Date.now() - this.timestamp);
         } else {
             this.instance.speed = 0;
         }
@@ -71,18 +73,24 @@ export default class extends Core {
 
     addElements() {
         this.els = [];
-        const els = this.el.querySelectorAll('[data-'+this.name+']');
+        const els = this.el.querySelectorAll('[data-' + this.name + ']');
 
         els.forEach((el, index) => {
             let cl = el.dataset[this.name + 'Class'] || this.class;
-            let id = (typeof el.dataset[this.name + 'Id'] === 'string') ? el.dataset[this.name + 'Id'] : index;
+            let id =
+                typeof el.dataset[this.name + 'Id'] === 'string'
+                    ? el.dataset[this.name + 'Id']
+                    : index;
             let top = el.getBoundingClientRect().top + this.instance.scroll.y;
             let bottom = top + el.offsetHeight;
-            let offset = (typeof el.dataset[this.name + 'Offset'] === 'string') ? el.dataset[this.name + 'Offset'].split(',') : this.offset;
+            let offset =
+                typeof el.dataset[this.name + 'Offset'] === 'string'
+                    ? el.dataset[this.name + 'Offset'].split(',')
+                    : this.offset;
             let repeat = el.dataset[this.name + 'Repeat'];
             let call = el.dataset[this.name + 'Call'];
 
-            if(repeat == 'false') {
+            if (repeat == 'false') {
                 repeat = false;
             } else if (repeat != undefined) {
                 repeat = true;
@@ -100,9 +108,9 @@ export default class extends Core {
                 offset: offset,
                 progress: 0,
                 repeat: repeat,
-                inView: (el.classList.contains(cl)) ? true : false,
+                inView: el.classList.contains(cl) ? true : false,
                 call: call
-            }
+            };
 
             this.els[id] = mappedEl;
         });
@@ -112,7 +120,7 @@ export default class extends Core {
         Object.entries(this.els).forEach(([i, el]) => {
             const top = el.el.getBoundingClientRect().top + this.instance.scroll.y;
             const bottom = top + el.el.offsetHeight;
-            const relativeOffset = this.getRelativeOffset(el.offset)
+            const relativeOffset = this.getRelativeOffset(el.offset);
 
             this.els[i].top = top + relativeOffset[0];
             this.els[i].bottom = bottom - relativeOffset[1];
@@ -122,13 +130,15 @@ export default class extends Core {
     }
 
     getRelativeOffset(offset) {
-        let relativeOffset = [0,0];
+        let relativeOffset = [0, 0];
 
-        if(offset) {
+        if (offset) {
             for (var i = 0; i < offset.length; i++) {
-                if(typeof offset[i] == 'string') {
-                    if(offset[i].includes('%')) {
-                        relativeOffset[i] = parseInt(offset[i].replace('%','') * this.windowHeight / 100);
+                if (typeof offset[i] == 'string') {
+                    if (offset[i].includes('%')) {
+                        relativeOffset[i] = parseInt(
+                            (offset[i].replace('%', '') * this.windowHeight) / 100
+                        );
                     } else {
                         relativeOffset[i] = parseInt(offset[i]);
                     }
@@ -154,24 +164,27 @@ export default class extends Core {
         const offset = parseInt(options.offset) || 0; // An offset to apply on top of given `target` or `sourceElem`'s target
         const callback = options.callback ? options.callback : false; // function called when scrollTo completes (note that it won't wait for lerp to stabilize)
 
-        if(typeof target === 'string') { // Selector or boundaries
-            if(target === 'top') {
+        if (typeof target === 'string') {
+            // Selector or boundaries
+            if (target === 'top') {
                 target = this.html;
-            } else if(target === 'bottom') {
+            } else if (target === 'bottom') {
                 target = this.html.offsetHeight - window.innerHeight;
             } else {
                 target = document.querySelector(target);
                 // If the query fails, abort
-                if(!target)  {
+                if (!target) {
                     return;
                 }
             }
-        } else if(typeof target === 'number') { // Absolute coordinate
-            target = parseInt(target)
-        } else if(target && target.tagName) { // DOM Element
+        } else if (typeof target === 'number') {
+            // Absolute coordinate
+            target = parseInt(target);
+        } else if (target && target.tagName) {
+            // DOM Element
             // We good 👍
         } else {
-            console.warn('`target` parameter is not valid')
+            console.warn('`target` parameter is not valid');
             return;
         }
 
@@ -179,18 +192,18 @@ export default class extends Core {
         if (typeof target !== 'number') {
             offset = target.getBoundingClientRect().top + offset + this.instance.scroll.y;
         } else {
-            offset = target + offset
+            offset = target + offset;
         }
 
-        if(callback) {
-            offset = offset.toFixed()
+        if (callback) {
+            offset = offset.toFixed();
             let onScroll = function () {
                 if (window.pageYOffset.toFixed() === offset) {
-                    window.removeEventListener('scroll', onScroll)
-                    callback()
+                    window.removeEventListener('scroll', onScroll);
+                    callback();
                 }
-            }
-            window.addEventListener('scroll', onScroll)
+            };
+            window.addEventListener('scroll', onScroll);
         }
 
         window.scrollTo({
@@ -209,5 +222,4 @@ export default class extends Core {
 
         window.removeEventListener('scroll', this.checkScroll, false);
     }
-
 }

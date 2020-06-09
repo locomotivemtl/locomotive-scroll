@@ -7,6 +7,11 @@
     "license": "MIT",
     "main": "./dist/locomotive-scroll.js",
     "module": "./dist/locomotive-scroll.esm.js",
+    "scripts": {
+		"start": "gulp",
+		"format": "prettier --write 'src/**/*.js'",
+		"build": "npm run format && gulp build"
+	},
     "devDependencies": {
         "@modularbp/gulp": "^1.0.5",
         "@modularbp/gulp-build": "^1.0.1",
@@ -20,7 +25,8 @@
         "gulp-header": "^2.0.9",
         "mbp": "^1.1.3",
         "merge-stream": "^2.0.0",
-        "normalize.css": "^8.0.1"
+        "normalize.css": "^8.0.1",
+        "prettier": "^2.0.5"
     },
     "dependencies": {
         "bezier-easing": "^2.1.0",

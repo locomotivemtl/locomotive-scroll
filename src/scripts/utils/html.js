@@ -8,7 +8,7 @@ export function getParents(elem) {
     let parents = [];
 
     // Push each parent element to the array
-    for ( ; elem && elem !== document; elem = elem.parentNode ) {
+    for (; elem && elem !== document; elem = elem.parentNode) {
         parents.push(elem);
     }
 
@@ -18,7 +18,6 @@ export function getParents(elem) {
 
 // https://gomakethings.com/how-to-get-the-closest-parent-element-with-a-matching-selector-using-vanilla-javascript/
 export function queryClosestParent(elem, selector) {
-
     // Element.matches() polyfill
     if (!Element.prototype.matches) {
         Element.prototype.matches =
@@ -27,7 +26,7 @@ export function queryClosestParent(elem, selector) {
             Element.prototype.msMatchesSelector ||
             Element.prototype.oMatchesSelector ||
             Element.prototype.webkitMatchesSelector ||
-            function(s) {
+            function (s) {
                 var matches = (this.document || this.ownerDocument).querySelectorAll(s),
                     i = matches.length;
                 while (--i >= 0 && matches.item(i) !== this) {}
@@ -36,8 +35,8 @@ export function queryClosestParent(elem, selector) {
     }
 
     // Get the closest matching element
-    for ( ; elem && elem !== document; elem = elem.parentNode ) {
-        if ( elem.matches( selector ) ) return elem;
+    for (; elem && elem !== document; elem = elem.parentNode) {
+        if (elem.matches(selector)) return elem;
     }
     return null;
-};
+}
