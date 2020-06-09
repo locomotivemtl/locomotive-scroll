@@ -142,7 +142,7 @@ export default class {
         const scrollLeft = this.instance.scroll.x;
         const scrollRight = scrollLeft + this.windowWidth;
 
-        this.els.forEach((el, i) => {
+        Object.entries(this.els).forEach(([i, el]) => {
             if (el && (!el.inView || hasCallEventSet)) {
                 if(this.direction === 'horizontal') {
                     if ((scrollRight >= el.left) && (scrollLeft < el.right)) {
@@ -174,9 +174,9 @@ export default class {
             }
         });
 
-        this.els = this.els.filter((current, i) => {
-            return current !== null;
-        });
+        // this.els = this.els.filter((current, i) => {
+        //     return current !== null;
+        // });
 
         this.hasScrollTicking = false;
     }
@@ -185,7 +185,7 @@ export default class {
         this.els[i].inView = true;
         current.el.classList.add(current.class);
 
-        this.currentElements.push(current);
+        this.currentElements[i] = current;
 
         if (current.call && this.hasCallEventSet) {
 
@@ -221,7 +221,6 @@ export default class {
         if (current.repeat) {
             current.el.classList.remove(current.class);
         }
-
     }
 
     dispatchCall(current, way) {
@@ -241,7 +240,6 @@ export default class {
     }
 
     setEvents(event, func) {
-
         if(!this.listeners[event]) {
             this.listeners[event] = [];
         }

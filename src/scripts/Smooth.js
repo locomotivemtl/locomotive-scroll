@@ -77,16 +77,14 @@ export default class extends Core {
         this.initScrollBar();
         this.addSections();
         this.addElements();
-        this.detectElements();
-        this.transformElements(true, true);
 
         this.checkScroll(true);
+        this.transformElements(true, true);
 
         super.init();
     }
 
     setScrollLimit() {
-
         this.instance.limit.y = this.el.offsetHeight - this.windowHeight;
 
         if(this.direction === 'horizontal') {
@@ -431,7 +429,7 @@ export default class extends Core {
 
             els.forEach((el, index) => {
                 let cl = el.dataset[this.name + 'Class'] || this.class;
-                let id = (typeof el.dataset[this.name + 'Id'] === 'string') ? el.dataset[this.name + 'Id'] : index;
+                let id = (typeof el.dataset[this.name + 'Id'] === 'string') ? el.dataset[this.name + 'Id'] : 'el' + y + index;
                 let top;
                 let left;
                 let repeat = el.dataset[this.name + 'Repeat'];
@@ -529,7 +527,6 @@ export default class extends Core {
 
                 const mappedEl = {
                     el,
-                    id: id,
                     class: cl,
                     top,
                     middle,
@@ -549,10 +546,10 @@ export default class extends Core {
                     sticky
                 }
 
-                this.els.push(mappedEl);
+                this.els[id] = mappedEl;
 
-                if(speed !== false || sticky) {
-                    this.parallaxElements.push(mappedEl);
+                if (speed !== false || sticky) {
+                    this.parallaxElements[id] = mappedEl;
                 }
             });
 
@@ -617,8 +614,7 @@ export default class extends Core {
             y: this.instance.scroll.y + this.windowMiddle.y
         };
 
-
-        this.parallaxElements.forEach((current, i) => {
+        Object.entries(this.parallaxElements).forEach(([i, current]) => {
             let transformDistance = false;
 
             if(isForced) {

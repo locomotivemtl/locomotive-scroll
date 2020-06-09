@@ -94,7 +94,6 @@ export default class extends Core {
 
             const mappedEl = {
                 el: el,
-                id: id,
                 class: cl,
                 top: top + relativeOffset[0],
                 bottom: bottom - relativeOffset[1],
@@ -105,12 +104,12 @@ export default class extends Core {
                 call: call
             }
 
-            this.els.push(mappedEl);
+            this.els[id] = mappedEl;
         });
     }
 
     updateElements() {
-        this.els.forEach((el, i) => {
+        Object.entries(this.els).forEach(([i, el]) => {
             const top = el.el.getBoundingClientRect().top + this.instance.scroll.y;
             const bottom = top + el.el.offsetHeight;
             const relativeOffset = this.getRelativeOffset(el.offset)

@@ -151,6 +151,10 @@ function _readOnlyError(name) {
   throw new Error("\"" + name + "\" is read-only");
 }
 
+function _slicedToArray(arr, i) {
+  return _arrayWithHoles(arr) || _iterableToArrayLimit(arr, i) || _nonIterableRest();
+}
+
 function _toConsumableArray(arr) {
   return _arrayWithoutHoles(arr) || _iterableToArray(arr) || _nonIterableSpread();
 }
@@ -163,12 +167,50 @@ function _arrayWithoutHoles(arr) {
   }
 }
 
+function _arrayWithHoles(arr) {
+  if (Array.isArray(arr)) return arr;
+}
+
 function _iterableToArray(iter) {
   if (Symbol.iterator in Object(iter) || Object.prototype.toString.call(iter) === "[object Arguments]") return Array.from(iter);
 }
 
+function _iterableToArrayLimit(arr, i) {
+  if (!(Symbol.iterator in Object(arr) || Object.prototype.toString.call(arr) === "[object Arguments]")) {
+    return;
+  }
+
+  var _arr = [];
+  var _n = true;
+  var _d = false;
+  var _e = undefined;
+
+  try {
+    for (var _i = arr[Symbol.iterator](), _s; !(_n = (_s = _i.next()).done); _n = true) {
+      _arr.push(_s.value);
+
+      if (i && _arr.length === i) break;
+    }
+  } catch (err) {
+    _d = true;
+    _e = err;
+  } finally {
+    try {
+      if (!_n && _i["return"] != null) _i["return"]();
+    } finally {
+      if (_d) throw _e;
+    }
+  }
+
+  return _arr;
+}
+
 function _nonIterableSpread() {
   throw new TypeError("Invalid attempt to spread non-iterable instance");
+}
+
+function _nonIterableRest() {
+  throw new TypeError("Invalid attempt to destructure non-iterable instance");
 }
 
 var defaults = {
@@ -357,7 +399,11 @@ var _default = /*#__PURE__*/function () {
       var scrollBottom = scrollTop + this.windowHeight;
       var scrollLeft = this.instance.scroll.x;
       var scrollRight = scrollLeft + this.windowWidth;
-      this.els.forEach(function (el, i) {
+      Object.entries(this.els).forEach(function (_ref) {
+        var _ref2 = _slicedToArray(_ref, 2),
+            i = _ref2[0],
+            el = _ref2[1];
+
         if (el && (!el.inView || hasCallEventSet)) {
           if (_this3.direction === 'horizontal') {
             if (scrollRight >= el.left && scrollLeft < el.right) {
@@ -387,10 +433,10 @@ var _default = /*#__PURE__*/function () {
             }
           }
         }
-      });
-      this.els = this.els.filter(function (current, i) {
-        return current !== null;
-      });
+      }); // this.els = this.els.filter((current, i) => {
+      //     return current !== null;
+      // });
+
       this.hasScrollTicking = false;
     }
   }, {
@@ -398,7 +444,7 @@ var _default = /*#__PURE__*/function () {
     value: function setInView(current, i) {
       this.els[i].inView = true;
       current.el.classList.add(current["class"]);
-      this.currentElements.push(current);
+      this.currentElements[i] = current;
 
       if (current.call && this.hasCallEventSet) {
         this.dispatchCall(current, 'enter');
@@ -1088,7 +1134,6 @@ var _default$1 = /*#__PURE__*/function (_Core) {
 
         var mappedEl = {
           el: el,
-          id: id,
           "class": cl,
           top: top + relativeOffset[0],
           bottom: bottom - relativeOffset[1],
@@ -1098,8 +1143,7 @@ var _default$1 = /*#__PURE__*/function (_Core) {
           inView: el.classList.contains(cl) ? true : false,
           call: call
         };
-
-        _this3.els.push(mappedEl);
+        _this3.els[id] = mappedEl;
       });
     }
   }, {
@@ -1107,7 +1151,11 @@ var _default$1 = /*#__PURE__*/function (_Core) {
     value: function updateElements() {
       var _this4 = this;
 
-      this.els.forEach(function (el, i) {
+      Object.entries(this.els).forEach(function (_ref) {
+        var _ref2 = _slicedToArray(_ref, 2),
+            i = _ref2[0],
+            el = _ref2[1];
+
         var top = el.el.getBoundingClientRect().top + _this4.instance.scroll.y;
 
         var bottom = top + el.el.offsetHeight;
@@ -1973,9 +2021,8 @@ var _default$2 = /*#__PURE__*/function (_Core) {
       this.initScrollBar();
       this.addSections();
       this.addElements();
-      this.detectElements();
-      this.transformElements(true, true);
       this.checkScroll(true);
+      this.transformElements(true, true);
 
       _get(_getPrototypeOf(_default.prototype), "init", this).call(this);
     }
@@ -2357,7 +2404,7 @@ var _default$2 = /*#__PURE__*/function (_Core) {
 
         els.forEach(function (el, index) {
           var cl = el.dataset[_this6.name + 'Class'] || _this6["class"];
-          var id = typeof el.dataset[_this6.name + 'Id'] === 'string' ? el.dataset[_this6.name + 'Id'] : index;
+          var id = typeof el.dataset[_this6.name + 'Id'] === 'string' ? el.dataset[_this6.name + 'Id'] : 'el' + y + index;
           var top;
           var left;
           var repeat = el.dataset[_this6.name + 'Repeat'];
@@ -2455,7 +2502,6 @@ var _default$2 = /*#__PURE__*/function (_Core) {
 
           var mappedEl = {
             el: el,
-            id: id,
             "class": cl,
             top: top,
             middle: middle,
@@ -2474,11 +2520,10 @@ var _default$2 = /*#__PURE__*/function (_Core) {
             direction: direction,
             sticky: sticky
           };
-
-          _this6.els.push(mappedEl);
+          _this6.els[id] = mappedEl;
 
           if (speed !== false || sticky) {
-            _this6.parallaxElements.push(mappedEl);
+            _this6.parallaxElements[id] = mappedEl;
           }
         });
       });
@@ -2545,7 +2590,11 @@ var _default$2 = /*#__PURE__*/function (_Core) {
         x: this.instance.scroll.x + this.windowMiddle.x,
         y: this.instance.scroll.y + this.windowMiddle.y
       };
-      this.parallaxElements.forEach(function (current, i) {
+      Object.entries(this.parallaxElements).forEach(function (_ref) {
+        var _ref2 = _slicedToArray(_ref, 2),
+            i = _ref2[0],
+            current = _ref2[1];
+
         var transformDistance = false;
 
         if (isForced) {
