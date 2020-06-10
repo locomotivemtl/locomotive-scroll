@@ -1140,6 +1140,7 @@
 
           var mappedEl = {
             el: el,
+            id: id,
             "class": cl,
             top: top + relativeOffset[0],
             bottom: bottom - relativeOffset[1],
@@ -2166,31 +2167,35 @@
             this.stopScrolling();
           }
 
-          for (var i = this.sections.length - 1; i >= 0; i--) {
-            if (this.sections[i].persistent || this.instance.scroll[this.directionAxis] > this.sections[i].offset[this.directionAxis] && this.instance.scroll[this.directionAxis] < this.sections[i].limit[this.directionAxis]) {
-              if (this.direction === 'horizontal') {
-                this.transform(this.sections[i].el, -this.instance.scroll[this.directionAxis], 0);
+          Object.entries(this.sections).forEach(function (_ref) {
+            var _ref2 = _slicedToArray(_ref, 2),
+                i = _ref2[0],
+                section = _ref2[1];
+
+            if (section.persistent || _this4.instance.scroll[_this4.directionAxis] > section.offset[_this4.directionAxis] && _this4.instance.scroll[_this4.directionAxis] < section.limit[_this4.directionAxis]) {
+              if (_this4.direction === 'horizontal') {
+                _this4.transform(section.el, -_this4.instance.scroll[_this4.directionAxis], 0);
               } else {
-                this.transform(this.sections[i].el, 0, -this.instance.scroll[this.directionAxis]);
+                _this4.transform(section.el, 0, -_this4.instance.scroll[_this4.directionAxis]);
               }
 
-              if (!this.sections[i].inView) {
-                this.sections[i].inView = true;
-                this.sections[i].el.style.opacity = 1;
-                this.sections[i].el.style.pointerEvents = 'all';
-                this.sections[i].el.setAttribute("data-".concat(this.name, "-section-inview"), '');
+              if (!section.inView) {
+                section.inView = true;
+                section.el.style.opacity = 1;
+                section.el.style.pointerEvents = 'all';
+                section.el.setAttribute("data-".concat(_this4.name, "-section-inview"), '');
               }
             } else {
-              if (this.sections[i].inView) {
-                this.sections[i].inView = false;
-                this.sections[i].el.style.opacity = 0;
-                this.sections[i].el.style.pointerEvents = 'none';
-                this.sections[i].el.removeAttribute("data-".concat(this.name, "-section-inview"));
+              if (section.inView) {
+                section.inView = false;
+                section.el.style.opacity = 0;
+                section.el.style.pointerEvents = 'none';
+                section.el.removeAttribute("data-".concat(_this4.name, "-section-inview"));
               }
 
-              this.transform(this.sections[i].el, 0, 0);
+              _this4.transform(section.el, 0, 0);
             }
-          }
+          });
 
           if (this.getDirection) {
             this.addDirection();
@@ -2404,135 +2409,141 @@
         var _this6 = this;
 
         this.els = [];
-        this.parallaxElements = [];
-        this.sections.forEach(function (section, y) {
-          var els = _this6.sections[y].el.querySelectorAll("[data-".concat(_this6.name, "]"));
+        this.parallaxElements = []; // this.sections.forEach((section, y) => {
 
-          els.forEach(function (el, index) {
-            var cl = el.dataset[_this6.name + 'Class'] || _this6["class"];
-            var id = typeof el.dataset[_this6.name + 'Id'] === 'string' ? el.dataset[_this6.name + 'Id'] : 'el' + y + index;
-            var top;
-            var left;
-            var repeat = el.dataset[_this6.name + 'Repeat'];
-            var call = el.dataset[_this6.name + 'Call'];
-            var position = el.dataset[_this6.name + 'Position'];
-            var delay = el.dataset[_this6.name + 'Delay'];
-            var direction = el.dataset[_this6.name + 'Direction'];
-            var sticky = typeof el.dataset[_this6.name + 'Sticky'] === 'string';
-            var speed = el.dataset[_this6.name + 'Speed'] ? parseFloat(el.dataset[_this6.name + 'Speed']) / 10 : false;
-            var offset = typeof el.dataset[_this6.name + 'Offset'] === 'string' ? el.dataset[_this6.name + 'Offset'].split(',') : _this6.offset;
-            var target = el.dataset[_this6.name + 'Target'];
-            var targetEl;
+        var els = this.el.querySelectorAll("[data-".concat(this.name, "]"));
+        els.forEach(function (el, index) {
+          var section = el.parentNode.querySelector('[data-scroll-section]') !== null ? _this6.sections[el.parentNode.querySelector('[data-scroll-section]').getAttribute('data-scroll-section-id')] : null;
+          var cl = el.dataset[_this6.name + 'Class'] || _this6["class"];
+          var id = typeof el.dataset[_this6.name + 'Id'] === 'string' ? el.dataset[_this6.name + 'Id'] : 'el' + index;
+          var top;
+          var left;
+          var repeat = el.dataset[_this6.name + 'Repeat'];
+          var call = el.dataset[_this6.name + 'Call'];
+          var position = el.dataset[_this6.name + 'Position'];
+          var delay = el.dataset[_this6.name + 'Delay'];
+          var direction = el.dataset[_this6.name + 'Direction'];
+          var sticky = typeof el.dataset[_this6.name + 'Sticky'] === 'string';
+          var speed = el.dataset[_this6.name + 'Speed'] ? parseFloat(el.dataset[_this6.name + 'Speed']) / 10 : false;
+          var offset = typeof el.dataset[_this6.name + 'Offset'] === 'string' ? el.dataset[_this6.name + 'Offset'].split(',') : _this6.offset;
+          var target = el.dataset[_this6.name + 'Target'];
+          var targetEl;
 
-            if (target !== undefined) {
-              targetEl = document.querySelector("".concat(target));
-            } else {
-              targetEl = el;
-            }
+          if (target !== undefined) {
+            targetEl = document.querySelector("".concat(target));
+          } else {
+            targetEl = el;
+          }
 
-            if (!_this6.sections[y].inView) {
-              top = targetEl.getBoundingClientRect().top - getTranslate(_this6.sections[y].el).y - getTranslate(targetEl).y;
-              left = targetEl.getBoundingClientRect().left - getTranslate(_this6.sections[y].el).x - getTranslate(targetEl).x;
+          if (section === null) {
+            top = targetEl.getBoundingClientRect().top + _this6.instance.scroll.y - getTranslate(targetEl).y;
+            left = targetEl.getBoundingClientRect().left + _this6.instance.scroll.x - getTranslate(targetEl).x;
+          } else {
+            if (!section.inView) {
+              top = targetEl.getBoundingClientRect().top - getTranslate(section.el).y - getTranslate(targetEl).y;
+              left = targetEl.getBoundingClientRect().left - getTranslate(section.el).x - getTranslate(targetEl).x;
             } else {
               top = targetEl.getBoundingClientRect().top + _this6.instance.scroll.y - getTranslate(targetEl).y;
               left = targetEl.getBoundingClientRect().left + _this6.instance.scroll.x - getTranslate(targetEl).x;
             }
+          }
 
-            var bottom = top + targetEl.offsetHeight;
-            var right = left + targetEl.offsetWidth;
-            var middle = {
+          var bottom = top + targetEl.offsetHeight;
+          var right = left + targetEl.offsetWidth;
+          var middle = {
+            x: (right - left) / 2 + left,
+            y: (bottom - top) / 2 + top
+          };
+
+          if (sticky) {
+            var elTop = el.getBoundingClientRect().top;
+            var elLeft = el.getBoundingClientRect().left;
+            var elDistance = {
+              x: elLeft - left,
+              y: elTop - top
+            };
+            top += window.innerHeight;
+            left += window.innerWidth;
+            bottom = elTop + targetEl.offsetHeight - el.offsetHeight - elDistance[_this6.directionAxis];
+            right = elLeft + targetEl.offsetWidth - el.offsetWidth - elDistance[_this6.directionAxis];
+            middle = {
               x: (right - left) / 2 + left,
               y: (bottom - top) / 2 + top
             };
+          }
 
-            if (sticky) {
-              var elTop = el.getBoundingClientRect().top;
-              var elLeft = el.getBoundingClientRect().left;
-              var elDistance = {
-                x: elLeft - left,
-                y: elTop - top
-              };
-              top += window.innerHeight;
-              left += window.innerWidth;
-              bottom = elTop + targetEl.offsetHeight - el.offsetHeight - elDistance[_this6.directionAxis];
-              right = elLeft + targetEl.offsetWidth - el.offsetWidth - elDistance[_this6.directionAxis];
-              middle = {
-                x: (right - left) / 2 + left,
-                y: (bottom - top) / 2 + top
-              };
-            }
+          if (repeat == 'false') {
+            repeat = false;
+          } else if (repeat != undefined) {
+            repeat = true;
+          } else {
+            repeat = _this6.repeat;
+          }
 
-            if (repeat == 'false') {
-              repeat = false;
-            } else if (repeat != undefined) {
-              repeat = true;
-            } else {
-              repeat = _this6.repeat;
-            }
+          var relativeOffset = [0, 0];
 
-            var relativeOffset = [0, 0];
-
-            if (offset) {
-              if (_this6.direction === 'horizontal') {
-                for (var i = 0; i < offset.length; i++) {
-                  if (typeof offset[i] == 'string') {
-                    if (offset[i].includes('%')) {
-                      relativeOffset[i] = parseInt(offset[i].replace('%', '') * _this6.windowWidth / 100);
-                    } else {
-                      relativeOffset[i] = parseInt(offset[i]);
-                    }
+          if (offset) {
+            if (_this6.direction === 'horizontal') {
+              for (var i = 0; i < offset.length; i++) {
+                if (typeof offset[i] == 'string') {
+                  if (offset[i].includes('%')) {
+                    relativeOffset[i] = parseInt(offset[i].replace('%', '') * _this6.windowWidth / 100);
                   } else {
-                    relativeOffset[i] = offset[i];
+                    relativeOffset[i] = parseInt(offset[i]);
                   }
+                } else {
+                  relativeOffset[i] = offset[i];
                 }
-
-                left = left + relativeOffset[0];
-                right = right - relativeOffset[1];
-              } else {
-                for (var i = 0; i < offset.length; i++) {
-                  if (typeof offset[i] == 'string') {
-                    if (offset[i].includes('%')) {
-                      relativeOffset[i] = parseInt(offset[i].replace('%', '') * _this6.windowHeight / 100);
-                    } else {
-                      relativeOffset[i] = parseInt(offset[i]);
-                    }
-                  } else {
-                    relativeOffset[i] = offset[i];
-                  }
-                }
-
-                top = top + relativeOffset[0];
-                bottom = bottom - relativeOffset[1];
               }
-            }
 
-            var mappedEl = {
-              el: el,
-              "class": cl,
-              top: top,
-              middle: middle,
-              bottom: bottom,
-              left: left,
-              right: right,
-              offset: offset,
-              progress: 0,
-              repeat: repeat,
-              inView: el.classList.contains(cl) ? true : false,
-              call: call,
-              speed: speed,
-              delay: delay,
-              position: position,
-              target: targetEl,
-              direction: direction,
-              sticky: sticky
-            };
-            _this6.els[id] = mappedEl;
+              left = left + relativeOffset[0];
+              right = right - relativeOffset[1];
+            } else {
+              for (var i = 0; i < offset.length; i++) {
+                if (typeof offset[i] == 'string') {
+                  if (offset[i].includes('%')) {
+                    relativeOffset[i] = parseInt(offset[i].replace('%', '') * _this6.windowHeight / 100);
+                  } else {
+                    relativeOffset[i] = parseInt(offset[i]);
+                  }
+                } else {
+                  relativeOffset[i] = offset[i];
+                }
+              }
 
-            if (speed !== false || sticky) {
-              _this6.parallaxElements[id] = mappedEl;
+              top = top + relativeOffset[0];
+              bottom = bottom - relativeOffset[1];
             }
-          });
-        });
+          }
+
+          var mappedEl = {
+            el: el,
+            id: id,
+            "class": cl,
+            section: section,
+            top: top,
+            middle: middle,
+            bottom: bottom,
+            left: left,
+            right: right,
+            offset: offset,
+            progress: 0,
+            repeat: repeat,
+            inView: el.classList.contains(cl) ? true : false,
+            call: call,
+            speed: speed,
+            delay: delay,
+            position: position,
+            target: targetEl,
+            direction: direction,
+            sticky: sticky
+          };
+          _this6.els[id] = mappedEl;
+
+          if (speed !== false || sticky) {
+            _this6.parallaxElements[id] = mappedEl;
+          }
+        }); // });
       }
     }, {
       key: "addSections",
@@ -2546,7 +2557,8 @@
           sections = [this.el];
         }
 
-        sections.forEach(function (section, i) {
+        sections.forEach(function (section, index) {
+          var id = typeof section.dataset[_this7.name + 'Id'] === 'string' ? section.dataset[_this7.name + 'Id'] : 'section' + index;
           var offset = {
             x: section.getBoundingClientRect().left - window.innerWidth * 1.5 - getTranslate(section).x,
             y: section.getBoundingClientRect().top - window.innerHeight * 1.5 - getTranslate(section).y
@@ -2556,14 +2568,16 @@
             y: offset.y + section.getBoundingClientRect().height + window.innerHeight * 2
           };
           var persistent = typeof section.dataset[_this7.name + 'Persistent'] === 'string';
+          section.setAttribute('data-scroll-section-id', id);
           var mappedSection = {
             el: section,
             offset: offset,
             limit: limit,
             inView: false,
-            persistent: persistent
+            persistent: persistent,
+            id: id
           };
-          _this7.sections[i] = mappedSection;
+          _this7.sections[id] = mappedSection;
         });
       }
     }, {
@@ -2596,10 +2610,10 @@
           x: this.instance.scroll.x + this.windowMiddle.x,
           y: this.instance.scroll.y + this.windowMiddle.y
         };
-        Object.entries(this.parallaxElements).forEach(function (_ref) {
-          var _ref2 = _slicedToArray(_ref, 2),
-              i = _ref2[0],
-              current = _ref2[1];
+        Object.entries(this.parallaxElements).forEach(function (_ref3) {
+          var _ref4 = _slicedToArray(_ref3, 2),
+              i = _ref4[0],
+              current = _ref4[1];
 
           var transformDistance = false;
 

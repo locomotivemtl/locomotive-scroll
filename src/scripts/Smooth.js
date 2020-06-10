@@ -206,45 +206,45 @@ export default class extends Core {
                 this.stopScrolling();
             }
 
-            for (let i = this.sections.length - 1; i >= 0; i--) {
+            Object.entries(this.sections).forEach(([i, section]) => {
                 if (
-                    this.sections[i].persistent ||
+                    section.persistent ||
                     (this.instance.scroll[this.directionAxis] >
-                        this.sections[i].offset[this.directionAxis] &&
+                        section.offset[this.directionAxis] &&
                         this.instance.scroll[this.directionAxis] <
-                            this.sections[i].limit[this.directionAxis])
+                            section.limit[this.directionAxis])
                 ) {
                     if (this.direction === 'horizontal') {
                         this.transform(
-                            this.sections[i].el,
+                            section.el,
                             -this.instance.scroll[this.directionAxis],
                             0
                         );
                     } else {
                         this.transform(
-                            this.sections[i].el,
+                            section.el,
                             0,
                             -this.instance.scroll[this.directionAxis]
                         );
                     }
 
-                    if (!this.sections[i].inView) {
-                        this.sections[i].inView = true;
-                        this.sections[i].el.style.opacity = 1;
-                        this.sections[i].el.style.pointerEvents = 'all';
-                        this.sections[i].el.setAttribute(`data-${this.name}-section-inview`, '');
+                    if (!section.inView) {
+                        section.inView = true;
+                        section.el.style.opacity = 1;
+                        section.el.style.pointerEvents = 'all';
+                        section.el.setAttribute(`data-${this.name}-section-inview`, '');
                     }
                 } else {
-                    if (this.sections[i].inView) {
-                        this.sections[i].inView = false;
-                        this.sections[i].el.style.opacity = 0;
-                        this.sections[i].el.style.pointerEvents = 'none';
-                        this.sections[i].el.removeAttribute(`data-${this.name}-section-inview`);
+                    if (section.inView) {
+                        section.inView = false;
+                        section.el.style.opacity = 0;
+                        section.el.style.pointerEvents = 'none';
+                        section.el.removeAttribute(`data-${this.name}-section-inview`);
                     }
 
-                    this.transform(this.sections[i].el, 0, 0);
+                    this.transform(section.el, 0, 0);
                 }
-            }
+            });
 
             if (this.getDirection) {
                 this.addDirection();
@@ -479,15 +479,20 @@ export default class extends Core {
         this.els = [];
         this.parallaxElements = [];
 
-        this.sections.forEach((section, y) => {
-            const els = this.sections[y].el.querySelectorAll(`[data-${this.name}]`);
+        // this.sections.forEach((section, y) => {
+            const els = this.el.querySelectorAll(`[data-${this.name}]`);
 
             els.forEach((el, index) => {
+                
+                let section = el.parentNode.querySelector('[data-scroll-section]') !== null
+                                ? this.sections[el.parentNode.querySelector('[data-scroll-section]').getAttribute('data-scroll-section-id')]
+                                : null;
+                
                 let cl = el.dataset[this.name + 'Class'] || this.class;
                 let id =
                     typeof el.dataset[this.name + 'Id'] === 'string'
                         ? el.dataset[this.name + 'Id']
-                        : 'el' + y + index;
+                        : 'el' + index;
                 let top;
                 let left;
                 let repeat = el.dataset[this.name + 'Repeat'];
@@ -513,16 +518,7 @@ export default class extends Core {
                     targetEl = el;
                 }
 
-                if (!this.sections[y].inView) {
-                    top =
-                        targetEl.getBoundingClientRect().top -
-                        getTranslate(this.sections[y].el).y -
-                        getTranslate(targetEl).y;
-                    left =
-                        targetEl.getBoundingClientRect().left -
-                        getTranslate(this.sections[y].el).x -
-                        getTranslate(targetEl).x;
-                } else {
+                if(section === null) {
                     top =
                         targetEl.getBoundingClientRect().top +
                         this.instance.scroll.y -
@@ -531,6 +527,26 @@ export default class extends Core {
                         targetEl.getBoundingClientRect().left +
                         this.instance.scroll.x -
                         getTranslate(targetEl).x;
+                } else {
+                    if (!section.inView) {
+                        top =
+                            targetEl.getBoundingClientRect().top -
+                            getTranslate(section.el).y -
+                            getTranslate(targetEl).y;
+                        left =
+                            targetEl.getBoundingClientRect().left -
+                            getTranslate(section.el).x -
+                            getTranslate(targetEl).x;
+                    } else {
+                        top =
+                            targetEl.getBoundingClientRect().top +
+                            this.instance.scroll.y -
+                            getTranslate(targetEl).y;
+                        left =
+                            targetEl.getBoundingClientRect().left +
+                            this.instance.scroll.x -
+                            getTranslate(targetEl).x;
+                    }
                 }
 
                 let bottom = top + targetEl.offsetHeight;
@@ -614,7 +630,9 @@ export default class extends Core {
 
                 const mappedEl = {
                     el,
+                    id: id,
                     class: cl,
+                    section: section,
                     top,
                     middle,
                     bottom,
@@ -639,7 +657,7 @@ export default class extends Core {
                     this.parallaxElements[id] = mappedEl;
                 }
             });
-        });
+        // });
     }
 
     addSections() {
@@ -650,7 +668,11 @@ export default class extends Core {
             sections = [this.el];
         }
 
-        sections.forEach((section, i) => {
+        sections.forEach((section, index) => {
+            let id =
+                    typeof section.dataset[this.name + 'Id'] === 'string'
+                        ? section.dataset[this.name + 'Id']
+                        : 'section' + index;
             let offset = {
                 x:
                     section.getBoundingClientRect().left -
@@ -666,16 +688,18 @@ export default class extends Core {
                 y: offset.y + section.getBoundingClientRect().height + window.innerHeight * 2
             };
             let persistent = typeof section.dataset[this.name + 'Persistent'] === 'string';
+            section.setAttribute('data-scroll-section-id',id);
 
             const mappedSection = {
                 el: section,
                 offset: offset,
                 limit: limit,
                 inView: false,
-                persistent: persistent
+                persistent: persistent,
+                id: id
             };
 
-            this.sections[i] = mappedSection;
+            this.sections[id] = mappedSection;
         });
     }
 

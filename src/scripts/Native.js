@@ -102,6 +102,7 @@ export default class extends Core {
 
             const mappedEl = {
                 el: el,
+                id: id,
                 class: cl,
                 top: top + relativeOffset[0],
                 bottom: bottom - relativeOffset[1],

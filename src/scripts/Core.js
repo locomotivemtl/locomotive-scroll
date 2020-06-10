@@ -195,7 +195,7 @@ export default class {
         current.el.classList.add(current.class);
 
         this.currentElements[i] = current;
-
+        
         if (current.call && this.hasCallEventSet) {
             this.dispatchCall(current, 'enter');
 
