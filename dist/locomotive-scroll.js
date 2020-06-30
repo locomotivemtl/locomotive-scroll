@@ -1066,7 +1066,7 @@
 
         if (this.getSpeed) {
           this.addSpeed();
-          this.timestamp = Date.now();
+          this.speedTs = Date.now();
         }
 
         this.instance.scroll.y = window.pageYOffset;
@@ -1097,7 +1097,7 @@
       key: "addSpeed",
       value: function addSpeed() {
         if (window.pageYOffset != this.instance.scroll.y) {
-          this.instance.speed = (window.pageYOffset - this.instance.scroll.y) / Math.max(1, Date.now() - this.timestamp);
+          this.instance.speed = (window.pageYOffset - this.instance.scroll.y) / Math.max(1, Date.now() - this.speedTs);
         } else {
           this.instance.speed = 0;
         }
@@ -2013,16 +2013,13 @@
             return;
           }
 
-          if (!_this2.isTicking && !_this2.isDraggingScrollbar) {
+          if (!_this2.isDraggingScrollbar) {
             requestAnimationFrame(function () {
               _this2.updateDelta(e);
 
               if (!_this2.isScrolling) _this2.startScrolling();
             });
-            _this2.isTicking = true;
           }
-
-          _this2.isTicking = false;
         });
         this.setScrollLimit();
         this.initScrollBar();
@@ -2052,6 +2049,8 @@
     }, {
       key: "startScrolling",
       value: function startScrolling() {
+        this.startScrollTs = Date.now(); // Record timestamp
+
         this.isScrolling = true;
         this.checkScroll();
         this.html.classList.add(this.scrollingClass);
@@ -2059,6 +2058,8 @@
     }, {
       key: "stopScrolling",
       value: function stopScrolling() {
+        cancelAnimationFrame(this.checkScrollRaf); // Prevent checkScroll to continue looping
+
         if (this.scrollToRaf) {
           cancelAnimationFrame(this.scrollToRaf);
           this.scrollToRaf = null;
@@ -2154,7 +2155,7 @@
 
         if (forced || this.isScrolling || this.isDraggingScrollbar) {
           if (!this.hasScrollTicking) {
-            requestAnimationFrame(function () {
+            this.checkScrollRaf = requestAnimationFrame(function () {
               return _this4.checkScroll();
             });
             this.hasScrollTicking = true;
@@ -2162,8 +2163,9 @@
 
           this.updateScroll();
           var distance = Math.abs(this.instance.delta[this.directionAxis] - this.instance.scroll[this.directionAxis]);
+          var timeSinceStart = Date.now() - this.startScrollTs; // Get the time since the scroll was started: the scroll can be stopped again only past 100ms
 
-          if (!this.animatingScroll && (distance < 0.5 && this.instance.delta[this.directionAxis] != 0 || distance < 0.5 && this.instance.delta[this.directionAxis] == 0)) {
+          if (!this.animatingScroll && timeSinceStart > 100 && (distance < 0.5 && this.instance.delta[this.directionAxis] != 0 || distance < 0.5 && this.instance.delta[this.directionAxis] == 0)) {
             this.stopScrolling();
           }
 
@@ -2203,7 +2205,7 @@
 
           if (this.getSpeed) {
             this.addSpeed();
-            this.timestamp = Date.now();
+            this.speedTs = Date.now();
           }
 
           this.detectElements();
@@ -2290,7 +2292,7 @@
       key: "addSpeed",
       value: function addSpeed() {
         if (this.instance.delta[this.directionAxis] != this.instance.scroll[this.directionAxis]) {
-          this.instance.speed = (this.instance.delta[this.directionAxis] - this.instance.scroll[this.directionAxis]) / Math.max(1, Date.now() - this.timestamp);
+          this.instance.speed = (this.instance.delta[this.directionAxis] - this.instance.scroll[this.directionAxis]) / Math.max(1, Date.now() - this.speedTs);
         } else {
           this.instance.speed = 0;
         }
@@ -2385,7 +2387,7 @@
       value: function moveScrollBar(e) {
         var _this5 = this;
 
-        if (!this.isTicking && this.isDraggingScrollbar) {
+        if (this.isDraggingScrollbar) {
           requestAnimationFrame(function () {
             var x = e.clientX * 100 / _this5.scrollbarWidth * _this5.instance.limit.x / 100;
             var y = e.clientY * 100 / _this5.scrollbarHeight * _this5.instance.limit.y / 100;
@@ -2398,10 +2400,7 @@
               _this5.instance.delta.x = x;
             }
           });
-          this.isTicking = true;
         }
-
-        this.isTicking = false;
       }
     }, {
       key: "addElements",

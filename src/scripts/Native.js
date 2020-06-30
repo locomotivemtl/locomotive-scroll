@@ -27,7 +27,7 @@ export default class extends Core {
 
         if (this.getSpeed) {
             this.addSpeed();
-            this.timestamp = Date.now();
+            this.speedTs = Date.now();
         }
 
         this.instance.scroll.y = window.pageYOffset;
@@ -58,7 +58,7 @@ export default class extends Core {
         if (window.pageYOffset != this.instance.scroll.y) {
             this.instance.speed =
                 (window.pageYOffset - this.instance.scroll.y) /
-                Math.max(1, Date.now() - this.timestamp);
+                Math.max(1, Date.now() - this.speedTs);
         } else {
             this.instance.speed = 0;
         }

@@ -63,14 +63,12 @@ export default class extends Core {
                 return;
             }
 
-            if (!this.isTicking && !this.isDraggingScrollbar) {
+            if (!this.isDraggingScrollbar) {
                 requestAnimationFrame(() => {
                     this.updateDelta(e);
                     if (!this.isScrolling) this.startScrolling();
                 });
-                this.isTicking = true;
             }
-            this.isTicking = false;
         });
 
         this.setScrollLimit();
@@ -99,12 +97,16 @@ export default class extends Core {
     }
 
     startScrolling() {
+        this.startScrollTs = Date.now() // Record timestamp
+
         this.isScrolling = true;
         this.checkScroll();
         this.html.classList.add(this.scrollingClass);
     }
 
     stopScrolling() {
+        cancelAnimationFrame(this.checkScrollRaf) // Prevent checkScroll to continue looping
+
         if (this.scrollToRaf) {
             cancelAnimationFrame(this.scrollToRaf);
             this.scrollToRaf = null;
@@ -189,7 +191,7 @@ export default class extends Core {
     checkScroll(forced = false) {
         if (forced || this.isScrolling || this.isDraggingScrollbar) {
             if (!this.hasScrollTicking) {
-                requestAnimationFrame(() => this.checkScroll());
+                this.checkScrollRaf = requestAnimationFrame(() => this.checkScroll());
                 this.hasScrollTicking = true;
             }
 
@@ -198,8 +200,10 @@ export default class extends Core {
             const distance = Math.abs(
                 this.instance.delta[this.directionAxis] - this.instance.scroll[this.directionAxis]
             );
+            const timeSinceStart = Date.now() - this.startScrollTs // Get the time since the scroll was started: the scroll can be stopped again only past 100ms
             if (
                 !this.animatingScroll &&
+                timeSinceStart > 100 &&
                 ((distance < 0.5 && this.instance.delta[this.directionAxis] != 0) ||
                     (distance < 0.5 && this.instance.delta[this.directionAxis] == 0))
             ) {
@@ -252,7 +256,7 @@ export default class extends Core {
 
             if (this.getSpeed) {
                 this.addSpeed();
-                this.timestamp = Date.now();
+                this.speedTs = Date.now();
             }
 
             this.detectElements();
@@ -356,7 +360,7 @@ export default class extends Core {
             this.instance.speed =
                 (this.instance.delta[this.directionAxis] -
                     this.instance.scroll[this.directionAxis]) /
-                Math.max(1, Date.now() - this.timestamp);
+                Math.max(1, Date.now() - this.speedTs);
         } else {
             this.instance.speed = 0;
         }
@@ -458,7 +462,7 @@ export default class extends Core {
     }
 
     moveScrollBar(e) {
-        if (!this.isTicking && this.isDraggingScrollbar) {
+        if (this.isDraggingScrollbar) {
             requestAnimationFrame(() => {
                 let x = (((e.clientX * 100) / this.scrollbarWidth) * this.instance.limit.x) / 100;
                 let y = (((e.clientY * 100) / this.scrollbarHeight) * this.instance.limit.y) / 100;
@@ -470,9 +474,7 @@ export default class extends Core {
                     this.instance.delta.x = x;
                 }
             });
-            this.isTicking = true;
         }
-        this.isTicking = false;
     }
 
     addElements() {
