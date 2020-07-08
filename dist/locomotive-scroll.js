@@ -2759,14 +2759,25 @@
 
           var targetParents = getParents(target);
           var parentSection = targetParents.find(function (candidate) {
-            return _this9.sections.find(function (section) {
+            return Object.entries(_this9.sections) // Get sections associative array as a regular array
+            .map(function (_ref5) {
+              var _ref6 = _slicedToArray(_ref5, 2),
+                  key = _ref6[0],
+                  section = _ref6[1];
+
+              return section;
+            }) // map to section only (we dont need the key here)
+            .find(function (section) {
               return section.el == candidate;
-            });
+            }); // finally find the section that matches the candidate
           });
           var parentSectionOffset = 0;
 
           if (parentSection) {
             parentSectionOffset = getTranslate(parentSection)[this.directionAxis]; // We got a parent section, store it's current offset to remove it later
+          } else {
+            // if no parent section is found we need to use instance scroll directly
+            parentSectionOffset = -this.instance.scroll[this.directionAxis];
           } // Final value of scroll destination : offsetTop + (optional offset given in options) - (parent's section translate)
 
 

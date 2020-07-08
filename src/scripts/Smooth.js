@@ -485,11 +485,11 @@ export default class extends Core {
             const els = this.el.querySelectorAll(`[data-${this.name}]`);
 
             els.forEach((el, index) => {
-                
+
                 let section = el.parentNode.querySelector('[data-scroll-section]') !== null
                                 ? this.sections[el.parentNode.querySelector('[data-scroll-section]').getAttribute('data-scroll-section-id')]
                                 : null;
-                
+
                 let cl = el.dataset[this.name + 'Class'] || this.class;
                 let id =
                     typeof el.dataset[this.name + 'Id'] === 'string'
@@ -911,13 +911,18 @@ export default class extends Core {
 
             // Try and find the target's parent section
             const targetParents = getParents(target);
-            const parentSection = targetParents.find((candidate) =>
-                this.sections.find((section) => section.el == candidate)
-            );
+            const parentSection = targetParents.find((candidate) => {
+                return Object.entries(this.sections) // Get sections associative array as a regular array
+                .map(([key, section]) => section) // map to section only (we dont need the key here)
+                .find(section => section.el == candidate) // finally find the section that matches the candidate
+            });
             let parentSectionOffset = 0;
             if (parentSection) {
                 parentSectionOffset = getTranslate(parentSection)[this.directionAxis]; // We got a parent section, store it's current offset to remove it later
+            } else { // if no parent section is found we need to use instance scroll directly
+                parentSectionOffset = -this.instance.scroll[this.directionAxis]
             }
+
             // Final value of scroll destination : offsetTop + (optional offset given in options) - (parent's section translate)
             if (this.direction === 'horizontal') {
                 offset = offsetLeft + offset - parentSectionOffset;
