@@ -2210,12 +2210,15 @@
 
           this.detectElements();
           this.transformElements();
-          var scrollBarTranslation = this.instance.scroll[this.directionAxis] / this.instance.limit[this.directionAxis] * this.scrollBarLimit[this.directionAxis];
 
-          if (this.direction === 'horizontal') {
-            this.transform(this.scrollbarThumb, scrollBarTranslation, 0);
-          } else {
-            this.transform(this.scrollbarThumb, 0, scrollBarTranslation);
+          if (this.hasScrollbar) {
+            var scrollBarTranslation = this.instance.scroll[this.directionAxis] / this.instance.limit[this.directionAxis] * this.scrollBarLimit[this.directionAxis];
+
+            if (this.direction === 'horizontal') {
+              this.transform(this.scrollbarThumb, scrollBarTranslation, 0);
+            } else {
+              this.transform(this.scrollbarThumb, 0, scrollBarTranslation);
+            }
           }
 
           _get(_getPrototypeOf(_default.prototype), "checkScroll", this).call(this);
@@ -2314,6 +2317,8 @@
         window.addEventListener('mouseup', this.releaseScrollBar);
         window.addEventListener('mousemove', this.moveScrollBar); // Set scrollbar values
 
+        this.hasScrollbar = false;
+
         if (this.direction == 'horizontal') {
           if (this.instance.limit.x + this.windowWidth <= this.windowWidth) {
             return;
@@ -2324,6 +2329,7 @@
           }
         }
 
+        this.hasScrollbar = true;
         this.scrollbarHeight = this.scrollbar.getBoundingClientRect().height;
         this.scrollbarWidth = this.scrollbar.getBoundingClientRect().width;
 
@@ -2341,10 +2347,19 @@
     }, {
       key: "reinitScrollBar",
       value: function reinitScrollBar() {
-        if (this.instance.limit + this.windowHeight <= this.windowHeight) {
-          return;
+        this.hasScrollbar = false;
+
+        if (this.direction == 'horizontal') {
+          if (this.instance.limit.x + this.windowWidth <= this.windowWidth) {
+            return;
+          }
+        } else {
+          if (this.instance.limit.y + this.windowHeight <= this.windowHeight) {
+            return;
+          }
         }
 
+        this.hasScrollbar = true;
         this.scrollbarHeight = this.scrollbar.getBoundingClientRect().height;
         this.scrollbarWidth = this.scrollbar.getBoundingClientRect().width;
 
