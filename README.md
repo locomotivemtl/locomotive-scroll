@@ -152,7 +152,7 @@ scroll.on('call', func => {
 | Attribute               | Values                   | Description                                                                              |
 | ----------------------- | ------------------------ | ---------------------------------------------------------------------------------------- |
 | `data-scroll`           |                          | Detect if in-view.                                                                       |
-| `data-scroll-id`        | `string`                 | (Optionnal) Usefull if you want to scope your element and get the progress of your element in the viewport for example. |
+| `data-scroll-id`        | `string`                 | (Optional) Useful if you want to scope your element and get the progress of your element in the viewport for example. |
 | `data-scroll-container` |                          | Defines the scroll container. Required for [basic styling](https://github.com/locomotivemtl/locomotive-scroll/blob/master/dist/locomotive-scroll.css).                                                                                     |
 | `data-scroll-section`   |                          | Defines a scrollable section. Splitting your page into sections may improve performance. |
 | `data-scroll-class`     | `string`                 | Element in-view class.                                                                   |
