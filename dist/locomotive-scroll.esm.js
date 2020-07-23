@@ -267,8 +267,8 @@ var _default = /*#__PURE__*/function () {
       x: this.windowWidth / 2,
       y: this.windowHeight / 2
     };
-    this.els = [];
-    this.currentElements = [];
+    this.els = {};
+    this.currentElements = {};
     this.listeners = {};
     this.hasScrollTicking = false;
     this.hasCallEventSet = false;
@@ -1065,7 +1065,7 @@ var _default$1 = /*#__PURE__*/function (_Core) {
 
       this.instance.scroll.y = window.pageYOffset;
 
-      if (this.els.length) {
+      if (Object.entries(this.els).length) {
         if (!this.hasScrollTicking) {
           requestAnimationFrame(function () {
             _this2.detectElements();
@@ -1099,7 +1099,7 @@ var _default$1 = /*#__PURE__*/function (_Core) {
   }, {
     key: "resize",
     value: function resize() {
-      if (this.els.length) {
+      if (Object.entries(this.els).length) {
         this.windowHeight = window.innerHeight;
         this.updateElements();
       }
@@ -1109,7 +1109,7 @@ var _default$1 = /*#__PURE__*/function (_Core) {
     value: function addElements() {
       var _this3 = this;
 
-      this.els = [];
+      this.els = {};
       var els = this.el.querySelectorAll('[data-' + this.name + ']');
       els.forEach(function (el, index) {
         var cl = el.dataset[_this3.name + 'Class'] || _this3["class"];
@@ -1974,7 +1974,7 @@ var _default$2 = /*#__PURE__*/function (_Core) {
     _this.isDraggingScrollbar = false;
     _this.isTicking = false;
     _this.hasScrollTicking = false;
-    _this.parallaxElements = [];
+    _this.parallaxElements = {};
     _this.stop = false;
     _this.checkKey = _this.checkKey.bind(_assertThisInitialized(_this));
     window.addEventListener('keydown', _this.checkKey, false);
@@ -2416,12 +2416,22 @@ var _default$2 = /*#__PURE__*/function (_Core) {
     value: function addElements() {
       var _this6 = this;
 
-      this.els = [];
-      this.parallaxElements = []; // this.sections.forEach((section, y) => {
+      this.els = {};
+      this.parallaxElements = {}; // this.sections.forEach((section, y) => {
 
       var els = this.el.querySelectorAll("[data-".concat(this.name, "]"));
       els.forEach(function (el, index) {
-        var section = el.parentNode.querySelector('[data-scroll-section]') !== null ? _this6.sections[el.parentNode.querySelector('[data-scroll-section]').getAttribute('data-scroll-section-id')] : null;
+        // Try and find the target's parent section
+        var targetParents = getParents(el);
+        var section = Object.entries(_this6.sections).map(function (_ref3) {
+          var _ref4 = _slicedToArray(_ref3, 2),
+              key = _ref4[0],
+              section = _ref4[1];
+
+          return section;
+        }).find(function (section) {
+          return targetParents.includes(section.el);
+        });
         var cl = el.dataset[_this6.name + 'Class'] || _this6["class"];
         var id = typeof el.dataset[_this6.name + 'Id'] === 'string' ? el.dataset[_this6.name + 'Id'] : 'el' + index;
         var top;
@@ -2558,7 +2568,7 @@ var _default$2 = /*#__PURE__*/function (_Core) {
     value: function addSections() {
       var _this7 = this;
 
-      this.sections = [];
+      this.sections = {};
       var sections = this.el.querySelectorAll("[data-".concat(this.name, "-section]"));
 
       if (sections.length === 0) {
@@ -2618,10 +2628,10 @@ var _default$2 = /*#__PURE__*/function (_Core) {
         x: this.instance.scroll.x + this.windowMiddle.x,
         y: this.instance.scroll.y + this.windowMiddle.y
       };
-      Object.entries(this.parallaxElements).forEach(function (_ref3) {
-        var _ref4 = _slicedToArray(_ref3, 2),
-            i = _ref4[0],
-            current = _ref4[1];
+      Object.entries(this.parallaxElements).forEach(function (_ref5) {
+        var _ref6 = _slicedToArray(_ref5, 2),
+            i = _ref6[0],
+            current = _ref6[1];
 
         var transformDistance = false;
 
@@ -2769,10 +2779,10 @@ var _default$2 = /*#__PURE__*/function (_Core) {
         var targetParents = getParents(target);
         var parentSection = targetParents.find(function (candidate) {
           return Object.entries(_this9.sections) // Get sections associative array as a regular array
-          .map(function (_ref5) {
-            var _ref6 = _slicedToArray(_ref5, 2),
-                key = _ref6[0],
-                section = _ref6[1];
+          .map(function (_ref7) {
+            var _ref8 = _slicedToArray(_ref7, 2),
+                key = _ref8[0],
+                section = _ref8[1];
 
             return section;
           }) // map to section only (we dont need the key here)

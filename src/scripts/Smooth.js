@@ -30,7 +30,7 @@ export default class extends Core {
         this.isDraggingScrollbar = false;
         this.isTicking = false;
         this.hasScrollTicking = false;
-        this.parallaxElements = [];
+        this.parallaxElements = {};
         this.stop = false;
 
         this.checkKey = this.checkKey.bind(this);
@@ -490,17 +490,18 @@ export default class extends Core {
     }
 
     addElements() {
-        this.els = [];
-        this.parallaxElements = [];
+        this.els = {};
+        this.parallaxElements = {};
 
         // this.sections.forEach((section, y) => {
             const els = this.el.querySelectorAll(`[data-${this.name}]`);
 
             els.forEach((el, index) => {
-
-                let section = el.parentNode.querySelector('[data-scroll-section]') !== null
-                                ? this.sections[el.parentNode.querySelector('[data-scroll-section]').getAttribute('data-scroll-section-id')]
-                                : null;
+                // Try and find the target's parent section
+                const targetParents = getParents(el);
+                let section = Object.entries(this.sections)
+                .map(([key,section]) => section)
+                .find(section => targetParents.includes(section.el))
 
                 let cl = el.dataset[this.name + 'Class'] || this.class;
                 let id =
@@ -675,7 +676,7 @@ export default class extends Core {
     }
 
     addSections() {
-        this.sections = [];
+        this.sections = {};
 
         let sections = this.el.querySelectorAll(`[data-${this.name}-section]`);
         if (sections.length === 0) {

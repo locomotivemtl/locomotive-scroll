@@ -32,7 +32,7 @@ export default class extends Core {
 
         this.instance.scroll.y = window.pageYOffset;
 
-        if (this.els.length) {
+        if (Object.entries(this.els).length) {
             if (!this.hasScrollTicking) {
                 requestAnimationFrame(() => {
                     this.detectElements();
@@ -65,14 +65,14 @@ export default class extends Core {
     }
 
     resize() {
-        if (this.els.length) {
+        if (Object.entries(this.els).length) {
             this.windowHeight = window.innerHeight;
             this.updateElements();
         }
     }
 
     addElements() {
-        this.els = [];
+        this.els = {};
         const els = this.el.querySelectorAll('[data-' + this.name + ']');
 
         els.forEach((el, index) => {

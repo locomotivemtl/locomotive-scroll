@@ -16,8 +16,8 @@ export default class {
             x: this.windowWidth / 2,
             y: this.windowHeight / 2
         };
-        this.els = [];
-        this.currentElements = [];
+        this.els = {};
+        this.currentElements = {};
         this.listeners = {};
 
         this.hasScrollTicking = false;
@@ -195,7 +195,7 @@ export default class {
         current.el.classList.add(current.class);
 
         this.currentElements[i] = current;
-        
+
         if (current.call && this.hasCallEventSet) {
             this.dispatchCall(current, 'enter');
 
