@@ -97,7 +97,7 @@ export default class extends Core {
     }
 
     startScrolling() {
-        this.startScrollTs = Date.now() // Record timestamp
+        this.startScrollTs = Date.now(); // Record timestamp
 
         this.isScrolling = true;
         this.checkScroll();
@@ -105,7 +105,7 @@ export default class extends Core {
     }
 
     stopScrolling() {
-        cancelAnimationFrame(this.checkScrollRaf) // Prevent checkScroll to continue looping
+        cancelAnimationFrame(this.checkScrollRaf); // Prevent checkScroll to continue looping
 
         if (this.scrollToRaf) {
             cancelAnimationFrame(this.scrollToRaf);
@@ -200,7 +200,7 @@ export default class extends Core {
             const distance = Math.abs(
                 this.instance.delta[this.directionAxis] - this.instance.scroll[this.directionAxis]
             );
-            const timeSinceStart = Date.now() - this.startScrollTs // Get the time since the scroll was started: the scroll can be stopped again only past 100ms
+            const timeSinceStart = Date.now() - this.startScrollTs; // Get the time since the scroll was started: the scroll can be stopped again only past 100ms
             if (
                 !this.animatingScroll &&
                 timeSinceStart > 100 &&
@@ -219,17 +219,9 @@ export default class extends Core {
                             section.limit[this.directionAxis])
                 ) {
                     if (this.direction === 'horizontal') {
-                        this.transform(
-                            section.el,
-                            -this.instance.scroll[this.directionAxis],
-                            0
-                        );
+                        this.transform(section.el, -this.instance.scroll[this.directionAxis], 0);
                     } else {
-                        this.transform(
-                            section.el,
-                            0,
-                            -this.instance.scroll[this.directionAxis]
-                        );
+                        this.transform(section.el, 0, -this.instance.scroll[this.directionAxis]);
                     }
 
                     if (!section.inView) {
@@ -262,7 +254,7 @@ export default class extends Core {
             this.detectElements();
             this.transformElements();
 
-            if(this.hasScrollbar) {
+            if (this.hasScrollbar) {
                 const scrollBarTranslation =
                     (this.instance.scroll[this.directionAxis] /
                         this.instance.limit[this.directionAxis]) *
@@ -387,7 +379,7 @@ export default class extends Core {
         window.addEventListener('mousemove', this.moveScrollBar);
 
         // Set scrollbar values
-        this.hasScrollbar = false
+        this.hasScrollbar = false;
         if (this.direction == 'horizontal') {
             if (this.instance.limit.x + this.windowWidth <= this.windowWidth) {
                 return;
@@ -397,7 +389,7 @@ export default class extends Core {
                 return;
             }
         }
-        this.hasScrollbar = true
+        this.hasScrollbar = true;
 
         this.scrollbarHeight = this.scrollbar.getBoundingClientRect().height;
         this.scrollbarWidth = this.scrollbar.getBoundingClientRect().width;
@@ -421,7 +413,7 @@ export default class extends Core {
     }
 
     reinitScrollBar() {
-        this.hasScrollbar = false
+        this.hasScrollbar = false;
         if (this.direction == 'horizontal') {
             if (this.instance.limit.x + this.windowWidth <= this.windowWidth) {
                 return;
@@ -431,7 +423,7 @@ export default class extends Core {
                 return;
             }
         }
-        this.hasScrollbar = true
+        this.hasScrollbar = true;
 
         this.scrollbarHeight = this.scrollbar.getBoundingClientRect().height;
         this.scrollbarWidth = this.scrollbar.getBoundingClientRect().width;
@@ -494,46 +486,65 @@ export default class extends Core {
         this.parallaxElements = {};
 
         // this.sections.forEach((section, y) => {
-            const els = this.el.querySelectorAll(`[data-${this.name}]`);
+        const els = this.el.querySelectorAll(`[data-${this.name}]`);
 
-            els.forEach((el, index) => {
-                // Try and find the target's parent section
-                const targetParents = getParents(el);
-                let section = Object.entries(this.sections)
-                .map(([key,section]) => section)
-                .find(section => targetParents.includes(section.el))
+        els.forEach((el, index) => {
+            // Try and find the target's parent section
+            const targetParents = getParents(el);
+            let section = Object.entries(this.sections)
+                .map(([key, section]) => section)
+                .find((section) => targetParents.includes(section.el));
 
-                let cl = el.dataset[this.name + 'Class'] || this.class;
-                let id =
-                    typeof el.dataset[this.name + 'Id'] === 'string'
-                        ? el.dataset[this.name + 'Id']
-                        : 'el' + index;
-                let top;
-                let left;
-                let repeat = el.dataset[this.name + 'Repeat'];
-                let call = el.dataset[this.name + 'Call'];
-                let position = el.dataset[this.name + 'Position'];
-                let delay = el.dataset[this.name + 'Delay'];
-                let direction = el.dataset[this.name + 'Direction'];
-                let sticky = typeof el.dataset[this.name + 'Sticky'] === 'string';
-                let speed = el.dataset[this.name + 'Speed']
-                    ? parseFloat(el.dataset[this.name + 'Speed']) / 10
-                    : false;
-                let offset =
-                    typeof el.dataset[this.name + 'Offset'] === 'string'
-                        ? el.dataset[this.name + 'Offset'].split(',')
-                        : this.offset;
+            let cl = el.dataset[this.name + 'Class'] || this.class;
+            let id =
+                typeof el.dataset[this.name + 'Id'] === 'string'
+                    ? el.dataset[this.name + 'Id']
+                    : 'el' + index;
+            let top;
+            let left;
+            let repeat = el.dataset[this.name + 'Repeat'];
+            let call = el.dataset[this.name + 'Call'];
+            let position = el.dataset[this.name + 'Position'];
+            let delay = el.dataset[this.name + 'Delay'];
+            let direction = el.dataset[this.name + 'Direction'];
+            let sticky = typeof el.dataset[this.name + 'Sticky'] === 'string';
+            let speed = el.dataset[this.name + 'Speed']
+                ? parseFloat(el.dataset[this.name + 'Speed']) / 10
+                : false;
+            let offset =
+                typeof el.dataset[this.name + 'Offset'] === 'string'
+                    ? el.dataset[this.name + 'Offset'].split(',')
+                    : this.offset;
 
-                let target = el.dataset[this.name + 'Target'];
-                let targetEl;
+            let target = el.dataset[this.name + 'Target'];
+            let targetEl;
 
-                if (target !== undefined) {
-                    targetEl = document.querySelector(`${target}`);
+            if (target !== undefined) {
+                targetEl = document.querySelector(`${target}`);
+            } else {
+                targetEl = el;
+            }
+
+            if (section === null) {
+                top =
+                    targetEl.getBoundingClientRect().top +
+                    this.instance.scroll.y -
+                    getTranslate(targetEl).y;
+                left =
+                    targetEl.getBoundingClientRect().left +
+                    this.instance.scroll.x -
+                    getTranslate(targetEl).x;
+            } else {
+                if (!section.inView) {
+                    top =
+                        targetEl.getBoundingClientRect().top -
+                        getTranslate(section.el).y -
+                        getTranslate(targetEl).y;
+                    left =
+                        targetEl.getBoundingClientRect().left -
+                        getTranslate(section.el).x -
+                        getTranslate(targetEl).x;
                 } else {
-                    targetEl = el;
-                }
-
-                if(section === null) {
                     top =
                         targetEl.getBoundingClientRect().top +
                         this.instance.scroll.y -
@@ -542,136 +553,114 @@ export default class extends Core {
                         targetEl.getBoundingClientRect().left +
                         this.instance.scroll.x -
                         getTranslate(targetEl).x;
-                } else {
-                    if (!section.inView) {
-                        top =
-                            targetEl.getBoundingClientRect().top -
-                            getTranslate(section.el).y -
-                            getTranslate(targetEl).y;
-                        left =
-                            targetEl.getBoundingClientRect().left -
-                            getTranslate(section.el).x -
-                            getTranslate(targetEl).x;
-                    } else {
-                        top =
-                            targetEl.getBoundingClientRect().top +
-                            this.instance.scroll.y -
-                            getTranslate(targetEl).y;
-                        left =
-                            targetEl.getBoundingClientRect().left +
-                            this.instance.scroll.x -
-                            getTranslate(targetEl).x;
-                    }
                 }
+            }
 
-                let bottom = top + targetEl.offsetHeight;
-                let right = left + targetEl.offsetWidth;
-                let middle = {
+            let bottom = top + targetEl.offsetHeight;
+            let right = left + targetEl.offsetWidth;
+            let middle = {
+                x: (right - left) / 2 + left,
+                y: (bottom - top) / 2 + top
+            };
+
+            if (sticky) {
+                const elTop = el.getBoundingClientRect().top;
+                const elLeft = el.getBoundingClientRect().left;
+
+                const elDistance = {
+                    x: elLeft - left,
+                    y: elTop - top
+                };
+
+                top += window.innerHeight;
+                left += window.innerWidth;
+                bottom =
+                    elTop +
+                    targetEl.offsetHeight -
+                    el.offsetHeight -
+                    elDistance[this.directionAxis];
+                right =
+                    elLeft + targetEl.offsetWidth - el.offsetWidth - elDistance[this.directionAxis];
+                middle = {
                     x: (right - left) / 2 + left,
                     y: (bottom - top) / 2 + top
                 };
+            }
 
-                if (sticky) {
-                    const elTop = el.getBoundingClientRect().top;
-                    const elLeft = el.getBoundingClientRect().left;
+            if (repeat == 'false') {
+                repeat = false;
+            } else if (repeat != undefined) {
+                repeat = true;
+            } else {
+                repeat = this.repeat;
+            }
 
-                    const elDistance = {
-                        x: elLeft - left,
-                        y: elTop - top
-                    };
-
-                    top += window.innerHeight;
-                    left += window.innerWidth;
-                    bottom =
-                        elTop +
-                        targetEl.offsetHeight -
-                        el.offsetHeight -
-                        elDistance[this.directionAxis];
-                    right =
-                        elLeft +
-                        targetEl.offsetWidth -
-                        el.offsetWidth -
-                        elDistance[this.directionAxis];
-                    middle = {
-                        x: (right - left) / 2 + left,
-                        y: (bottom - top) / 2 + top
-                    };
-                }
-
-                if (repeat == 'false') {
-                    repeat = false;
-                } else if (repeat != undefined) {
-                    repeat = true;
-                } else {
-                    repeat = this.repeat;
-                }
-
-                let relativeOffset = [0, 0];
-                if (offset) {
-                    if (this.direction === 'horizontal') {
-                        for (var i = 0; i < offset.length; i++) {
-                            if (typeof offset[i] == 'string') {
-                                if (offset[i].includes('%')) {
-                                    relativeOffset[i] = parseInt(
-                                        (offset[i].replace('%', '') * this.windowWidth) / 100
-                                    );
-                                } else {
-                                    relativeOffset[i] = parseInt(offset[i]);
-                                }
+            let relativeOffset = [0, 0];
+            if (offset) {
+                if (this.direction === 'horizontal') {
+                    for (var i = 0; i < offset.length; i++) {
+                        if (typeof offset[i] == 'string') {
+                            if (offset[i].includes('%')) {
+                                relativeOffset[i] = parseInt(
+                                    (offset[i].replace('%', '') * this.windowWidth) / 100
+                                );
                             } else {
-                                relativeOffset[i] = offset[i];
+                                relativeOffset[i] = parseInt(offset[i]);
                             }
+                        } else {
+                            relativeOffset[i] = offset[i];
                         }
-                        left = left + relativeOffset[0];
-                        right = right - relativeOffset[1];
-                    } else {
-                        for (var i = 0; i < offset.length; i++) {
-                            if (typeof offset[i] == 'string') {
-                                if (offset[i].includes('%')) {
-                                    relativeOffset[i] = parseInt(
-                                        (offset[i].replace('%', '') * this.windowHeight) / 100
-                                    );
-                                } else {
-                                    relativeOffset[i] = parseInt(offset[i]);
-                                }
-                            } else {
-                                relativeOffset[i] = offset[i];
-                            }
-                        }
-                        top = top + relativeOffset[0];
-                        bottom = bottom - relativeOffset[1];
                     }
+                    left = left + relativeOffset[0];
+                    right = right - relativeOffset[1];
+                } else {
+                    for (var i = 0; i < offset.length; i++) {
+                        if (typeof offset[i] == 'string') {
+                            if (offset[i].includes('%')) {
+                                relativeOffset[i] = parseInt(
+                                    (offset[i].replace('%', '') * this.windowHeight) / 100
+                                );
+                            } else {
+                                relativeOffset[i] = parseInt(offset[i]);
+                            }
+                        } else {
+                            relativeOffset[i] = offset[i];
+                        }
+                    }
+                    top = top + relativeOffset[0];
+                    bottom = bottom - relativeOffset[1];
                 }
+            }
 
-                const mappedEl = {
-                    el,
-                    id: id,
-                    class: cl,
-                    section: section,
-                    top,
-                    middle,
-                    bottom,
-                    left,
-                    right,
-                    offset,
-                    progress: 0,
-                    repeat,
-                    inView: el.classList.contains(cl) ? true : false,
-                    call,
-                    speed,
-                    delay,
-                    position,
-                    target: targetEl,
-                    direction,
-                    sticky
-                };
+            const mappedEl = {
+                el,
+                id: id,
+                class: cl,
+                section: section,
+                top,
+                middle,
+                bottom,
+                left,
+                right,
+                offset,
+                progress: 0,
+                repeat,
+                inView: el.classList.contains(cl) ? true : false,
+                call,
+                speed,
+                delay,
+                position,
+                target: targetEl,
+                direction,
+                sticky
+            };
 
-                this.els[id] = mappedEl;
+            this.els[id] = mappedEl;
 
-                if (speed !== false || sticky) {
-                    this.parallaxElements[id] = mappedEl;
-                }
-            });
+            if (speed !== false || sticky) {
+                this.parallaxElements[id] = mappedEl;
+            }
+        });
         // });
     }
 
@@ -685,9 +674,9 @@ export default class extends Core {
 
         sections.forEach((section, index) => {
             let id =
-                    typeof section.dataset[this.name + 'Id'] === 'string'
-                        ? section.dataset[this.name + 'Id']
-                        : 'section' + index;
+                typeof section.dataset[this.name + 'Id'] === 'string'
+                    ? section.dataset[this.name + 'Id']
+                    : 'section' + index;
             let offset = {
                 x:
                     section.getBoundingClientRect().left -
@@ -703,7 +692,7 @@ export default class extends Core {
                 y: offset.y + section.getBoundingClientRect().height + window.innerHeight * 2
             };
             let persistent = typeof section.dataset[this.name + 'Persistent'] === 'string';
-            section.setAttribute('data-scroll-section-id',id);
+            section.setAttribute('data-scroll-section-id', id);
 
             const mappedSection = {
                 el: section,
@@ -926,14 +915,15 @@ export default class extends Core {
             const targetParents = getParents(target);
             const parentSection = targetParents.find((candidate) => {
                 return Object.entries(this.sections) // Get sections associative array as a regular array
-                .map(([key, section]) => section) // map to section only (we dont need the key here)
-                .find(section => section.el == candidate) // finally find the section that matches the candidate
+                    .map(([key, section]) => section) // map to section only (we dont need the key here)
+                    .find((section) => section.el == candidate); // finally find the section that matches the candidate
             });
             let parentSectionOffset = 0;
             if (parentSection) {
                 parentSectionOffset = getTranslate(parentSection)[this.directionAxis]; // We got a parent section, store it's current offset to remove it later
-            } else { // if no parent section is found we need to use instance scroll directly
-                parentSectionOffset = -this.instance.scroll[this.directionAxis]
+            } else {
+                // if no parent section is found we need to use instance scroll directly
+                parentSectionOffset = -this.instance.scroll[this.directionAxis];
             }
 
             // Final value of scroll destination : offsetTop + (optional offset given in options) - (parent's section translate)
