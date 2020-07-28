@@ -162,7 +162,7 @@ export default class extends Core {
      */
     scrollTo(target, options = {}) {
         // Parse options
-        const offset = parseInt(options.offset) || 0; // An offset to apply on top of given `target` or `sourceElem`'s target
+        let offset = parseInt(options.offset) || 0; // An offset to apply on top of given `target` or `sourceElem`'s target
         const callback = options.callback ? options.callback : false; // function called when scrollTo completes (note that it won't wait for lerp to stabilize)
 
         if (typeof target === 'string') {
