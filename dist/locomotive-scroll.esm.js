@@ -147,10 +147,6 @@ function _get(target, property, receiver) {
   return _get(target, property, receiver || target);
 }
 
-function _readOnlyError(name) {
-  throw new Error("\"" + name + "\" is read-only");
-}
-
 function _slicedToArray(arr, i) {
   return _arrayWithHoles(arr) || _iterableToArrayLimit(arr, i) || _nonIterableRest();
 }
@@ -1230,13 +1226,13 @@ var _default$1 = /*#__PURE__*/function (_Core) {
 
 
       if (typeof target !== 'number') {
-        offset = (_readOnlyError("offset"), target.getBoundingClientRect().top + offset + this.instance.scroll.y);
+        offset = target.getBoundingClientRect().top + offset + this.instance.scroll.y;
       } else {
-        offset = (_readOnlyError("offset"), target + offset);
+        offset = target + offset;
       }
 
       if (callback) {
-        offset = (_readOnlyError("offset"), offset.toFixed());
+        offset = offset.toFixed();
 
         var onScroll = function onScroll() {
           if (window.pageYOffset.toFixed() === offset) {
