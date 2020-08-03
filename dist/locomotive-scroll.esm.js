@@ -1108,11 +1108,12 @@ var _default$1 = /*#__PURE__*/function (_Core) {
       this.els = {};
       var els = this.el.querySelectorAll('[data-' + this.name + ']');
       els.forEach(function (el, index) {
+        var BCR = el.getBoundingClientRect();
         var cl = el.dataset[_this3.name + 'Class'] || _this3["class"];
         var id = typeof el.dataset[_this3.name + 'Id'] === 'string' ? el.dataset[_this3.name + 'Id'] : index;
-
-        var top = el.getBoundingClientRect().top + _this3.instance.scroll.y;
-
+        var top = BCR.top + _this3.instance.scroll.y;
+        var left = BCR.left;
+        var right = BCR.right;
         var bottom = top + el.offsetHeight;
         var offset = typeof el.dataset[_this3.name + 'Offset'] === 'string' ? el.dataset[_this3.name + 'Offset'].split(',') : _this3.offset;
         var repeat = el.dataset[_this3.name + 'Repeat'];
@@ -1131,9 +1132,11 @@ var _default$1 = /*#__PURE__*/function (_Core) {
         var mappedEl = {
           el: el,
           id: id,
-          "class": cl,
+          cl: cl,
           top: top + relativeOffset[0],
           bottom: bottom - relativeOffset[1],
+          left: left,
+          right: right,
           offset: offset,
           progress: 0,
           repeat: repeat,

@@ -76,12 +76,15 @@ export default class extends Core {
         const els = this.el.querySelectorAll('[data-' + this.name + ']');
 
         els.forEach((el, index) => {
+            const BCR = el.getBoundingClientRect();
             let cl = el.dataset[this.name + 'Class'] || this.class;
             let id =
                 typeof el.dataset[this.name + 'Id'] === 'string'
                     ? el.dataset[this.name + 'Id']
                     : index;
-            let top = el.getBoundingClientRect().top + this.instance.scroll.y;
+            let top = BCR.top + this.instance.scroll.y;
+            let left = BCR.left
+            let right = BCR.right
             let bottom = top + el.offsetHeight;
             let offset =
                 typeof el.dataset[this.name + 'Offset'] === 'string'
@@ -101,16 +104,18 @@ export default class extends Core {
             let relativeOffset = this.getRelativeOffset(offset);
 
             const mappedEl = {
-                el: el,
-                id: id,
-                class: cl,
+                el,
+                id,
+                cl,
                 top: top + relativeOffset[0],
                 bottom: bottom - relativeOffset[1],
-                offset: offset,
+                left,
+                right,
+                offset,
                 progress: 0,
-                repeat: repeat,
+                repeat,
                 inView: el.classList.contains(cl) ? true : false,
-                call: call
+                call
             };
 
             this.els[id] = mappedEl;
