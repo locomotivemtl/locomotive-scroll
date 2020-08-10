@@ -126,6 +126,8 @@ export default class extends Core {
                     // Make sure native scroll is always at top of page
                     this.html.scrollTop = 0;
                     document.body.scrollTop = 0;
+                    this.html.scrollLeft = 0;
+                    document.body.scrollLeft = 0;
                 });
             }
             return;
@@ -139,6 +141,8 @@ export default class extends Core {
                     // Make sure native scroll is always at top of page
                     this.html.scrollTop = 0;
                     document.body.scrollTop = 0;
+                    this.html.scrollLeft = 0;
+                    document.body.scrollLeft = 0;
 
                     // Request scrollTo on the focusedElement, putting it at the center of the screen
                     this.scrollTo(document.activeElement, -window.innerHeight / 2);

@@ -2075,6 +2075,8 @@ var _default$2 = /*#__PURE__*/function (_Core) {
             // Make sure native scroll is always at top of page
             _this3.html.scrollTop = 0;
             document.body.scrollTop = 0;
+            _this3.html.scrollLeft = 0;
+            document.body.scrollLeft = 0;
           });
         }
 
@@ -2088,7 +2090,9 @@ var _default$2 = /*#__PURE__*/function (_Core) {
           requestAnimationFrame(function () {
             // Make sure native scroll is always at top of page
             _this3.html.scrollTop = 0;
-            document.body.scrollTop = 0; // Request scrollTo on the focusedElement, putting it at the center of the screen
+            document.body.scrollTop = 0;
+            _this3.html.scrollLeft = 0;
+            document.body.scrollLeft = 0; // Request scrollTo on the focusedElement, putting it at the center of the screen
 
             _this3.scrollTo(document.activeElement, -window.innerHeight / 2);
           });
