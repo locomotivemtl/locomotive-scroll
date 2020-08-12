@@ -1138,7 +1138,7 @@
           var mappedEl = {
             el: el,
             id: id,
-            cl: cl,
+            "class": cl,
             top: top + relativeOffset[0],
             bottom: bottom - relativeOffset[1],
             left: left,
