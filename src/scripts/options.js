@@ -20,6 +20,7 @@ export const defaults = {
     multiplier: 1,
     firefoxMultiplier: 50,
     touchMultiplier: 2,
+    resetNativeScroll: true,
     tablet: {
         smooth: false,
         direction: 'vertical',

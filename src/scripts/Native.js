@@ -4,6 +4,13 @@ import smoothscroll from 'smoothscroll-polyfill';
 export default class extends Core {
     constructor(options = {}) {
         super(options);
+        
+        if(this.resetNativeScroll) {
+            if(history.scrollRestoration) {
+                history.scrollRestoration = 'manual';
+            }
+            window.scrollTo(0, 0);
+        }
 
         window.addEventListener('scroll', this.checkScroll, false);
         smoothscroll.polyfill();

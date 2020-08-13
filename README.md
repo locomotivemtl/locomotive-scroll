@@ -146,6 +146,8 @@ scroll.on('call', func => {
 | `horizontalGesture`     | `boolean` | `false`                | ![Smooth only][smooth-only]<br>If you want to use horizontal input to scroll in your page                                                                                                                                                                                                          |
 | `tablet` & `smartphone` | `object`  |                        | Object allowing to override some options for a particular context. You can specify: <ul><li>`smooth`</li><li>`direction`</li><li>`horizontalGesture`</li></ul>For `tablet` context you can also define `breakpoint` (_integer_, defaults to 1024) to set the max-width breakpoint for tablets.     |
 | `reloadOnContextChange` | `boolean` | `false`                | Allows to reload the page when switching between `desktop`, `tablet` and `smartphone` contexts. It can be useful if your page changes a lot between contexts and you want to reset everything.                                                                                                     |
+| `resetNativeScroll` | `boolean` | `true`                | Sets `history.scrollRestoration = 'manual'` and calls `window.scrollTo(0, 0)` on locomotive-scroll init. 
+Useful if you use transitions with native scrolling, otherwise we advise to set it to `false` if you don't want to break History API's scroll restoration feature. |
 
 ## Element attributes
 

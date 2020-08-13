@@ -231,6 +231,7 @@ var defaults = {
   multiplier: 1,
   firefoxMultiplier: 50,
   touchMultiplier: 2,
+  resetNativeScroll: true,
   tablet: {
     smooth: false,
     direction: 'vertical',
@@ -1029,6 +1030,15 @@ var _default$1 = /*#__PURE__*/function (_Core) {
     _classCallCheck(this, _default);
 
     _this = _possibleConstructorReturn(this, _getPrototypeOf(_default).call(this, options));
+
+    if (_this.resetNativeScroll) {
+      if (history.scrollRestoration) {
+        history.scrollRestoration = 'manual';
+      }
+
+      window.scrollTo(0, 0);
+    }
+
     window.addEventListener('scroll', _this.checkScroll, false);
     smoothscroll.polyfill();
     return _this;
@@ -1965,7 +1975,10 @@ var _default$2 = /*#__PURE__*/function (_Core) {
 
     _classCallCheck(this, _default);
 
-    history.scrollRestoration = 'manual';
+    if (history.scrollRestoration) {
+      history.scrollRestoration = 'manual';
+    }
+
     window.scrollTo(0, 0);
     _this = _possibleConstructorReturn(this, _getPrototypeOf(_default).call(this, options));
     if (_this.inertia) _this.lerp = _this.inertia * 0.1;
