@@ -1045,8 +1045,8 @@
         window.scrollTo(0, 0);
       }
 
-      window.addEventListener('scroll', _this.checkScroll, false);
-      smoothscroll.polyfill();
+      window.addEventListener('scroll', _this.checkScroll, false); // smoothscroll.polyfill();
+
       return _this;
     }
 

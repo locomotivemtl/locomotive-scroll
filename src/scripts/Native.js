@@ -13,7 +13,7 @@ export default class extends Core {
         }
 
         window.addEventListener('scroll', this.checkScroll, false);
-        smoothscroll.polyfill();
+        // smoothscroll.polyfill();
     }
 
     init() {
