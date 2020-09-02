@@ -9,6 +9,7 @@ export const defaults = {
     direction: 'vertical',
     lerp: 0.1,
     class: 'is-inview',
+    scrollbarContainer: false,
     scrollbarClass: 'c-scrollbar',
     scrollingClass: 'has-scroll-scrolling',
     draggingClass: 'has-scroll-dragging',

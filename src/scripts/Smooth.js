@@ -22,7 +22,7 @@ export default class extends Core {
     constructor(options = {}) {
         window.scrollTo(0,0);
         history.scrollRestoration = 'manual'
-        
+
         super(options);
 
         if(this.inertia) this.lerp = this.inertia * 0.1
@@ -32,6 +32,7 @@ export default class extends Core {
         this.hasScrollTicking = false;
         this.parallaxElements = [];
         this.stop = false;
+        this.scrollbarContainer = options.scrollbarContainer
 
         this.checkKey = this.checkKey.bind(this);
         window.addEventListener('keydown', this.checkKey, false);
@@ -58,7 +59,7 @@ export default class extends Core {
         });
 
         this.vs.on((e) => {
-            
+
             if (this.stop) {
                 return;
             }
@@ -182,7 +183,7 @@ export default class extends Core {
             this.updateScroll();
 
             const distance = (Math.abs(this.instance.delta.y - this.instance.scroll.y));
-            
+
             if (!this.animatingScroll && ((distance < 0.5 && this.instance.delta.y != 0) || (distance < 0.5 && this.instance.delta.y == 0))) {
                 this.stopScrolling();
             }
@@ -284,7 +285,11 @@ export default class extends Core {
         this.scrollbarThumb.classList.add(`${this.scrollbarClass}_thumb`);
 
         this.scrollbar.append(this.scrollbarThumb);
-        document.body.append(this.scrollbar);
+        if(this.scrollbarContainer) {
+            this.scrollbarContainer.append(this.scrollbar)
+        } else {
+            document.body.append(this.scrollbar);
+        }
 
         // Scrollbar Events
         this.getScrollBar = this.getScrollBar.bind(this);

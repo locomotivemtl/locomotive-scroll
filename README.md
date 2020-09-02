@@ -140,6 +140,7 @@ scroll.on('call', func => {
 | `scrollingClass`    | `string`  | `has-scroll-scrolling` | Is scrolling class.                                                                   |
 | `draggingClass`     | `string`  | `has-scroll-dragging`  | Is dragging class.                                                                    |
 | `smoothClass`       | `string`  | `has-scroll-smooth`    | Has smooth scrolling class.                                                           |
+| `scrollbarContainer`| `object`  | `false`                | Specifies the container element for the scrollbar to be appended in. If false, scrollbar will be appended to the body. (smooth-only) | 
 | `scrollbarClass`    | `string`  | `c-scrollbar`          | Scrollbar element class.                                                              |
 | `multiplier`        | `number`  | `1`                    | Factor applied to the scroll delta, allowing to boost/reduce scrolling speed (regardless of the platform). |
 | `firefoxMultiplier` | `number`  | `50`                   | Boost scrolling speed of Firefox on Windows.                                          |

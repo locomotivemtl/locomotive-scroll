@@ -178,6 +178,7 @@ var defaults = {
   direction: 'vertical',
   lerp: 0.1,
   "class": 'is-inview',
+  scrollbarContainer: false,
   scrollbarClass: 'c-scrollbar',
   scrollingClass: 'has-scroll-scrolling',
   draggingClass: 'has-scroll-dragging',
@@ -1829,6 +1830,7 @@ var _default$2 = /*#__PURE__*/function (_Core) {
     _this.hasScrollTicking = false;
     _this.parallaxElements = [];
     _this.stop = false;
+    _this.scrollbarContainer = options.scrollbarContainer;
     _this.checkKey = _this.checkKey.bind(_assertThisInitialized(_this));
     window.addEventListener('keydown', _this.checkKey, false);
     return _this;
@@ -2103,7 +2105,13 @@ var _default$2 = /*#__PURE__*/function (_Core) {
       this.scrollbar.classList.add("".concat(this.scrollbarClass));
       this.scrollbarThumb.classList.add("".concat(this.scrollbarClass, "_thumb"));
       this.scrollbar.append(this.scrollbarThumb);
-      document.body.append(this.scrollbar); // Scrollbar Events
+
+      if (this.scrollbarContainer) {
+        this.scrollbarContainer.append(this.scrollbar);
+      } else {
+        document.body.append(this.scrollbar);
+      } // Scrollbar Events
+
 
       this.getScrollBar = this.getScrollBar.bind(this);
       this.releaseScrollBar = this.releaseScrollBar.bind(this);
