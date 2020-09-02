@@ -305,7 +305,8 @@ export default class extends Core {
             return;
         }
 
-        this.scrollbarHeight = this.scrollbar.getBoundingClientRect().height;
+        this.scrollbarBCR = this.scrollbar.getBoundingClientRect()
+        this.scrollbarHeight = this.scrollbarBCR.height;
         this.scrollbarThumb.style.height = `${(this.scrollbarHeight * this.scrollbarHeight) / (this.instance.limit + this.scrollbarHeight)}px`;
         this.scrollBarLimit = this.scrollbarHeight - this.scrollbarThumb.getBoundingClientRect().height;
 
@@ -316,7 +317,8 @@ export default class extends Core {
             return;
         }
 
-        this.scrollbarHeight = this.scrollbar.getBoundingClientRect().height;
+        this.scrollbarBCR = this.scrollbar.getBoundingClientRect()
+        this.scrollbarHeight = this.scrollbarBCR.height;
         this.scrollbarThumb.style.height = `${(this.scrollbarHeight * this.scrollbarHeight) / (this.instance.limit + this.scrollbarHeight)}px`;
         this.scrollBarLimit = this.scrollbarHeight - this.scrollbarThumb.getBoundingClientRect().height;
     }
@@ -344,7 +346,7 @@ export default class extends Core {
     moveScrollBar(e) {
         if (!this.isTicking && this.isDraggingScrollbar) {
             requestAnimationFrame(() => {
-                let y = (e.clientY * 100 / (this.scrollbarHeight)) * this.instance.limit / 100;
+                let y = ((e.clientY - this.scrollbarBCR.top) * 100 / (this.scrollbarHeight)) * this.instance.limit / 100;
 
                 if(y > 0 && y < this.instance.limit) {
                     this.instance.delta.y = y;

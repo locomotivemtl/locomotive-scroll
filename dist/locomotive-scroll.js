@@ -2130,7 +2130,8 @@
           return;
         }
 
-        this.scrollbarHeight = this.scrollbar.getBoundingClientRect().height;
+        this.scrollbarBCR = this.scrollbar.getBoundingClientRect();
+        this.scrollbarHeight = this.scrollbarBCR.height;
         this.scrollbarThumb.style.height = "".concat(this.scrollbarHeight * this.scrollbarHeight / (this.instance.limit + this.scrollbarHeight), "px");
         this.scrollBarLimit = this.scrollbarHeight - this.scrollbarThumb.getBoundingClientRect().height;
       }
@@ -2141,7 +2142,8 @@
           return;
         }
 
-        this.scrollbarHeight = this.scrollbar.getBoundingClientRect().height;
+        this.scrollbarBCR = this.scrollbar.getBoundingClientRect();
+        this.scrollbarHeight = this.scrollbarBCR.height;
         this.scrollbarThumb.style.height = "".concat(this.scrollbarHeight * this.scrollbarHeight / (this.instance.limit + this.scrollbarHeight), "px");
         this.scrollBarLimit = this.scrollbarHeight - this.scrollbarThumb.getBoundingClientRect().height;
       }
@@ -2175,7 +2177,7 @@
 
         if (!this.isTicking && this.isDraggingScrollbar) {
           requestAnimationFrame(function () {
-            var y = e.clientY * 100 / _this5.scrollbarHeight * _this5.instance.limit / 100;
+            var y = (e.clientY - _this5.scrollbarBCR.top) * 100 / _this5.scrollbarHeight * _this5.instance.limit / 100;
 
             if (y > 0 && y < _this5.instance.limit) {
               _this5.instance.delta.y = y;
