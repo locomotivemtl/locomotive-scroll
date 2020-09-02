@@ -226,6 +226,7 @@
     reloadOnContextChange: false,
     lerp: 0.1,
     "class": 'is-inview',
+    scrollbarContainer: false,
     scrollbarClass: 'c-scrollbar',
     scrollingClass: 'has-scroll-scrolling',
     draggingClass: 'has-scroll-dragging',
@@ -1994,6 +1995,7 @@
       _this.hasScrollTicking = false;
       _this.parallaxElements = {};
       _this.stop = false;
+      _this.scrollbarContainer = options.scrollbarContainer;
       _this.checkKey = _this.checkKey.bind(_assertThisInitialized(_this));
       window.addEventListener('keydown', _this.checkKey, false);
       return _this;
@@ -2324,7 +2326,13 @@
         this.scrollbar.classList.add("".concat(this.scrollbarClass));
         this.scrollbarThumb.classList.add("".concat(this.scrollbarClass, "_thumb"));
         this.scrollbar.append(this.scrollbarThumb);
-        document.body.append(this.scrollbar); // Scrollbar Events
+
+        if (this.scrollbarContainer) {
+          this.scrollbarContainer.append(this.scrollbar);
+        } else {
+          document.body.append(this.scrollbar);
+        } // Scrollbar Events
+
 
         this.getScrollBar = this.getScrollBar.bind(this);
         this.releaseScrollBar = this.releaseScrollBar.bind(this);
@@ -2346,8 +2354,9 @@
         }
 
         this.hasScrollbar = true;
-        this.scrollbarHeight = this.scrollbar.getBoundingClientRect().height;
-        this.scrollbarWidth = this.scrollbar.getBoundingClientRect().width;
+        this.scrollbarBCR = this.scrollbar.getBoundingClientRect();
+        this.scrollbarHeight = this.scrollbarBCR.height;
+        this.scrollbarWidth = this.scrollbarBCR.width;
 
         if (this.direction === 'horizontal') {
           this.scrollbarThumb.style.width = "".concat(this.scrollbarWidth * this.scrollbarWidth / (this.instance.limit.x + this.scrollbarWidth), "px");
@@ -2355,9 +2364,10 @@
           this.scrollbarThumb.style.height = "".concat(this.scrollbarHeight * this.scrollbarHeight / (this.instance.limit.y + this.scrollbarHeight), "px");
         }
 
+        this.scrollbarThumbBCR = this.scrollbarThumb.getBoundingClientRect();
         this.scrollBarLimit = {
-          x: this.scrollbarWidth - this.scrollbarThumb.getBoundingClientRect().width,
-          y: this.scrollbarHeight - this.scrollbarThumb.getBoundingClientRect().height
+          x: this.scrollbarWidth - this.scrollbarThumbBCR.width,
+          y: this.scrollbarHeight - this.scrollbarThumbBCR.height
         };
       }
     }, {
@@ -2376,8 +2386,9 @@
         }
 
         this.hasScrollbar = true;
-        this.scrollbarHeight = this.scrollbar.getBoundingClientRect().height;
-        this.scrollbarWidth = this.scrollbar.getBoundingClientRect().width;
+        this.scrollbarBCR = this.scrollbar.getBoundingClientRect();
+        this.scrollbarHeight = this.scrollbarBCR.height;
+        this.scrollbarWidth = this.scrollbarBCR.width;
 
         if (this.direction === 'horizontal') {
           this.scrollbarThumb.style.width = "".concat(this.scrollbarWidth * this.scrollbarWidth / (this.instance.limit.x + this.scrollbarWidth), "px");
@@ -2385,9 +2396,10 @@
           this.scrollbarThumb.style.height = "".concat(this.scrollbarHeight * this.scrollbarHeight / (this.instance.limit.y + this.scrollbarHeight), "px");
         }
 
+        this.scrollbarThumbBCR = this.scrollbarThumb.getBoundingClientRect();
         this.scrollBarLimit = {
-          x: this.scrollbarWidth - this.scrollbarThumb.getBoundingClientRect().width,
-          y: this.scrollbarHeight - this.scrollbarThumb.getBoundingClientRect().height
+          x: this.scrollbarWidth - this.scrollbarThumbBCR.width,
+          y: this.scrollbarHeight - this.scrollbarThumbBCR.height
         };
       }
     }, {
@@ -2420,8 +2432,8 @@
 
         if (this.isDraggingScrollbar) {
           requestAnimationFrame(function () {
-            var x = e.clientX * 100 / _this5.scrollbarWidth * _this5.instance.limit.x / 100;
-            var y = e.clientY * 100 / _this5.scrollbarHeight * _this5.instance.limit.y / 100;
+            var x = (e.clientX - _this5.scrollbarBCR.left) * 100 / _this5.scrollbarWidth * _this5.instance.limit.x / 100;
+            var y = (e.clientY - _this5.scrollbarBCR.top) * 100 / _this5.scrollbarHeight * _this5.instance.limit.y / 100;
 
             if (y > 0 && y < _this5.instance.limit.y) {
               _this5.instance.delta.y = y;
@@ -2475,16 +2487,18 @@
             targetEl = el;
           }
 
+          var targetElBCR = targetEl.getBoundingClientRect();
+
           if (section === null) {
-            top = targetEl.getBoundingClientRect().top + _this6.instance.scroll.y - getTranslate(targetEl).y;
-            left = targetEl.getBoundingClientRect().left + _this6.instance.scroll.x - getTranslate(targetEl).x;
+            top = targetElBCR.top + _this6.instance.scroll.y - getTranslate(targetEl).y;
+            left = targetElBCR.left + _this6.instance.scroll.x - getTranslate(targetEl).x;
           } else {
             if (!section.inView) {
-              top = targetEl.getBoundingClientRect().top - getTranslate(section.el).y - getTranslate(targetEl).y;
-              left = targetEl.getBoundingClientRect().left - getTranslate(section.el).x - getTranslate(targetEl).x;
+              top = targetElBCR.top - getTranslate(section.el).y - getTranslate(targetEl).y;
+              left = targetElBCR.left - getTranslate(section.el).x - getTranslate(targetEl).x;
             } else {
-              top = targetEl.getBoundingClientRect().top + _this6.instance.scroll.y - getTranslate(targetEl).y;
-              left = targetEl.getBoundingClientRect().left + _this6.instance.scroll.x - getTranslate(targetEl).x;
+              top = targetElBCR.top + _this6.instance.scroll.y - getTranslate(targetEl).y;
+              left = targetElBCR.left + _this6.instance.scroll.x - getTranslate(targetEl).x;
             }
           }
 
@@ -2496,8 +2510,9 @@
           };
 
           if (sticky) {
-            var elTop = el.getBoundingClientRect().top;
-            var elLeft = el.getBoundingClientRect().left;
+            var elBCR = el.getBoundingClientRect();
+            var elTop = elBCR.top;
+            var elLeft = elBCR.left;
             var elDistance = {
               x: elLeft - left,
               y: elTop - top
@@ -2599,13 +2614,14 @@
 
         sections.forEach(function (section, index) {
           var id = typeof section.dataset[_this7.name + 'Id'] === 'string' ? section.dataset[_this7.name + 'Id'] : 'section' + index;
+          var sectionBCR = section.getBoundingClientRect();
           var offset = {
-            x: section.getBoundingClientRect().left - window.innerWidth * 1.5 - getTranslate(section).x,
-            y: section.getBoundingClientRect().top - window.innerHeight * 1.5 - getTranslate(section).y
+            x: sectionBCR.left - window.innerWidth * 1.5 - getTranslate(section).x,
+            y: sectionBCR.top - window.innerHeight * 1.5 - getTranslate(section).y
           };
           var limit = {
-            x: offset.x + section.getBoundingClientRect().width + window.innerWidth * 2,
-            y: offset.y + section.getBoundingClientRect().height + window.innerHeight * 2
+            x: offset.x + sectionBCR.width + window.innerWidth * 2,
+            y: offset.y + sectionBCR.height + window.innerHeight * 2
           };
           var persistent = typeof section.dataset[_this7.name + 'Persistent'] === 'string';
           section.setAttribute('data-scroll-section-id', id);
