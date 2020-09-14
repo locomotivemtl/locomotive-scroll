@@ -295,10 +295,16 @@ export default class extends Core {
 
     updateDelta(e) {
         let delta;
-        if (this.isMobile) {
-            delta = this[this.context].horizontalGesture ? e.deltaX : e.deltaY;
+        const gestureDirection = (this[this.context] && this[this.context].gestureDirection) ? this[this.context].gestureDirection : this.gestureDirection;
+
+        if(gestureDirection === "both") {
+            delta = e.deltaX + e.deltaY;
+        } else if(gestureDirection === "vertical") {
+            delta = e.deltaY;
+        } else if(gestureDirection === "horizontal") {
+            delta = e.deltaX;
         } else {
-            delta = this.horizontalGesture ? e.deltaX : e.deltaY;
+            delta = e.deltaY;
         }
 
         this.instance.delta[this.directionAxis] -= delta * this.multiplier;

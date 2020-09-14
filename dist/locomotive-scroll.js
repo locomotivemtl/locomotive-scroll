@@ -222,7 +222,7 @@
     repeat: false,
     smooth: false,
     direction: 'vertical',
-    horizontalGesture: false,
+    gestureDirection: 'vertical',
     reloadOnContextChange: false,
     lerp: 0.1,
     "class": 'is-inview',
@@ -242,13 +242,13 @@
     tablet: {
       smooth: false,
       direction: 'vertical',
-      horizontalGesture: false,
+      gestureDirection: 'vertical',
       breakpoint: 1024
     },
     smartphone: {
       smooth: false,
       direction: 'vertical',
-      horizontalGesture: false
+      gestureDirection: 'vertical'
     }
   };
 
@@ -2260,11 +2260,16 @@
       key: "updateDelta",
       value: function updateDelta(e) {
         var delta;
+        var gestureDirection = this[this.context] && this[this.context].gestureDirection ? this[this.context].gestureDirection : this.gestureDirection;
 
-        if (this.isMobile) {
-          delta = this[this.context].horizontalGesture ? e.deltaX : e.deltaY;
+        if (gestureDirection === "both") {
+          delta = e.deltaX + e.deltaY;
+        } else if (gestureDirection === "vertical") {
+          delta = e.deltaY;
+        } else if (gestureDirection === "horizontal") {
+          delta = e.deltaX;
         } else {
-          delta = this.horizontalGesture ? e.deltaX : e.deltaY;
+          delta = e.deltaY;
         }
 
         this.instance.delta[this.directionAxis] -= delta * this.multiplier;

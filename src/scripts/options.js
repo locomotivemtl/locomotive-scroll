@@ -5,7 +5,7 @@ export const defaults = {
     repeat: false,
     smooth: false,
     direction: 'vertical',
-    horizontalGesture: false,
+    gestureDirection: 'vertical',
     reloadOnContextChange: false,
     lerp: 0.1,
     class: 'is-inview',
@@ -25,12 +25,12 @@ export const defaults = {
     tablet: {
         smooth: false,
         direction: 'vertical',
-        horizontalGesture: false,
+        gestureDirection: 'vertical',
         breakpoint: 1024
     },
     smartphone: {
         smooth: false,
         direction: 'vertical',
-        horizontalGesture: false
+        gestureDirection: 'vertical'
     }
 };
