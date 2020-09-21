@@ -1161,6 +1161,7 @@
             call: call
           };
           _this3.els[id] = mappedEl;
+          if (_this3.currentElements[id]) _this3.currentElements[id] = mappedEl;
         });
       }
     }, {
@@ -2599,6 +2600,7 @@
             sticky: sticky
           };
           _this6.els[id] = mappedEl;
+          if (_this6.currentElements[id]) _this6.currentElements[id] = mappedEl;
 
           if (speed !== false || sticky) {
             _this6.parallaxElements[id] = mappedEl;

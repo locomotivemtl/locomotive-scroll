@@ -4,7 +4,7 @@ import smoothscroll from 'smoothscroll-polyfill';
 export default class extends Core {
     constructor(options = {}) {
         super(options);
-        
+
         if(this.resetNativeScroll) {
             if(history.scrollRestoration) {
                 history.scrollRestoration = 'manual';
@@ -126,6 +126,7 @@ export default class extends Core {
             };
 
             this.els[id] = mappedEl;
+            if(this.currentElements[id]) this.currentElements[id] = mappedEl
         });
     }
 

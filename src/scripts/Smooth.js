@@ -681,6 +681,7 @@ export default class extends Core {
             };
 
             this.els[id] = mappedEl;
+            if(this.currentElements[id]) this.currentElements[id] = mappedEl
 
             if (speed !== false || sticky) {
                 this.parallaxElements[id] = mappedEl;
