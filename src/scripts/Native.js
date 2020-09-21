@@ -121,12 +121,14 @@ export default class extends Core {
                 offset,
                 progress: 0,
                 repeat,
-                inView: el.classList.contains(cl) ? true : false,
+                inView: false,
                 call
             };
 
             this.els[id] = mappedEl;
-            if(this.currentElements[id]) this.currentElements[id] = mappedEl
+            if(el.classList.contains(cl)) {
+                this.setInView(this.els[id], id)
+            }
         });
     }
 

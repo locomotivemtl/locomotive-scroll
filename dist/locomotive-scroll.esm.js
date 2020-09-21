@@ -1151,11 +1151,14 @@ var _default$1 = /*#__PURE__*/function (_Core) {
           offset: offset,
           progress: 0,
           repeat: repeat,
-          inView: el.classList.contains(cl) ? true : false,
+          inView: false,
           call: call
         };
         _this3.els[id] = mappedEl;
-        if (_this3.currentElements[id]) _this3.currentElements[id] = mappedEl;
+
+        if (el.classList.contains(cl)) {
+          _this3.setInView(_this3.els[id], id);
+        }
       });
     }
   }, {
@@ -2584,7 +2587,7 @@ var _default$2 = /*#__PURE__*/function (_Core) {
           offset: offset,
           progress: 0,
           repeat: repeat,
-          inView: el.classList.contains(cl) ? true : false,
+          inView: false,
           call: call,
           speed: speed,
           delay: delay,
@@ -2594,7 +2597,10 @@ var _default$2 = /*#__PURE__*/function (_Core) {
           sticky: sticky
         };
         _this6.els[id] = mappedEl;
-        if (_this6.currentElements[id]) _this6.currentElements[id] = mappedEl;
+
+        if (el.classList.contains(cl)) {
+          _this6.setInView(_this6.els[id], id);
+        }
 
         if (speed !== false || sticky) {
           _this6.parallaxElements[id] = mappedEl;
