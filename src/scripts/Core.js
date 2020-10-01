@@ -318,5 +318,7 @@ export default class {
         this.scrollToEls.forEach((el) => {
             el.removeEventListener('click', this.setScrollTo, false);
         });
+
+        this.html.classList.remove(this.initClass);
     }
 }

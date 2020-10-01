@@ -575,6 +575,7 @@ var _default = /*#__PURE__*/function () {
       this.scrollToEls.forEach(function (el) {
         el.removeEventListener('click', _this6.setScrollTo, false);
       });
+      this.html.classList.remove(this.initClass);
     }
   }]);
 
