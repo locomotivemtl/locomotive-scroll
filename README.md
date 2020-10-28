@@ -199,7 +199,7 @@ In the on scroll event you can get all current in-view elements.
 scroll.on('scroll', (args) => {
     // Get all current elements : args.currentElements
     if(typeof args.currentElements['hey'] === 'object') {
-        let progress = instance.currentElements['hey'].progress;
+        let progress = args.currentElements['hey'].progress;
         console.log(progress);
         // ouput log example: 0.34
         // gsap example : myGsapAnimation.progress(progress);
