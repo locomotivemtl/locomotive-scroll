@@ -101,6 +101,19 @@ function _setPrototypeOf(o, p) {
   return _setPrototypeOf(o, p);
 }
 
+function _isNativeReflectConstruct() {
+  if (typeof Reflect === "undefined" || !Reflect.construct) return false;
+  if (Reflect.construct.sham) return false;
+  if (typeof Proxy === "function") return true;
+
+  try {
+    Date.prototype.toString.call(Reflect.construct(Date, [], function () {}));
+    return true;
+  } catch (e) {
+    return false;
+  }
+}
+
 function _assertThisInitialized(self) {
   if (self === void 0) {
     throw new ReferenceError("this hasn't been initialised - super() hasn't been called");
@@ -115,6 +128,25 @@ function _possibleConstructorReturn(self, call) {
   }
 
   return _assertThisInitialized(self);
+}
+
+function _createSuper(Derived) {
+  var hasNativeReflectConstruct = _isNativeReflectConstruct();
+
+  return function _createSuperInternal() {
+    var Super = _getPrototypeOf(Derived),
+        result;
+
+    if (hasNativeReflectConstruct) {
+      var NewTarget = _getPrototypeOf(this).constructor;
+
+      result = Reflect.construct(Super, arguments, NewTarget);
+    } else {
+      result = Super.apply(this, arguments);
+    }
+
+    return _possibleConstructorReturn(this, result);
+  };
 }
 
 function _superPropBase(object, property) {
@@ -148,19 +180,15 @@ function _get(target, property, receiver) {
 }
 
 function _slicedToArray(arr, i) {
-  return _arrayWithHoles(arr) || _iterableToArrayLimit(arr, i) || _nonIterableRest();
+  return _arrayWithHoles(arr) || _iterableToArrayLimit(arr, i) || _unsupportedIterableToArray(arr, i) || _nonIterableRest();
 }
 
 function _toConsumableArray(arr) {
-  return _arrayWithoutHoles(arr) || _iterableToArray(arr) || _nonIterableSpread();
+  return _arrayWithoutHoles(arr) || _iterableToArray(arr) || _unsupportedIterableToArray(arr) || _nonIterableSpread();
 }
 
 function _arrayWithoutHoles(arr) {
-  if (Array.isArray(arr)) {
-    for (var i = 0, arr2 = new Array(arr.length); i < arr.length; i++) arr2[i] = arr[i];
-
-    return arr2;
-  }
+  if (Array.isArray(arr)) return _arrayLikeToArray(arr);
 }
 
 function _arrayWithHoles(arr) {
@@ -168,14 +196,11 @@ function _arrayWithHoles(arr) {
 }
 
 function _iterableToArray(iter) {
-  if (Symbol.iterator in Object(iter) || Object.prototype.toString.call(iter) === "[object Arguments]") return Array.from(iter);
+  if (typeof Symbol !== "undefined" && Symbol.iterator in Object(iter)) return Array.from(iter);
 }
 
 function _iterableToArrayLimit(arr, i) {
-  if (!(Symbol.iterator in Object(arr) || Object.prototype.toString.call(arr) === "[object Arguments]")) {
-    return;
-  }
-
+  if (typeof Symbol === "undefined" || !(Symbol.iterator in Object(arr))) return;
   var _arr = [];
   var _n = true;
   var _d = false;
@@ -201,12 +226,29 @@ function _iterableToArrayLimit(arr, i) {
   return _arr;
 }
 
+function _unsupportedIterableToArray(o, minLen) {
+  if (!o) return;
+  if (typeof o === "string") return _arrayLikeToArray(o, minLen);
+  var n = Object.prototype.toString.call(o).slice(8, -1);
+  if (n === "Object" && o.constructor) n = o.constructor.name;
+  if (n === "Map" || n === "Set") return Array.from(o);
+  if (n === "Arguments" || /^(?:Ui|I)nt(?:8|16|32)(?:Clamped)?Array$/.test(n)) return _arrayLikeToArray(o, minLen);
+}
+
+function _arrayLikeToArray(arr, len) {
+  if (len == null || len > arr.length) len = arr.length;
+
+  for (var i = 0, arr2 = new Array(len); i < len; i++) arr2[i] = arr[i];
+
+  return arr2;
+}
+
 function _nonIterableSpread() {
-  throw new TypeError("Invalid attempt to spread non-iterable instance");
+  throw new TypeError("Invalid attempt to spread non-iterable instance.\nIn order to be iterable, non-array objects must have a [Symbol.iterator]() method.");
 }
 
 function _nonIterableRest() {
-  throw new TypeError("Invalid attempt to destructure non-iterable instance");
+  throw new TypeError("Invalid attempt to destructure non-iterable instance.\nIn order to be iterable, non-array objects must have a [Symbol.iterator]() method.");
 }
 
 var defaults = {
@@ -1024,6 +1066,8 @@ var smoothscroll_1 = smoothscroll.polyfill;
 var _default$1 = /*#__PURE__*/function (_Core) {
   _inherits(_default, _Core);
 
+  var _super = _createSuper(_default);
+
   function _default() {
     var _this;
 
@@ -1031,7 +1075,7 @@ var _default$1 = /*#__PURE__*/function (_Core) {
 
     _classCallCheck(this, _default);
 
-    _this = _possibleConstructorReturn(this, _getPrototypeOf(_default).call(this, options));
+    _this = _super.call(this, options);
 
     if (_this.resetNativeScroll) {
       if (history.scrollRestoration) {
@@ -1979,6 +2023,8 @@ var keyCodes$1 = {
 var _default$2 = /*#__PURE__*/function (_Core) {
   _inherits(_default, _Core);
 
+  var _super = _createSuper(_default);
+
   function _default() {
     var _this;
 
@@ -1991,7 +2037,7 @@ var _default$2 = /*#__PURE__*/function (_Core) {
     }
 
     window.scrollTo(0, 0);
-    _this = _possibleConstructorReturn(this, _getPrototypeOf(_default).call(this, options));
+    _this = _super.call(this, options);
     if (_this.inertia) _this.lerp = _this.inertia * 0.1;
     _this.isScrolling = false;
     _this.isDraggingScrollbar = false;
@@ -2163,7 +2209,9 @@ var _default$2 = /*#__PURE__*/function (_Core) {
       }
 
       if (this.instance.delta[this.directionAxis] < 0) this.instance.delta[this.directionAxis] = 0;
-      if (this.instance.delta[this.directionAxis] > this.instance.limit) this.instance.delta[this.directionAxis] = this.instance.limit;
+      if (this.instance.delta[this.directionAxis] > this.instance.limit[this.directionAxis]) this.instance.delta[this.directionAxis] = this.instance.limit[this.directionAxis];
+      this.stopScrolling(); // Stop any movement, allows to kill any other `scrollTo` still happening
+
       this.isScrolling = true;
       this.checkScroll();
       this.html.classList.add(this.scrollingClass);
@@ -2932,7 +2980,7 @@ var _default$2 = /*#__PURE__*/function (_Core) {
   }, {
     key: "setScroll",
     value: function setScroll(x, y) {
-      this.instance = _objectSpread2({}, this.instance, {
+      this.instance = _objectSpread2(_objectSpread2({}, this.instance), {}, {
         scroll: {
           x: x,
           y: y

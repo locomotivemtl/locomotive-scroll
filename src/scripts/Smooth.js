@@ -188,9 +188,10 @@ export default class extends Core {
 
         if (this.instance.delta[this.directionAxis] < 0)
             this.instance.delta[this.directionAxis] = 0;
-        if (this.instance.delta[this.directionAxis] > this.instance.limit)
-            this.instance.delta[this.directionAxis] = this.instance.limit;
+        if (this.instance.delta[this.directionAxis] > this.instance.limit[this.directionAxis])
+            this.instance.delta[this.directionAxis] = this.instance.limit[this.directionAxis];
 
+        this.stopScrolling(); // Stop any movement, allows to kill any other `scrollTo` still happening
         this.isScrolling = true;
         this.checkScroll();
         this.html.classList.add(this.scrollingClass);

@@ -1,64 +1,30 @@
 import gulp from 'gulp';
 import postcss from 'gulp-postcss';
-import rename from 'gulp-rename';
 import cssnano from 'cssnano';
-import merge from 'merge-stream';
-import uglify from 'gulp-uglify';
+import terser from 'gulp-terser-js';
 import htmlmin from 'gulp-htmlmin';
 import paths from '../mconfig.json';
 
 function buildStyles() {
-    const stylesfiles = [
-        {
-            dest: paths.styles.dest
-        },
-        {
-            dest: paths.styles.docs.dest
-       }
-    ];
-
     const plugins = [
         cssnano()
     ];
 
-    const stylesStreams = stylesfiles.map((file) => {
-        return gulp
-            .src([file.dest+'*.css', '!'+file.dest+'*.min.css'])
-            .pipe(rename(function(file) {
-                if (file.basename == paths.styles.main) {
-                    file.basename += '.min';
-                }
-            }))
-            .pipe(postcss(plugins))
-            .pipe(gulp.dest(file.dest));
-    });
-
-    return merge(stylesStreams);
+    return gulp
+        .src(paths.styles.dest + '*.css')
+        .pipe(postcss(plugins))
+        .pipe(gulp.dest(paths.styles.dest));
 }
 
 function buildScripts() {
-    const scriptsfiles = [
-        {
-            dest: paths.scripts.dest
-        },
-        {
-            dest: paths.scripts.docs.dest
-       }
-    ];
-
-    const scriptsStreams = scriptsfiles.map((file) => {
-        return gulp
-            .src([file.dest+'*.js', '!'+file.dest+'*.esm.js', '!'+file.dest+'*.min.js'])
-            .pipe(rename(function(file) {
-                if (file.basename == paths.scripts.main) {
-                    file.basename += '.min';
-                }
-            }))
-            .pipe(uglify())
-            .pipe(gulp.dest(file.dest));
-    });
-
-    return merge(scriptsStreams);
+    return gulp
+        .src(paths.scripts.dest + '*.js')
+        .pipe(terser({
+            output: {
+                comments: false
+            }
+        }))
+        .pipe(gulp.dest(paths.scripts.dest));
 }
 
 function buildViews() {
