@@ -9,14 +9,29 @@ import LocomotiveScroll from '../../../src/locomotive-scroll';
         document.documentElement.classList.add('is-ready');
     },300)
 
-    setTimeout(() => {
-        const scroll = new LocomotiveScroll({
-            el: document.querySelector('#js-scroll'),
+    let options = {
+        el: document.querySelector('#js-scroll'),
+        smooth: true,
+        getSpeed: true,
+        getDirection: true
+    }
+
+    if(document.querySelector('#js-scroll').getAttribute('data-horizontal') == 'true') {
+        options.direction = 'horizontal';
+        options.gestureDirection = 'both';
+        options.tablet = {
             smooth: true,
-            getSpeed: true,
-            getDirection: true,
-            useKeyboard: true
-        });
+            direction: 'horizontal',
+            horizontalGesture: true
+        }
+        options.smartphone = {
+            smooth: false
+        }
+        options.reloadOnContextChange = true
+    }
+
+    setTimeout(() => {
+        const scroll = new LocomotiveScroll(options);
 
         let dynamicBackgrounds = [];
         let dynamicColorElements = [];

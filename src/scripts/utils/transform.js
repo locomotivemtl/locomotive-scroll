@@ -5,8 +5,8 @@ export function transform(el, transformValue) {
 }
 
 export function getTranslate(el) {
-    const translate = {}
-    if(!window.getComputedStyle) return;
+    const translate = {};
+    if (!window.getComputedStyle) return;
 
     const style = getComputedStyle(el);
     const transform = style.transform || style.webkitTransform || style.mozTransform;
@@ -15,7 +15,7 @@ export function getTranslate(el) {
     if (mat) {
         translate.x = mat ? parseFloat(mat[1].split(', ')[12]) : 0;
         translate.y = mat ? parseFloat(mat[1].split(', ')[13]) : 0;
-    } else{
+    } else {
         mat = transform.match(/^matrix\((.+)\)$/);
         translate.x = mat ? parseFloat(mat[1].split(', ')[4]) : 0;
         translate.y = mat ? parseFloat(mat[1].split(', ')[5]) : 0;

@@ -18,4 +18,21 @@ body {
     .has-scroll-smooth & {
         min-height: 100vh;
     }
+    [data-scroll-direction="horizontal"] & {
+        white-space: nowrap;
+        height: 100vh;
+        display: inline-block;
+        white-space: nowrap;
+    }
 }
+
+[data-scroll-section] {
+    [data-scroll-direction="horizontal"] & {
+        display: inline-block;
+        vertical-align: top;
+        white-space: nowrap;
+        height: 100%;
+    }
+ }
+
+

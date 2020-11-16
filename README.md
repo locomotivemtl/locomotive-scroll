@@ -122,47 +122,51 @@ scroll.on('call', func => {
 
 ## Instance options
 
-| Option              | Type      | Default                | Description                                                                           |
-| ------------------- | --------- | ---------------------- | ------------------------------------------------------------------------------------- |
-| `el`                | `object`  | `document`             | Scroll container element.                                                             |
-| `name`              | `string`  | `'scroll'`             | Data attribute prefix (`data-scroll-xxxx`).                                           |
-| `offset`            | `array(2)`| `[0,0]`                | Global in-view trigger offset : `[bottom,top]`<br>Use a string with `%` to use a percentage of the viewport height.<br>Use a numeric value for absolute pixels unit.<br>E.g. `["30%",0]`, `[100,0]`, `["30%", 100]`  |
-| `repeat`            | `boolean` | `false`                | Repeat in-view detection.                                                             |
-| `smooth`            | `boolean` | `false`                | Smooth scrolling.                                                                     |
-| `smoothMobile`      | `boolean` | `false`                | Smooth scrolling on iOS and Android devices.                                          |
-| `direction`         | `string`  | `vertical`             | Scroll direction.                                                                     |
-| ~~`inertia`~~       | ~~`number`~~  | ~~`1`~~            | ⚠️ **Deprecated**, use option `lerp` instead                                          |
-| `lerp`              | `number`  | `0.1`                  | Linear interpolation (lerp) intensity. Float between `0` and `1`.<br>This defines the "smoothness" intensity. The closer to `0`, the smoother. |
-| `getDirection`      | `boolean` | `false`                | Add direction to scroll event.                                                        |
-| `getSpeed`          | `boolean` | `false`                | Add speed to scroll event.                                                            |
-| `class`             | `string`  | `is-inview`            | Element in-view class.                                                                |
-| `initClass`         | `string`  | `has-scroll-init`      | Initialize class.                                                                     |
-| `scrollingClass`    | `string`  | `has-scroll-scrolling` | Is scrolling class.                                                                   |
-| `draggingClass`     | `string`  | `has-scroll-dragging`  | Is dragging class.                                                                    |
-| `smoothClass`       | `string`  | `has-scroll-smooth`    | Has smooth scrolling class.                                                           |
-| `scrollbarClass`    | `string`  | `c-scrollbar`          | Scrollbar element class.                                                              |
-| `multiplier`        | `number`  | `1`                    | Factor applied to the scroll delta, allowing to boost/reduce scrolling speed (regardless of the platform). |
-| `firefoxMultiplier` | `number`  | `50`                   | Boost scrolling speed of Firefox on Windows.                                          |
-| `touchMultiplier`   | `number`  | `2`                    | Mutiply touch action to scroll faster than finger movement.                           |
-| `scrollFromAnywhere`| `boolean` | `false`                | (_smooth only_)<br>By default locomotive-scroll listens for scroll events only on the scroll container (`el` option). With this option set to true, it listens on the whole document instead. |
+| Option                  | Type      | Default                | Description                                                                                                                                                                                                                                                                                        |
+| ----------------------- | --------- | ---------------------- | -------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
+| `el`                    | `object`  | `document`             | Scroll container element.                                                                                                                                                                                                                                                                          |
+| `name`                  | `string`  | `'scroll'`             | Data attribute prefix (`data-scroll-xxxx`).                                                                                                                                                                                                                                                        |
+| `offset`                | `array(2)`| `[0,0]`                | Global in-view trigger offset : `[bottom,top]`<br>Use a string with `%` to use a percentage of the viewport height.<br>Use a numeric value for absolute pixels unit.<br>E.g. `["30%",0]`, `[100,0]`, `["30%", 100]`                                                                                |
+| `repeat`                | `boolean` | `false`                | Repeat in-view detection.                                                                                                                                                                                                                                                                          |
+| `smooth`                | `boolean` | `false`                | Smooth scrolling.                                                                                                                                                                                                                                                                                  |
+| `direction`             | `string`  | `vertical`             | ![Smooth only][smooth-only]<br>Scroll direction: `vertical` or `horizontal`                                                                                                                                                                                                                        |
+| `lerp`                  | `number`  | `0.1`                  | ![Smooth only][smooth-only]<br>Linear interpolation (lerp) intensity. Float between `0` and `1`.<br>This defines the "smoothness" intensity. The closer to `0`, the smoother.                                                                                                                      |
+| `getDirection`          | `boolean` | `false`                | Add direction to scroll event.                                                                                                                                                                                                                                                                     |
+| `getSpeed`              | `boolean` | `false`                | Add speed to scroll event.                                                                                                                                                                                                                                                                         |
+| `class`                 | `string`  | `is-inview`            | Element in-view class.                                                                                                                                                                                                                                                                             |
+| `initClass`             | `string`  | `has-scroll-init`      | Initialize class.                                                                                                                                                                                                                                                                                  |
+| `scrollingClass`        | `string`  | `has-scroll-scrolling` | Is scrolling class.                                                                                                                                                                                                                                                                                |
+| `draggingClass`         | `string`  | `has-scroll-dragging`  | Is dragging class.                                                                                                                                                                                                                                                                                 |
+| `smoothClass`           | `string`  | `has-scroll-smooth`    | Has smooth scrolling class.                                                                                                                                                                                                                                                                        |
+| `scrollbarContainer`    | `object`  | `false`                | ![Smooth only][smooth-only]<br>Specifies the container element for the scrollbar to be appended in. If false, scrollbar will be appended to the body. | 
+| `scrollbarClass`        | `string`  | `c-scrollbar`          | ![Smooth only][smooth-only]<br>Scrollbar element class.                                                                                                                                                                                                                                                                           |
+| `multiplier`            | `number`  | `1`                    | ![Smooth only][smooth-only]<br>Factor applied to the scroll delta, allowing to boost/reduce scrolling speed (regardless of the platform).                                                                                                                                                          |
+| `firefoxMultiplier`     | `number`  | `50`                   | ![Smooth only][smooth-only]<br>Boost scrolling speed of Firefox on Windows.                                                                                                                                                                                                                        |
+| `touchMultiplier`       | `number`  | `2`                    | ![Smooth only][smooth-only]<br>Mutiply touch action to scroll faster than finger movement.                                                                                                                                                                                                         |
+| `scrollFromAnywhere`    | `boolean` | `false`                | ![Smooth only][smooth-only]<br>By default locomotive-scroll listens for scroll events only on the scroll container (`el` option). With this option set to true, it listens on the whole document instead.                                                                                          |
+| `gestureDirection`     | `string` | `vertical`                | ![Smooth only][smooth-only]<br>Defines which gesture direction(s) scrolls in your instance. You can use : <ul><li>`vertical`</li><li>`horizontal`</li><li>`both`</li></ul>                                                                                                                                                                                                         |
+| `tablet` & `smartphone` | `object`  |                        | Object allowing to override some options for a particular context. You can specify: <ul><li>`smooth`</li><li>`direction`</li><li>`horizontalGesture`</li></ul>For `tablet` context you can also define `breakpoint` (_integer_, defaults to 1024) to set the max-width breakpoint for tablets.     |
+| `reloadOnContextChange` | `boolean` | `false`                | Allows to reload the page when switching between `desktop`, `tablet` and `smartphone` contexts. It can be useful if your page changes a lot between contexts and you want to reset everything.                                                                                                     |
+| `resetNativeScroll` | `boolean` | `true`                | Sets `history.scrollRestoration = 'manual'` and calls `window.scrollTo(0, 0)` on locomotive-scroll init in Native Class. Useful if you use transitions with native scrolling, otherwise we advise to set it to `false` if you don't want to break History API's scroll restoration feature. |
 
 ## Element attributes
 
 | Attribute               | Values                   | Description                                                                              |
 | ----------------------- | ------------------------ | ---------------------------------------------------------------------------------------- |
 | `data-scroll`           |                          | Detect if in-view.                                                                       |
-| `data-scroll-container` |                          | Defines the scroll container. Required for [basic styling](https://github.com/locomotivemtl/locomotive-scroll/blob/master/dist/locomotive-scroll.css).                                                                                      |
+| `data-scroll-id`        | `string`                 | (Optional) Useful if you want to scope your element and get the progress of your element in the viewport for example. |
+| `data-scroll-container` |                          | Defines the scroll container. Required for [basic styling](https://github.com/locomotivemtl/locomotive-scroll/blob/master/dist/locomotive-scroll.css).                                                                                     |
 | `data-scroll-section`   |                          | Defines a scrollable section. Splitting your page into sections may improve performance. |
 | `data-scroll-class`     | `string`                 | Element in-view class.                                                                   |
 | `data-scroll-offset`    | `string`                 | Element in-view trigger offset : `bottom,top`<br>First value is `bottom` offset, second (optional) is `top` offset.<br> Percent is relative to viewport height, otherwise it's absolute pixels.<br>E.g. `"10"`, `"100,50%"`, `"25%, 15%"`  |
-| `data-scroll-repeat`    | `true`, `false`          | Element in-view detection repeat.                                                        |
+| `data-scroll-repeat`    | `boolean`                | Element in-view detection repeat.                                                        |
 | `data-scroll-call`      | `string`                 | Element in-view trigger call event.                                                      |
-| `data-scroll-speed`     | `number`                 | Element parallax speed. A negative value will reverse the direction.                     |
-| `data-scroll-target`    | `string`                 | Target element's in-view position.                                                       |
-| `data-scroll-position`  | `top`, `bottom`          | Window position of in-view trigger.                                                      |
-| `data-scroll-direction` | `vertical`, `horizontal` | Element's parallax direction.                                                            |
-| `data-scroll-delay`     | `number`                 | Element's parallax lerp delay.                                                           |
-| `data-scroll-sticky`    |                          | Sticky element. Starts and stops at `data-scroll-target` position.                       |
+| `data-scroll-position`  | `string`                 | `top`, `bottom`, `left` or `right`<br>Window position of in-view trigger.                |
+| `data-scroll-speed`     | `number`                 | ![Smooth only][smooth-only]<br>Element parallax speed. A negative value will reverse the direction. |
+| `data-scroll-delay`     | `number`                 | ![Smooth only][smooth-only]<br>Element's parallax lerp delay.                            |
+| `data-scroll-direction` | `string`                 | ![Smooth only][smooth-only]<br>Element's parallax direction. `vertical` or `horizontal`  |
+| `data-scroll-sticky`    |                          | ![Smooth only][smooth-only]<br>Sticky element. Starts and stops at `data-scroll-target` position. |
+| `data-scroll-target`    | `string`                 | ![Smooth only][smooth-only]<br>Target element's in-view position.                        |
 
 ## Instance methods
 
@@ -174,14 +178,35 @@ scroll.on('call', func => {
 | `destroy()`                | Destroys the scroll events.    |                                                                                 |
 | `start()`                  | Restarts the scroll events.    |                                                                                 |
 | `stop()`                   | Stops the scroll events.       |                                                                                 |
-| `scrollTo(target, offset, duration, easing, disableLerp, callback)` | Scroll to an element.          | <div>`target`: Defines where you want to scroll. Available values types are :<ul><li>`node` : a dom element</li><li>`string` : you can type your own selector, or use values `"top"` and `"bottom"` to reach scroll boundaries</li><li>`int` : An absolute scroll coordinate in pixels</li></ul></div><div>`offset` (optional) : An `integer` that defines an offset from your target. E.g. `-100` if you want to scroll 100 pixels above your target</div><br><div>`duration` (optional, **smooth only**) : An `integer` defining the duration of the scroll animation in milliseconds. Defaults to `1000`</div><br><div>`easing` (optional, **smooth only**) : An `array` of 4 floats between 0 and 1 defining the bezier curve for the animation's easing.<br>Defaults to `[0.25, 0.00, 0.35, 1.00]`<br>See [http://greweb.me/bezier-easing-editor/example/](http://greweb.me/bezier-easing-editor/example/)<br>*Keep in mind this will also be affected by the lerp unless you set `disableLerp` to `true`*.</div><br><div>`disableLerp` (optional, **smooth only**) : Lerp effect won't be applied if set to `true`</div><br><div>`callback` (optional) : `function` called when scrollTo completes (note that it won't wait for lerp to stabilize)</div> |
+| `scrollTo(target, options)`| Scroll to a target.            | <div>`target`: Defines where you want to scroll. Available values types are :<ul><li>`node` : a dom element</li><li>`string` : you can type your own selector, or use values `"top"` and `"bottom"` to reach scroll boundaries</li><li>`int` : An absolute scroll coordinate in pixels</li></ul></div><div>`options` (optional, _object_) : Settings object. Available values are: <ul><li>`offset` (_integer_) : Defines an offset from your target. E.g. `-100` if you want to scroll 100 pixels above your target</li><li>`callback` (_function_) : Called when scrollTo completes (note that it won't wait for lerp to stabilize)</li><li>`duration` (_integer_) : Defines the duration of the scroll animation in milliseconds. Defaults to `1000`<br>![Smooth only][smooth-only]</li><li>`easing` (_array_) : An `array` of 4 floats between 0 and 1 defining the bezier curve for the animation's easing. <br>Defaults to `[0.25, 0.00, 0.35, 1.00]`<br>See [http://greweb.me/bezier-easing-editor/example/](http://greweb.me/bezier-easing-editor/example/)<br>*Keep in mind this will also be affected by the lerp unless you set `disableLerp` to `true`*.<br>![Smooth only][smooth-only]</li><li>`disableLerp` (_boolean_) : Lerp effect won't be applied if set to `true`<br>![Smooth only][smooth-only]</li></ul> |
 
 ## Instance events
 
 | Event    | Arguments | Description                                                           |
 | -------- | --------- | --------------------------------------------------------------------- |
-| `scroll` | `obj`     | Returns scroll instance (position, limit, speed, direction).          |
+| `scroll` | `obj`     | Returns scroll instance (position, limit, speed, direction and current in-view elements).          |
 | `call`   | `func`    | Trigger if in-view. Returns your `string` or `array` if contains `,`. |
+
+## Progressive playing animations example (like gsap)
+All `data-scroll` elements have a progress value. 
+In the on scroll event you can get all current in-view elements. 
+#### HTML
+```html
+<h1 data-scroll data-scroll-id="hey">Hey</h1>
+```
+#### JS
+```js
+scroll.on('scroll', (args) => {
+    // Get all current elements : args.currentElements
+    if(typeof args.currentElements['hey'] === 'object') {
+        let progress = args.currentElements['hey'].progress;
+        console.log(progress);
+        // ouput log example: 0.34
+        // gsap example : myGsapAnimation.progress(progress);
+    }
+}
+```
+
 
 ## Dependencies
 
@@ -189,7 +214,7 @@ scroll.on('call', func => {
 | ---------------- | ------------------------------------------------------------------ |
 | [Virtual Scroll] | Custom scroll event with inertia/momentum.                         |
 | [modularScroll]  | Elements in viewport detection. Forked from it, not a dependency.  |
-| [bezier-easing]  | Improve `scrollTo` system and add `duration` & `easing` parameters |
+| [bezier-easing]  | Allows to define an easing to `scrollTo` movement                  |
 
 [instance events]: #instance-events
 [Virtual Scroll]: https://github.com/ayamflow/virtual-scroll
@@ -229,3 +254,5 @@ You can use your own or include these before our script.
 ## Related
 
 - [Locomotive Boilerplate 🚂](https://github.com/locomotivemtl/locomotive-boilerplate)
+
+[smooth-only]: https://img.shields.io/badge/smooth-only-blue
