@@ -1,4 +1,4 @@
-/* locomotive-scroll v4.0.0 | MIT License | https://github.com/locomotivemtl/locomotive-scroll */
+/* locomotive-scroll v4.0.1 | MIT License | https://github.com/locomotivemtl/locomotive-scroll */
 (function () {
   'use strict';
 
