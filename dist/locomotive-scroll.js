@@ -1047,7 +1047,12 @@
         window.scrollTo(0, 0);
       }
 
-      window.addEventListener('scroll', _this.checkScroll, false); // smoothscroll.polyfill();
+      window.addEventListener('scroll', _this.checkScroll, false);
+
+      if (window.smoothscrollPolyfill === undefined) {
+        window.smoothscrollPolyfill = smoothscroll;
+        window.smoothscrollPolyfill.polyfill();
+      }
 
       return _this;
     }
