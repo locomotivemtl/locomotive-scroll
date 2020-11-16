@@ -14,7 +14,7 @@
     },
     "devDependencies": {
         "@modularbp/gulp": "^1.0.5",
-        "@modularbp/gulp-build": "^1.0.1",
+        "@modularbp/gulp-build": "^1.1.0",
         "@modularbp/gulp-error": "^1.0.3",
         "@modularbp/gulp-js": "^1.0.8",
         "@modularbp/gulp-notify": "^1.0.3",
@@ -23,10 +23,10 @@
         "@modularbp/gulp-svg": "^1.0.5",
         "@modularbp/gulp-watch": "^1.0.5",
         "gulp-header": "^2.0.9",
-        "mbp": "^1.1.3",
+        "mbp": "^1.3.0",
         "merge-stream": "^2.0.0",
         "normalize.css": "^8.0.1",
-        "prettier": "^2.0.5"
+        "prettier": "^2.1.2"
     },
     "dependencies": {
         "bezier-easing": "^2.1.0",
