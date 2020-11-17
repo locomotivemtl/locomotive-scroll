@@ -20,8 +20,7 @@ const keyCodes = {
 
 export default class extends Core {
     constructor(options = {}) {
-
-        if(history.scrollRestoration) {
+        if (history.scrollRestoration) {
             history.scrollRestoration = 'manual';
         }
         window.scrollTo(0, 0);
@@ -35,7 +34,7 @@ export default class extends Core {
         this.hasScrollTicking = false;
         this.parallaxElements = {};
         this.stop = false;
-        this.scrollbarContainer = options.scrollbarContainer
+        this.scrollbarContainer = options.scrollbarContainer;
 
         this.checkKey = this.checkKey.bind(this);
         window.addEventListener('keydown', this.checkKey, false);
@@ -296,13 +295,16 @@ export default class extends Core {
 
     updateDelta(e) {
         let delta;
-        const gestureDirection = (this[this.context] && this[this.context].gestureDirection) ? this[this.context].gestureDirection : this.gestureDirection;
+        const gestureDirection =
+            this[this.context] && this[this.context].gestureDirection
+                ? this[this.context].gestureDirection
+                : this.gestureDirection;
 
-        if(gestureDirection === "both") {
+        if (gestureDirection === 'both') {
             delta = e.deltaX + e.deltaY;
-        } else if(gestureDirection === "vertical") {
+        } else if (gestureDirection === 'vertical') {
             delta = e.deltaY;
-        } else if(gestureDirection === "horizontal") {
+        } else if (gestureDirection === 'horizontal') {
             delta = e.deltaX;
         } else {
             delta = e.deltaY;
@@ -382,8 +384,8 @@ export default class extends Core {
         this.scrollbarThumb.classList.add(`${this.scrollbarClass}_thumb`);
 
         this.scrollbar.append(this.scrollbarThumb);
-        if(this.scrollbarContainer) {
-            this.scrollbarContainer.append(this.scrollbar)
+        if (this.scrollbarContainer) {
+            this.scrollbarContainer.append(this.scrollbar);
         } else {
             document.body.append(this.scrollbar);
         }
@@ -410,7 +412,7 @@ export default class extends Core {
         }
         this.hasScrollbar = true;
 
-        this.scrollbarBCR = this.scrollbar.getBoundingClientRect()
+        this.scrollbarBCR = this.scrollbar.getBoundingClientRect();
         this.scrollbarHeight = this.scrollbarBCR.height;
         this.scrollbarWidth = this.scrollbarBCR.width;
 
@@ -426,7 +428,7 @@ export default class extends Core {
             }px`;
         }
 
-        this.scrollbarThumbBCR = this.scrollbarThumb.getBoundingClientRect()
+        this.scrollbarThumbBCR = this.scrollbarThumb.getBoundingClientRect();
         this.scrollBarLimit = {
             x: this.scrollbarWidth - this.scrollbarThumbBCR.width,
             y: this.scrollbarHeight - this.scrollbarThumbBCR.height
@@ -446,7 +448,7 @@ export default class extends Core {
         }
         this.hasScrollbar = true;
 
-        this.scrollbarBCR = this.scrollbar.getBoundingClientRect()
+        this.scrollbarBCR = this.scrollbar.getBoundingClientRect();
         this.scrollbarHeight = this.scrollbarBCR.height;
         this.scrollbarWidth = this.scrollbarBCR.width;
 
@@ -462,7 +464,7 @@ export default class extends Core {
             }px`;
         }
 
-        this.scrollbarThumbBCR = this.scrollbarThumb.getBoundingClientRect()
+        this.scrollbarThumbBCR = this.scrollbarThumb.getBoundingClientRect();
         this.scrollBarLimit = {
             x: this.scrollbarWidth - this.scrollbarThumbBCR.width,
             y: this.scrollbarHeight - this.scrollbarThumbBCR.height
@@ -492,8 +494,14 @@ export default class extends Core {
     moveScrollBar(e) {
         if (this.isDraggingScrollbar) {
             requestAnimationFrame(() => {
-                let x = ((((e.clientX - this.scrollbarBCR.left) * 100) / this.scrollbarWidth) * this.instance.limit.x) / 100;
-                let y = ((((e.clientY - this.scrollbarBCR.top) * 100) / this.scrollbarHeight) * this.instance.limit.y) / 100;
+                let x =
+                    ((((e.clientX - this.scrollbarBCR.left) * 100) / this.scrollbarWidth) *
+                        this.instance.limit.x) /
+                    100;
+                let y =
+                    ((((e.clientY - this.scrollbarBCR.top) * 100) / this.scrollbarHeight) *
+                        this.instance.limit.y) /
+                    100;
 
                 if (y > 0 && y < this.instance.limit.y) {
                     this.instance.delta.y = y;
@@ -549,35 +557,17 @@ export default class extends Core {
                 targetEl = el;
             }
 
-            const targetElBCR = targetEl.getBoundingClientRect()
+            const targetElBCR = targetEl.getBoundingClientRect();
             if (section === null) {
-                top =
-                    targetElBCR.top +
-                    this.instance.scroll.y -
-                    getTranslate(targetEl).y;
-                left =
-                    targetElBCR.left +
-                    this.instance.scroll.x -
-                    getTranslate(targetEl).x;
+                top = targetElBCR.top + this.instance.scroll.y - getTranslate(targetEl).y;
+                left = targetElBCR.left + this.instance.scroll.x - getTranslate(targetEl).x;
             } else {
                 if (!section.inView) {
-                    top =
-                        targetElBCR.top -
-                        getTranslate(section.el).y -
-                        getTranslate(targetEl).y;
-                    left =
-                        targetElBCR.left -
-                        getTranslate(section.el).x -
-                        getTranslate(targetEl).x;
+                    top = targetElBCR.top - getTranslate(section.el).y - getTranslate(targetEl).y;
+                    left = targetElBCR.left - getTranslate(section.el).x - getTranslate(targetEl).x;
                 } else {
-                    top =
-                        targetElBCR.top +
-                        this.instance.scroll.y -
-                        getTranslate(targetEl).y;
-                    left =
-                        targetElBCR.left +
-                        this.instance.scroll.x -
-                        getTranslate(targetEl).x;
+                    top = targetElBCR.top + this.instance.scroll.y - getTranslate(targetEl).y;
+                    left = targetElBCR.left + this.instance.scroll.x - getTranslate(targetEl).x;
                 }
             }
 
@@ -589,7 +579,7 @@ export default class extends Core {
             };
 
             if (sticky) {
-                const elBCR = el.getBoundingClientRect()
+                const elBCR = el.getBoundingClientRect();
                 const elTop = elBCR.top;
                 const elLeft = elBCR.left;
 
@@ -682,8 +672,8 @@ export default class extends Core {
             };
 
             this.els[id] = mappedEl;
-            if(el.classList.contains(cl)) {
-                this.setInView(this.els[id], id)
+            if (el.classList.contains(cl)) {
+                this.setInView(this.els[id], id);
             }
 
             if (speed !== false || sticky) {
@@ -708,14 +698,8 @@ export default class extends Core {
                     : 'section' + index;
             const sectionBCR = section.getBoundingClientRect();
             let offset = {
-                x:
-                    sectionBCR.left -
-                    window.innerWidth * 1.5 -
-                    getTranslate(section).x,
-                y:
-                    sectionBCR.top -
-                    window.innerHeight * 1.5 -
-                    getTranslate(section).y
+                x: sectionBCR.left - window.innerWidth * 1.5 - getTranslate(section).x,
+                y: sectionBCR.top - window.innerHeight * 1.5 - getTranslate(section).y
             };
             let limit = {
                 x: offset.x + sectionBCR.width + window.innerWidth * 2,

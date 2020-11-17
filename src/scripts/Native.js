@@ -5,20 +5,19 @@ export default class extends Core {
     constructor(options = {}) {
         super(options);
 
-        if(this.resetNativeScroll) {
-            if(history.scrollRestoration) {
+        if (this.resetNativeScroll) {
+            if (history.scrollRestoration) {
                 history.scrollRestoration = 'manual';
             }
             window.scrollTo(0, 0);
         }
 
         window.addEventListener('scroll', this.checkScroll, false);
-        
-        if(window.smoothscrollPolyfill === undefined) {
+
+        if (window.smoothscrollPolyfill === undefined) {
             window.smoothscrollPolyfill = smoothscroll;
             window.smoothscrollPolyfill.polyfill();
         }
-
     }
 
     init() {
@@ -95,8 +94,8 @@ export default class extends Core {
                     ? el.dataset[this.name + 'Id']
                     : index;
             let top = BCR.top + this.instance.scroll.y;
-            let left = BCR.left
-            let right = BCR.right
+            let left = BCR.left;
+            let right = BCR.right;
             let bottom = top + el.offsetHeight;
             let offset =
                 typeof el.dataset[this.name + 'Offset'] === 'string'
@@ -131,8 +130,8 @@ export default class extends Core {
             };
 
             this.els[id] = mappedEl;
-            if(el.classList.contains(cl)) {
-                this.setInView(this.els[id], id)
+            if (el.classList.contains(cl)) {
+                this.setInView(this.els[id], id);
             }
         });
     }
