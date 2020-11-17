@@ -14,7 +14,7 @@ function scripts() {
             format: 'esm'
         },
         {
-            src: paths.scripts.src + paths.scripts.main,
+            src: paths.scripts.src + paths.scripts.main + '.umd',
             dest: paths.scripts.dest + paths.scripts.main,
             format: 'umd'
         },
