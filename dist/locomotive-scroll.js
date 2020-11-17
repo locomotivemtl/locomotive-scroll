@@ -1,9 +1,9 @@
-/* locomotive-scroll v4.0.2 | MIT License | https://github.com/locomotivemtl/locomotive-scroll */
+/* locomotive-scroll v4.0.3 | MIT License | https://github.com/locomotivemtl/locomotive-scroll */
 (function (global, factory) {
-  typeof exports === 'object' && typeof module !== 'undefined' ? factory(exports) :
-  typeof define === 'function' && define.amd ? define(['exports'], factory) :
-  (global = typeof globalThis !== 'undefined' ? globalThis : global || self, factory(global.LocomotiveScroll = {}));
-}(this, (function (exports) { 'use strict';
+  typeof exports === 'object' && typeof module !== 'undefined' ? module.exports = factory() :
+  typeof define === 'function' && define.amd ? define(factory) :
+  (global = typeof globalThis !== 'undefined' ? globalThis : global || self, global.LocomotiveScroll = factory());
+}(this, (function () { 'use strict';
 
   function _classCallCheck(instance, Constructor) {
     if (!(instance instanceof Constructor)) {
@@ -3100,85 +3100,6 @@
     return Smooth;
   }();
 
-  var Native = /*#__PURE__*/function () {
-    function Native() {
-      var options = arguments.length > 0 && arguments[0] !== undefined ? arguments[0] : {};
-
-      _classCallCheck(this, Native);
-
-      this.options = options; // Override default options with given ones
-
-      Object.assign(this, defaults, options);
-      this.smartphone = defaults.smartphone;
-      if (options.smartphone) Object.assign(this.smartphone, options.smartphone);
-      this.tablet = defaults.tablet;
-      if (options.tablet) Object.assign(this.tablet, options.tablet);
-      this.init();
-    }
-
-    _createClass(Native, [{
-      key: "init",
-      value: function init() {
-        this.scroll = new _default$1(this.options);
-        this.scroll.init();
-
-        if (window.location.hash) {
-          // Get the hash without the '#' and find the matching element
-          var id = window.location.hash.slice(1, window.location.hash.length);
-          var target = document.getElementById(id); // If found, scroll to the element
-
-          if (target) this.scroll.scrollTo(target);
-        }
-      }
-    }, {
-      key: "update",
-      value: function update() {
-        this.scroll.update();
-      }
-    }, {
-      key: "start",
-      value: function start() {
-        this.scroll.startScroll();
-      }
-    }, {
-      key: "stop",
-      value: function stop() {
-        this.scroll.stopScroll();
-      }
-    }, {
-      key: "scrollTo",
-      value: function scrollTo(target, options) {
-        this.scroll.scrollTo(target, options);
-      }
-    }, {
-      key: "setScroll",
-      value: function setScroll(x, y) {
-        this.scroll.setScroll(x, y);
-      }
-    }, {
-      key: "on",
-      value: function on(event, func) {
-        this.scroll.setEvents(event, func);
-      }
-    }, {
-      key: "off",
-      value: function off(event, func) {
-        this.scroll.unsetEvents(event, func);
-      }
-    }, {
-      key: "destroy",
-      value: function destroy() {
-        this.scroll.destroy();
-      }
-    }]);
-
-    return Native;
-  }();
-
-  exports.Native = Native;
-  exports.Smooth = Smooth;
-  exports.default = Smooth;
-
-  Object.defineProperty(exports, '__esModule', { value: true });
+  return Smooth;
 
 })));
