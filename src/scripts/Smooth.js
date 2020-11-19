@@ -148,7 +148,7 @@ export default class extends Core {
                     document.body.scrollLeft = 0;
 
                     // Request scrollTo on the focusedElement, putting it at the center of the screen
-                    this.scrollTo(document.activeElement, -window.innerHeight / 2);
+                    this.scrollTo(document.activeElement, { offset: -window.innerHeight / 2 });
                 });
                 break;
             case keyCodes.UP:

@@ -2171,7 +2171,9 @@
               _this3.html.scrollLeft = 0;
               document.body.scrollLeft = 0; // Request scrollTo on the focusedElement, putting it at the center of the screen
 
-              _this3.scrollTo(document.activeElement, -window.innerHeight / 2);
+              _this3.scrollTo(document.activeElement, {
+                offset: -window.innerHeight / 2
+              });
             });
             break;
 
