@@ -93,16 +93,31 @@ export default class extends Core {
                 typeof el.dataset[this.name + 'Id'] === 'string'
                     ? el.dataset[this.name + 'Id']
                     : index;
-            let top = BCR.top + this.instance.scroll.y;
-            let left = BCR.left;
-            let right = BCR.right;
-            let bottom = top + el.offsetHeight;
+            let top;
+            let left;
             let offset =
                 typeof el.dataset[this.name + 'Offset'] === 'string'
                     ? el.dataset[this.name + 'Offset'].split(',')
                     : this.offset;
             let repeat = el.dataset[this.name + 'Repeat'];
             let call = el.dataset[this.name + 'Call'];
+
+
+            let target = el.dataset[this.name + 'Target'];
+            let targetEl;
+
+            if (target !== undefined) {
+                targetEl = document.querySelector(`${target}`);
+            } else {
+                targetEl = el;
+            }
+
+            const targetElBCR = targetEl.getBoundingClientRect();
+            top = targetElBCR.top + this.instance.scroll.y;
+            left = targetElBCR.left + this.instance.scroll.x;
+
+            let bottom = top + targetEl.offsetHeight;
+            let right = left + targetEl.offsetWidth;
 
             if (repeat == 'false') {
                 repeat = false;

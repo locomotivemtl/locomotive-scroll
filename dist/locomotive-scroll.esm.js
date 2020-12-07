@@ -1172,13 +1172,25 @@ var _default$1 = /*#__PURE__*/function (_Core) {
         var BCR = el.getBoundingClientRect();
         var cl = el.dataset[_this3.name + 'Class'] || _this3["class"];
         var id = typeof el.dataset[_this3.name + 'Id'] === 'string' ? el.dataset[_this3.name + 'Id'] : index;
-        var top = BCR.top + _this3.instance.scroll.y;
-        var left = BCR.left;
-        var right = BCR.right;
-        var bottom = top + el.offsetHeight;
+        var top;
+        var left;
         var offset = typeof el.dataset[_this3.name + 'Offset'] === 'string' ? el.dataset[_this3.name + 'Offset'].split(',') : _this3.offset;
         var repeat = el.dataset[_this3.name + 'Repeat'];
         var call = el.dataset[_this3.name + 'Call'];
+        var target = el.dataset[_this3.name + 'Target'];
+        var targetEl;
+
+        if (target !== undefined) {
+          targetEl = document.querySelector("".concat(target));
+        } else {
+          targetEl = el;
+        }
+
+        var targetElBCR = targetEl.getBoundingClientRect();
+        top = targetElBCR.top + _this3.instance.scroll.y;
+        left = targetElBCR.left + _this3.instance.scroll.x;
+        var bottom = top + targetEl.offsetHeight;
+        var right = left + targetEl.offsetWidth;
 
         if (repeat == 'false') {
           repeat = false;
