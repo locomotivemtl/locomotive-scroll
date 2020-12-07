@@ -102,7 +102,6 @@ export default class extends Core {
             let repeat = el.dataset[this.name + 'Repeat'];
             let call = el.dataset[this.name + 'Call'];
 
-
             let target = el.dataset[this.name + 'Target'];
             let targetEl;
 
@@ -119,6 +118,10 @@ export default class extends Core {
             let bottom = top + targetEl.offsetHeight;
             let right = left + targetEl.offsetWidth;
 
+            if(target === '#header') {
+                console.log(top, bottom);
+            }
+
             if (repeat == 'false') {
                 repeat = false;
             } else if (repeat != undefined) {
@@ -128,13 +131,16 @@ export default class extends Core {
             }
 
             let relativeOffset = this.getRelativeOffset(offset);
+            top = top + relativeOffset[0];
+            bottom = bottom - relativeOffset[1];
 
             const mappedEl = {
-                el,
+                el: el,
+                targetEl: targetEl,
                 id,
                 class: cl,
-                top: top + relativeOffset[0],
-                bottom: bottom - relativeOffset[1],
+                top: top,
+                bottom: bottom,
                 left,
                 right,
                 offset,
@@ -153,8 +159,8 @@ export default class extends Core {
 
     updateElements() {
         Object.entries(this.els).forEach(([i, el]) => {
-            const top = el.el.getBoundingClientRect().top + this.instance.scroll.y;
-            const bottom = top + el.el.offsetHeight;
+            const top = el.targetEl.getBoundingClientRect().top + this.instance.scroll.y;
+            const bottom = top + el.targetEl.offsetHeight;
             const relativeOffset = this.getRelativeOffset(el.offset);
 
             this.els[i].top = top + relativeOffset[0];

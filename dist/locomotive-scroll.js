@@ -1198,6 +1198,10 @@
           var bottom = top + targetEl.offsetHeight;
           var right = left + targetEl.offsetWidth;
 
+          if (target === '#header') {
+            console.log(top, bottom);
+          }
+
           if (repeat == 'false') {
             repeat = false;
           } else if (repeat != undefined) {
@@ -1208,12 +1212,15 @@
 
           var relativeOffset = _this3.getRelativeOffset(offset);
 
+          top = top + relativeOffset[0];
+          bottom = bottom - relativeOffset[1];
           var mappedEl = {
             el: el,
+            targetEl: targetEl,
             id: id,
             "class": cl,
-            top: top + relativeOffset[0],
-            bottom: bottom - relativeOffset[1],
+            top: top,
+            bottom: bottom,
             left: left,
             right: right,
             offset: offset,
@@ -1239,9 +1246,9 @@
               i = _ref2[0],
               el = _ref2[1];
 
-          var top = el.el.getBoundingClientRect().top + _this4.instance.scroll.y;
+          var top = el.targetEl.getBoundingClientRect().top + _this4.instance.scroll.y;
 
-          var bottom = top + el.el.offsetHeight;
+          var bottom = top + el.targetEl.offsetHeight;
 
           var relativeOffset = _this4.getRelativeOffset(el.offset);
 
