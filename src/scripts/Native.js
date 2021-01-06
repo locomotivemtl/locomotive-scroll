@@ -118,7 +118,7 @@ export default class extends Core {
             let bottom = top + targetEl.offsetHeight;
             let right = left + targetEl.offsetWidth;
 
-            if(target === '#header') {
+            if (target === '#header') {
                 console.log(top, bottom);
             }
 
