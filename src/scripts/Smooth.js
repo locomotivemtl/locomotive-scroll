@@ -876,7 +876,7 @@ export default class extends Core {
     scrollTo(target, options = {}) {
         // Parse options
         let offset = parseInt(options.offset) || 0; // An offset to apply on top of given `target` or `sourceElem`'s target
-        const duration = options.duration || 1000; // Duration of the scroll animation in milliseconds
+        const duration = !isNaN(parseInt(options.duration)) ? parseInt(options.duration) : 1000; // Duration of the scroll animation in milliseconds
         let easing = options.easing || [0.25, 0.0, 0.35, 1.0]; // An array of 4 floats between 0 and 1 defining the bezier curve for the animation's easing. See http://greweb.me/bezier-easing-editor/example/
         const disableLerp = options.disableLerp ? true : false; // Lerp effect won't be applied if set to true
         const callback = options.callback ? options.callback : false; // function called when scrollTo completes (note that it won't wait for lerp to stabilize)
