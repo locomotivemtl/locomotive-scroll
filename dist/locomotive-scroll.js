@@ -263,6 +263,10 @@
     offset: [0, 0],
     repeat: false,
     smooth: false,
+    initPosition: {
+      x: 0,
+      y: 0
+    },
     direction: 'vertical',
     gestureDirection: 'vertical',
     reloadOnContextChange: false,
@@ -2081,12 +2085,12 @@
         this.html.setAttribute("data-".concat(this.name, "-direction"), this.direction);
         this.instance = _objectSpread2({
           delta: {
-            x: this.x || 0,
-            y: this.y || 0
+            x: this.initPosition.x,
+            y: this.initPosition.y
           },
           scroll: {
-            x: this.x || 0,
-            y: this.y || 0
+            x: this.initPosition.x,
+            y: this.initPosition.y
           }
         }, this.instance);
         this.vs = new src({
