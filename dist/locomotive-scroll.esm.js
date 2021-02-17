@@ -257,6 +257,10 @@ var defaults = {
   offset: [0, 0],
   repeat: false,
   smooth: false,
+  initPosition: {
+    x: 0,
+    y: 0
+  },
   direction: 'vertical',
   gestureDirection: 'vertical',
   reloadOnContextChange: false,
@@ -1192,10 +1196,6 @@ var _default$1 = /*#__PURE__*/function (_Core) {
         var bottom = top + targetEl.offsetHeight;
         var right = left + targetEl.offsetWidth;
 
-        if (target === '#header') {
-          console.log(top, bottom);
-        }
-
         if (repeat == 'false') {
           repeat = false;
         } else if (repeat != undefined) {
@@ -2079,8 +2079,12 @@ var _default$2 = /*#__PURE__*/function (_Core) {
       this.html.setAttribute("data-".concat(this.name, "-direction"), this.direction);
       this.instance = _objectSpread2({
         delta: {
-          x: 0,
-          y: 0
+          x: this.initPosition.x,
+          y: this.initPosition.y
+        },
+        scroll: {
+          x: this.initPosition.x,
+          y: this.initPosition.y
         }
       }, this.instance);
       this.vs = new src({

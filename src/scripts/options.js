@@ -4,6 +4,7 @@ export const defaults = {
     offset: [0, 0],
     repeat: false,
     smooth: false,
+    initPosition: { x: 0, y: 0 },
     direction: 'vertical',
     gestureDirection: 'vertical',
     reloadOnContextChange: false,
