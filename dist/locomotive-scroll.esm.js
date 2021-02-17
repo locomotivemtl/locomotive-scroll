@@ -1192,10 +1192,6 @@ var _default$1 = /*#__PURE__*/function (_Core) {
         var bottom = top + targetEl.offsetHeight;
         var right = left + targetEl.offsetWidth;
 
-        if (target === '#header') {
-          console.log(top, bottom);
-        }
-
         if (repeat == 'false') {
           repeat = false;
         } else if (repeat != undefined) {
@@ -2079,8 +2075,12 @@ var _default$2 = /*#__PURE__*/function (_Core) {
       this.html.setAttribute("data-".concat(this.name, "-direction"), this.direction);
       this.instance = _objectSpread2({
         delta: {
-          x: 0,
-          y: 0
+          x: this.x || 0,
+          y: this.y || 0
+        },
+        scroll: {
+          x: this.x || 0,
+          y: this.y || 0
         }
       }, this.instance);
       this.vs = new src({

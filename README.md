@@ -1,7 +1,7 @@
 [![](https://img.shields.io/npm/v/locomotive-scroll)](https://www.npmjs.com/package/locomotive-scroll)
 [![](https://img.shields.io/npm/dm/locomotive-scroll)](https://www.npmjs.com/package/locomotive-scroll)
 
-<p align="center">        
+<p align="center">
     <a href="https://github.com/locomotivemtl/locomotive-scroll">
         <img src="https://user-images.githubusercontent.com/4596862/58807621-67aeec00-85e6-11e9-8e3a-3fe4123ee76c.png" height="140">
     </a>
@@ -126,6 +126,8 @@ scroll.on('call', func => {
 | ----------------------- | --------- | ---------------------- | -------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
 | `el`                    | `object`  | `document`             | Scroll container element.                                                                                                                                                                                                                                                                          |
 | `name`                  | `string`  | `'scroll'`             | Data attribute prefix (`data-scroll-xxxx`).                                                                                                                                                                                                                                                        |
+| `x`                     | `integer` | `0`                    | Initial X scroll position                                                                                                                                                                                                                                                                          |
+| `y`                     | `integer` | `0`                    | Initial Y scroll position                                                                                                                                                                                                                                                                          |
 | `offset`                | `array(2)`| `[0,0]`                | Global in-view trigger offset : `[bottom,top]`<br>Use a string with `%` to use a percentage of the viewport height.<br>Use a numeric value for absolute pixels unit.<br>E.g. `["30%",0]`, `[100,0]`, `["30%", 100]`                                                                                |
 | `repeat`                | `boolean` | `false`                | Repeat in-view detection.                                                                                                                                                                                                                                                                          |
 | `smooth`                | `boolean` | `false`                | Smooth scrolling.                                                                                                                                                                                                                                                                                  |
@@ -138,7 +140,7 @@ scroll.on('call', func => {
 | `scrollingClass`        | `string`  | `has-scroll-scrolling` | Is scrolling class.                                                                                                                                                                                                                                                                                |
 | `draggingClass`         | `string`  | `has-scroll-dragging`  | Is dragging class.                                                                                                                                                                                                                                                                                 |
 | `smoothClass`           | `string`  | `has-scroll-smooth`    | Has smooth scrolling class.                                                                                                                                                                                                                                                                        |
-| `scrollbarContainer`    | `object`  | `false`                | ![Smooth only][smooth-only]<br>Specifies the container element for the scrollbar to be appended in. If false, scrollbar will be appended to the body. | 
+| `scrollbarContainer`    | `object`  | `false`                | ![Smooth only][smooth-only]<br>Specifies the container element for the scrollbar to be appended in. If false, scrollbar will be appended to the body. |
 | `scrollbarClass`        | `string`  | `c-scrollbar`          | ![Smooth only][smooth-only]<br>Scrollbar element class.                                                                                                                                                                                                                                                                           |
 | `multiplier`            | `number`  | `1`                    | ![Smooth only][smooth-only]<br>Factor applied to the scroll delta, allowing to boost/reduce scrolling speed (regardless of the platform).                                                                                                                                                          |
 | `firefoxMultiplier`     | `number`  | `50`                   | ![Smooth only][smooth-only]<br>Boost scrolling speed of Firefox on Windows.                                                                                                                                                                                                                        |
@@ -188,8 +190,8 @@ scroll.on('call', func => {
 | `call`   | `func`    | Trigger if in-view. Returns your `string` or `array` if contains `,`. |
 
 ## Progressive playing animations example (like gsap)
-All `data-scroll` elements have a progress value. 
-In the on scroll event you can get all current in-view elements. 
+All `data-scroll` elements have a progress value.
+In the on scroll event you can get all current in-view elements.
 #### HTML
 ```html
 <h1 data-scroll data-scroll-id="hey">Hey</h1>

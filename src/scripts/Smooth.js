@@ -46,8 +46,12 @@ export default class extends Core {
 
         this.instance = {
             delta: {
-                x: 0,
-                y: 0
+                x: this.x || 0,
+                y: this.y || 0
+            },
+            scroll: {
+                x: this.x || 0,
+                y: this.y || 0
             },
             ...this.instance
         };
