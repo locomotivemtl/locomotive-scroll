@@ -2285,7 +2285,7 @@
                 section.el.setAttribute("data-".concat(_this4.name, "-section-inview"), '');
               }
             } else {
-              if (section.inView) {
+              if (section.inView || forced) {
                 section.inView = false;
                 section.el.style.opacity = 0;
                 section.el.style.pointerEvents = 'none';
