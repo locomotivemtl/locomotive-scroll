@@ -19,7 +19,6 @@ body {
         min-height: 100vh;
     }
     [data-scroll-direction="horizontal"] & {
-        white-space: nowrap;
         height: 100vh;
         display: inline-block;
         white-space: nowrap;

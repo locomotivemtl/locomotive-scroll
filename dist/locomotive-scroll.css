@@ -15,7 +15,6 @@ html.has-scroll-dragging {
   min-height: 100vh; }
 
 [data-scroll-direction="horizontal"] [data-scroll-container] {
-  white-space: nowrap;
   height: 100vh;
   display: inline-block;
   white-space: nowrap; }
