@@ -1324,17 +1324,24 @@
           offset = target + offset;
         }
 
+        var isTargetReached = function isTargetReached() {
+          return parseInt(window.pageYOffset) === parseInt(offset);
+        };
+
         if (callback) {
-          offset = offset.toFixed();
+          if (isTargetReached()) {
+            callback();
+            return;
+          } else {
+            var onScroll = function onScroll() {
+              if (isTargetReached()) {
+                window.removeEventListener('scroll', onScroll);
+                callback();
+              }
+            };
 
-          var onScroll = function onScroll() {
-            if (window.pageYOffset.toFixed() === offset) {
-              window.removeEventListener('scroll', onScroll);
-              callback();
-            }
-          };
-
-          window.addEventListener('scroll', onScroll);
+            window.addEventListener('scroll', onScroll);
+          }
         }
 
         window.scrollTo({
