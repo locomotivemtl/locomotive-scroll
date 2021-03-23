@@ -1,6 +1,6 @@
 {
     "name": "locomotive-scroll",
-    "version": "4.1.0",
+    "version": "4.1.1",
     "description": "Detection of elements in viewport & smooth scrolling with parallax effects.",
     "repository": "locomotivemtl/locomotive-scroll",
     "author": "Locomotive <info@locomotive.ca> (https://locomotive.ca)",
