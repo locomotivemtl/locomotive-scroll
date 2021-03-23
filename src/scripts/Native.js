@@ -232,15 +232,20 @@ export default class extends Core {
             offset = target + offset;
         }
 
+        const isTargetReached = () => { return parseInt(window.pageYOffset) === parseInt(offset) }
         if (callback) {
-            offset = offset.toFixed();
-            let onScroll = function () {
-                if (window.pageYOffset.toFixed() === offset) {
-                    window.removeEventListener('scroll', onScroll);
-                    callback();
-                }
-            };
-            window.addEventListener('scroll', onScroll);
+            if (isTargetReached()) {
+                callback();
+                return;
+            } else {
+                let onScroll = function () {
+                    if (isTargetReached()) {
+                        window.removeEventListener('scroll', onScroll);
+                        callback();
+                    }
+                };
+                window.addEventListener('scroll', onScroll);
+            }
         }
 
         window.scrollTo({
