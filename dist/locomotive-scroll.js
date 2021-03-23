@@ -331,7 +331,7 @@
           y: 0
         },
         limit: {
-          x: this.html.offsetHeight,
+          x: this.html.offsetWidth,
           y: this.html.offsetHeight
         },
         currentElements: this.currentElements
