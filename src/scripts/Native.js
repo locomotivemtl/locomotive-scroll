@@ -30,8 +30,6 @@ export default class extends Core {
     }
 
     checkScroll() {
-        super.checkScroll();
-
         if (this.getDirection) {
             this.addDirection();
         }
@@ -42,6 +40,8 @@ export default class extends Core {
         }
 
         this.instance.scroll.y = window.pageYOffset;
+
+        super.checkScroll();
 
         if (Object.entries(this.els).length) {
             if (!this.hasScrollTicking) {
