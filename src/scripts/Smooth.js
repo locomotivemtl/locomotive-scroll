@@ -113,7 +113,8 @@ export default class extends Core {
 
     stopScrolling() {
         cancelAnimationFrame(this.checkScrollRaf); // Prevent checkScroll to continue looping
-
+        this.startScrollTs = undefined;
+        
         if (this.scrollToRaf) {
             cancelAnimationFrame(this.scrollToRaf);
             this.scrollToRaf = null;

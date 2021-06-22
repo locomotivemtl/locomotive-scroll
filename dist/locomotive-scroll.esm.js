@@ -2154,6 +2154,8 @@ var _default$2 = /*#__PURE__*/function (_Core) {
     value: function stopScrolling() {
       cancelAnimationFrame(this.checkScrollRaf); // Prevent checkScroll to continue looping
 
+      this.startScrollTs = undefined;
+
       if (this.scrollToRaf) {
         cancelAnimationFrame(this.scrollToRaf);
         this.scrollToRaf = null;
