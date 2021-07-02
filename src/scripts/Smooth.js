@@ -592,8 +592,8 @@ export default class extends Core {
                     y: elTop - top
                 };
 
-                top += window.innerHeight;
-                left += window.innerWidth;
+                top += window.innerHeight - this.instance.scroll.y;
+                left += window.innerWidth - this.instance.scroll.x;
                 bottom =
                     elTop +
                     targetEl.offsetHeight -

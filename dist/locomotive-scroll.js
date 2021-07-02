@@ -2612,8 +2612,8 @@
               x: elLeft - left,
               y: elTop - top
             };
-            top += window.innerHeight;
-            left += window.innerWidth;
+            top += window.innerHeight - _this6.instance.scroll.y;
+            left += window.innerWidth - _this6.instance.scroll.x;
             bottom = elTop + targetEl.offsetHeight - el.offsetHeight - elDistance[_this6.directionAxis];
             right = elLeft + targetEl.offsetWidth - el.offsetWidth - elDistance[_this6.directionAxis];
             middle = {
