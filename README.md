@@ -205,7 +205,7 @@ scroll.on('scroll', (args) => {
         // ouput log example: 0.34
         // gsap example : myGsapAnimation.progress(progress);
     }
-}
+});
 ```
 
 
