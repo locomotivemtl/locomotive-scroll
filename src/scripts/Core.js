@@ -321,8 +321,8 @@ export default class {
 
     cancelRequestedFrames() {
         for (let i = 0; i < this.requestAnimationFrameIds.length; i++) {
-            const requestAnimationFrameHandle = this.requestAnimationFrameIds[i];
-            cancelAnimationFrame(requestAnimationFrameHandle);
+            const requestId = this.requestAnimationFrameIds[i];
+            cancelAnimationFrame(requestId);
         }
         this.requestAnimationFrameIds = [];
     }
