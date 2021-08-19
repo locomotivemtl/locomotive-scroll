@@ -7,6 +7,7 @@ export default class {
         if (options.smartphone) Object.assign(this.smartphone, options.smartphone);
         this.tablet = defaults.tablet;
         if (options.tablet) Object.assign(this.tablet, options.tablet);
+        this.requestAnimationFrameIds = [];
 
         this.namespace = 'locomotive';
         this.html = document.documentElement;
@@ -77,10 +78,21 @@ export default class {
         this.dispatchScroll();
     }
 
+    requestAnimationFrame(callback) {
+        const requestId = requestAnimationFrame(() => {
+            callback();
+            const requestIdIndex = this.requestAnimationFrameIds.indexOf(requestId);
+            if (requestIdIndex >= 0) {
+                this.requestAnimationFrameIds.splice(requestIdIndex, 1);
+            }
+        });
+        this.requestAnimationFrameIds.push(requestId);
+    }
+
     checkResize() {
         if (!this.resizeTick) {
             this.resizeTick = true;
-            requestAnimationFrame(() => {
+            this.requestAnimationFrame(() => {
                 this.resize();
                 this.resizeTick = false;
             });
@@ -307,8 +319,18 @@ export default class {
         };
     }
 
+    cancelRequestedFrames() {
+        for (let i = 0; i < this.requestAnimationFrameIds.length; i++) {
+            const requestAnimationFrameHandle = this.requestAnimationFrameIds[i];
+            cancelAnimationFrame(requestAnimationFrameHandle);
+        }
+        this.requestAnimationFrameIds = [];
+    }
+
     destroy() {
         window.removeEventListener('resize', this.checkResize, false);
+
+        this.cancelRequestedFrames();
 
         Object.keys(this.listeners).forEach((event) => {
             this.el.removeEventListener(this.namespace + event, this.checkEvent, false);
