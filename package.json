@@ -1,6 +1,6 @@
 {
     "name": "locomotive-scroll",
-    "version": "4.1.1",
+    "version": "4.1.2",
     "description": "Detection of elements in viewport & smooth scrolling with parallax effects.",
     "repository": "locomotivemtl/locomotive-scroll",
     "author": "Locomotive <info@locomotive.ca> (https://locomotive.ca)",
@@ -21,6 +21,7 @@
         "@modularbp/gulp-sass": "^1.0.7",
         "@modularbp/gulp-serve": "^1.0.5",
         "@modularbp/gulp-svg": "^1.0.5",
+        "@modularbp/gulp-watch": "^1.0.5",
         "gulp-header": "^2.0.9",
         "mbp": "^1.3.0",
         "merge-stream": "^2.0.0",
@@ -28,7 +29,6 @@
         "prettier": "^2.1.2"
     },
     "dependencies": {
-        "@modularbp/gulp-watch": "^1.0.5",
         "bezier-easing": "^2.1.0",
         "smoothscroll-polyfill": "^0.4.4",
         "virtual-scroll": "^1.5.2"
