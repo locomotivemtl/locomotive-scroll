@@ -491,7 +491,11 @@ export default class extends Core {
 
     releaseScrollBar(e) {
         this.isDraggingScrollbar = false;
-        this.html.classList.add(this.scrollingClass);
+
+        if (this.isScrolling) {
+            this.html.classList.add(this.scrollingClass);
+        }
+
         this.html.classList.remove(this.draggingClass);
     }
 
