@@ -114,6 +114,9 @@ export default class extends Core {
     stopScrolling() {
         cancelAnimationFrame(this.checkScrollRaf); // Prevent checkScroll to continue looping
 
+        //Pevent scrollbar glitch/locking
+        this.startScrollTs = undefined;
+
         if (this.scrollToRaf) {
             cancelAnimationFrame(this.scrollToRaf);
             this.scrollToRaf = null;
