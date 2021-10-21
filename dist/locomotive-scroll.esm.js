@@ -1,4 +1,4 @@
-/* locomotive-scroll v4.1.1 | MIT License | https://github.com/locomotivemtl/locomotive-scroll */
+/* locomotive-scroll v4.1.2 | MIT License | https://github.com/locomotivemtl/locomotive-scroll */
 function _classCallCheck(instance, Constructor) {
   if (!(instance instanceof Constructor)) {
     throw new TypeError("Cannot call a class as a function");
@@ -1340,7 +1340,7 @@ var _default$1 = /*#__PURE__*/function (_Core) {
 
       window.scrollTo({
         top: offset,
-        behavior: 'smooth'
+        behavior: options.duration === 0 ? 'auto' : 'smooth'
       });
     }
   }, {
@@ -2153,6 +2153,9 @@ var _default$2 = /*#__PURE__*/function (_Core) {
     key: "stopScrolling",
     value: function stopScrolling() {
       cancelAnimationFrame(this.checkScrollRaf); // Prevent checkScroll to continue looping
+      //Pevent scrollbar glitch/locking
+
+      this.startScrollTs = undefined;
 
       if (this.scrollToRaf) {
         cancelAnimationFrame(this.scrollToRaf);
@@ -2511,7 +2514,11 @@ var _default$2 = /*#__PURE__*/function (_Core) {
     key: "releaseScrollBar",
     value: function releaseScrollBar(e) {
       this.isDraggingScrollbar = false;
-      this.html.classList.add(this.scrollingClass);
+
+      if (this.isScrolling) {
+        this.html.classList.add(this.scrollingClass);
+      }
+
       this.html.classList.remove(this.draggingClass);
     }
   }, {
