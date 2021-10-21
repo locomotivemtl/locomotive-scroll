@@ -250,7 +250,7 @@ export default class extends Core {
 
         window.scrollTo({
             top: offset,
-            behavior: 'smooth'
+            behavior: options.duration === 0 ? 'auto' : 'smooth'
         });
     }
 
