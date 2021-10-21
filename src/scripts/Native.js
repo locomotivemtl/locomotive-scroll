@@ -232,7 +232,9 @@ export default class extends Core {
             offset = target + offset;
         }
 
-        const isTargetReached = () => { return parseInt(window.pageYOffset) === parseInt(offset) }
+        const isTargetReached = () => {
+            return parseInt(window.pageYOffset) === parseInt(offset);
+        };
         if (callback) {
             if (isTargetReached()) {
                 callback();

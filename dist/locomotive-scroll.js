@@ -5,6 +5,44 @@
   (global = typeof globalThis !== 'undefined' ? globalThis : global || self, global.LocomotiveScroll = factory());
 }(this, (function () { 'use strict';
 
+  function ownKeys(object, enumerableOnly) {
+    var keys = Object.keys(object);
+
+    if (Object.getOwnPropertySymbols) {
+      var symbols = Object.getOwnPropertySymbols(object);
+
+      if (enumerableOnly) {
+        symbols = symbols.filter(function (sym) {
+          return Object.getOwnPropertyDescriptor(object, sym).enumerable;
+        });
+      }
+
+      keys.push.apply(keys, symbols);
+    }
+
+    return keys;
+  }
+
+  function _objectSpread2(target) {
+    for (var i = 1; i < arguments.length; i++) {
+      var source = arguments[i] != null ? arguments[i] : {};
+
+      if (i % 2) {
+        ownKeys(Object(source), true).forEach(function (key) {
+          _defineProperty(target, key, source[key]);
+        });
+      } else if (Object.getOwnPropertyDescriptors) {
+        Object.defineProperties(target, Object.getOwnPropertyDescriptors(source));
+      } else {
+        ownKeys(Object(source)).forEach(function (key) {
+          Object.defineProperty(target, key, Object.getOwnPropertyDescriptor(source, key));
+        });
+      }
+    }
+
+    return target;
+  }
+
   function _classCallCheck(instance, Constructor) {
     if (!(instance instanceof Constructor)) {
       throw new TypeError("Cannot call a class as a function");
@@ -40,40 +78,6 @@
     }
 
     return obj;
-  }
-
-  function ownKeys(object, enumerableOnly) {
-    var keys = Object.keys(object);
-
-    if (Object.getOwnPropertySymbols) {
-      var symbols = Object.getOwnPropertySymbols(object);
-      if (enumerableOnly) symbols = symbols.filter(function (sym) {
-        return Object.getOwnPropertyDescriptor(object, sym).enumerable;
-      });
-      keys.push.apply(keys, symbols);
-    }
-
-    return keys;
-  }
-
-  function _objectSpread2(target) {
-    for (var i = 1; i < arguments.length; i++) {
-      var source = arguments[i] != null ? arguments[i] : {};
-
-      if (i % 2) {
-        ownKeys(Object(source), true).forEach(function (key) {
-          _defineProperty(target, key, source[key]);
-        });
-      } else if (Object.getOwnPropertyDescriptors) {
-        Object.defineProperties(target, Object.getOwnPropertyDescriptors(source));
-      } else {
-        ownKeys(Object(source)).forEach(function (key) {
-          Object.defineProperty(target, key, Object.getOwnPropertyDescriptor(source, key));
-        });
-      }
-    }
-
-    return target;
   }
 
   function _inherits(subClass, superClass) {
@@ -113,7 +117,7 @@
     if (typeof Proxy === "function") return true;
 
     try {
-      Date.prototype.toString.call(Reflect.construct(Date, [], function () {}));
+      Boolean.prototype.valueOf.call(Reflect.construct(Boolean, [], function () {}));
       return true;
     } catch (e) {
       return false;
@@ -202,18 +206,21 @@
   }
 
   function _iterableToArray(iter) {
-    if (typeof Symbol !== "undefined" && Symbol.iterator in Object(iter)) return Array.from(iter);
+    if (typeof Symbol !== "undefined" && iter[Symbol.iterator] != null || iter["@@iterator"] != null) return Array.from(iter);
   }
 
   function _iterableToArrayLimit(arr, i) {
-    if (typeof Symbol === "undefined" || !(Symbol.iterator in Object(arr))) return;
+    var _i = arr == null ? null : typeof Symbol !== "undefined" && arr[Symbol.iterator] || arr["@@iterator"];
+
+    if (_i == null) return;
     var _arr = [];
     var _n = true;
     var _d = false;
-    var _e = undefined;
+
+    var _s, _e;
 
     try {
-      for (var _i = arr[Symbol.iterator](), _s; !(_n = (_s = _i.next()).done); _n = true) {
+      for (_i = _i.call(arr); !(_n = (_s = _i.next()).done); _n = true) {
         _arr.push(_s.value);
 
         if (i && _arr.length === i) break;
@@ -271,7 +278,7 @@
     gestureDirection: 'vertical',
     reloadOnContextChange: false,
     lerp: 0.1,
-    "class": 'is-inview',
+    class: 'is-inview',
     scrollbarContainer: false,
     scrollbarClass: 'c-scrollbar',
     scrollingClass: 'has-scroll-scrolling',
@@ -298,7 +305,7 @@
     }
   };
 
-  var _default = /*#__PURE__*/function () {
+  var _default$2 = /*#__PURE__*/function () {
     function _default() {
       var options = arguments.length > 0 && arguments[0] !== undefined ? arguments[0] : {};
 
@@ -493,7 +500,7 @@
       key: "setInView",
       value: function setInView(current, i) {
         this.els[i].inView = true;
-        current.el.classList.add(current["class"]);
+        current.el.classList.add(current.class);
         this.currentElements[i] = current;
 
         if (current.call && this.hasCallEventSet) {
@@ -526,7 +533,7 @@
         }
 
         if (current.repeat) {
-          current.el.classList.remove(current["class"]);
+          current.el.classList.remove(current.class);
         }
       }
     }, {
@@ -1071,7 +1078,7 @@
 
   }());
   });
-  var smoothscroll_1 = smoothscroll.polyfill;
+  smoothscroll.polyfill;
 
   var _default$1 = /*#__PURE__*/function (_Core) {
     _inherits(_default, _Core);
@@ -1179,8 +1186,8 @@
         this.els = {};
         var els = this.el.querySelectorAll('[data-' + this.name + ']');
         els.forEach(function (el, index) {
-          var BCR = el.getBoundingClientRect();
-          var cl = el.dataset[_this3.name + 'Class'] || _this3["class"];
+          el.getBoundingClientRect();
+          var cl = el.dataset[_this3.name + 'Class'] || _this3.class;
           var id = typeof el.dataset[_this3.name + 'Id'] === 'string' ? el.dataset[_this3.name + 'Id'] : index;
           var top;
           var left;
@@ -1218,7 +1225,7 @@
             el: el,
             targetEl: targetEl,
             id: id,
-            "class": cl,
+            class: cl,
             top: top,
             bottom: bottom,
             left: left,
@@ -1365,7 +1372,7 @@
     }]);
 
     return _default;
-  }(_default);
+  }(_default$2);
 
   /*
   object-assign
@@ -1374,7 +1381,7 @@
   */
   /* eslint-disable no-unused-vars */
   var getOwnPropertySymbols = Object.getOwnPropertySymbols;
-  var hasOwnProperty = Object.prototype.hasOwnProperty;
+  var hasOwnProperty$1 = Object.prototype.hasOwnProperty;
   var propIsEnumerable = Object.prototype.propertyIsEnumerable;
 
   function toObject(val) {
@@ -1438,7 +1445,7 @@
   		from = Object(arguments[s]);
 
   		for (var key in from) {
-  			if (hasOwnProperty.call(from, key)) {
+  			if (hasOwnProperty$1.call(from, key)) {
   				to[key] = from[key];
   			}
   		}
@@ -1527,7 +1534,7 @@
   (function() {
     var root;
 
-    root =  exports !== null ? exports : this;
+    root = exports !== null ? exports : this;
 
     root.Lethargy = (function() {
       function Lethargy(stability, sensitivity, tolerance, delay) {
@@ -1638,7 +1645,7 @@
   })();
 
   var toString = Object.prototype.toString,
-      hasOwnProperty$1 = Object.prototype.hasOwnProperty;
+      hasOwnProperty = Object.prototype.hasOwnProperty;
 
   var bindallStandalone = function(object) {
       if(!object) return console.warn('bindAll requires at least one argument.');
@@ -1648,7 +1655,7 @@
       if (functions.length === 0) {
 
           for (var method in object) {
-              if(hasOwnProperty$1.call(object, method)) {
+              if(hasOwnProperty.call(object, method)) {
                   if(typeof object[method] == 'function' && toString.call(object[method]) == "[object Function]") {
                       functions.push(method);
                   }
@@ -1679,9 +1686,9 @@
 
   var EVT_ID = 'virtualscroll';
 
-  var src = VirtualScroll;
+  var src$1 = VirtualScroll;
 
-  var keyCodes = {
+  var keyCodes$1 = {
       LEFT: 37,
       UP: 38,
       RIGHT: 39,
@@ -1807,19 +1814,19 @@
       var windowHeight = window.innerHeight - 40;
 
       switch(e.keyCode) {
-          case keyCodes.LEFT:
-          case keyCodes.UP:
+          case keyCodes$1.LEFT:
+          case keyCodes$1.UP:
               evt.deltaY = this.options.keyStep;
               break;
 
-          case keyCodes.RIGHT:
-          case keyCodes.DOWN:
+          case keyCodes$1.RIGHT:
+          case keyCodes$1.DOWN:
               evt.deltaY = - this.options.keyStep;
               break;
-          case  e.shiftKey:
+          case e.shiftKey:
               evt.deltaY = windowHeight;
               break;
-          case keyCodes.SPACE:
+          case keyCodes$1.SPACE:
               evt.deltaY = - windowHeight;
               break;
           default:
@@ -1988,7 +1995,7 @@
     return x;
   }
 
-  var src$1 = function bezier (mX1, mY1, mX2, mY2) {
+  var src = function bezier (mX1, mY1, mX2, mY2) {
     if (!(0 <= mX1 && mX1 <= 1 && 0 <= mX2 && mX2 <= 1)) {
       throw new Error('bezier x values must be in [0, 1] range');
     }
@@ -2039,7 +2046,7 @@
     };
   };
 
-  var keyCodes$1 = {
+  var keyCodes = {
     LEFT: 37,
     UP: 38,
     RIGHT: 39,
@@ -2052,7 +2059,7 @@
     END: 35
   };
 
-  var _default$2 = /*#__PURE__*/function (_Core) {
+  var _default = /*#__PURE__*/function (_Core) {
     _inherits(_default, _Core);
 
     var _super = _createSuper(_default);
@@ -2100,7 +2107,7 @@
             y: this.initPosition.y
           }
         }, this.instance);
-        this.vs = new src({
+        this.vs = new src$1({
           el: this.scrollFromAnywhere ? document : this.el,
           mouseMultiplier: navigator.platform.indexOf('Win') > -1 ? 1 : 0.4,
           firefoxMultiplier: this.firefoxMultiplier,
@@ -2136,13 +2143,7 @@
         this.instance.limit.y = this.el.offsetHeight - this.windowHeight;
 
         if (this.direction === 'horizontal') {
-          var totalWidth = 0;
-          var nodes = this.el.children;
-
-          for (var i = 0; i < nodes.length; i++) {
-            totalWidth += nodes[i].offsetWidth;
-          }
-
+          var totalWidth = this.el.scrollWidth;
           this.instance.limit.x = totalWidth - this.windowWidth;
         }
       }
@@ -2177,7 +2178,7 @@
         if (this.stop) {
           // If we are stopped, we don't want any scroll to occur because of a keypress
           // Prevent tab to scroll to activeElement
-          if (e.keyCode == keyCodes$1.TAB) {
+          if (e.keyCode == keyCodes.TAB) {
             requestAnimationFrame(function () {
               // Make sure native scroll is always at top of page
               _this3.html.scrollTop = 0;
@@ -2191,7 +2192,7 @@
         }
 
         switch (e.keyCode) {
-          case keyCodes$1.TAB:
+          case keyCodes.TAB:
             // Do not remove the RAF
             // It allows to override the browser's native scrollTo, which is essential
             requestAnimationFrame(function () {
@@ -2207,31 +2208,31 @@
             });
             break;
 
-          case keyCodes$1.UP:
+          case keyCodes.UP:
             this.instance.delta[this.directionAxis] -= 240;
             break;
 
-          case keyCodes$1.DOWN:
+          case keyCodes.DOWN:
             this.instance.delta[this.directionAxis] += 240;
             break;
 
-          case keyCodes$1.PAGEUP:
+          case keyCodes.PAGEUP:
             this.instance.delta[this.directionAxis] -= window.innerHeight;
             break;
 
-          case keyCodes$1.PAGEDOWN:
+          case keyCodes.PAGEDOWN:
             this.instance.delta[this.directionAxis] += window.innerHeight;
             break;
 
-          case keyCodes$1.HOME:
+          case keyCodes.HOME:
             this.instance.delta[this.directionAxis] -= this.instance.limit[this.directionAxis];
             break;
 
-          case keyCodes$1.END:
+          case keyCodes.END:
             this.instance.delta[this.directionAxis] += this.instance.limit[this.directionAxis];
             break;
 
-          case keyCodes$1.SPACE:
+          case keyCodes.SPACE:
             if (!(document.activeElement instanceof HTMLInputElement) && !(document.activeElement instanceof HTMLTextAreaElement)) {
               if (e.shiftKey) {
                 this.instance.delta[this.directionAxis] -= window.innerHeight;
@@ -2278,9 +2279,9 @@
           }
 
           Object.entries(this.sections).forEach(function (_ref) {
-            var _ref2 = _slicedToArray(_ref, 2),
-                i = _ref2[0],
-                section = _ref2[1];
+            var _ref2 = _slicedToArray(_ref, 2);
+                _ref2[0];
+                var section = _ref2[1];
 
             if (section.persistent || _this4.instance.scroll[_this4.directionAxis] > section.offset[_this4.directionAxis] && _this4.instance.scroll[_this4.directionAxis] < section.limit[_this4.directionAxis]) {
               if (_this4.direction === 'horizontal') {
@@ -2553,15 +2554,15 @@
           // Try and find the target's parent section
           var targetParents = getParents(el);
           var section = Object.entries(_this6.sections).map(function (_ref3) {
-            var _ref4 = _slicedToArray(_ref3, 2),
-                key = _ref4[0],
-                section = _ref4[1];
+            var _ref4 = _slicedToArray(_ref3, 2);
+                _ref4[0];
+                var section = _ref4[1];
 
             return section;
           }).find(function (section) {
             return targetParents.includes(section.el);
           });
-          var cl = el.dataset[_this6.name + 'Class'] || _this6["class"];
+          var cl = el.dataset[_this6.name + 'Class'] || _this6.class;
           var id = typeof el.dataset[_this6.name + 'Id'] === 'string' ? el.dataset[_this6.name + 'Id'] : 'el' + index;
           var top;
           var left;
@@ -2669,7 +2670,7 @@
           var mappedEl = {
             el: el,
             id: id,
-            "class": cl,
+            class: cl,
             section: section,
             top: top,
             middle: middle,
@@ -2766,9 +2767,9 @@
           y: this.instance.scroll.y + this.windowMiddle.y
         };
         Object.entries(this.parallaxElements).forEach(function (_ref5) {
-          var _ref6 = _slicedToArray(_ref5, 2),
-              i = _ref6[0],
-              current = _ref6[1];
+          var _ref6 = _slicedToArray(_ref5, 2);
+              _ref6[0];
+              var current = _ref6[1];
 
           var transformDistance = false;
 
@@ -2871,7 +2872,7 @@
 
         var callback = options.callback ? options.callback : false; // function called when scrollTo completes (note that it won't wait for lerp to stabilize)
 
-        easing = src$1.apply(void 0, _toConsumableArray(easing));
+        easing = src.apply(void 0, _toConsumableArray(easing));
 
         if (typeof target === 'string') {
           // Selector or boundaries
@@ -2917,9 +2918,9 @@
           var parentSection = targetParents.find(function (candidate) {
             return Object.entries(_this9.sections) // Get sections associative array as a regular array
             .map(function (_ref7) {
-              var _ref8 = _slicedToArray(_ref7, 2),
-                  key = _ref8[0],
-                  section = _ref8[1];
+              var _ref8 = _slicedToArray(_ref7, 2);
+                  _ref8[0];
+                  var section = _ref8[1];
 
               return section;
             }) // map to section only (we dont need the key here)
@@ -3044,7 +3045,7 @@
     }]);
 
     return _default;
-  }(_default);
+  }(_default$2);
 
   var Smooth = /*#__PURE__*/function () {
     function Smooth() {
@@ -3072,7 +3073,7 @@
         this.options.isTablet = this.options.isMobile && window.innerWidth >= this.tablet.breakpoint;
 
         if (this.smooth && !this.options.isMobile || this.tablet.smooth && this.options.isTablet || this.smartphone.smooth && this.options.isMobile && !this.options.isTablet) {
-          this.scroll = new _default$2(this.options);
+          this.scroll = new _default(this.options);
         } else {
           this.scroll = new _default$1(this.options);
         }
