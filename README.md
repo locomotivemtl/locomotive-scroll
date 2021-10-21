@@ -11,6 +11,8 @@
 
 ## Installation
 
+> ⚠️ Scroll-hijacking is a controversial practice that can cause usability, accessibility, and performance issues. Please use responsibly.
+
 ```sh
 npm install locomotive-scroll
 ```
