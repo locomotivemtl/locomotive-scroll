@@ -360,9 +360,7 @@ export default class extends Core {
             if (this.instance.direction !== 'up') {
                 this.instance.direction = 'up';
             }
-        }
-
-        if (this.instance.delta.x > this.instance.scroll.x) {
+        } else if (this.instance.delta.x > this.instance.scroll.x) {
             if (this.instance.direction !== 'right') {
                 this.instance.direction = 'right';
             }
