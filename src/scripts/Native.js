@@ -193,7 +193,7 @@ export default class extends Core {
      *
      * @param  Available options :
      *          target {node, string, "top", "bottom", int} - The DOM element we want to scroll to
-     *          options {object} - Options object for additionnal settings.
+     *          options {object} - Options object for additional settings.
      * @return {void}
      */
     scrollTo(target, options = {}) {
