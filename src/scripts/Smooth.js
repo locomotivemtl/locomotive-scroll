@@ -159,10 +159,14 @@ export default class extends Core {
                 });
                 break;
             case keyCodes.UP:
-                this.instance.delta[this.directionAxis] -= 240;
+                if (this.isActiveElementScrollSensitive()) {
+                    this.instance.delta[this.directionAxis] -= 240;
+                }
                 break;
             case keyCodes.DOWN:
-                this.instance.delta[this.directionAxis] += 240;
+                if (this.isActiveElementScrollSensitive()) {
+                    this.instance.delta[this.directionAxis] += 240;
+                }
                 break;
             case keyCodes.PAGEUP:
                 this.instance.delta[this.directionAxis] -= window.innerHeight;
@@ -177,10 +181,7 @@ export default class extends Core {
                 this.instance.delta[this.directionAxis] += this.instance.limit[this.directionAxis];
                 break;
             case keyCodes.SPACE:
-                if (
-                    !(document.activeElement instanceof HTMLInputElement) &&
-                    !(document.activeElement instanceof HTMLTextAreaElement)
-                ) {
+                if (this.isActiveElementScrollSensitive()) {
                     if (e.shiftKey) {
                         this.instance.delta[this.directionAxis] -= window.innerHeight;
                     } else {
@@ -201,6 +202,15 @@ export default class extends Core {
         this.isScrolling = true;
         this.checkScroll();
         this.html.classList.add(this.scrollingClass);
+    }
+
+    isActiveElementScrollSensitive() {
+        return (
+            !(document.activeElement instanceof HTMLInputElement) &&
+            !(document.activeElement instanceof HTMLTextAreaElement) &&
+            !(document.activeElement instanceof HTMLButtonElement) &&
+            !(document.activeElement instanceof HTMLSelectElement)
+        );
     }
 
     checkScroll(forced = false) {

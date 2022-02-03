@@ -2211,11 +2211,17 @@
             break;
 
           case keyCodes$1.UP:
-            this.instance.delta[this.directionAxis] -= 240;
+            if (this.isActiveElementScrollSensitive()) {
+              this.instance.delta[this.directionAxis] -= 240;
+            }
+
             break;
 
           case keyCodes$1.DOWN:
-            this.instance.delta[this.directionAxis] += 240;
+            if (this.isActiveElementScrollSensitive()) {
+              this.instance.delta[this.directionAxis] += 240;
+            }
+
             break;
 
           case keyCodes$1.PAGEUP:
@@ -2235,7 +2241,7 @@
             break;
 
           case keyCodes$1.SPACE:
-            if (!(document.activeElement instanceof HTMLInputElement) && !(document.activeElement instanceof HTMLTextAreaElement)) {
+            if (this.isActiveElementScrollSensitive()) {
               if (e.shiftKey) {
                 this.instance.delta[this.directionAxis] -= window.innerHeight;
               } else {
@@ -2256,6 +2262,11 @@
         this.isScrolling = true;
         this.checkScroll();
         this.html.classList.add(this.scrollingClass);
+      }
+    }, {
+      key: "isActiveElementScrollSensitive",
+      value: function isActiveElementScrollSensitive() {
+        return !(document.activeElement instanceof HTMLInputElement) && !(document.activeElement instanceof HTMLTextAreaElement) && !(document.activeElement instanceof HTMLButtonElement) && !(document.activeElement instanceof HTMLSelectElement);
       }
     }, {
       key: "checkScroll",
