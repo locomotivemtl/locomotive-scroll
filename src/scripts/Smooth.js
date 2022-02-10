@@ -707,7 +707,7 @@ export default class extends Core {
     addSections() {
         this.sections = {};
 
-        let sections = this.el.querySelectorAll(`[data-${this.name}-section]`);
+        let sections = this.el.querySelectorAll(this.sectionSelector ? this.sectionSelector : `[data-${this.name}-section]`);
         if (sections.length === 0) {
             sections = [this.el];
         }
