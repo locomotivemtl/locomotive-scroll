@@ -1,4 +1,4 @@
-/* locomotive-scroll v4.1.3 | MIT License | https://github.com/locomotivemtl/locomotive-scroll */
+/* locomotive-scroll v4.1.4 | MIT License | https://github.com/locomotivemtl/locomotive-scroll */
 function _classCallCheck(instance, Constructor) {
   if (!(instance instanceof Constructor)) {
     throw new TypeError("Cannot call a class as a function");
@@ -1277,7 +1277,7 @@ var _default$1 = /*#__PURE__*/function (_Core) {
      *
      * @param  Available options :
      *          target {node, string, "top", "bottom", int} - The DOM element we want to scroll to
-     *          options {object} - Options object for additionnal settings.
+     *          options {object} - Options object for additional settings.
      * @return {void}
      */
 
@@ -1319,7 +1319,7 @@ var _default$1 = /*#__PURE__*/function (_Core) {
       }
 
       var isTargetReached = function isTargetReached() {
-        return parseInt(window.pageYOffset) === parseInt(offset);
+        return Math.round(window.pageYOffset) === Math.round(offset);
       };
 
       if (callback) {
@@ -2862,7 +2862,7 @@ var _default$2 = /*#__PURE__*/function (_Core) {
      *
      * @param  Available options :
      *          target {node, string, "top", "bottom", int} - The DOM element we want to scroll to
-     *          options {object} - Options object for additionnal settings.
+     *          options {object} - Options object for additional settings.
      * @return {void}
      */
 

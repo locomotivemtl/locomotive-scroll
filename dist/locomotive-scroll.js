@@ -1,4 +1,4 @@
-/* locomotive-scroll v4.1.3 | MIT License | https://github.com/locomotivemtl/locomotive-scroll */
+/* locomotive-scroll v4.1.4 | MIT License | https://github.com/locomotivemtl/locomotive-scroll */
 (function (global, factory) {
   typeof exports === 'object' && typeof module !== 'undefined' ? module.exports = factory() :
   typeof define === 'function' && define.amd ? define(factory) :
@@ -1283,7 +1283,7 @@
        *
        * @param  Available options :
        *          target {node, string, "top", "bottom", int} - The DOM element we want to scroll to
-       *          options {object} - Options object for additionnal settings.
+       *          options {object} - Options object for additional settings.
        * @return {void}
        */
 
@@ -1325,7 +1325,7 @@
         }
 
         var isTargetReached = function isTargetReached() {
-          return parseInt(window.pageYOffset) === parseInt(offset);
+          return Math.round(window.pageYOffset) === Math.round(offset);
         };
 
         if (callback) {
@@ -2868,7 +2868,7 @@
        *
        * @param  Available options :
        *          target {node, string, "top", "bottom", int} - The DOM element we want to scroll to
-       *          options {object} - Options object for additionnal settings.
+       *          options {object} - Options object for additional settings.
        * @return {void}
        */
 

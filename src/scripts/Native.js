@@ -233,7 +233,7 @@ export default class extends Core {
         }
 
         const isTargetReached = () => {
-            return parseInt(window.pageYOffset) === parseInt(offset);
+            return Math.round(window.pageYOffset) === Math.round(offset);
         };
         if (callback) {
             if (isTargetReached()) {
