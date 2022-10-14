@@ -225,7 +225,7 @@ export default class extends Core {
             const distance = Math.abs(
                 this.instance.delta[this.directionAxis] - this.instance.scroll[this.directionAxis]
             );
-            const timeSinceStart = Date.now() - this.startScrollTs; // Get the time since the scroll was started: the scroll can be stopped again only past 100ms
+            const timeSinceStart = Date.now() - this.startScrollTs ? this.startScrollTs : Date.now(); // Get the time since the scroll was started: the scroll can be stopped again only past 100ms
             if (
                 !this.animatingScroll &&
                 timeSinceStart > 100 &&
