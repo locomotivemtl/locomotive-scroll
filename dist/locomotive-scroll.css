@@ -1,6 +1,6 @@
 /*! locomotive-scroll v4.1.3 | MIT License | https://github.com/locomotivemtl/locomotive-scroll */
 html.has-scroll-smooth {
-  overflow: hidden; }
+  overflow: visible; }
 
 html.has-scroll-dragging {
   -webkit-user-select: none;
@@ -9,7 +9,7 @@ html.has-scroll-dragging {
   user-select: none; }
 
 .has-scroll-smooth body {
-  overflow: hidden; }
+  overflow: visible; }
 
 .has-scroll-smooth [data-scroll-container] {
   min-height: 100vh; }
