@@ -9,7 +9,7 @@ html.has-scroll-dragging {
   user-select: none; }
 
 .has-scroll-smooth body {
-  overflow: visible; }
+  overflow: hidden; }
 
 .has-scroll-smooth [data-scroll-container] {
   min-height: 100vh; }
