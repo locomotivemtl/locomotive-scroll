@@ -1319,7 +1319,9 @@ var _default$1 = /*#__PURE__*/function (_Core) {
       }
 
       var isTargetReached = function isTargetReached() {
-        return Math.round(window.pageYOffset) === Math.round(offset);
+        var _offset = Math.round(offset);
+
+        return Math.round(window.pageYOffset) < _offset + 2 && Math.round(window.pageYOffset) > _offset - 2;
       };
 
       if (callback) {
