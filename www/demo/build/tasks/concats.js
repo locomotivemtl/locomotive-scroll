@@ -1,8 +1,9 @@
-import loconfig from '../utils/config.js';
-import glob from '../utils/glob.js';
-import message from '../utils/message.js';
-import notification from '../utils/notification.js';
-import resolve from '../utils/template.js';
+import loconfig from '../helpers/config.js';
+import glob, { supportsGlob } from '../helpers/glob.js';
+import message from '../helpers/message.js';
+import notification from '../helpers/notification.js';
+import resolve from '../helpers/template.js';
+import { merge } from '../utils/index.js';
 import concat from 'concat';
 import {
     basename,
@@ -64,7 +65,7 @@ export const productionConcatFilesArgs  = [
  * @return {Promise}
  */
 export default async function concatFiles(globOptions = null, concatOptions = null) {
-    if (glob) {
+    if (supportsGlob) {
         if (globOptions == null) {
             globOptions = productionGlobOptions;
         } else if (
@@ -72,7 +73,7 @@ export default async function concatFiles(globOptions = null, concatOptions = nu
             globOptions !== developmentGlobOptions &&
             globOptions !== productionGlobOptions
         ) {
-            globOptions = Object.assign({}, defaultGlobOptions, globOptions);
+            globOptions = merge({}, defaultGlobOptions, globOptions);
         }
     }
 
@@ -82,9 +83,18 @@ export default async function concatFiles(globOptions = null, concatOptions = nu
         concatOptions !== developmentConcatOptions &&
         concatOptions !== productionConcatOptions
     ) {
-        concatOptions = Object.assign({}, defaultConcatOptions, concatOptions);
+        concatOptions = merge({}, defaultConcatOptions, concatOptions);
     }
 
+    /**
+     * @async
+     * @param  {object}   entry          - The entrypoint to process.
+     * @param  {string[]} entry.includes - One or more paths to process.
+     * @param  {string}   entry.outfile  - The file to write to.
+     * @param  {?string}  [entry.label]  - The task label.
+     *     Defaults to the outfile name.
+     * @return {Promise}
+     */
     loconfig.tasks.concats.forEach(async ({
         includes,
         outfile,
@@ -98,25 +108,25 @@ export default async function concatFiles(globOptions = null, concatOptions = nu
         console.time(timeLabel);
 
         try {
+            if (!Array.isArray(includes)) {
+                includes = [ includes ];
+            }
+
             includes = resolve(includes);
             outfile  = resolve(outfile);
 
-            let files;
-
-            if (glob && globOptions) {
-                files = await glob(includes, globOptions);
-            } else {
-                files = includes;
+            if (supportsGlob && globOptions) {
+                includes = await glob(includes, globOptions);
             }
 
             if (concatOptions.removeDuplicates) {
-                files = files.map((path) => normalize(path));
-                files = [ ...new Set(files) ];
+                includes = includes.map((path) => normalize(path));
+                includes = [ ...new Set(includes) ];
             }
 
-            await concat(files, outfile);
+            await concat(includes, outfile);
 
-            if (files.length) {
+            if (includes.length) {
                 message(`${label} concatenated`, 'success', timeLabel);
             } else {
                 message(`${label} is empty`, 'notice', timeLabel);

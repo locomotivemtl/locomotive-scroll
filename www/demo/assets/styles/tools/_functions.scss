@@ -45,7 +45,7 @@
         @error "`#{$base}` needs to be a number in pixel.";
     }
 
-    @return ($size / $base) * 1rem;
+    @return math.div($size, $base) * 1rem;
 }
 
 // Retrieves the z-index from the {@see $layers master list}.

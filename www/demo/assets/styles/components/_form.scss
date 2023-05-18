@@ -63,7 +63,7 @@ $checkbox-icon-color: $input-icon-color;
         top: 50%;
         left: 0;
         display: inline-block;
-        margin-top: (-$checkbox / 2);
+        margin-top: math.div(-$checkbox, 2);
         padding: 0;
         width: $checkbox;
         height: $checkbox;

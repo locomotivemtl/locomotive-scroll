@@ -16,7 +16,7 @@ import notifier from 'node-notifier';
  * @param  {function}      callback        - The notification callback.
  * @return {void}
  */
-export default function notification(options, callback) {
+function notification(options, callback) {
     if (typeof options === 'string') {
         options = {
             message: options
@@ -42,4 +42,10 @@ export default function notification(options, callback) {
     }
 
     notifier.notify(options, callback);
+}
+
+export default notification;
+
+export {
+    notification,
 };

@@ -28,8 +28,8 @@ $aspect-ratios: (
             @error "`#{$consequent}` needs to be a number."
         }
 
-        &.u-#{$antecedent}\:#{$consequent}::before {
-            padding-bottom: ($consequent/$antecedent) * 100%;
+        .u-#{$antecedent}\:#{$consequent}::before {
+            padding-bottom: math.div($consequent, $antecedent) * 100%;
         }
     }
 }

@@ -3,6 +3,10 @@
  */
 
 import loconfig from './config.js';
+import {
+    escapeRegExp,
+    flatten
+} from '../utils/index.js';
 
 const templateData = flatten({
     paths: loconfig.paths
@@ -22,7 +26,7 @@ const templateData = flatten({
  * @param  {object} [data] - An object in the form `{ 'from': 'to', … }`.
  * @return {*} Returns the transformed value.
  */
-export default function resolve(input, data = templateData) {
+function resolve(input, data = templateData) {
     switch (typeof input) {
         case 'string': {
             return resolveValue(input, data);
@@ -56,7 +60,7 @@ export default function resolve(input, data = templateData) {
  * @param  {object} [data] - An object in the form `{ 'from': 'to', … }`.
  * @return {string} Returns the translated string.
  */
-export function resolveValue(input, data = templateData) {
+function resolveValue(input, data = templateData) {
     const tags = [];
 
     if (data !== templateData) {
@@ -93,55 +97,9 @@ export function resolveValue(input, data = templateData) {
     });
 }
 
-/**
- * Creates a new object with all nested object properties
- * concatenated into it recursively.
- *
- * Nested keys are flattened into a property path:
- *
- * ```js
- * {
- *   a: {
- *     b: {
- *       c: 1
- *     }
- *   },
- *   d: 1
- * }
- * ```
- *
- * ```js
- * {
- *   "a.b.c": 1,
- *   "d": 1
- * }
- * ```
- *
- * @param  {object} input  - The object to flatten.
- * @param  {string} prefix - The parent key prefix.
- * @param  {object} target - The object that will receive the flattened properties.
- * @return {object} Returns the `target` object.
- */
-function flatten(input, prefix, target = {}) {
-    for (let key in input) {
-        let field = (prefix ? prefix + '.' + key : key);
+export default resolve;
 
-        if (typeof input[key] === 'object') {
-            flatten(input[key], field, target);
-        } else {
-            target[field] = input[key];
-        }
-    }
-
-    return target;
-}
-
-/**
- * Quotes regular expression characters.
- *
- * @param  {string} str - The input string.
- * @return {string} Returns the quoted (escaped) string.
- */
-function escapeRegExp(str) {
-    return str.replace(/[\[\]\{\}\(\)\-\*\+\?\.\,\\\^\$\|\#\s]/g, '\\$&');
-}
+export {
+    resolve,
+    resolveValue,
+};

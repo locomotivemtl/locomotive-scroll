@@ -11,7 +11,7 @@ import kleur from 'kleur';
  * @param {string} [type]    - The type of message.
  * @param {string} [timerID] - The console time label to output.
  */
-export default function message(text, type, timerID) {
+function message(text, type, timerID) {
     switch (type) {
         case 'success':
             console.log('✅ ', kleur.bgGreen().black(text));
@@ -52,4 +52,10 @@ export default function message(text, type, timerID) {
     }
 
     console.log('');
+}
+
+export default message;
+
+export {
+    message,
 };

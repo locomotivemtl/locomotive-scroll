@@ -1,7 +1,8 @@
-import loconfig from '../utils/config.js';
-import message from '../utils/message.js';
-import notification from '../utils/notification.js';
-import resolve from '../utils/template.js';
+import loconfig from '../helpers/config.js';
+import message from '../helpers/message.js';
+import notification from '../helpers/notification.js';
+import resolve from '../helpers/template.js';
+import { merge } from '../utils/index.js';
 import esbuild from 'esbuild';
 import { basename } from 'node:path';
 
@@ -50,9 +51,20 @@ export default async function compileScripts(esBuildOptions = null) {
         esBuildOptions !== developmentESBuildOptions &&
         esBuildOptions !== productionESBuildOptions
     ) {
-        esBuildOptions = Object.assign({}, defaultESBuildOptions, esBuildOptions);
+        esBuildOptions = merge({}, defaultESBuildOptions, esBuildOptions);
     }
 
+    /**
+     * @async
+     * @param  {object}   entry           - The entrypoint to process.
+     * @param  {string[]} entry.includes  - One or more paths to process.
+     * @param  {string}   [entry.outdir]  - The directory to write to.
+     * @param  {string}   [entry.outfile] - The file to write to.
+     * @param  {?string}  [entry.label]   - The task label.
+     *     Defaults to the outdir or outfile name.
+     * @throws {TypeError} If outdir and outfile are missing.
+     * @return {Promise}
+     */
     loconfig.tasks.scripts.forEach(async ({
         includes,
         outdir = '',
@@ -67,6 +79,10 @@ export default async function compileScripts(esBuildOptions = null) {
         console.time(timeLabel);
 
         try {
+            if (!Array.isArray(includes)) {
+                includes = [ includes ];
+            }
+
             includes = resolve(includes);
 
             if (outdir) {

@@ -1,12 +1,17 @@
-import loconfig from '../utils/config.js';
-import message from '../utils/message.js';
-import notification from '../utils/notification.js';
-import postcss, { pluginsMap as postcssPluginsMap } from '../utils/postcss.js';
-import resolve from '../utils/template.js';
+import loconfig from '../helpers/config.js';
+import message from '../helpers/message.js';
+import notification from '../helpers/notification.js';
+import {
+    createProcessor,
+    pluginsMap as postcssPluginsMap,
+    supportsPostCSS
+} from '../helpers/postcss.js';
+import resolve from '../helpers/template.js';
+import { merge } from '../utils/index.js';
 import { writeFile } from 'node:fs/promises';
 import { basename } from 'node:path';
 import { promisify } from 'node:util';
-import sass from 'node-sass';
+import sass from 'sass';
 import { PurgeCSS } from 'purgecss';
 
 const sassRender = promisify(sass.render);
@@ -23,6 +28,7 @@ export const defaultSassOptions = {
     sourceMap: true,
     sourceMapContents: true,
 };
+
 export const developmentSassOptions = Object.assign({}, defaultSassOptions, {
     outputStyle: 'expanded',
 });
@@ -81,10 +87,10 @@ export default async function compileStyles(sassOptions = null, postcssOptions =
         sassOptions !== developmentSassOptions &&
         sassOptions !== productionSassOptions
     ) {
-        sassOptions = Object.assign({}, defaultSassOptions, sassOptions);
+        sassOptions = merge({}, defaultSassOptions, sassOptions);
     }
 
-    if (postcss) {
+    if (supportsPostCSS) {
         if (postcssOptions == null) {
             postcssOptions = productionPostCSSOptions;
         } else if (
@@ -92,10 +98,19 @@ export default async function compileStyles(sassOptions = null, postcssOptions =
             postcssOptions !== developmentPostCSSOptions &&
             postcssOptions !== productionPostCSSOptions
         ) {
-            postcssOptions = Object.assign({}, defaultPostCSSOptions, postcssOptions);
+            postcssOptions = merge({}, defaultPostCSSOptions, postcssOptions);
         }
     }
 
+    /**
+     * @async
+     * @param  {object}   entry         - The entrypoint to process.
+     * @param  {string[]} entry.infile  - The file to process.
+     * @param  {string}   entry.outfile - The file to write to.
+     * @param  {?string}  [entry.label] - The task label.
+     *     Defaults to the outfile name.
+     * @return {Promise}
+     */
     loconfig.tasks.styles.forEach(async ({
         infile,
         outfile,
@@ -115,9 +130,9 @@ export default async function compileStyles(sassOptions = null, postcssOptions =
                 outFile: outfile,
             }));
 
-            if (postcss && postcssOptions) {
+            if (supportsPostCSS && postcssOptions) {
                 if (typeof postcssProcessor === 'undefined') {
-                    postcssProcessor = createPostCSSProcessor(
+                    postcssProcessor = createProcessor(
                         postcssPluginsMap,
                         postcssOptions
                     );
@@ -191,35 +206,6 @@ export default async function compileStyles(sassOptions = null, postcssOptions =
 };
 
 /**
- * Creates a PostCSS Processor with the given plugins and options.
- *
- * @param {array<(function|object)>|object<string, (function|object)>} pluginsListOrMap -
- *     A list or map of plugins.
- *     If a map of plugins, the plugin name looks up `options`.
- * @param {object}              options - The PostCSS options.
- */
-function createPostCSSProcessor(pluginsListOrMap, options)
-{
-    let plugins;
-
-    if (Array.isArray(pluginsListOrMap)) {
-        plugins = pluginsListOrMap;
-    } else {
-        plugins = [];
-
-        for (let [ name, plugin ] of Object.entries(pluginsListOrMap)) {
-            if (name in options) {
-                plugin = plugin[name](options[name]);
-            }
-
-            plugins.push(plugin);
-        }
-    }
-
-    return postcss(plugins);
-}
-
-/**
  * Purge unused styles from CSS files.
  *
  * @async
@@ -231,22 +217,23 @@ function createPostCSSProcessor(pluginsListOrMap, options)
  */
 async function purgeUnusedCSS(outfile, label) {
     label = label ?? basename(outfile);
+
     const timeLabel = `${label} purged in`;
     console.time(timeLabel);
 
     const purgeCSSContentFiles = Array.from(loconfig.tasks.purgeCSS.content);
 
-    const purgeCSSResults = await new PurgeCSS().purge({
+    const purgeCSSResults = await (new PurgeCSS()).purge({
         content: purgeCSSContentFiles,
         css: [ outfile ],
         rejected: true,
-        defaultExtractor: content => content.match(/[a-z0-9_\-\\\/\@]+/gi) || [],
+        defaultExtractor: (content) => content.match(/[a-z0-9_\-\\\/\@]+/gi) || [],
         safelist: {
             standard: [ /^((?!\bu-gc-).)*$/ ]
         }
     })
 
-    for(let result of purgeCSSResults) {
+    for (let result of purgeCSSResults) {
         await writeFile(outfile, result.css)
 
         message(`${label} purged`, 'chore', timeLabel);
