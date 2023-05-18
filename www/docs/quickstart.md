@@ -49,7 +49,7 @@ Or without
 
 Add the base styles to your CSS file.
 
-[locomotive-scroll.css](https://github.com/locomotivemtl/locomotive-scroll/blob/master/dist/locomotive-scroll.css)
+[locomotive-scroll.css](https://github.com/locomotivemtl/locomotive-scroll/blob/v5-beta/bundled/locomotive-scroll.css)
 
 Learn more about styling considerations on [Lenis documentation](https://github.com/studio-freight/lenis#considerations).
 
@@ -57,7 +57,7 @@ Learn more about styling considerations on [Lenis documentation](https://github.
 
 You can also import the following .css file.
 
-[locomotive-scroll.css](https://github.com/locomotivemtl/locomotive-scroll/blob/master/dist/locomotive-scroll.css)
+[locomotive-scroll.css](https://github.com/locomotivemtl/locomotive-scroll/blob/v5-beta/bundled/locomotive-scroll.css)
 
 ```scss
 // Vendors
