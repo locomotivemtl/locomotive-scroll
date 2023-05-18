@@ -35,7 +35,7 @@ const locomotiveScroll = new LocomotiveScroll();
 Or without
 
 ```js
-<script src="https://cdn.jsdelivr.net/npm/locomotive-scroll@5.0.0-beta.6/bundled/locomotive-scroll.min.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/locomotive-scroll@beta/bundled/locomotive-scroll.min.js"></script>
 <script>
     (function () {
         const locomotiveScroll = new LocomotiveScroll();

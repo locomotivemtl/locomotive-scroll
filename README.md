@@ -10,6 +10,15 @@ Locomotive Scroll is an opinionated JavaScript library that provides smooth scro
 
 Read the [documentation](https://scroll.locomotive.ca/docs) for more details.
 
+## Installation
+
+You can install it via NPM by running the following command:
+
+```bash
+npm install locomotive-scroll@beta
+```
+Find more ways to install the package in our [Quick start](https://scroll.locomotive.ca/docs/#/quickstart?id=installation) guide.
+
 ## Features
 
 | Name                        | Support | Description                                                                                                      |

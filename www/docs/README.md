@@ -5,6 +5,14 @@
 
 Locomotive Scroll is an opinionated JavaScript library that provides smooth scrolling animations and advanced scroll interactions for web applications. It is designed to create engaging and interactive scrolling experiences with ease. Locomotive Scroll offers features such as smooth scrolling, parallax effects and scroll-based animations.
 
+## Installation
+
+You can install it via NPM by running the following command:
+
+```bash
+npm install locomotive-scroll@beta
+```
+
 See the [Quick start](quickstart.md) guide for more details.
 
 ## Features
