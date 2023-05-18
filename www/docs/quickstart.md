@@ -9,7 +9,7 @@ To install Locomotive Scroll, you have two options:
 You can install it via NPM by running the following command:
 
 ```bash
-npm install locomotive-scroll
+npm install locomotive-scroll@beta
 ```
 
 ### Manual Installation
