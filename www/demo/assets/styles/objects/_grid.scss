@@ -1,0 +1,171 @@
+// ==========================================================================
+// Grid helper
+// ==========================================================================
+// Help: https://css-tricks.com/snippets/css/complete-guide-grid/
+//
+/**
+ * Usage:
+ *
+ * ```html
+ * <div class="o-grid -col-4 -col-12@from-medium -gutters">
+ *     <div class="o-grid_item u-gc-1/2 u-gc-3/9@from-medium">
+ *         <p>Hello</p>
+ *     </div>
+ *     <div class="o-grid_item u-gc-3/4 u-gc-9/13@from-medium">
+ *         <p>Hello</p>
+ *     </div>
+ * </div>
+ * ```
+ */
+
+.o-grid {
+    display: grid;
+    width: 100%;
+
+    &:is(ul, ol) {
+        margin: 0;
+        padding: 0;
+        list-style: none;
+    }
+
+    // ==========================================================================
+    // Cols
+    // ==========================================================================
+    &.-col-#{$base-column-nb} {
+        grid-template-columns: repeat(#{$base-column-nb}, 1fr);
+    }
+
+    &.-col-4 {
+        grid-template-columns: repeat(4, 1fr);
+    }
+
+    &.-col-#{$base-column-nb}\@from-medium {
+        @media (min-width: $from-medium) {
+            grid-template-columns: repeat(#{$base-column-nb}, 1fr);
+        }
+    }
+
+    // ==========================================================================
+    // Gutters
+    // ==========================================================================
+
+    // Gutters rows and columns
+    &.-gutters {
+        gap: $base-column-gap;
+        column-gap: $base-column-gap;
+    }
+
+    // ==========================================================================
+    // Modifiers
+    // ==========================================================================
+    &.-full-height {
+        height: 100%;
+    }
+
+    // ==========================================================================
+    // Aligns
+    // ==========================================================================
+
+    // ==========================================================================
+    // Items inside cells
+    //
+    &.-top-items {
+        align-items: start;
+    }
+    &.-right-items {
+        justify-items: end;
+    }
+    &.-bottom-items {
+        align-items: end;
+    }
+    &.-left-items {
+        justify-items: start;
+    }
+    &.-center-items {
+        align-items: center;
+        justify-items: center;
+    }
+    &.-center-items-x {
+        justify-items: center;
+    }
+    &.-center-items-y {
+        align-items: center;
+    }
+    &.-stretch-items {
+        align-items: stretch;
+        justify-items: stretch;
+    }
+
+    // ==========================================================================
+    // Cells
+    //
+    &.-top-cells {
+        align-content: start;
+    }
+    &.-right-cells {
+        justify-content: end;
+    }
+    &.-bottom-cells {
+        align-content: end;
+    }
+    &.-left-cells {
+        justify-content: start;
+    }
+    &.-center-cells {
+        align-content: center;
+        justify-content: center;
+    }
+    &.-center-cells-x {
+        justify-content: center;
+    }
+    &.-center-cells-y {
+        align-content: center;
+    }
+    &.-stretch-cells {
+        align-content: stretch;
+        justify-content: stretch;
+    }
+    &.-space-around-cells {
+        align-content: space-around;
+        justify-content: space-around;
+    }
+    &.-space-around-cells-x {
+        justify-content: space-around;
+    }
+    &.-space-around-cells-y {
+        align-content: space-around;
+    }
+    &.-space-between-cells {
+        justify-content: space-between;
+        align-content: space-between;
+    }
+    &.-space-between-cells-x {
+        justify-content: space-between;
+    }
+    &.-space-between-cells-y {
+        align-content: space-between;
+    }
+    &.-space-evenly-cells {
+        justify-content: space-evenly;
+        align-content: space-evenly;
+    }
+    &.-space-evenly-cells-x {
+        justify-content: space-evenly;
+    }
+    &.-space-evenly-cells-y {
+        align-content: space-evenly;
+    }
+}
+
+// ==========================================================================
+// Grid item
+// ==========================================================================
+// By default, a grid item takes full width of its parent.
+//
+.o-grid_item {
+    grid-column: 1 / -1;
+
+    &.-align-end {
+        align-self: end;
+    }
+}

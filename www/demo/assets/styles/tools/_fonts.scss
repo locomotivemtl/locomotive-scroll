@@ -1,0 +1,61 @@
+// ==========================================================================
+// Tools / Font Faces
+// ==========================================================================
+
+// Imports the custom font.
+//
+// The mixin expects font files to be woff and woff2.
+//
+// @param  {List}   $webfont - A custom font to import, as a tuple:
+//     `<font-name> <font-file-basename> <font-weight> <font-style>`.
+// @param  {String} $dir     - The webfont directory path.
+// @output The `@font-face` at-rule specifying the custom font.
+
+@mixin font-face($webfont, $dir) {
+    @font-face {
+        font-display: swap;
+        font-family: nth($webfont, 1);
+        src: url("#{$dir}#{nth($webfont, 2)}.woff2") format("woff2"),
+             url("#{$dir}#{nth($webfont, 2)}.woff") format("woff");
+        font-weight: #{nth($webfont, 3)};
+        font-style: #{nth($webfont, 4)};
+    }
+}
+
+// Imports the list of custom fonts.
+//
+// @require {mixin} font-face
+//
+// @param  {List<List>} $webfonts - List of custom fonts to import.
+//     See `font-face` mixin for details.
+// @param  {String}     $dir      - The webfont directory path.
+// @output The `@font-face` at-rules specifying the custom fonts.
+
+@mixin font-faces($webfonts, $dir) {
+    @if (length($webfonts) > 0) {
+        @if (type-of(nth($webfonts, 1)) == "list") {
+            @each $webfont in $webfonts {
+                @include font-face($webfont, $dir);
+            }
+        } @else {
+            @include font-face($webfonts, $dir);
+        }
+    }
+}
+
+// Retrieves the font family stack for the given font ID.
+//
+// @require {variable} $font-families - See settings directory.
+//
+// @param  {String} $font-family - The custom font ID.
+// @throws Error if the $font-family does not exist.
+// @return {List} The font stack.
+
+@function ff($font-family) {
+    @if not map-has-key($font-families, $font-family) {
+        @error "No font-family found in $font-families map for `#{$font-family}`.";
+    }
+
+    $value: map-get($font-families, $font-family);
+    @return $value;
+}

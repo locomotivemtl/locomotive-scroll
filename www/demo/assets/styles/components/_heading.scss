@@ -1,0 +1,32 @@
+// ==========================================================================
+// Components / Headings
+// ==========================================================================
+
+.c-heading {
+    line-height: $line-height-h;
+    margin-bottom: rem(30px);
+
+    &.-h1 {
+        font-size: rem($font-size-h1);
+    }
+
+    &.-h2 {
+        font-size: rem($font-size-h2);
+    }
+
+    &.-h3 {
+        font-size: rem($font-size-h3);
+    }
+
+    &.-h4 {
+        font-size: rem($font-size-h4);
+    }
+
+    &.-h5 {
+        font-size: rem($font-size-h5);
+    }
+
+    &.-h6 {
+        font-size: rem($font-size-h6);
+    }
+}

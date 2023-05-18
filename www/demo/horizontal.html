@@ -1,0 +1,209 @@
+<!doctype html>
+<html class="is-loading" lang="en" data-page="home">
+
+<head>
+    <meta charset="utf-8">
+    <title>Locomotive Scroll v5</title>
+    <meta name="description" content="">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+
+    <meta name="theme-color" content="#ffffff">
+    <meta name="msapplication-TileColor" content="#ffffff">
+    <link rel="manifest" href="site.webmanifest">
+    <link rel="apple-touch-icon" sizes="180x180" href="dist/assets/images/favicons/apple-touch-icon.png">
+    <link rel="icon" type="image/png" sizes="32x32" href="dist/assets/images/favicons/favicon-32x32.png">
+    <link rel="icon" type="image/png" sizes="16x16" href="dist/assets/images/favicons/favicon-16x16.png">
+    <link rel="mask-icon" href="dist/assets/images/favicons/safari-pinned-tab.svg" color="#000000">
+    <!-- For a dark mode managment and svg favicon add this in your favicon.svg -->
+    <!--
+            <style>
+                path {
+                    fill: #000;
+                }
+                @media (prefers-color-scheme: dark) {
+                    path {
+                        fill: #fff;
+                    }
+                }
+            </style>
+        -->
+    <!-- <link rel="icon" href="dist/assets/images/favicons/favicon.svg"> -->
+
+    <link id="main-css" rel="stylesheet" href="dist/assets/styles/main.css" media="print"
+        onload="this.media='all'; this.onload=null; this.isLoaded=true">
+</head>
+
+<body data-module-load>
+    <div data-load-container>
+        <div data-module-scroll="main" data-scroll-orientation="horizontal">
+            <main id="top">
+                <div class="c-scroll_offset" style="--offset-start: 10%; --offset-end: 10%;"></div>
+
+                <div class="c-scroll_section -full -centered">
+                    <h1 style="font-size: 10vw; opacity: calc(1 - var(--progress));" data-scroll data-scroll-css-progress data-scroll-enable-touch-speed>Locomotive Scroll</h1>
+                    <div style="display:flex; font-size: 10vw">
+                        <p data-scroll data-scroll-enable-touch-speed data-scroll-speed=".25">V</p>
+                        <p data-scroll data-scroll-enable-touch-speed data-scroll-speed=".2">.</p>
+                        <p data-scroll data-scroll-enable-touch-speed data-scroll-speed=".15">0</p>
+                        <p data-scroll data-scroll-enable-touch-speed data-scroll-speed=".1">X</p>
+                    </div>
+                </div>
+
+                <div class="c-scroll_section">
+                    <div class="o-container">
+                        <h2 style="font-size: 3vw">data-scroll-speed</h2>
+                    </div>
+                </div>
+                <div class="c-scroll_section -centered -row -full -parallax" style="font-size: 2vw">
+                    <div class="c-scroll_box" style="background-color: var(--color-2)" data-scroll data-scroll-enable-touch-speed data-scroll-speed="-.1">
+                        <p>-.1</p>
+                    </div>
+                    <div class="c-scroll_box" style="background-color: var(--color-3); color:white;" data-scroll data-scroll-enable-touch-speed data-scroll-speed="0">
+                        <p>0</p>
+                    </div>
+                    <div class="c-scroll_box" style="background-color: var(--color-4); color:white;" data-scroll data-scroll-enable-touch-speed data-scroll-speed=".5">
+                        <p>.5</p>
+                    </div>
+                    <div class="c-scroll_box" style="background-color: var(--color-5); color:white;" data-scroll data-scroll-enable-touch-speed data-scroll-speed="-.2">
+                        <p>-.2</p>
+                    </div>
+                </div>
+
+
+                <div class="c-scroll_section">
+                    <div class="o-container">
+                        <h2 style="font-size: 3vw">data-scroll-class</h2>
+                    </div>
+                </div>
+                <div class="c-scroll_section -centered -row -full" style="font-size: 2vw">
+                    <div class="c-scroll_box" style="background-color: var(--color-2); opacity: 0;" data-scroll data-scroll-offset="10%, 10%" data-scroll-class="c-scroll-opacity">
+                        <p>c-scroll-opacity</p>
+                    </div>
+                    <div class="c-scroll_box" style="background-color: var(--color-3); color:white; transform: rotate(0);" data-scroll data-scroll-offset="10%, 10%" data-scroll-class="c-scroll-rotate">
+                        <p>c-scroll-rotate</p>
+                    </div>
+                </div>
+
+
+                <div class="c-scroll_section">
+                    <div class="o-container">
+                        <h2 style="font-size: 3vw">data-scroll-repeat</h2>
+                    </div>
+                </div>
+                <div class="c-scroll_section -centered -row -full" style="font-size: 2vw">
+                    <div class="c-scroll_box" style="background-color: var(--color-5); color:white; opacity: 0;" data-scroll data-scroll-offset="10%, 10%" data-scroll-repeat data-scroll-class="c-scroll-opacity">
+                        <p>c-scroll-opacity</p>
+                        <p>REPEAT</p>
+                    </div>
+                </div>
+
+
+                <div class="c-scroll_section">
+                    <div class="o-container">
+                        <h2 style="font-size: 3vw">data-scroll-css-progress</h2>
+                    </div>
+                </div>
+                <div class="c-scroll_section -centered -row -full" style="font-size: 2vw;">
+                    <div class="c-scroll_box" style="background-color: var(--color-4); opacity: var(--progress); color:white;" data-scroll data-scroll-css-progress data-scroll-offset="10%, 10%">
+                        <p>css progress variable</p>
+                    </div>
+                </div>
+
+
+                <div class="c-scroll_section">
+                    <div class="o-container">
+                        <h2 style="font-size: 3vw">data-scroll-module-progress</h2>
+                    </div>
+                </div>
+                <div class="c-scroll_section -centered -row -full" style="font-size: 2vw;">
+                    <div class="c-scroll_box" style="background-color: var(--color-5); color:white;" data-module-progress data-scroll data-scroll-module-progress data-scroll-offset="10%, 10%">
+                        <p data-progress="progress"></p>
+                    </div>
+                </div>
+
+
+                <div class="c-scroll_section">
+                    <div class="o-container">
+                        <h2 style="font-size: 3vw">data-scroll-event-progress: Custom Event</h2>
+                    </div>
+                </div>
+                <div class="c-scroll_section -centered -row -full" style="font-size: 2vw;">
+                    <div class="c-scroll_box" style="background-color: var(--color-3); color:white;" data-module-progress-event data-scroll data-scroll-event-progress="progressEvent" data-scroll-offset="10%, 10%">
+                        <p data-progress-event="progress"></p>
+                    </div>
+                </div>
+
+
+                <div class="c-scroll_section">
+                    <div class="o-container">
+                        <h2 style="font-size: 3vw">data-scroll-position</h2>
+                    </div>
+                </div>
+                <div class="c-scroll_section -centered -row -full" style="font-size: 2vw;">
+                    <div class="c-scroll_box" style="background-color: var(--color-2); color:white;" data-scroll-position="start,end" data-module-progress data-scroll data-scroll-module-progress data-scroll-offset="10%, 10%">
+                        <p>Position Enter: start</p>
+                        <p>Position Leave: end</p>
+                        <p data-progress="progress"></p>
+                    </div>
+                    <div class="c-scroll_box" style="background-color: var(--color-3); color:white;" data-scroll-position="middle,middle" data-module-progress data-scroll data-scroll-module-progress data-scroll-offset="10%, 10%">
+                        <p>Position Enter: middle</p>
+                        <p>Position Leave: middle</p>
+                        <p data-progress="progress"></p>
+                    </div>
+                    <div class="c-scroll_box" style="background-color: var(--color-5); color:white;" data-scroll-position="end,start" data-module-progress data-scroll data-scroll-module-progress data-scroll-offset="10%, 10%">
+                        <p>Position Enter: end</p>
+                        <p>Position Leave: start</p>
+                        <p data-progress="progress"></p>
+                    </div>
+                </div>
+
+                <div class="c-scroll_section">
+                    <div class="o-container">
+                        <h2 style="font-size: 3vw">data-scroll-call: Custom Event</h2>
+                    </div>
+                </div>
+                <div class="c-scroll_section -centered -row -full" style="font-size: 2vw;">
+                    <div class="c-scroll_box" style="background-color: var(--color-4); color:white;" data-module-custom-event data-scroll-position="end,start" data-scroll-repeat data-scroll data-scroll-call="scrollEvent" data-scroll-offset="10%, 10%">
+                        <p data-custom-event="event"></p>
+                    </div>
+                </div>
+
+                <div class="c-scroll_section">
+                    <div class="o-container">
+                        <h2 style="font-size: 3vw">data-scroll-call: Modular.js (Ex: lazyload)</h2>
+                    </div>
+                </div>
+                <div class="c-scroll_section -centered -row -full" style="font-size: 2vw;">
+                    <div class="c-scroll_box" style="background-color: var(--color-2); color:white;">
+                        <img data-scroll data-scroll-offset="10%, 10%" data-scroll-call="lazyLoad, Scroll, main" data-src="http://picsum.photos/640/480?v=2" alt="" src="data:image/gif;base64,R0lGODlhAQABAAAAACH5BAEKAAEALAAAAAABAAEAAAICTAEAOw==" />
+                    </div>
+                </div>
+
+                <div class="c-scroll_section">
+                    <div class="o-container">
+                        <h2 style="font-size: 3vw">Lenis scroll calback: direction</h2>
+                    </div>
+                </div>
+                <div class="c-scroll_section -centered -row -full" style="font-size: 10vw;">
+                    <div class="c-scroll_box c-scroll-direction">
+                        <button data-scroll-to data-scroll-to-href="#top">
+                            ⬇️
+                        </button>
+                    </div>
+                </div>
+
+            </main>
+        </div>
+    </div>
+
+    <script nomodule src="https://cdnjs.cloudflare.com/ajax/libs/babel-polyfill/7.6.0/polyfill.min.js"
+        crossorigin="anonymous"></script>
+    <script nomodule
+        src="https://polyfill.io/v3/polyfill.min.js?features=Element.prototype.remove%2CElement.prototype.append%2Cfetch%2CCustomEvent%2CElement.prototype.matches%2CNodeList.prototype.forEach%2CAbortController"
+        crossorigin="anonymous"></script>
+
+    <script src="dist/assets/scripts/vendors.js" defer></script>
+    <script src="dist/assets/scripts/app.js" defer></script>
+</body>
+
+</html>

@@ -1,0 +1,72 @@
+{
+    "paths": {
+        "url": "locomotive-scroll-v5.test",
+        "src": "./assets",
+        "dest": "./dist",
+        "images": {
+            "src": "./assets/images"
+        },
+        "styles": {
+            "src": "./assets/styles",
+            "dest": "./dist/assets/styles"
+        },
+        "scripts": {
+            "src": "./assets/scripts",
+            "dest": "./dist/assets/scripts"
+        },
+        "svgs": {
+            "src": "./assets/images/sprite",
+            "dest": "./dist/assets/images"
+        },
+        "views": {
+            "src": "./www/"
+        }
+    },
+    "tasks": {
+        "concats": [
+            {
+                "includes": [
+                    "{% paths.scripts.src %}/vendors/*.js"
+                ],
+                "outfile": "{% paths.scripts.dest %}/vendors.js"
+            }
+        ],
+        "scripts": [
+            {
+                "includes": [
+                    "{% paths.scripts.src %}/app.js"
+                ],
+                "outfile": "{% paths.scripts.dest %}/app.js"
+            }
+        ],
+        "styles": [
+            {
+                "infile": "{% paths.styles.src %}/critical.scss",
+                "outfile": "{% paths.styles.dest %}/critical.css"
+            },
+            {
+                "infile": "{% paths.styles.src %}/main.scss",
+                "outfile": "{% paths.styles.dest %}/main.css"
+            }
+        ],
+        "svgs": [
+            {
+                "includes": [
+                    "{% paths.svgs.src %}/*.svg"
+                ],
+                "outfile": "{% paths.svgs.dest %}/sprite.svg"
+            }
+        ],
+        "purgeCSS": {
+            "content": [
+                "./**/*.html",
+                "./assets/scripts/**/*"
+            ]
+        },
+        "versions": [
+            {
+                "outfile": "./assets.json"
+            }
+        ]
+    }
+}

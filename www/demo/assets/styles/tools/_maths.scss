@@ -1,0 +1,136 @@
+// ==========================================================================
+// Tools / Maths
+// ==========================================================================
+
+// Removes the unit from the given number.
+//
+// @param  {number} $number The number to strip.
+// @return {number}
+
+@function strip-units($number) {
+    @return $number / ($number * 0 + 1);
+}
+
+// Returns the square root of the given number.
+//
+// @param  {number} $number The number to calculate.
+// @return {number}
+
+@function sqrt($number) {
+    $x: 1;
+    $value: $x;
+
+    @for $i from 1 through 10 {
+        $value: $x - ($x * $x - abs($number)) / (2 * $x);
+        $x: $value;
+    }
+
+    @return $value;
+}
+
+// Returns a number raised to the power of an exponent.
+//
+// @param  {number} $number The base number.
+// @param  {number} $exp    The exponent.
+// @return {number}
+
+@function pow($number, $exp) {
+    $value: 1;
+
+    @if $exp > 0 {
+        @for $i from 1 through $exp {
+            $value: $value * $number;
+        }
+    } @else if $exp < 0 {
+        @for $i from 1 through -$exp {
+            $value: $value / $number;
+        }
+    }
+
+    @return $value;
+}
+
+// Returns the factorial of the given number.
+//
+// @param  {number} $number The number to calculate.
+// @return {number}
+
+@function fact($number) {
+    $value: 1;
+
+    @if $number > 0 {
+        @for $i from 1 through $number {
+            $value: $value * $i;
+        }
+    }
+
+    @return $value;
+}
+
+// Returns an approximation of pi, with 11 decimals.
+//
+// @return {number}
+
+@function pi() {
+    @return 3.14159265359;
+}
+
+// Converts the number in degrees to the radian equivalent .
+//
+// @param  {number} $angle  The angular value to calculate.
+// @return {number}         If $angle has the `deg` unit,
+//                          the radian equivalent is returned.
+//                          Otherwise, the unitless value of $angle is returned.
+
+@function rad($angle) {
+    $unit: unit($angle);
+    $angle: strip-units($angle);
+
+    // If the angle has `deg` as unit, convert to radians.
+    @if ($unit == deg) {
+        @return $angle / 180 * pi();
+    }
+
+    @return $angle;
+}
+
+// Returns the sine of the given number.
+//
+// @param  {number} $angle The angle to calculate.
+// @return {number}
+
+@function sin($angle) {
+    $sin: 0;
+    $angle: rad($angle);
+
+    @for $i from 0 through 10 {
+        $sin: $sin + pow(-1, $i) * pow($angle, (2 * $i + 1)) / fact(2 * $i + 1);
+    }
+
+    @return $sin;
+}
+
+// Returns the cosine of the given number.
+//
+// @param  {string} $angle The angle to calculate.
+// @return {number}
+
+@function cos($angle) {
+    $cos: 0;
+    $angle: rad($angle);
+
+    @for $i from 0 through 10 {
+        $cos: $cos + pow(-1, $i) * pow($angle, 2 * $i) / fact(2 * $i);
+    }
+
+    @return $cos;
+}
+
+// Returns the tangent of the given number.
+//
+// @param  {string} $angle The angle to calculate.
+// @return {number}
+
+@function tan($angle) {
+    @return sin($angle) / cos($angle);
+}

@@ -1,3 +1,16 @@
 node_modules
 .DS_Store
-package-lock.json
+Thumbs.db
+loconfig.*.json
+!loconfig.example.json
+
+# Ignore nested folders: https://stackoverflow.com/questions/3203228/git-ignore-exception/72380673#72380673
+/tmp/*
+!/tmp/cjs
+/tmp/cjs/*
+!/tmp/dts
+/tmp/dts/*
+!/tmp/esm
+/tmp/esm/*
+!tmp/**/package.json
+!tmp/**/tsconfig.json

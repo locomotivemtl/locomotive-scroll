@@ -1,0 +1,44 @@
+{
+    "private": true,
+    "name": "@locomotivemtl/boilerplate",
+    "title": "Locomotive Boilerplate",
+    "version": "1.0.0",
+    "author": "Locomotive <info@locomotive.ca>",
+    "type": "module",
+    "engines": {
+        "node": ">=17.9",
+        "npm": ">=8.0"
+    },
+    "scripts": {
+        "start": "node --experimental-json-modules --no-warnings build/watch.js",
+        "build": "node --experimental-json-modules --no-warnings build/build.js"
+    },
+    "dependencies": {
+        "gsap": "^3.11.4",
+        "modujs": "^1.4.2",
+        "modularload": "^1.2.6",
+        "normalize.css": "^8.0.1",
+        "svg4everybody": "^2.1.9"
+    },
+    "devDependencies": {
+        "autoprefixer": "^10.4.13",
+        "browser-sync": "^2.27.11",
+        "concat": "^1.0.3",
+        "esbuild": "^0.17.6",
+        "kleur": "^4.1.5",
+        "node-notifier": "^10.0.1",
+        "postcss": "^8.4.21",
+        "purgecss": "^5.0.0",
+        "sass": "^1.57.1",
+        "svg-mixer": "~2.3.14",
+        "tiny-glob": "^0.2.9"
+    },
+    "overrides": {
+        "browser-sync": {
+            "ua-parser-js": "~1.0.33"
+        },
+        "svg-mixer": {
+            "postcss": "^8.4.20"
+        }
+    }
+}

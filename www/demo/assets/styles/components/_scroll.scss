@@ -1,0 +1,124 @@
+:root {
+    --color-1: #f4f4ed;
+    --color-2: #6decaf;
+    --color-3: #357ded;
+    --color-4: #5e239d;
+    --color-5: #f61067;
+}
+
+.c-scroll_offset {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    pointer-events: none;
+
+    &:before,
+    &:after {
+        content: '';
+        position: absolute;
+        z-index: 1;
+
+        html[data-scroll-orientation='vertical'] & {
+            width: 100%;
+            height: 1px;
+        }
+        html[data-scroll-orientation='horizontal'] & {
+            width: 1px;
+            height: 100%;
+        }
+    }
+
+    &:before {
+        background-color: rgb(217, 66, 66);
+        html[data-scroll-orientation='vertical'] & {
+            bottom: var(--offset-start);
+        }
+        html[data-scroll-orientation='horizontal'] & {
+            right: var(--offset-start);
+        }
+    }
+
+    &:after {
+        background-color: rgb(74, 166, 215);
+        html[data-scroll-orientation='vertical'] & {
+            top: var(--offset-end);
+        }
+        html[data-scroll-orientation='horizontal'] & {
+            left: var(--offset-end);
+        }
+    }
+}
+
+.c-scroll_section {
+    width: 100%;
+    background-color: var(--color-1);
+
+    &.-full {
+        height: 100vh;
+        
+        html[data-scroll-orientation='horizontal'] & {
+            width: 100vw;
+            flex-shrink: 0;
+        }
+    }
+
+    &.-centered {
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+        justify-content: center;
+    }
+
+    &.-row {
+        flex-direction: row;
+
+        &.-parallax {
+            html[data-scroll-orientation='horizontal'] & {
+                flex-direction: column;
+            }
+        }
+    }
+}
+
+.c-scroll_box {
+    position: relative;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    flex-direction: column;
+    width: 20vw;
+    height: 20vw;
+    max-width: 300px;
+    max-height: 300px;
+    overflow: hidden;
+
+    img {
+        position: absolute;
+        top: 0;
+        left: 0;
+        width: 100%;
+        height: 100%;
+        object-fit: cover;
+    }
+}
+
+.c-scroll-opacity {
+    opacity: 1 !important;
+    transition: opacity 0.75s $ease-smooth;
+}
+
+.c-scroll-rotate {
+    transform: rotate(2turn) !important;
+    transition: transform 0.75s $ease-smooth;
+}
+
+.c-scroll-direction {
+    html[data-scroll-orientation='vertical'] & {
+        transform: scaleY(var(--scroll-direction));
+    }
+    html[data-scroll-orientation='horizontal'] & {
+        transform: scaleX(var(--scroll-direction)) rotate(-90deg);
+    }
+}

@@ -1,0 +1,7 @@
+{
+  "version": 3,
+  "sources": ["../../../../../dist/locomotive-scroll.css"],
+  "sourcesContent": ["html.lenis{height:auto}.lenis.lenis-smooth{scroll-behavior:auto}.lenis.lenis-smooth [data-lenis-prevent]{overscroll-behavior:contain}.lenis.lenis-stopped{overflow:hidden}.lenis.lenis-scrolling iframe{pointer-events:none}"],
+  "mappings": ";AAAA;AAAW;AAAA;AAAY;AAAoB;AAAA;AAAqB;AAAyC;AAAA;AAA4B;AAAqB;AAAA;AAAgB;AAA8B;AAAA;",
+  "names": []
+}

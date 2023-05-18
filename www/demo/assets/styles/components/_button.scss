@@ -1,0 +1,12 @@
+// ==========================================================================
+// Components / Buttons
+// ==========================================================================
+
+.c-button {
+    padding: rem(15px) rem(20px);
+    background-color: lightgray;
+
+    @include u-hocus {
+        background-color: darkgray;
+    }
+}

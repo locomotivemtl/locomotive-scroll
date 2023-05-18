@@ -1,0 +1,8 @@
+{
+    "server": {
+        "https": {
+            "key": "~/.config/valet/Certificates/{% paths.url %}.key",
+            "cert": "~/.config/valet/Certificates/{% paths.url %}.crt"
+        }
+    }
+}
