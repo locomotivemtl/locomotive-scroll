@@ -51,7 +51,7 @@
         "watch": "microbundle watch -i src/index.ts --o ./dist --no-compress"
     },
     "dependencies": {
-        "@studio-freight/lenis": "^1.0.4"
+        "@studio-freight/lenis": "1.0.12"
     },
     "devDependencies": {
         "cssnano": "^6.0.1",
