@@ -4,7 +4,7 @@
 
 > Detection of elements in viewport & smooth scrolling with parallax effects.
 
-[GitHub](https://github.com/locomotivemtl/locomotive-scroll/)
+[GitHub](https://github.com/locomotivemtl/locomotive-scroll/tree/v5-beta)
 [Getting Started](#locomotive-scroll-v5)
 
 <!-- background color -->
