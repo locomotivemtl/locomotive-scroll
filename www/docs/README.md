@@ -24,7 +24,7 @@ See the [Quick start](quickstart.md) guide for more details.
 | Built-in viewport detection | ✅      | Using browsers's native Intersection Observer API                                                                |
 | Real time progress value    | ✅      | For flexible scroll-based animation                                                                              |
 | Accessibility and performance  | ✅      | More than ever!                                                                                                  |
-| Lightweight                 | ✅      | [8.3KB (gzip)](https://bundlephobia.com/package/locomotive-scroll@5.0.0-beta.6)                                                                                                     |
+| Lightweight                 | ✅      | [8.3KB (gzip)](https://bundlephobia.com/package/locomotive-scroll@beta)                                                                                                     |
 
 ## Examples
 
