@@ -1,6 +1,17 @@
 [![](https://img.shields.io/npm/v/locomotive-scroll)](https://www.npmjs.com/package/locomotive-scroll)
 [![](https://img.shields.io/npm/dm/locomotive-scroll)](https://www.npmjs.com/package/locomotive-scroll)
 
+> 🚀 **Locomotive Scroll v5 Beta Release**
+>
+> Try out the beta version of Locomotive Scroll v5!
+>
+> 🔗 [Click here to try Locomotive Scroll v5 Beta](https://github.com/locomotivemtl/locomotive-scroll/tree/v5-beta)
+>
+> Your feedback is valuable during this beta testing phase. If you encounter any issues or have suggestions, please [open an issue](https://github.com/locomotivemtl/locomotive-scroll/issues/new?labels=v5&template=bug_report.md).
+>
+> Happy scrolling! 😄
+
+
 <p align="center">
     <a href="https://github.com/locomotivemtl/locomotive-scroll">
         <img src="https://user-images.githubusercontent.com/4596862/58807621-67aeec00-85e6-11e9-8e3a-3fe4123ee76c.png" height="140">
