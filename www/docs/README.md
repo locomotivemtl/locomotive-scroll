@@ -1,4 +1,7 @@
-!> Locomotive Scroll v.5 is currently in **beta**. Be prepared for breaking changes compared to previous versions.
+> **Warning** 
+> 
+> Locomotive Scroll v.5 is currently in **beta**. Be prepared for breaking changes compared to previous versions.
+
 # Locomotive Scroll v.5
 
 > Detection of elements in viewport & smooth scrolling with parallax effects.

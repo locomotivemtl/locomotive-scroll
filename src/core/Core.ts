@@ -17,6 +17,7 @@ const ATTRIBUTES_THAT_NEED_RAF = [
     'scrollPosition',
     'scrollModuleProgress',
     'scrollCssProgress',
+    'scrollEventProgress',
     'scrollSpeed',
 ];
 

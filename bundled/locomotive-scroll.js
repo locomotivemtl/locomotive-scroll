@@ -703,7 +703,7 @@
   }();
 
   /** Defined attributes that need a requestAnimationFrame */
-  var ATTRIBUTES_THAT_NEED_RAF = ['scrollOffset', 'scrollPosition', 'scrollModuleProgress', 'scrollCssProgress', 'scrollSpeed'];
+  var ATTRIBUTES_THAT_NEED_RAF = ['scrollOffset', 'scrollPosition', 'scrollModuleProgress', 'scrollCssProgress', 'scrollEventProgress', 'scrollSpeed'];
   /** Default root margins */
   var TRIGGER_ROOT_MARGIN = '-1px -1px -1px -1px';
   var RAF_ROOT_MARGIN = '100% 100% 100% 100%'; // Add 100vh top/bottom && 100vw left/right to use a biggest value with data-scroll-speed

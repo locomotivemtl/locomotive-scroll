@@ -1,6 +1,6 @@
 {
     "paths": {
-        "url": "locomotive-scroll-v5.test",
+        "url": "locomotive-scroll.test",
         "src": "./assets",
         "dest": "./dist",
         "images": {
