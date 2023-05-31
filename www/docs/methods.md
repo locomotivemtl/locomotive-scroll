@@ -11,12 +11,18 @@ locomotiveScroll.destroy();
 
 ## start()
 
-The `start()` method allows you to manually start the scroll. By default, the scroll automatically starts when you create the Locomotive Scroll instance. However, in certain scenarios, you may want to control when the scroll begins programmatically.
+The `start()` method allows you to manually start the scroll. By default, the scroll automatically starts when you create the Locomotive Scroll instance. However, there may be situations where you need to programmatically control when the scroll starts. In such cases, you can utilize the [autoStart](/options?id=autostart) option to have more flexibility and decide whether to initiate the scroll automatically or not.
 
 ```js
-const locomotiveScroll = new LocomotiveScroll();
-locomotiveScroll.start();
+const locomotiveScroll = new LocomotiveScroll({ autoStart: false });
+
+// Starting the locomotive scroll on the next frame
+requestAnimationFrame(() => {
+    locomotiveScroll.start();
+});
 ```
+
+> :bulb: **Tip**: If you prefer not to start Locomotive Scroll automatically, you can utilize the [autoStart](/options?id=autostart) option.
 
 ## stop()
 
@@ -24,8 +30,13 @@ The `stop()` method allows you to manually stop the scroll. When you call this m
 
 ```js
 const locomotiveScroll = new LocomotiveScroll();
-locomotiveScroll.stop();
+
+// Stopping locomotive-scroll on the next frame
+requestAnimationFrame(() => {
+    locomotiveScroll.stop();
+});
 ```
+> :bulb: **Tip**: If you prefer not to start Locomotive Scroll automatically, you can utilize the [autoStart](/options?id=autostart) option.
 
 ## resize()
 
