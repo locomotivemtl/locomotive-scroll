@@ -8,6 +8,7 @@
 
 - Examples
     - [Playground](playground.md)
+    - [Demo](https://scroll.locomotive.ca/demo)
 
 - Informations
     - [Limitations](limitations.md)
