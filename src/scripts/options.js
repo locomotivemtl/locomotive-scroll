@@ -16,6 +16,7 @@ export const defaults = {
     draggingClass: 'has-scroll-dragging',
     smoothClass: 'has-scroll-smooth',
     initClass: 'has-scroll-init',
+    sectionSelector: null,
     getSpeed: false,
     getDirection: false,
     scrollFromAnywhere: false,
