@@ -1894,7 +1894,7 @@ function getTranslate(el) {
   if (!window.getComputedStyle) return;
   var style = getComputedStyle(el);
   var transform = style.transform || style.webkitTransform || style.mozTransform;
-  var mat = transform.match(/^matrix3d\((.+)\)$/);
+  var mat = transform && transform.match(/^matrix3d\((.+)\)$/);
 
   if (mat) {
     translate.x = mat ? parseFloat(mat[1].split(', ')[12]) : 0;
