@@ -20,6 +20,8 @@ Accepted values are: `'start'`, `'middle'`, `'end'`.
 -   **Type:** `string`
 -   **Default:** `0,0`
 
+![Data Scroll Offset](assets/scroll-offset-1.jpg)
+
 Specifies the trigger offset of the element within the viewport when using the Locomotive Scroll library. It takes two values: one for the offset when the element enters the viewport, and a second for the offset when the element leaves the viewport.
 
 The offset can be defined in two ways:
