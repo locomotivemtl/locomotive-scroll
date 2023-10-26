@@ -305,6 +305,9 @@ export default class LocomotiveScroll {
             return;
         }
 
+        // Call lenis start method
+        this.lenisInstance?.start();
+
         this.rafPlaying = true;
         this.initCustomTicker
             ? this.initCustomTicker(this._onRenderBind)
@@ -318,6 +321,9 @@ export default class LocomotiveScroll {
         if (!this.rafPlaying) {
             return;
         }
+
+        // Call lenis stop method
+        this.lenisInstance?.stop();
 
         this.rafPlaying = false;
         this.destroyCustomTicker
