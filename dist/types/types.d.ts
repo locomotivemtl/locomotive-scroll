@@ -13,15 +13,20 @@ export interface IModular {
 export interface ILenisOptions {
     wrapper?: HTMLElement | Window;
     content?: HTMLElement;
+    eventsTarget?: HTMLElement | Window;
     lerp?: number;
     duration?: number;
     orientation?: scrollOrientation;
     gestureOrientation?: gestureOrientation;
     smoothWheel?: boolean;
     smoothTouch?: boolean;
+    syncTouch?: boolean;
+    syncTouchLerp?: number;
+    touchInertiaMultiplier?: number;
     wheelMultiplier?: number;
     touchMultiplier?: number;
     normalizeWheel?: boolean;
+    autoResize?: boolean;
     easing?(t: number): number;
 }
 export interface ILenisScrollValues {

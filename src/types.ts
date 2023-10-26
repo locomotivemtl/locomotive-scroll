@@ -34,29 +34,38 @@ export interface IModular {
  *
  * @property {(HTMLElement|Window)}  wrapper            - The element that will be used as the scroll container
  * @property {HTMLElement}           content            - The element that contains the content that will be scrolled, usually wrapper's direct child
+ * @property {HTMLElement}           eventsTarget       - The element that will listen to wheel and touch events
  * @property {number}                lerp               - Linear interpolation (lerp) intensity (between 0 and 1)
  * @property {number}                duration           - The duration of scroll animation (in seconds). Useless if lerp defined
  * @property {scrollOrientation}     orientation        - The orientation of the scrolling.
  * @property {gestureOrientation}    gestureOrientation - The orientation of the gestures.
  * @property {boolean}               smoothWheel        - Whether or not to enable smooth scrolling for mouse wheel events
  * @property {boolean}               smoothTouch        - Whether or not to enable smooth scrolling for touch events.
+ * @property {boolean}               syncTouch          - Mimic touch device scroll while allowing scroll sync (can be unstable on iOS<16)
+ * @property {number}                syncTouchLerp      - Lerp applied during syncTouch inertia
  * @property {number}                wheelMultiplier    - The multiplier to use for mouse wheel events
  * @property {number}                touchMultiplier    - The multiplier to use for touch events
  * @property {boolean}               normalizeWheel     - Normalize wheel inputs across browsers
+ * @property {boolean}               autoResize         - Resize instance automatically based on ResizeObserver. If false you must resize manually using .resize()
  * @property {function}              easing             - The easing function to use for the scroll animation, our default is custom but you can pick one from Easings.net. Useless if lerp defined
  */
 export interface ILenisOptions {
     wrapper?: HTMLElement | Window,
     content?: HTMLElement,
+    eventsTarget?: HTMLElement | Window,
     lerp?: number;
     duration?: number;
     orientation?: scrollOrientation;
     gestureOrientation?: gestureOrientation;
     smoothWheel?: boolean;
     smoothTouch?: boolean;
+    syncTouch?: boolean;
+    syncTouchLerp?: number;
+    touchInertiaMultiplier?: number;
     wheelMultiplier?: number;
     touchMultiplier?: number;
     normalizeWheel?: boolean;
+    autoResize?: boolean;
     easing?(t: number): number;
 }
 
