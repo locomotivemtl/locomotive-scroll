@@ -1,6 +1,6 @@
 {
     "name": "locomotive-scroll",
-    "version": "5.0.0-beta.8",
+    "version": "5.0.0-beta.9",
     "description": "Detection of elements in viewport & smooth scrolling with parallax effects.",
     "license": "MIT",
     "homepage": "https://github.com/locomotivemtl/locomotive-scroll",
