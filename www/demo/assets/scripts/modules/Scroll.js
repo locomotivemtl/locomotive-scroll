@@ -3,7 +3,7 @@ import { gsap } from 'gsap/all';
 import { lazyLoadImage } from '../utils/image';
 import LocomotiveScroll from '../../../../../dist/locomotive-scroll.modern.mjs';
 
-export default class extends Module { 
+export default class extends Module {
     constructor(m) {
         super(m);
 
@@ -31,7 +31,7 @@ export default class extends Module {
                 orientation: this.orientation,
                 gestureOrientation: this.orientation,
             },
-            autoResize: true, 
+            autoResize: true,
             autoStart: true,
             modularInstance: this,
             scrollCallback: this.onScrollBind,
@@ -133,5 +133,27 @@ export default class extends Module {
     scrollTo(params) {
         const { target, options } = params;
         this.locomotiveScroll?.scrollTo(target, options);
+    }
+
+    /**
+     * Start
+     * Resumes the scroll
+     *
+     * @see https://github.com/studio-freight/lenis#methods
+     *
+     */
+    start() {
+        this.locomotiveScroll?.start();
+    }
+
+    /**
+     * Stop
+     * Pauses the scroll
+     *
+     * @see https://github.com/studio-freight/lenis#methods
+     *
+     */
+    stop() {
+        this.locomotiveScroll?.stop();
     }
 }

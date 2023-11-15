@@ -1317,9 +1317,12 @@
      * Start RequestAnimationFrame that active Lenis smooth and scroll progress.
      */;
     _proto.start = function start() {
+      var _this$lenisInstance3;
       if (this.rafPlaying) {
         return;
       }
+      // Call lenis start method
+      (_this$lenisInstance3 = this.lenisInstance) == null ? void 0 : _this$lenisInstance3.start();
       this.rafPlaying = true;
       this.initCustomTicker ? this.initCustomTicker(this._onRenderBind) : this._raf();
     }
@@ -1327,9 +1330,12 @@
      * Stop RequestAnimationFrame that active Lenis smooth and scroll progress.
      */;
     _proto.stop = function stop() {
+      var _this$lenisInstance4;
       if (!this.rafPlaying) {
         return;
       }
+      // Call lenis stop method
+      (_this$lenisInstance4 = this.lenisInstance) == null ? void 0 : _this$lenisInstance4.stop();
       this.rafPlaying = false;
       this.destroyCustomTicker ? this.destroyCustomTicker(this._onRenderBind) : this.rafInstance && cancelAnimationFrame(this.rafInstance);
     }
@@ -1370,8 +1376,8 @@
      * Trigger scroll to callback.
      */;
     _proto.scrollTo = function scrollTo(target, options) {
-      var _this$lenisInstance3;
-      (_this$lenisInstance3 = this.lenisInstance) == null ? void 0 : _this$lenisInstance3.scrollTo(target, {
+      var _this$lenisInstance5;
+      (_this$lenisInstance5 = this.lenisInstance) == null ? void 0 : _this$lenisInstance5.scrollTo(target, {
         offset: options == null ? void 0 : options.offset,
         lerp: options == null ? void 0 : options.lerp,
         duration: options == null ? void 0 : options.duration,
