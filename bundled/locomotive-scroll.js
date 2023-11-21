@@ -1213,6 +1213,8 @@
      * Lifecyle - Destroy instance.
      */;
     _proto.destroy = function destroy() {
+      var _this$coreInstance,
+        _this2 = this;
       // Stop raf
       this.stop();
       // Unbind Events
@@ -1220,7 +1222,12 @@
       // Destroy Lenis
       this.lenisInstance.destroy();
       // Destroy Core
-      this.coreInstance.destroy();
+      (_this$coreInstance = this.coreInstance) == null ? void 0 : _this$coreInstance.destroy();
+      // Ensure a delay before destroying to handle cases of instant destruction
+      requestAnimationFrame(function () {
+        var _this2$coreInstance;
+        (_this2$coreInstance = _this2.coreInstance) == null ? void 0 : _this2$coreInstance.destroy();
+      });
     }
     /**
      * Events - Subscribe events to listen.
@@ -1255,34 +1262,34 @@
      * Events - Subscribe scrollTo events to listen.
      */;
     _proto._bindScrollToEvents = function _bindScrollToEvents($container) {
-      var _this2 = this;
+      var _this3 = this;
       var $rootContainer = $container ? $container : this.lenisInstance.rootElement;
       var $scrollToElements = $rootContainer == null ? void 0 : $rootContainer.querySelectorAll('[data-scroll-to]');
       ($scrollToElements == null ? void 0 : $scrollToElements.length) && $scrollToElements.forEach(function ($el) {
-        $el.addEventListener('click', _this2._onScrollToBind, false);
+        $el.addEventListener('click', _this3._onScrollToBind, false);
       });
     }
     /**
      * Events - Unsubscribe scrollTo listened events.
      */;
     _proto._unbindScrollToEvents = function _unbindScrollToEvents($container) {
-      var _this3 = this;
+      var _this4 = this;
       var $rootContainer = $container ? $container : this.lenisInstance.rootElement;
       var $scrollToElements = $rootContainer == null ? void 0 : $rootContainer.querySelectorAll('[data-scroll-to]');
       ($scrollToElements == null ? void 0 : $scrollToElements.length) && $scrollToElements.forEach(function ($el) {
-        $el.removeEventListener('click', _this3._onScrollToBind, false);
+        $el.removeEventListener('click', _this4._onScrollToBind, false);
       });
     }
     /**
      * Callback - Resize callback.
      */;
     _proto._onResize = function _onResize() {
-      var _this4 = this;
+      var _this5 = this;
       // Waiting the next frame to get the new current scroll value return by Lenis
       requestAnimationFrame(function () {
-        var _this4$coreInstance;
-        (_this4$coreInstance = _this4.coreInstance) == null ? void 0 : _this4$coreInstance.onResize({
-          currentScroll: _this4.lenisInstance.scroll
+        var _this5$coreInstance;
+        (_this5$coreInstance = _this5.coreInstance) == null ? void 0 : _this5$coreInstance.onResize({
+          currentScroll: _this5.lenisInstance.scroll
         });
       });
     }
@@ -1290,9 +1297,9 @@
      * Callback - Render callback.
      */;
     _proto._onRender = function _onRender() {
-      var _this$lenisInstance2, _this$coreInstance;
+      var _this$lenisInstance2, _this$coreInstance2;
       (_this$lenisInstance2 = this.lenisInstance) == null ? void 0 : _this$lenisInstance2.raf(Date.now());
-      (_this$coreInstance = this.coreInstance) == null ? void 0 : _this$coreInstance.onRender({
+      (_this$coreInstance2 = this.coreInstance) == null ? void 0 : _this$coreInstance2.onRender({
         currentScroll: this.lenisInstance.scroll,
         smooth: this.lenisInstance.isSmooth
       });
@@ -1343,27 +1350,27 @@
      * Remove old scroll elements items and rebuild ScrollElements instances.
      */;
     _proto.removeScrollElements = function removeScrollElements($oldContainer) {
-      var _this$coreInstance2;
+      var _this$coreInstance3;
       if (!$oldContainer) {
         console.error('Please provide a DOM Element as $oldContainer');
         return;
       }
       this._unbindScrollToEvents($oldContainer);
-      (_this$coreInstance2 = this.coreInstance) == null ? void 0 : _this$coreInstance2.removeScrollElements($oldContainer);
+      (_this$coreInstance3 = this.coreInstance) == null ? void 0 : _this$coreInstance3.removeScrollElements($oldContainer);
     }
     /**
      * Add new scroll elements items and rebuild ScrollElements instances.
      */;
     _proto.addScrollElements = function addScrollElements($newContainer) {
-      var _this$coreInstance3,
-        _this5 = this;
+      var _this$coreInstance4,
+        _this6 = this;
       if (!$newContainer) {
         console.error('Please provide a DOM Element as $newContainer');
         return;
       }
-      (_this$coreInstance3 = this.coreInstance) == null ? void 0 : _this$coreInstance3.addScrollElements($newContainer);
+      (_this$coreInstance4 = this.coreInstance) == null ? void 0 : _this$coreInstance4.addScrollElements($newContainer);
       requestAnimationFrame(function () {
-        _this5._bindScrollToEvents($newContainer);
+        _this6._bindScrollToEvents($newContainer);
       });
     }
     /**
@@ -1395,10 +1402,10 @@
      *
      */;
     _proto._raf = function _raf() {
-      var _this6 = this;
+      var _this7 = this;
       this._onRenderBind();
       this.rafInstance = requestAnimationFrame(function () {
-        return _this6._raf();
+        return _this7._raf();
       });
     };
     return LocomotiveScroll;
