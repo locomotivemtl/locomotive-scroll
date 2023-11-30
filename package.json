@@ -30,9 +30,12 @@
     "module": "dist/locomotive-scroll.mjs",
     "types": "dist/types/index.d.ts",
     "exports": {
-        "types": "./dist/locomotive-scroll.d.ts",
-        "require": "./dist/locomotive-scroll.js",
-        "default": "./dist/locomotive-scroll.modern.mjs"
+        ".": {
+            "types": "./dist/locomotive-scroll.d.ts",
+            "require": "./dist/locomotive-scroll.js",
+            "default": "./dist/locomotive-scroll.modern.mjs"
+        },
+        "./locomotive-scroll.css": "./dist/locomotive-scroll.css"
     },
     "files": [
         "dist",
