@@ -62,3 +62,15 @@ export function closestNumber(array: number[], target: number): number {
         return Math.abs(curr - target) < Math.abs(prev - target) ? curr : prev;
     });
 }
+
+
+/**
+ * Linear interpolation between two numbers.
+ * @param {number} start 
+ * @param {number} end 
+ * @param {number} amt 
+ * @returns {number}
+ */
+export function lerp(start: number, end: number, amt: number): number {
+    return (1 - amt) * start + amt * end;
+}

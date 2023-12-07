@@ -28,7 +28,8 @@ import {
     scrollCallFrom,
     scrollOrientation,
 } from '../types';
-import { clamp, closestNumber, normalize, mapRange } from '../utils/maths';
+import { clamp, closestNumber, normalize, mapRange, lerp } from '../utils/maths';
+import { getTranslate } from '../utils/translate';
 
 /** Constants */
 const INVIEW_CLASS = 'is-inview';
@@ -95,6 +96,10 @@ export default class ScrollElement {
             scrollSpeed:
                 this.$el.dataset['scrollSpeed'] != null
                     ? parseFloat(this.$el.dataset['scrollSpeed'])
+                    : null,
+            scrollDelay:
+                this.$el.dataset['scrollDelay'] != null
+                    ? parseFloat(this.$el.dataset['scrollDelay'])
                     : null,
             scrollRepeat: this.$el.dataset['scrollRepeat'] != null,
             scrollCall: this.$el.dataset['scrollCall'] ?? null,
@@ -205,10 +210,23 @@ export default class ScrollElement {
                         progress * wSize * this.attributes.scrollSpeed * -1;
                 }
 
-                this.$el.style.transform =
-                    this.scrollOrientation === 'vertical'
-                        ? `translate3d(0, ${this.translateValue}px, 0)`
-                        : `translate3d(${this.translateValue}px, 0, 0)`;
+                if (this.attributes.scrollDelay) {
+                    const start = getTranslate(this.$el)
+                    const lerped = this.scrollOrientation == 'vertical' ?
+                        lerp(start.x, this.translateValue, this.attributes.scrollDelay) :
+                        lerp(start.y, this.translateValue, this.attributes.scrollDelay)
+
+                    this.$el.style.transform =
+                        this.scrollOrientation === 'vertical'
+                            ? `translate3d(0, ${lerped}px, 0)`
+                            : `translate3d(${lerped}px, 0, 0)`;
+                }
+                else {
+                    this.$el.style.transform =
+                        this.scrollOrientation === 'vertical'
+                            ? `translate3d(0, ${this.translateValue}px, 0)`
+                            : `translate3d(${this.translateValue}px, 0, 0)`;
+                }
             }
         }
     }
