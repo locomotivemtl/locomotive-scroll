@@ -212,9 +212,10 @@ export default class ScrollElement {
 
                 if (this.attributes.scrollDelay) {
                     const start = getTranslate(this.$el)
+
                     const lerped = this.scrollOrientation == 'vertical' ?
-                        lerp(start.x, this.translateValue, this.attributes.scrollDelay) :
-                        lerp(start.y, this.translateValue, this.attributes.scrollDelay)
+                        lerp(start.y, this.translateValue, this.attributes.scrollDelay) :
+                        lerp(start.x, this.translateValue, this.attributes.scrollDelay)
 
                     this.$el.style.transform =
                         this.scrollOrientation === 'vertical'

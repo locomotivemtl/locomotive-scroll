@@ -234,6 +234,33 @@
       return Math.abs(curr - target) < Math.abs(prev - target) ? curr : prev;
     });
   }
+  /**
+   * Linear interpolation between two numbers.
+   * @param {number} start
+   * @param {number} end
+   * @param {number} amt
+   * @returns {number}
+   */
+  function lerp(start, end, amt) {
+    return (1 - amt) * start + amt * end;
+  }
+
+  function getTranslate(el) {
+    var translate = {
+      x: 0,
+      y: 0
+    };
+    if (!window.getComputedStyle) return translate;
+    var style = getComputedStyle(el);
+    var transform = style.transform;
+    var matches = transform.match(/translate\(([^)]+)\)/);
+    if (matches) {
+      var parts = matches[1].split(', ');
+      translate.x = parseFloat(parts[0]);
+      translate.y = parseFloat(parts[1]);
+    }
+    return translate;
+  }
 
   /** Constants */
   var INVIEW_CLASS = 'is-inview';
@@ -291,6 +318,7 @@
         scrollCssProgress: this.$el.dataset['scrollCssProgress'] != null,
         scrollEventProgress: (_this$$el$dataset$scr4 = this.$el.dataset['scrollEventProgress']) != null ? _this$$el$dataset$scr4 : null,
         scrollSpeed: this.$el.dataset['scrollSpeed'] != null ? parseFloat(this.$el.dataset['scrollSpeed']) : null,
+        scrollDelay: this.$el.dataset['scrollDelay'] != null ? parseFloat(this.$el.dataset['scrollDelay']) : null,
         scrollRepeat: this.$el.dataset['scrollRepeat'] != null,
         scrollCall: (_this$$el$dataset$scr5 = this.$el.dataset['scrollCall']) != null ? _this$$el$dataset$scr5 : null,
         scrollCallSelf: this.$el.dataset['scrollCallSelf'] != null,
@@ -377,7 +405,13 @@
             var _progress = mapRange(0, 1, -1, 1, this.progress);
             this.translateValue = _progress * wSize * this.attributes.scrollSpeed * -1;
           }
-          this.$el.style.transform = this.scrollOrientation === 'vertical' ? "translate3d(0, " + this.translateValue + "px, 0)" : "translate3d(" + this.translateValue + "px, 0, 0)";
+          if (this.attributes.scrollDelay) {
+            var start = getTranslate(this.$el);
+            var lerped = this.scrollOrientation == 'vertical' ? lerp(start.y, this.translateValue, this.attributes.scrollDelay) : lerp(start.x, this.translateValue, this.attributes.scrollDelay);
+            this.$el.style.transform = this.scrollOrientation === 'vertical' ? "translate3d(0, " + lerped + "px, 0)" : "translate3d(" + lerped + "px, 0, 0)";
+          } else {
+            this.$el.style.transform = this.scrollOrientation === 'vertical' ? "translate3d(0, " + this.translateValue + "px, 0)" : "translate3d(" + this.translateValue + "px, 0, 0)";
+          }
         }
       }
     }

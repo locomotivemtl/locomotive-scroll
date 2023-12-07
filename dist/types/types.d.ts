@@ -74,6 +74,7 @@ export interface IScrollElementOptions {
 }
 export interface IScrollElementAttributes {
     scrollClass: string;
+    scrollDelay: number | null;
     scrollOffset: string;
     scrollPosition: string;
     scrollModuleProgress: boolean;
