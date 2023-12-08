@@ -39,3 +39,11 @@ export declare function normalize(min: number, max: number, value: number): numb
  * @returns {number} - Closest number.
  */
 export declare function closestNumber(array: number[], target: number): number;
+/**
+ * Linear interpolation between two numbers.
+ * @param {number} start
+ * @param {number} end
+ * @param {number} amt
+ * @returns {number}
+ */
+export declare function lerp(start: number, end: number, amt: number): number;
