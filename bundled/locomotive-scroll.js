@@ -250,10 +250,8 @@
       x: 0,
       y: 0
     };
-    if (!window.getComputedStyle) return translate;
-    var style = getComputedStyle(el);
-    var transform = style.transform;
-    var matches = transform.match(/translate\(([^)]+)\)/);
+    var transform = el.style.transform;
+    var matches = transform.match(/translate3d\(([^)]+)\)/);
     if (matches) {
       var parts = matches[1].split(', ');
       translate.x = parseFloat(parts[0]);

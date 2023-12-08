@@ -1,10 +1,7 @@
-export function getTranslate(el: Element) {
+export function getTranslate(el: HTMLElement) {
     const translate = {x: 0, y: 0};
-
-    if (!window.getComputedStyle) return translate;
-
-    const style = getComputedStyle(el);
-    const transform = style.transform  
+ 
+    const transform = el.style.transform  
 
     let matches = transform.match(/translate3d\(([^)]+)\)/);
 
