@@ -6,7 +6,7 @@ export function getTranslate(el: Element) {
     const style = getComputedStyle(el);
     const transform = style.transform  
 
-    let matches = transform.match(/translate\(([^)]+)\)/);
+    let matches = transform.match(/translate3d\(([^)]+)\)/);
 
     if (matches) {
         const parts = matches[1].split(', ');
