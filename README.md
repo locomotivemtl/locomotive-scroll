@@ -81,11 +81,11 @@ With smooth scrolling and parallax.
 ```
 
 ```js
-import LocomotiveScroll from 'locomotive-scroll';
-
-const scroll = new LocomotiveScroll({
-    el: document.querySelector('[data-scroll-container]'),
-    smooth: true
+document.addEventListener('DOMContentLoaded', function () {
+    const locoScroll = new LocomotiveScroll({
+        el: document.querySelector('#main'), // Replace with the ID of your scroll container
+        smooth: true,
+    });
 });
 ```
 
