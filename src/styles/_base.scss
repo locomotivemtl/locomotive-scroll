@@ -25,6 +25,18 @@ body {
     }
 }
 
+/*
+ * Scroll to top fix
+ *
+ * Based on github issue #361 : "Elements disappearing when scroll back to the top"
+ *
+ * Issue link : https://github.com/locomotivemtl/locomotive-scroll/issues/361
+ */
+[data-scroll-container] {
+    position: fixed;
+    width: 100vw; // Else page takes as much space as needed, usually less than screen, causing an ugly white space
+}
+
 [data-scroll-section] {
     [data-scroll-direction="horizontal"] & {
         display: inline-block;

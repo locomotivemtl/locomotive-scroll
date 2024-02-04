@@ -3,9 +3,6 @@ html.has-scroll-smooth {
   overflow: hidden; }
 
 html.has-scroll-dragging {
-  -webkit-user-select: none;
-  -moz-user-select: none;
-  -ms-user-select: none;
   user-select: none; }
 
 .has-scroll-smooth body {
@@ -18,6 +15,17 @@ html.has-scroll-dragging {
   height: 100vh;
   display: inline-block;
   white-space: nowrap; }
+
+/*
+ * Scroll to top fix
+ *
+ * Based on github issue #361 : "Elements disappearing when scroll back to the top"
+ *
+ * Issue link : https://github.com/locomotivemtl/locomotive-scroll/issues/361
+ */
+[data-scroll-container] {
+  position: fixed;
+  width: 100vw; }
 
 [data-scroll-direction="horizontal"] [data-scroll-section] {
   display: inline-block;
@@ -56,10 +64,8 @@ html.has-scroll-dragging {
   width: 7px;
   border-radius: 10px;
   margin: 2px;
-  cursor: -webkit-grab;
   cursor: grab; }
   .has-scroll-dragging .c-scrollbar_thumb {
-    cursor: -webkit-grabbing;
     cursor: grabbing; }
   [data-scroll-direction="horizontal"] .c-scrollbar_thumb {
     right: auto;
