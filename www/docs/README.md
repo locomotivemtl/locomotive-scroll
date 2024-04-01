@@ -22,7 +22,7 @@ See the [Quick start](quickstart.md) guide for more details.
 
 | Name                        | Support | Description                                                                                                      |
 | --------------------------- | ------- | ---------------------------------------------------------------------------------------------------------------- |
-| Lenis                       | ✅      | Built on top of [Lenis](https://github.com/studio-freight/lenis) |
+| Lenis                       | ✅      | Built on top of [Lenis](https://github.com/darkroomengineering/lenis) |
 | TypeScript                  | ✅      | For a better developer experience                                                                                |
 | Built-in viewport detection | ✅      | Using browsers's native Intersection Observer API                                                                |
 | Real time progress value    | ✅      | For flexible scroll-based animation                                                                              |
@@ -37,10 +37,10 @@ Check out the [Examples](playground.md) to see locomotive-scroll in use.
 
 | Name                                             | Description                  |
 | ------------------------------------------------ | ---------------------------- |
-| [Lenis](https://github.com/studio-freight/lenis) | How smooth scroll should be. |
+| [Lenis](https://github.com/darkroomengineering/lenis) | How smooth scroll should be. |
 
 ## Related
 
--   [Lenis](https://github.com/studio-freight/lenis)
+-   [Lenis](https://github.com/darkroomengineering/lenis)
 -   [Modularjs](https://github.com/modularorg/modularjs)
 -   [Locomotive Boilerplate 🚂](https://github.com/locomotivemtl/locomotive-boilerplate)

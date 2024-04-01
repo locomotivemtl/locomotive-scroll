@@ -51,7 +51,7 @@ Add the base styles to your CSS file.
 
 [locomotive-scroll.css](https://github.com/locomotivemtl/locomotive-scroll/blob/v5-beta/bundled/locomotive-scroll.css)
 
-Learn more about styling considerations on [Lenis documentation](https://github.com/studio-freight/lenis#considerations).
+Learn more about styling considerations on [Lenis documentation](https://github.com/darkroomengineering/lenis#considerations).
 
 #### Sass Import
 
