@@ -89,7 +89,7 @@ The `scrollTo(target, options)` method allows you to scroll to a specific target
 
 -   **Parameters:**
     -   `target` (_optional, number / HTMLElement / string_): The target to scroll to. It can be a `number` (scroll position), `HTMLElement` (DOM element), or `string` (CSS selector or keyword: `top`, `left`, `start`, `bottom`, `right`, `end`).
-    -   `options` (_optional, ILenisScrollToOptions_): An options object that configures the scroll behavior. The available options are based on [Lenis's scroll-to options](https://github.com/studio-freight/lenis#instance-methods):
+    -   `options` (_optional, ILenisScrollToOptions_): An options object that configures the scroll behavior. The available options are based on [Lenis's scroll-to options](https://github.com/darkroomengineering/lenis#instance-methods):
         -   `offset` (_number_): A number equivalent to `scroll-padding-top`. Specifies the offset from the top of the target element.
         -   `lerp` (_number_): Animation lerp intensity.
         -   `duration` (_number_): The duration of the scroll animation in seconds.

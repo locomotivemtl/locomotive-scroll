@@ -4,7 +4,7 @@
 
 ## Lenis
 
-Lenis already have its own [considerations](https://github.com/studio-freight/lenis#considerations). We recommend reviewing them before using Locomotive Scroll to ensure a smooth integration and avoid any potential conflicts. 
+Lenis already have its own [considerations](https://github.com/darkroomengineering/lenis#considerations). We recommend reviewing them before using Locomotive Scroll to ensure a smooth integration and avoid any potential conflicts. 
 
 There are certain Lenis `options` that are not supported in the Locomotive Scroll layer :
 
@@ -16,7 +16,7 @@ Due to Locomotive Scroll's reliance on the window reference and Intersection Obs
 
 ## Third Party Injected Popups
 
-Some third-party JavaScript used on websites may inject popups or modals that require scrolling. In certain cases, conflicts can arise when the default Lenis `wrapper` (typically the `window`) captures the scroll event. Normally, we can [resolve this](https://github.com/studio-freight/lenis#use-the-data-lenis-prevent-attribute-on-nested-scroll-elements-in-addition-we-advise-you-to-add-overscroll-behavior-contain-on-this-element) by adding the `data-lenis-prevent` data attribute to the DOM element that requires inner scrolling, such as a popup. However, this solution cannot be used when the DOM is injected dynamically. 
+Some third-party JavaScript used on websites may inject popups or modals that require scrolling. In certain cases, conflicts can arise when the default Lenis `wrapper` (typically the `window`) captures the scroll event. Normally, we can [resolve this](https://github.com/darkroomengineering/lenis#use-the-data-lenis-prevent-attribute-on-nested-scroll-elements-in-addition-we-advise-you-to-add-overscroll-behavior-contain-on-this-element) by adding the `data-lenis-prevent` data attribute to the DOM element that requires inner scrolling, such as a popup. However, this solution cannot be used when the DOM is injected dynamically. 
 
 To address this issue, we have found a workaround. Here's how it works:
 

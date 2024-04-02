@@ -4,7 +4,7 @@
 
 -   **Type:** `object`
 
-_(Optional)_ The `lenisOptions` parameter is an optional object that allows you to configure specific settings based on some of [Lenis's instance settings](https://github.com/studio-freight/lenis#instance-settings):
+_(Optional)_ The `lenisOptions` parameter is an optional object that allows you to configure specific settings based on some of [Lenis's instance settings](https://github.com/darkroomengineering/lenis#instance-settings):
 
 -   `wrapper` (**HTMLElement|Window**): Specifies the element that will be used as the scroll container.
 -   `content` (**HTMLElement**): Specifies the element that contains the content that will be scrolled, usually `wrapper`'s direct child.
