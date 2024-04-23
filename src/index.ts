@@ -11,28 +11,28 @@ import {
     lenisTargetScrollTo,
 } from './types';
 
-/**
- * @type {ILenisOptions}
- */
-const defaultLenisOptions: ILenisOptions = {
-    wrapper: window,
-    content: document.documentElement,
-    eventsTarget: window,
-    lerp: 0.1,
-    duration: 0.75,
-    orientation: 'vertical',
-    gestureOrientation: 'vertical',
-    smoothWheel: true,
-    smoothTouch: false,
-    syncTouch: false,
-    syncTouchLerp: 0.1,
-    touchInertiaMultiplier: 35,
-    wheelMultiplier: 1,
-    touchMultiplier: 2,
-    normalizeWheel: false,
-    autoResize: true,
-    easing: (t) => Math.min(1, 1.001 - Math.pow(2, -10 * t)), // https://www.desmos.com/calculator/brs54l4xou
-};
+
+function getDefaultLenisOptions(): ILenisOptions {
+    return {
+        wrapper: window,
+        content: document.documentElement,
+        eventsTarget: window,
+        lerp: 0.1,
+        duration: 0.75,
+        orientation: 'vertical',
+        gestureOrientation: 'vertical',
+        smoothWheel: true,
+        smoothTouch: false,
+        syncTouch: false,
+        syncTouchLerp: 0.1,
+        touchInertiaMultiplier: 35,
+        wheelMultiplier: 1,
+        touchMultiplier: 2,
+        normalizeWheel: false,
+        autoResize: true,
+        easing: (t) => Math.min(1, 1.001 - Math.pow(2, -10 * t)), // https://www.desmos.com/calculator/brs54l4xou
+    }
+}
 
 /**
  * Locomotive Scroll
@@ -78,7 +78,7 @@ export default class LocomotiveScroll {
         destroyCustomTicker,
     }: ILocomotiveScrollOptions = {}) {
         // Arguments
-        this.lenisOptions = { ...defaultLenisOptions, ...lenisOptions };
+        this.lenisOptions = { ...getDefaultLenisOptions(), ...lenisOptions };
 
         Object.assign(this, {
             lenisOptions,
@@ -290,7 +290,7 @@ export default class LocomotiveScroll {
         const duration =
             $target.getAttribute('data-scroll-to-duration') ||
             this.lenisOptions.duration ||
-            defaultLenisOptions.duration;
+            getDefaultLenisOptions().duration;
 
         target &&
             this.scrollTo(target, {
