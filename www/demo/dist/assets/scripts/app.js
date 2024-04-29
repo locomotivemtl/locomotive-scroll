@@ -42,6 +42,10 @@
     isNodeMode || !mod || !mod.__esModule ? __defProp(target, "default", { value: mod, enumerable: true }) : target,
     mod
   ));
+  var __publicField = (obj, key, value) => {
+    __defNormalProp(obj, typeof key !== "symbol" ? key + "" : key, value);
+    return value;
+  };
   var __async = (__this, __arguments, generator) => {
     return new Promise((resolve, reject) => {
       var fulfilled = (value) => {
@@ -169,8 +173,8 @@
     }
   }
   function _defineProperties(target, props) {
-    for (var i3 = 0; i3 < props.length; i3++) {
-      var descriptor = props[i3];
+    for (var i2 = 0; i2 < props.length; i2++) {
+      var descriptor = props[i2];
       descriptor.enumerable = descriptor.enumerable || false;
       descriptor.configurable = true;
       if ("value" in descriptor)
@@ -198,8 +202,8 @@
     }
     return obj;
   }
-  function _slicedToArray(arr, i3) {
-    return _arrayWithHoles(arr) || _iterableToArrayLimit(arr, i3) || _unsupportedIterableToArray(arr, i3) || _nonIterableRest();
+  function _slicedToArray(arr, i2) {
+    return _arrayWithHoles(arr) || _iterableToArrayLimit(arr, i2) || _unsupportedIterableToArray(arr, i2) || _nonIterableRest();
   }
   function _toConsumableArray(arr) {
     return _arrayWithoutHoles(arr) || _iterableToArray(arr) || _unsupportedIterableToArray(arr) || _nonIterableSpread();
@@ -216,7 +220,7 @@
     if (typeof Symbol !== "undefined" && Symbol.iterator in Object(iter))
       return Array.from(iter);
   }
-  function _iterableToArrayLimit(arr, i3) {
+  function _iterableToArrayLimit(arr, i2) {
     if (typeof Symbol === "undefined" || !(Symbol.iterator in Object(arr)))
       return;
     var _arr = [];
@@ -226,7 +230,7 @@
     try {
       for (var _i = arr[Symbol.iterator](), _s; !(_n = (_s = _i.next()).done); _n = true) {
         _arr.push(_s.value);
-        if (i3 && _arr.length === i3)
+        if (i2 && _arr.length === i2)
           break;
       }
     } catch (err) {
@@ -243,24 +247,24 @@
     }
     return _arr;
   }
-  function _unsupportedIterableToArray(o3, minLen) {
-    if (!o3)
+  function _unsupportedIterableToArray(o2, minLen) {
+    if (!o2)
       return;
-    if (typeof o3 === "string")
-      return _arrayLikeToArray(o3, minLen);
-    var n3 = Object.prototype.toString.call(o3).slice(8, -1);
-    if (n3 === "Object" && o3.constructor)
-      n3 = o3.constructor.name;
-    if (n3 === "Map" || n3 === "Set")
-      return Array.from(o3);
-    if (n3 === "Arguments" || /^(?:Ui|I)nt(?:8|16|32)(?:Clamped)?Array$/.test(n3))
-      return _arrayLikeToArray(o3, minLen);
+    if (typeof o2 === "string")
+      return _arrayLikeToArray(o2, minLen);
+    var n2 = Object.prototype.toString.call(o2).slice(8, -1);
+    if (n2 === "Object" && o2.constructor)
+      n2 = o2.constructor.name;
+    if (n2 === "Map" || n2 === "Set")
+      return Array.from(o2);
+    if (n2 === "Arguments" || /^(?:Ui|I)nt(?:8|16|32)(?:Clamped)?Array$/.test(n2))
+      return _arrayLikeToArray(o2, minLen);
   }
   function _arrayLikeToArray(arr, len) {
     if (len == null || len > arr.length)
       len = arr.length;
-    for (var i3 = 0, arr2 = new Array(len); i3 < len; i3++)
-      arr2[i3] = arr[i3];
+    for (var i2 = 0, arr2 = new Array(len); i2 < len; i2++)
+      arr2[i2] = arr[i2];
     return arr2;
   }
   function _nonIterableSpread() {
@@ -432,13 +436,13 @@
         var _this4 = this;
         if (this.modules[mod]) {
           if (id) {
-            this.modules[mod][id].el.addEventListener(e3, function(o3) {
-              return func(o3);
+            this.modules[mod][id].el.addEventListener(e3, function(o2) {
+              return func(o2);
             });
           } else {
-            Object.keys(this.modules[mod]).forEach(function(i3) {
-              _this4.modules[mod][i3].el.addEventListener(e3, function(o3) {
-                return func(o3);
+            Object.keys(this.modules[mod]).forEach(function(i2) {
+              _this4.modules[mod][i2].el.addEventListener(e3, function(o2) {
+                return func(o2);
               });
             });
           }
@@ -478,10 +482,10 @@
           "app": this.app
         };
         elements.forEach(function(el) {
-          Array.from(el.attributes).forEach(function(i3) {
-            if (i3.name.startsWith("data-module")) {
+          Array.from(el.attributes).forEach(function(i2) {
+            if (i2.name.startsWith("data-module")) {
               var moduleExists = false;
-              var dataName = i3.name.split("-").splice(2);
+              var dataName = i2.name.split("-").splice(2);
               var moduleName = _this.toCamel(dataName);
               if (_this.modules[moduleName]) {
                 moduleExists = true;
@@ -496,11 +500,11 @@
                   dataName: dataName.join("-")
                 };
                 var module = new _this.modules[moduleName](options);
-                var id = i3.value;
+                var id = i2.value;
                 if (!id) {
                   _this.moduleId++;
                   id = "m" + _this.moduleId;
-                  el.setAttribute(i3.name, id);
+                  el.setAttribute(i2.name, id);
                 }
                 _this.addActiveModule(moduleName, id, module);
                 var moduleId = moduleName + "-" + id;
@@ -570,10 +574,10 @@
         var _this3 = this;
         var elements = scope.querySelectorAll("*");
         elements.forEach(function(el) {
-          Array.from(el.attributes).forEach(function(i3) {
-            if (i3.name.startsWith("data-module")) {
-              var id = i3.value;
-              var dataName = i3.name.split("-").splice(2);
+          Array.from(el.attributes).forEach(function(i2) {
+            if (i2.name.startsWith("data-module")) {
+              var id = i2.value;
+              var dataName = i2.name.split("-").splice(2);
               var moduleName = _this3.toCamel(dataName) + "-" + id;
               var moduleExists = false;
               if (_this3.currentModules[moduleName]) {
@@ -737,8 +741,8 @@
     }
   }
   function _defineProperties2(target, props) {
-    for (var i3 = 0; i3 < props.length; i3++) {
-      var descriptor = props[i3];
+    for (var i2 = 0; i2 < props.length; i2++) {
+      var descriptor = props[i2];
       descriptor.enumerable = descriptor.enumerable || false;
       descriptor.configurable = true;
       if ("value" in descriptor)
@@ -753,14 +757,14 @@
       _defineProperties2(Constructor, staticProps);
     return Constructor;
   }
-  function _slicedToArray2(arr, i3) {
-    return _arrayWithHoles2(arr) || _iterableToArrayLimit2(arr, i3) || _unsupportedIterableToArray2(arr, i3) || _nonIterableRest2();
+  function _slicedToArray2(arr, i2) {
+    return _arrayWithHoles2(arr) || _iterableToArrayLimit2(arr, i2) || _unsupportedIterableToArray2(arr, i2) || _nonIterableRest2();
   }
   function _arrayWithHoles2(arr) {
     if (Array.isArray(arr))
       return arr;
   }
-  function _iterableToArrayLimit2(arr, i3) {
+  function _iterableToArrayLimit2(arr, i2) {
     var _i = arr == null ? null : typeof Symbol !== "undefined" && arr[Symbol.iterator] || arr["@@iterator"];
     if (_i == null)
       return;
@@ -771,7 +775,7 @@
     try {
       for (_i = _i.call(arr); !(_n = (_s = _i.next()).done); _n = true) {
         _arr.push(_s.value);
-        if (i3 && _arr.length === i3)
+        if (i2 && _arr.length === i2)
           break;
       }
     } catch (err) {
@@ -788,24 +792,24 @@
     }
     return _arr;
   }
-  function _unsupportedIterableToArray2(o3, minLen) {
-    if (!o3)
+  function _unsupportedIterableToArray2(o2, minLen) {
+    if (!o2)
       return;
-    if (typeof o3 === "string")
-      return _arrayLikeToArray2(o3, minLen);
-    var n3 = Object.prototype.toString.call(o3).slice(8, -1);
-    if (n3 === "Object" && o3.constructor)
-      n3 = o3.constructor.name;
-    if (n3 === "Map" || n3 === "Set")
-      return Array.from(o3);
-    if (n3 === "Arguments" || /^(?:Ui|I)nt(?:8|16|32)(?:Clamped)?Array$/.test(n3))
-      return _arrayLikeToArray2(o3, minLen);
+    if (typeof o2 === "string")
+      return _arrayLikeToArray2(o2, minLen);
+    var n2 = Object.prototype.toString.call(o2).slice(8, -1);
+    if (n2 === "Object" && o2.constructor)
+      n2 = o2.constructor.name;
+    if (n2 === "Map" || n2 === "Set")
+      return Array.from(o2);
+    if (n2 === "Arguments" || /^(?:Ui|I)nt(?:8|16|32)(?:Clamped)?Array$/.test(n2))
+      return _arrayLikeToArray2(o2, minLen);
   }
   function _arrayLikeToArray2(arr, len) {
     if (len == null || len > arr.length)
       len = arr.length;
-    for (var i3 = 0, arr2 = new Array(len); i3 < len; i3++)
-      arr2[i3] = arr[i3];
+    for (var i2 = 0, arr2 = new Array(len); i2 < len; i2++)
+      arr2[i2] = arr[i2];
     return arr2;
   }
   function _nonIterableRest2() {
@@ -1325,17 +1329,17 @@
   var _harnessPlugins = [];
   var _callbackNames = "";
   var _harness = function _harness2(targets) {
-    var target = targets[0], harnessPlugin, i3;
+    var target = targets[0], harnessPlugin, i2;
     _isObject(target) || _isFunction(target) || (targets = [targets]);
     if (!(harnessPlugin = (target._gsap || {}).harness)) {
-      i3 = _harnessPlugins.length;
-      while (i3-- && !_harnessPlugins[i3].targetTest(target)) {
+      i2 = _harnessPlugins.length;
+      while (i2-- && !_harnessPlugins[i2].targetTest(target)) {
       }
-      harnessPlugin = _harnessPlugins[i3];
+      harnessPlugin = _harnessPlugins[i2];
     }
-    i3 = targets.length;
-    while (i3--) {
-      targets[i3] && (targets[i3]._gsap || (targets[i3]._gsap = new GSCache(targets[i3], harnessPlugin))) || targets.splice(i3, 1);
+    i2 = targets.length;
+    while (i2--) {
+      targets[i2] && (targets[i2]._gsap || (targets[i2]._gsap = new GSCache(targets[i2], harnessPlugin))) || targets.splice(i2, 1);
     }
     return targets;
   };
@@ -1360,17 +1364,17 @@
     return operator === "+" ? start + end : operator === "-" ? start - end : operator === "*" ? start * end : start / end;
   };
   var _arrayContainsAny = function _arrayContainsAny2(toSearch, toFind) {
-    var l3 = toFind.length, i3 = 0;
-    for (; toSearch.indexOf(toFind[i3]) < 0 && ++i3 < l3; ) {
+    var l2 = toFind.length, i2 = 0;
+    for (; toSearch.indexOf(toFind[i2]) < 0 && ++i2 < l2; ) {
     }
-    return i3 < l3;
+    return i2 < l2;
   };
   var _lazyRender = function _lazyRender2() {
-    var l3 = _lazyTweens.length, a2 = _lazyTweens.slice(0), i3, tween;
+    var l2 = _lazyTweens.length, a2 = _lazyTweens.slice(0), i2, tween;
     _lazyLookup = {};
     _lazyTweens.length = 0;
-    for (i3 = 0; i3 < l3; i3++) {
-      tween = a2[i3];
+    for (i2 = 0; i2 < l2; i2++) {
+      tween = a2[i2];
       tween && tween._lazy && (tween.render(tween._lazy[0], tween._lazy[1], true)._lazy = 0);
     }
   };
@@ -1380,8 +1384,8 @@
     _lazyTweens.length && !_reverting && _lazyRender();
   };
   var _numericIfPossible = function _numericIfPossible2(value) {
-    var n3 = parseFloat(value);
-    return (n3 || n3 === 0) && (value + "").match(_delimitedValueExp).length < 2 ? n3 : _isString(value) ? value.trim() : value;
+    var n2 = parseFloat(value);
+    return (n2 || n2 === 0) && (value + "").match(_delimitedValueExp).length < 2 ? n2 : _isString(value) ? value.trim() : value;
   };
   var _passThrough = function _passThrough2(p) {
     return p;
@@ -1429,10 +1433,10 @@
     return vars;
   };
   var _arraysMatch = function _arraysMatch2(a1, a2) {
-    var i3 = a1.length, match = i3 === a2.length;
-    while (match && i3-- && a1[i3] === a2[i3]) {
+    var i2 = a1.length, match = i2 === a2.length;
+    while (match && i2-- && a1[i2] === a2[i2]) {
     }
-    return i3 < 0;
+    return i2 < 0;
   };
   var _addLinkedListItem = function _addLinkedListItem2(parent, child, firstProp, lastProp, sortBy) {
     if (firstProp === void 0) {
@@ -1666,24 +1670,24 @@
     totalDuration: _emptyFunc
   };
   var _parsePosition = function _parsePosition2(animation, position, percentAnimation) {
-    var labels = animation.labels, recent = animation._recent || _zeroPosition, clippedDuration = animation.duration() >= _bigNum ? recent.endTime(false) : animation._dur, i3, offset, isPercent;
+    var labels = animation.labels, recent = animation._recent || _zeroPosition, clippedDuration = animation.duration() >= _bigNum ? recent.endTime(false) : animation._dur, i2, offset, isPercent;
     if (_isString(position) && (isNaN(position) || position in labels)) {
       offset = position.charAt(0);
       isPercent = position.substr(-1) === "%";
-      i3 = position.indexOf("=");
+      i2 = position.indexOf("=");
       if (offset === "<" || offset === ">") {
-        i3 >= 0 && (position = position.replace(/=/, ""));
-        return (offset === "<" ? recent._start : recent.endTime(recent._repeat >= 0)) + (parseFloat(position.substr(1)) || 0) * (isPercent ? (i3 < 0 ? recent : percentAnimation).totalDuration() / 100 : 1);
+        i2 >= 0 && (position = position.replace(/=/, ""));
+        return (offset === "<" ? recent._start : recent.endTime(recent._repeat >= 0)) + (parseFloat(position.substr(1)) || 0) * (isPercent ? (i2 < 0 ? recent : percentAnimation).totalDuration() / 100 : 1);
       }
-      if (i3 < 0) {
+      if (i2 < 0) {
         position in labels || (labels[position] = clippedDuration);
         return labels[position];
       }
-      offset = parseFloat(position.charAt(i3 - 1) + position.substr(i3 + 1));
+      offset = parseFloat(position.charAt(i2 - 1) + position.substr(i2 + 1));
       if (isPercent && percentAnimation) {
         offset = offset / 100 * (_isArray(percentAnimation) ? percentAnimation[0] : percentAnimation).totalDuration();
       }
-      return i3 > 1 ? _parsePosition2(animation, position.substr(0, i3 - 1), percentAnimation) + offset : clippedDuration + offset;
+      return i2 > 1 ? _parsePosition2(animation, position.substr(0, i2 - 1), percentAnimation) + offset : clippedDuration + offset;
     }
     return position == null ? clippedDuration : +position;
   };
@@ -1762,22 +1766,22 @@
       ratioX = from[0];
       ratioY = from[1];
     }
-    return function(i3, target, a2) {
-      var l3 = (a2 || vars).length, distances = cache[l3], originX, originY, x, y, d, j, max, min, wrapAt;
+    return function(i2, target, a2) {
+      var l2 = (a2 || vars).length, distances = cache[l2], originX, originY, x, y, d, j, max, min, wrapAt;
       if (!distances) {
         wrapAt = vars.grid === "auto" ? 0 : (vars.grid || [1, _bigNum])[1];
         if (!wrapAt) {
           max = -_bigNum;
-          while (max < (max = a2[wrapAt++].getBoundingClientRect().left) && wrapAt < l3) {
+          while (max < (max = a2[wrapAt++].getBoundingClientRect().left) && wrapAt < l2) {
           }
           wrapAt--;
         }
-        distances = cache[l3] = [];
-        originX = ratios ? Math.min(wrapAt, l3) * ratioX - 0.5 : from % wrapAt;
-        originY = wrapAt === _bigNum ? 0 : ratios ? l3 * ratioY / wrapAt - 0.5 : from / wrapAt | 0;
+        distances = cache[l2] = [];
+        originX = ratios ? Math.min(wrapAt, l2) * ratioX - 0.5 : from % wrapAt;
+        originY = wrapAt === _bigNum ? 0 : ratios ? l2 * ratioY / wrapAt - 0.5 : from / wrapAt | 0;
         max = 0;
         min = _bigNum;
-        for (j = 0; j < l3; j++) {
+        for (j = 0; j < l2; j++) {
           x = j % wrapAt - originX;
           y = originY - (j / wrapAt | 0);
           distances[j] = d = !axis ? _sqrt(x * x + y * y) : Math.abs(axis === "y" ? y : x);
@@ -1787,20 +1791,20 @@
         from === "random" && shuffle(distances);
         distances.max = max - min;
         distances.min = min;
-        distances.v = l3 = (parseFloat(vars.amount) || parseFloat(vars.each) * (wrapAt > l3 ? l3 - 1 : !axis ? Math.max(wrapAt, l3 / wrapAt) : axis === "y" ? l3 / wrapAt : wrapAt) || 0) * (from === "edges" ? -1 : 1);
-        distances.b = l3 < 0 ? base - l3 : base;
+        distances.v = l2 = (parseFloat(vars.amount) || parseFloat(vars.each) * (wrapAt > l2 ? l2 - 1 : !axis ? Math.max(wrapAt, l2 / wrapAt) : axis === "y" ? l2 / wrapAt : wrapAt) || 0) * (from === "edges" ? -1 : 1);
+        distances.b = l2 < 0 ? base - l2 : base;
         distances.u = getUnit(vars.amount || vars.each) || 0;
-        ease = ease && l3 < 0 ? _invertEase(ease) : ease;
+        ease = ease && l2 < 0 ? _invertEase(ease) : ease;
       }
-      l3 = (distances[i3] - distances.min) / distances.max || 0;
-      return _roundPrecise(distances.b + (ease ? ease(l3) : l3) * distances.v) + distances.u;
+      l2 = (distances[i2] - distances.min) / distances.max || 0;
+      return _roundPrecise(distances.b + (ease ? ease(l2) : l2) * distances.v) + distances.u;
     };
   };
   var _roundModifier = function _roundModifier2(v) {
     var p = Math.pow(10, ((v + "").split(".")[1] || "").length);
     return function(raw) {
-      var n3 = _roundPrecise(Math.round(parseFloat(raw) / v) * v * p);
-      return (n3 - n3 % 1) / p + (_isNumber(raw) ? 0 : getUnit(raw));
+      var n2 = _roundPrecise(Math.round(parseFloat(raw) / v) * v * p);
+      return (n2 - n2 % 1) / p + (_isNumber(raw) ? 0 : getUnit(raw));
     };
   };
   var snap = function snap2(snapTo, value) {
@@ -1820,18 +1824,18 @@
       is2D = snapTo(raw);
       return Math.abs(is2D - raw) <= radius ? is2D : raw;
     } : function(raw) {
-      var x = parseFloat(is2D ? raw.x : raw), y = parseFloat(is2D ? raw.y : 0), min = _bigNum, closest = 0, i3 = snapTo.length, dx, dy;
-      while (i3--) {
+      var x = parseFloat(is2D ? raw.x : raw), y = parseFloat(is2D ? raw.y : 0), min = _bigNum, closest = 0, i2 = snapTo.length, dx, dy;
+      while (i2--) {
         if (is2D) {
-          dx = snapTo[i3].x - x;
-          dy = snapTo[i3].y - y;
+          dx = snapTo[i2].x - x;
+          dy = snapTo[i2].y - y;
           dx = dx * dx + dy * dy;
         } else {
-          dx = Math.abs(snapTo[i3] - x);
+          dx = Math.abs(snapTo[i2] - x);
         }
         if (dx < min) {
           min = dx;
-          closest = i3;
+          closest = i2;
         }
       }
       closest = !radius || min <= radius ? snapTo[closest] : raw;
@@ -1880,15 +1884,15 @@
     });
   };
   var _replaceRandom = function _replaceRandom2(value) {
-    var prev = 0, s3 = "", i3, nums, end, isArray;
-    while (~(i3 = value.indexOf("random(", prev))) {
-      end = value.indexOf(")", i3);
-      isArray = value.charAt(i3 + 7) === "[";
-      nums = value.substr(i3 + 7, end - i3 - 7).match(isArray ? _delimitedValueExp : _strictNumExp);
-      s3 += value.substr(prev, i3 - prev) + random(isArray ? nums : +nums[0], isArray ? 0 : +nums[1], +nums[2] || 1e-5);
+    var prev = 0, s2 = "", i2, nums, end, isArray;
+    while (~(i2 = value.indexOf("random(", prev))) {
+      end = value.indexOf(")", i2);
+      isArray = value.charAt(i2 + 7) === "[";
+      nums = value.substr(i2 + 7, end - i2 - 7).match(isArray ? _delimitedValueExp : _strictNumExp);
+      s2 += value.substr(prev, i2 - prev) + random(isArray ? nums : +nums[0], isArray ? 0 : +nums[1], +nums[2] || 1e-5);
       prev = end + 1;
     }
-    return s3 + value.substr(prev, value.length - prev);
+    return s2 + value.substr(prev, value.length - prev);
   };
   var mapRange = function mapRange2(inMin, inMax, outMin, outMax, value) {
     var inRange = inMax - inMin, outRange = outMax - outMin;
@@ -1901,7 +1905,7 @@
       return (1 - p2) * start + p2 * end;
     };
     if (!func) {
-      var isString = _isString(start), master = {}, p, i3, interpolators, l3, il;
+      var isString = _isString(start), master = {}, p, i2, interpolators, l2, il;
       progress === true && (mutate = 1) && (progress = null);
       if (isString) {
         start = {
@@ -1912,16 +1916,16 @@
         };
       } else if (_isArray(start) && !_isArray(end)) {
         interpolators = [];
-        l3 = start.length;
-        il = l3 - 2;
-        for (i3 = 1; i3 < l3; i3++) {
-          interpolators.push(interpolate2(start[i3 - 1], start[i3]));
+        l2 = start.length;
+        il = l2 - 2;
+        for (i2 = 1; i2 < l2; i2++) {
+          interpolators.push(interpolate2(start[i2 - 1], start[i2]));
         }
-        l3--;
+        l2--;
         func = function func2(p2) {
-          p2 *= l3;
-          var i4 = Math.min(il, ~~p2);
-          return interpolators[i4](p2 - i4);
+          p2 *= l2;
+          var i3 = Math.min(il, ~~p2);
+          return interpolators[i3](p2 - i3);
         };
         progress = end;
       } else if (!mutate) {
@@ -2036,7 +2040,7 @@
     return (h2 * 6 < 1 ? m1 + (m2 - m1) * h2 * 6 : h2 < 0.5 ? m2 : h2 * 3 < 2 ? m1 + (m2 - m1) * (2 / 3 - h2) * 6 : m1) * _255 + 0.5 | 0;
   };
   var splitColor = function splitColor2(v, toHSL, forceAlpha) {
-    var a2 = !v ? _colorLookup.black : _isNumber(v) ? [v >> 16, v >> 8 & _255, v & _255] : 0, r2, g, b, h2, s3, l3, max, min, d, wasHSL;
+    var a2 = !v ? _colorLookup.black : _isNumber(v) ? [v >> 16, v >> 8 & _255, v & _255] : 0, r2, g, b, h2, s2, l2, max, min, d, wasHSL;
     if (!a2) {
       if (v.substr(-1) === ",") {
         v = v.substr(0, v.length - 1);
@@ -2060,10 +2064,10 @@
         a2 = wasHSL = v.match(_strictNumExp);
         if (!toHSL) {
           h2 = +a2[0] % 360 / 360;
-          s3 = +a2[1] / 100;
-          l3 = +a2[2] / 100;
-          g = l3 <= 0.5 ? l3 * (s3 + 1) : l3 + s3 - l3 * s3;
-          r2 = l3 * 2 - g;
+          s2 = +a2[1] / 100;
+          l2 = +a2[2] / 100;
+          g = l2 <= 0.5 ? l2 * (s2 + 1) : l2 + s2 - l2 * s2;
+          r2 = l2 * 2 - g;
           a2.length > 3 && (a2[3] *= 1);
           a2[0] = _hue(h2 + 1 / 3, r2, g);
           a2[1] = _hue(h2, r2, g);
@@ -2084,66 +2088,66 @@
       b = a2[2] / _255;
       max = Math.max(r2, g, b);
       min = Math.min(r2, g, b);
-      l3 = (max + min) / 2;
+      l2 = (max + min) / 2;
       if (max === min) {
-        h2 = s3 = 0;
+        h2 = s2 = 0;
       } else {
         d = max - min;
-        s3 = l3 > 0.5 ? d / (2 - max - min) : d / (max + min);
+        s2 = l2 > 0.5 ? d / (2 - max - min) : d / (max + min);
         h2 = max === r2 ? (g - b) / d + (g < b ? 6 : 0) : max === g ? (b - r2) / d + 2 : (r2 - g) / d + 4;
         h2 *= 60;
       }
       a2[0] = ~~(h2 + 0.5);
-      a2[1] = ~~(s3 * 100 + 0.5);
-      a2[2] = ~~(l3 * 100 + 0.5);
+      a2[1] = ~~(s2 * 100 + 0.5);
+      a2[2] = ~~(l2 * 100 + 0.5);
     }
     forceAlpha && a2.length < 4 && (a2[3] = 1);
     return a2;
   };
   var _colorOrderData = function _colorOrderData2(v) {
-    var values = [], c2 = [], i3 = -1;
+    var values = [], c2 = [], i2 = -1;
     v.split(_colorExp).forEach(function(v2) {
       var a2 = v2.match(_numWithUnitExp) || [];
       values.push.apply(values, a2);
-      c2.push(i3 += a2.length + 1);
+      c2.push(i2 += a2.length + 1);
     });
     values.c = c2;
     return values;
   };
-  var _formatColors = function _formatColors2(s3, toHSL, orderMatchData) {
-    var result = "", colors = (s3 + result).match(_colorExp), type = toHSL ? "hsla(" : "rgba(", i3 = 0, c2, shell, d, l3;
+  var _formatColors = function _formatColors2(s2, toHSL, orderMatchData) {
+    var result = "", colors = (s2 + result).match(_colorExp), type = toHSL ? "hsla(" : "rgba(", i2 = 0, c2, shell, d, l2;
     if (!colors) {
-      return s3;
+      return s2;
     }
     colors = colors.map(function(color) {
       return (color = splitColor(color, toHSL, 1)) && type + (toHSL ? color[0] + "," + color[1] + "%," + color[2] + "%," + color[3] : color.join(",")) + ")";
     });
     if (orderMatchData) {
-      d = _colorOrderData(s3);
+      d = _colorOrderData(s2);
       c2 = orderMatchData.c;
       if (c2.join(result) !== d.c.join(result)) {
-        shell = s3.replace(_colorExp, "1").split(_numWithUnitExp);
-        l3 = shell.length - 1;
-        for (; i3 < l3; i3++) {
-          result += shell[i3] + (~c2.indexOf(i3) ? colors.shift() || type + "0,0,0,0)" : (d.length ? d : colors.length ? colors : orderMatchData).shift());
+        shell = s2.replace(_colorExp, "1").split(_numWithUnitExp);
+        l2 = shell.length - 1;
+        for (; i2 < l2; i2++) {
+          result += shell[i2] + (~c2.indexOf(i2) ? colors.shift() || type + "0,0,0,0)" : (d.length ? d : colors.length ? colors : orderMatchData).shift());
         }
       }
     }
     if (!shell) {
-      shell = s3.split(_colorExp);
-      l3 = shell.length - 1;
-      for (; i3 < l3; i3++) {
-        result += shell[i3] + colors[i3];
+      shell = s2.split(_colorExp);
+      l2 = shell.length - 1;
+      for (; i2 < l2; i2++) {
+        result += shell[i2] + colors[i2];
       }
     }
-    return result + shell[l3];
+    return result + shell[l2];
   };
   var _colorExp = function() {
-    var s3 = "(?:\\b(?:(?:rgb|rgba|hsl|hsla)\\(.+?\\))|\\B#(?:[0-9a-f]{3,4}){1,2}\\b", p;
+    var s2 = "(?:\\b(?:(?:rgb|rgba|hsl|hsla)\\(.+?\\))|\\B#(?:[0-9a-f]{3,4}){1,2}\\b", p;
     for (p in _colorLookup) {
-      s3 += "|" + p + "\\b";
+      s2 += "|" + p + "\\b";
     }
-    return new RegExp(s3 + ")", "gi");
+    return new RegExp(s2 + ")", "gi");
   }();
   var _hslExp = /hsl[a]?\(/;
   var _colorStringFilter = function _colorStringFilter2(a2) {
@@ -2229,8 +2233,8 @@
         _wake();
         return func;
       },
-      remove: function remove(callback, i3) {
-        ~(i3 = _listeners2.indexOf(callback)) && _listeners2.splice(i3, 1) && _i >= i3 && _i--;
+      remove: function remove(callback, i2) {
+        ~(i2 = _listeners2.indexOf(callback)) && _listeners2.splice(i2, 1) && _i >= i2 && _i--;
       },
       _listeners: _listeners2
     };
@@ -2243,10 +2247,10 @@
   var _customEaseExp = /^[\d.\-M][\d.\-,\s]/;
   var _quotesExp = /["']/g;
   var _parseObjectInString = function _parseObjectInString2(value) {
-    var obj = {}, split = value.substr(1, value.length - 3).split(":"), key = split[0], i3 = 1, l3 = split.length, index, val, parsedVal;
-    for (; i3 < l3; i3++) {
-      val = split[i3];
-      index = i3 !== l3 - 1 ? val.lastIndexOf(",") : val.length;
+    var obj = {}, split = value.substr(1, value.length - 3).split(":"), key = split[0], i2 = 1, l2 = split.length, index, val, parsedVal;
+    for (; i2 < l2; i2++) {
+      val = split[i2];
+      index = i2 !== l2 - 1 ? val.lastIndexOf(",") : val.length;
       parsedVal = val.substr(0, index);
       obj[key] = isNaN(parsedVal) ? parsedVal.replace(_quotesExp, "").trim() : +parsedVal;
       key = val.substr(index + 1).trim();
@@ -2343,9 +2347,9 @@
     };
     return ease;
   };
-  _forEachName("Linear,Quad,Cubic,Quart,Quint,Strong", function(name, i3) {
-    var power = i3 < 5 ? i3 + 1 : i3;
-    _insertEase(name + ",Power" + (power - 1), i3 ? function(p) {
+  _forEachName("Linear,Quad,Cubic,Quart,Quint,Strong", function(name, i2) {
+    var power = i2 < 5 ? i2 + 1 : i2;
+    _insertEase(name + ",Power" + (power - 1), i2 ? function(p) {
       return Math.pow(p, power);
     } : function(p) {
       return p;
@@ -2357,9 +2361,9 @@
   });
   _easeMap.Linear.easeNone = _easeMap.none = _easeMap.Linear.easeIn;
   _insertEase("Elastic", _configElastic("in"), _configElastic("out"), _configElastic());
-  (function(n3, c2) {
-    var n1 = 1 / c2, n22 = 2 * n1, n32 = 2.5 * n1, easeOut = function easeOut2(p) {
-      return p < n1 ? n3 * p * p : p < n22 ? n3 * Math.pow(p - 1.5 / c2, 2) + 0.75 : p < n32 ? n3 * (p -= 2.25 / c2) * p + 0.9375 : n3 * Math.pow(p - 2.625 / c2, 2) + 0.984375;
+  (function(n2, c2) {
+    var n1 = 1 / c2, n22 = 2 * n1, n3 = 2.5 * n1, easeOut = function easeOut2(p) {
+      return p < n1 ? n2 * p * p : p < n22 ? n2 * Math.pow(p - 1.5 / c2, 2) + 0.75 : p < n3 ? n2 * (p -= 2.25 / c2) * p + 0.9375 : n2 * Math.pow(p - 2.625 / c2, 2) + 0.984375;
     };
     _insertEase("Bounce", function(p) {
       return 1 - easeOut(1 - p);
@@ -2915,10 +2919,10 @@
       return a2;
     };
     _proto2.getById = function getById2(id) {
-      var animations = this.getChildren(1, 1, 1), i3 = animations.length;
-      while (i3--) {
-        if (animations[i3].vars.id === id) {
-          return animations[i3];
+      var animations = this.getChildren(1, 1, 1), i2 = animations.length;
+      while (i2--) {
+        if (animations[i2].vars.id === id) {
+          return animations[i2];
         }
       }
     };
@@ -2972,9 +2976,9 @@
       }
     };
     _proto2.killTweensOf = function killTweensOf(targets, props, onlyActive) {
-      var tweens = this.getTweensOf(targets, onlyActive), i3 = tweens.length;
-      while (i3--) {
-        _overwritingTween !== tweens[i3] && tweens[i3].kill(targets, props);
+      var tweens = this.getTweensOf(targets, onlyActive), i2 = tweens.length;
+      while (i2--) {
+        _overwritingTween !== tweens[i2] && tweens[i2].kill(targets, props);
       }
       return this;
     };
@@ -3224,14 +3228,14 @@
     return copy;
   };
   var _checkPlugin = function _checkPlugin2(property, vars, tween, index, target, targets) {
-    var plugin, pt, ptLookup, i3;
+    var plugin, pt, ptLookup, i2;
     if (_plugins[property] && (plugin = new _plugins[property]()).init(target, plugin.rawVars ? vars[property] : _processVars(vars[property], index, target, targets, tween), tween, index, targets) !== false) {
       tween._pt = pt = new PropTween(tween._pt, target, property, 0, 1, plugin.render, plugin, 0, plugin.priority);
       if (tween !== _quickTween) {
         ptLookup = tween._ptLookup[tween._targets.indexOf(target)];
-        i3 = plugin._props.length;
-        while (i3--) {
-          ptLookup[plugin._props[i3]] = pt;
+        i2 = plugin._props.length;
+        while (i2--) {
+          ptLookup[plugin._props[i2]] = pt;
         }
       }
     }
@@ -3240,7 +3244,7 @@
   var _overwritingTween;
   var _forceAllPropTweens;
   var _initTween = function _initTween2(tween, time, tTime) {
-    var vars = tween.vars, ease = vars.ease, startAt = vars.startAt, immediateRender = vars.immediateRender, lazy = vars.lazy, onUpdate = vars.onUpdate, onUpdateParams = vars.onUpdateParams, callbackScope = vars.callbackScope, runBackwards = vars.runBackwards, yoyoEase = vars.yoyoEase, keyframes = vars.keyframes, autoRevert = vars.autoRevert, dur = tween._dur, prevStartAt = tween._startAt, targets = tween._targets, parent = tween.parent, fullTargets = parent && parent.data === "nested" ? parent.vars.targets : targets, autoOverwrite = tween._overwrite === "auto" && !_suppressOverwrites, tl = tween.timeline, cleanVars, i3, p, pt, target, hasPriority, gsData, harness, plugin, ptLookup, index, harnessVars, overwritten;
+    var vars = tween.vars, ease = vars.ease, startAt = vars.startAt, immediateRender = vars.immediateRender, lazy = vars.lazy, onUpdate = vars.onUpdate, onUpdateParams = vars.onUpdateParams, callbackScope = vars.callbackScope, runBackwards = vars.runBackwards, yoyoEase = vars.yoyoEase, keyframes = vars.keyframes, autoRevert = vars.autoRevert, dur = tween._dur, prevStartAt = tween._startAt, targets = tween._targets, parent = tween.parent, fullTargets = parent && parent.data === "nested" ? parent.vars.targets : targets, autoOverwrite = tween._overwrite === "auto" && !_suppressOverwrites, tl = tween.timeline, cleanVars, i2, p, pt, target, hasPriority, gsData, harness, plugin, ptLookup, index, harnessVars, overwritten;
     tl && (!keyframes || !ease) && (ease = "none");
     tween._ease = _parseEase(ease, _defaults.ease);
     tween._yEase = yoyoEase ? _invertEase(_parseEase(yoyoEase === true ? ease : yoyoEase, _defaults.ease)) : 0;
@@ -3311,12 +3315,12 @@
       }
       tween._pt = tween._ptCache = 0;
       lazy = dur && _isNotFalse(lazy) || lazy && !dur;
-      for (i3 = 0; i3 < targets.length; i3++) {
-        target = targets[i3];
-        gsData = target._gsap || _harness(targets)[i3]._gsap;
-        tween._ptLookup[i3] = ptLookup = {};
+      for (i2 = 0; i2 < targets.length; i2++) {
+        target = targets[i2];
+        gsData = target._gsap || _harness(targets)[i2]._gsap;
+        tween._ptLookup[i2] = ptLookup = {};
         _lazyLookup[gsData.id] && _lazyTweens.length && _lazyRender();
-        index = fullTargets === targets ? i3 : fullTargets.indexOf(target);
+        index = fullTargets === targets ? i2 : fullTargets.indexOf(target);
         if (harness && (plugin = new harness()).init(target, harnessVars || cleanVars, tween, index, fullTargets) !== false) {
           tween._pt = pt = new PropTween(tween._pt, target, plugin.name, 0, 1, plugin.render, plugin, 0, plugin.priority);
           plugin._props.forEach(function(name) {
@@ -3333,7 +3337,7 @@
             }
           }
         }
-        tween._op && tween._op[i3] && tween.kill(target, tween._op[i3]);
+        tween._op && tween._op[i2] && tween.kill(target, tween._op[i2]);
         if (autoOverwrite && tween._pt) {
           _overwritingTween = tween;
           _globalTimeline.killTweensOf(target, ptLookup, tween.globalTime(time));
@@ -3350,13 +3354,13 @@
     keyframes && time <= 0 && tl.render(_bigNum, true, true);
   };
   var _updatePropTweens = function _updatePropTweens2(tween, property, value, start, startIsRelative, ratio, time) {
-    var ptCache = (tween._pt && tween._ptCache || (tween._ptCache = {}))[property], pt, rootPT, lookup, i3;
+    var ptCache = (tween._pt && tween._ptCache || (tween._ptCache = {}))[property], pt, rootPT, lookup, i2;
     if (!ptCache) {
       ptCache = tween._ptCache[property] = [];
       lookup = tween._ptLookup;
-      i3 = tween._targets.length;
-      while (i3--) {
-        pt = lookup[i3][property];
+      i2 = tween._targets.length;
+      while (i2--) {
+        pt = lookup[i2][property];
         if (pt && pt.d && pt.d._pt) {
           pt = pt.d._pt;
           while (pt && pt.p !== property && pt.fp !== property) {
@@ -3373,9 +3377,9 @@
         ptCache.push(pt);
       }
     }
-    i3 = ptCache.length;
-    while (i3--) {
-      rootPT = ptCache[i3];
+    i2 = ptCache.length;
+    while (i2--) {
+      rootPT = ptCache[i2];
       pt = rootPT._pt || rootPT;
       pt.s = (start || start === 0) && !startIsRelative ? start : pt.s + (start || 0) + ratio * pt.c;
       pt.c = value - pt.s;
@@ -3384,7 +3388,7 @@
     }
   };
   var _addAliasesToVars = function _addAliasesToVars2(targets, vars) {
-    var harness = targets[0] ? _getCache(targets[0]).harness : 0, propertyAliases = harness && harness.aliases, copy, p, i3, aliases;
+    var harness = targets[0] ? _getCache(targets[0]).harness : 0, propertyAliases = harness && harness.aliases, copy, p, i2, aliases;
     if (!propertyAliases) {
       return vars;
     }
@@ -3392,9 +3396,9 @@
     for (p in propertyAliases) {
       if (p in copy) {
         aliases = propertyAliases[p].split(",");
-        i3 = aliases.length;
-        while (i3--) {
-          copy[aliases[i3]] = copy[p];
+        i2 = aliases.length;
+        while (i2--) {
+          copy[aliases[i2]] = copy[p];
         }
       }
     }
@@ -3404,9 +3408,9 @@
     var ease = obj.ease || easeEach || "power1.inOut", p, a2;
     if (_isArray(obj)) {
       a2 = allProps[prop] || (allProps[prop] = []);
-      obj.forEach(function(value, i3) {
+      obj.forEach(function(value, i2) {
         return a2.push({
-          t: i3 / (obj.length - 1) * 100,
+          t: i2 / (obj.length - 1) * 100,
           v: value,
           e: ease
         });
@@ -3422,8 +3426,8 @@
       }
     }
   };
-  var _parseFuncOrString = function _parseFuncOrString2(value, tween, i3, target, targets) {
-    return _isFunction(value) ? value.call(tween, i3, target, targets) : _isString(value) && ~value.indexOf("random(") ? _replaceRandom(value) : value;
+  var _parseFuncOrString = function _parseFuncOrString2(value, tween, i2, target, targets) {
+    return _isFunction(value) ? value.call(tween, i2, target, targets) : _isString(value) && ~value.indexOf("random(") ? _replaceRandom(value) : value;
   };
   var _staggerTweenProps = _callbackNames + "repeat,repeatDelay,yoyo,repeatRefresh,yoyoEase,autoRevert";
   var _staggerPropsToSkip = {};
@@ -3440,7 +3444,7 @@
         position = null;
       }
       _this3 = _Animation2.call(this, skipInherit ? vars : _inheritDefaults(vars)) || this;
-      var _this3$vars = _this3.vars, duration = _this3$vars.duration, delay = _this3$vars.delay, immediateRender = _this3$vars.immediateRender, stagger = _this3$vars.stagger, overwrite = _this3$vars.overwrite, keyframes = _this3$vars.keyframes, defaults2 = _this3$vars.defaults, scrollTrigger = _this3$vars.scrollTrigger, yoyoEase = _this3$vars.yoyoEase, parent = vars.parent || _globalTimeline, parsedTargets = (_isArray(targets) || _isTypedArray(targets) ? _isNumber(targets[0]) : "length" in vars) ? [targets] : toArray(targets), tl, i3, copy, l3, p, curTarget, staggerFunc, staggerVarsToMerge;
+      var _this3$vars = _this3.vars, duration = _this3$vars.duration, delay = _this3$vars.delay, immediateRender = _this3$vars.immediateRender, stagger = _this3$vars.stagger, overwrite = _this3$vars.overwrite, keyframes = _this3$vars.keyframes, defaults2 = _this3$vars.defaults, scrollTrigger = _this3$vars.scrollTrigger, yoyoEase = _this3$vars.yoyoEase, parent = vars.parent || _globalTimeline, parsedTargets = (_isArray(targets) || _isTypedArray(targets) ? _isNumber(targets[0]) : "length" in vars) ? [targets] : toArray(targets), tl, i2, copy, l2, p, curTarget, staggerFunc, staggerVarsToMerge;
       _this3._targets = parsedTargets.length ? _harness(parsedTargets) : _warn("GSAP target " + targets + " not found. https://greensock.com", !_config.nullTargetWarn) || [];
       _this3._ptLookup = [];
       _this3._overwrite = overwrite;
@@ -3455,7 +3459,7 @@
         tl.parent = tl._dp = _assertThisInitialized(_this3);
         tl._start = 0;
         if (stagger || _isFuncOrString(duration) || _isFuncOrString(delay)) {
-          l3 = parsedTargets.length;
+          l2 = parsedTargets.length;
           staggerFunc = stagger && distribute(stagger);
           if (_isObject(stagger)) {
             for (p in stagger) {
@@ -3465,20 +3469,20 @@
               }
             }
           }
-          for (i3 = 0; i3 < l3; i3++) {
+          for (i2 = 0; i2 < l2; i2++) {
             copy = _copyExcluding(vars, _staggerPropsToSkip);
             copy.stagger = 0;
             yoyoEase && (copy.yoyoEase = yoyoEase);
             staggerVarsToMerge && _merge(copy, staggerVarsToMerge);
-            curTarget = parsedTargets[i3];
-            copy.duration = +_parseFuncOrString(duration, _assertThisInitialized(_this3), i3, curTarget, parsedTargets);
-            copy.delay = (+_parseFuncOrString(delay, _assertThisInitialized(_this3), i3, curTarget, parsedTargets) || 0) - _this3._delay;
-            if (!stagger && l3 === 1 && copy.delay) {
+            curTarget = parsedTargets[i2];
+            copy.duration = +_parseFuncOrString(duration, _assertThisInitialized(_this3), i2, curTarget, parsedTargets);
+            copy.delay = (+_parseFuncOrString(delay, _assertThisInitialized(_this3), i2, curTarget, parsedTargets) || 0) - _this3._delay;
+            if (!stagger && l2 === 1 && copy.delay) {
               _this3._delay = delay = copy.delay;
               _this3._start += delay;
               copy.delay = 0;
             }
-            tl.to(curTarget, copy, staggerFunc ? staggerFunc(i3, curTarget, parsedTargets) : 0);
+            tl.to(curTarget, copy, staggerFunc ? staggerFunc(i2, curTarget, parsedTargets) : 0);
             tl._ease = _easeMap.none;
           }
           tl.duration() ? duration = delay = 0 : _this3.timeline = 0;
@@ -3503,11 +3507,11 @@
                 return a3.t - b.t;
               });
               time = 0;
-              for (i3 = 0; i3 < a2.length; i3++) {
-                kf = a2[i3];
+              for (i2 = 0; i2 < a2.length; i2++) {
+                kf = a2[i2];
                 v = {
                   ease: kf.e,
-                  duration: (kf.t - (i3 ? a2[i3 - 1].t : 0)) / 100 * duration
+                  duration: (kf.t - (i2 ? a2[i2 - 1].t : 0)) / 100 * duration
                 };
                 v[p] = kf.v;
                 tl.to(parsedTargets, v, time);
@@ -3668,7 +3672,7 @@
         this.parent && tDur !== this.timeline.totalDuration() && _setDuration(this, this._dur * this.timeline._tDur / tDur, 0, 1);
         return this;
       }
-      var parsedTargets = this._targets, killingTargets = targets ? toArray(targets) : parsedTargets, propTweenLookup = this._ptLookup, firstPT = this._pt, overwrittenProps, curLookup, curOverwriteProps, props, p, pt, i3;
+      var parsedTargets = this._targets, killingTargets = targets ? toArray(targets) : parsedTargets, propTweenLookup = this._ptLookup, firstPT = this._pt, overwrittenProps, curLookup, curOverwriteProps, props, p, pt, i2;
       if ((!vars || vars === "all") && _arraysMatch(parsedTargets, killingTargets)) {
         vars === "all" && (this._pt = 0);
         return _interrupt(this);
@@ -3684,16 +3688,16 @@
         }
         vars = _addAliasesToVars(parsedTargets, vars);
       }
-      i3 = parsedTargets.length;
-      while (i3--) {
-        if (~killingTargets.indexOf(parsedTargets[i3])) {
-          curLookup = propTweenLookup[i3];
+      i2 = parsedTargets.length;
+      while (i2--) {
+        if (~killingTargets.indexOf(parsedTargets[i2])) {
+          curLookup = propTweenLookup[i2];
           if (vars === "all") {
-            overwrittenProps[i3] = vars;
+            overwrittenProps[i2] = vars;
             props = curLookup;
             curOverwriteProps = {};
           } else {
-            curOverwriteProps = overwrittenProps[i3] = overwrittenProps[i3] || {};
+            curOverwriteProps = overwrittenProps[i2] = overwrittenProps[i2] || {};
             props = vars;
           }
           for (p in props) {
@@ -3781,19 +3785,19 @@
     return data.set(data.t, data.p, !!(data.s + data.c * ratio), data);
   };
   var _renderComplexString = function _renderComplexString2(ratio, data) {
-    var pt = data._pt, s3 = "";
+    var pt = data._pt, s2 = "";
     if (!ratio && data.b) {
-      s3 = data.b;
+      s2 = data.b;
     } else if (ratio === 1 && data.e) {
-      s3 = data.e;
+      s2 = data.e;
     } else {
       while (pt) {
-        s3 = pt.p + (pt.m ? pt.m(pt.s + pt.c * ratio) : Math.round((pt.s + pt.c * ratio) * 1e4) / 1e4) + s3;
+        s2 = pt.p + (pt.m ? pt.m(pt.s + pt.c * ratio) : Math.round((pt.s + pt.c * ratio) * 1e4) / 1e4) + s2;
         pt = pt._next;
       }
-      s3 += data.c;
+      s2 += data.c;
     }
-    data.set(data.t, data.p, s3, data);
+    data.set(data.t, data.p, s2, data);
   };
   var _renderPropTweens = function _renderPropTweens2(ratio, data) {
     var pt = data._pt;
@@ -3987,8 +3991,8 @@
           };
         }).sort(function(a2, b) {
           return b.g - a2.g || -1;
-        }).forEach(function(o3) {
-          return o3.t.revert(revert);
+        }).forEach(function(o2) {
+          return o2.t.revert(revert);
         });
         this.data.forEach(function(e3) {
           return !(e3 instanceof Animation) && e3.revert && e3.revert(revert);
@@ -4004,8 +4008,8 @@
       }
       this.clear();
       if (matchMedia2) {
-        var i3 = _media.indexOf(this);
-        !!~i3 && _media.splice(i3, 1);
+        var i2 = _media.indexOf(this);
+        !!~i2 && _media.splice(i2, 1);
       }
     };
     _proto5.revert = function revert(config3) {
@@ -4080,11 +4084,11 @@
       if (target.length > 1) {
         var setters = target.map(function(t2) {
           return gsap.quickSetter(t2, property, unit);
-        }), l3 = setters.length;
+        }), l2 = setters.length;
         return function(value) {
-          var i3 = l3;
-          while (i3--) {
-            setters[i3](value);
+          var i2 = l2;
+          while (i2--) {
+            setters[i2](value);
           }
         };
       }
@@ -4184,8 +4188,8 @@
       ~a2.indexOf(callback) || a2.push(callback);
     },
     removeEventListener: function removeEventListener(type, callback) {
-      var a2 = _listeners[type], i3 = a2 && a2.indexOf(callback);
-      i3 >= 0 && a2.splice(i3, 1);
+      var a2 = _listeners[type], i2 = a2 && a2.indexOf(callback);
+      i2 >= 0 && a2.splice(i2, 1);
     },
     utils: {
       wrap,
@@ -4249,16 +4253,16 @@
     return pt;
   };
   var _addModifiers = function _addModifiers2(tween, modifiers) {
-    var targets = tween._targets, p, i3, pt;
+    var targets = tween._targets, p, i2, pt;
     for (p in modifiers) {
-      i3 = targets.length;
-      while (i3--) {
-        pt = tween._ptLookup[i3][p];
+      i2 = targets.length;
+      while (i2--) {
+        pt = tween._ptLookup[i2][p];
         if (pt && (pt = pt.d)) {
           if (pt._pt) {
             pt = _getPluginPropTween(pt, p);
           }
-          pt && pt.modifier && pt.modifier(modifiers[p], tween, targets[i3], p);
+          pt && pt.modifier && pt.modifier(modifiers[p], tween, targets[i2], p);
         }
       }
     }
@@ -4313,9 +4317,9 @@
   }, {
     name: "endArray",
     init: function init2(target, value) {
-      var i3 = value.length;
-      while (i3--) {
-        this.add(target, i3, target[i3] || 0, value[i3], 0, 0, 0, 0, 0, 1);
+      var i2 = value.length;
+      while (i2--) {
+        this.add(target, i2, target[i2] || 0, value[i2], 0, 0, 0, 0, 0, 1);
       }
     }
   }, _buildModifierPlugin("roundProps", _roundModifier), _buildModifierPlugin("modifiers"), _buildModifierPlugin("snap", snap)) || _gsap;
@@ -4443,9 +4447,9 @@
     }
   };
   var _revertStyle = function _revertStyle2() {
-    var props = this.props, target = this.target, style = target.style, cache = target._gsap, i3, p;
-    for (i3 = 0; i3 < props.length; i3 += 3) {
-      props[i3 + 1] ? target[props[i3]] = props[i3 + 2] : props[i3 + 2] ? style[props[i3]] = props[i3 + 2] : style.removeProperty(props[i3].substr(0, 2) === "--" ? props[i3] : props[i3].replace(_capsExp, "-$1").toLowerCase());
+    var props = this.props, target = this.target, style = target.style, cache = target._gsap, i2, p;
+    for (i2 = 0; i2 < props.length; i2 += 3) {
+      props[i2 + 1] ? target[props[i2]] = props[i2 + 2] : props[i2 + 2] ? style[props[i2]] = props[i2 + 2] : style.removeProperty(props[i2].substr(0, 2) === "--" ? props[i2] : props[i2].replace(_capsExp, "-$1").toLowerCase());
     }
     if (this.tfm) {
       for (p in this.tfm) {
@@ -4455,8 +4459,8 @@
         cache.renderTransform();
         target.setAttribute("data-svg-origin", this.svgo || "");
       }
-      i3 = _reverting2();
-      if ((!i3 || !i3.isStart) && !style[_transformProp]) {
+      i2 = _reverting2();
+      if ((!i2 || !i2.isStart) && !style[_transformProp]) {
         _removeIndependentTransforms(style);
         cache.uncache = 1;
       }
@@ -4486,14 +4490,14 @@
   };
   var _prefixes = "O,Moz,ms,Ms,Webkit".split(",");
   var _checkPropPrefix = function _checkPropPrefix2(property, element, preferPrefix) {
-    var e3 = element || _tempDiv, s3 = e3.style, i3 = 5;
-    if (property in s3 && !preferPrefix) {
+    var e3 = element || _tempDiv, s2 = e3.style, i2 = 5;
+    if (property in s2 && !preferPrefix) {
       return property;
     }
     property = property.charAt(0).toUpperCase() + property.substr(1);
-    while (i3-- && !(_prefixes[i3] + property in s3)) {
+    while (i2-- && !(_prefixes[i2] + property in s2)) {
     }
-    return i3 < 0 ? null : (i3 === 3 ? "ms" : i3 >= 0 ? _prefixes[i3] : "") + property;
+    return i2 < 0 ? null : (i2 === 3 ? "ms" : i2 >= 0 ? _prefixes[i2] : "") + property;
   };
   var _initCore = function _initCore2() {
     if (_windowExists3() && window.document) {
@@ -4539,10 +4543,10 @@
     return bbox;
   };
   var _getAttributeFallbacks = function _getAttributeFallbacks2(target, attributesArray) {
-    var i3 = attributesArray.length;
-    while (i3--) {
-      if (target.hasAttribute(attributesArray[i3])) {
-        return target.getAttribute(attributesArray[i3]);
+    var i2 = attributesArray.length;
+    while (i2--) {
+      if (target.hasAttribute(attributesArray[i2])) {
+        return target.getAttribute(attributesArray[i2]);
       }
     }
   };
@@ -4656,10 +4660,10 @@
   };
   var _tweenComplexCSSString = function _tweenComplexCSSString2(target, prop, start, end) {
     if (!start || start === "none") {
-      var p = _checkPropPrefix(prop, target, 1), s3 = p && _getComputedProperty(target, p, 1);
-      if (s3 && s3 !== start) {
+      var p = _checkPropPrefix(prop, target, 1), s2 = p && _getComputedProperty(target, p, 1);
+      if (s2 && s2 !== start) {
         prop = p;
-        start = s3;
+        start = s2;
       } else if (prop === "borderColor") {
         start = _getComputedProperty(target, "borderTopColor");
       }
@@ -4744,15 +4748,15 @@
   };
   var _renderClearProps = function _renderClearProps2(ratio, data) {
     if (data.tween && data.tween._time === data.tween._dur) {
-      var target = data.t, style = target.style, props = data.u, cache = target._gsap, prop, clearTransforms, i3;
+      var target = data.t, style = target.style, props = data.u, cache = target._gsap, prop, clearTransforms, i2;
       if (props === "all" || props === true) {
         style.cssText = "";
         clearTransforms = 1;
       } else {
         props = props.split(",");
-        i3 = props.length;
-        while (--i3 > -1) {
-          prop = props[i3];
+        i2 = props.length;
+        while (--i2 > -1) {
+          prop = props[i2];
           if (_transformProps[prop]) {
             clearTransforms = 1;
             prop = prop === "transformOrigin" ? _transformOriginProp : _transformProp;
@@ -5222,7 +5226,7 @@
     _assign(endCache, startCache);
   };
   _forEachName("padding,margin,Width,Radius", function(name, index) {
-    var t2 = "Top", r2 = "Right", b = "Bottom", l3 = "Left", props = (index < 3 ? [t2, r2, b, l3] : [t2 + l3, t2 + r2, b + r2, b + l3]).map(function(side) {
+    var t2 = "Top", r2 = "Right", b = "Bottom", l2 = "Left", props = (index < 3 ? [t2, r2, b, l2] : [t2 + l2, t2 + r2, b + r2, b + l2]).map(function(side) {
       return index < 2 ? name + side : "border" + side + name;
     });
     _specialProps[index > 1 ? "border" + name : name] = function(plugin, target, property, endValue, tween) {
@@ -5236,8 +5240,8 @@
       }
       a2 = (endValue + "").split(" ");
       vars = {};
-      props.forEach(function(prop, i3) {
-        return vars[prop] = a2[i3] = a2[i3] || a2[(i3 - 1) / 2 | 0];
+      props.forEach(function(prop, i2) {
+        return vars[prop] = a2[i2] = a2[i2] || a2[(i2 - 1) / 2 | 0];
       });
       plugin.init(target, vars, tween);
     };
@@ -5497,290 +5501,283 @@
     });
   }
 
-  // ../../node_modules/@studio-freight/lenis/dist/lenis.modern.mjs
-  function t() {
-    return t = Object.assign ? Object.assign.bind() : function(t2) {
-      for (var e3 = 1; e3 < arguments.length; e3++) {
-        var i3 = arguments[e3];
-        for (var s3 in i3)
-          Object.prototype.hasOwnProperty.call(i3, s3) && (t2[s3] = i3[s3]);
-      }
+  // ../../node_modules/lenis/dist/lenis.mjs
+  var __assign = function() {
+    return __assign = Object.assign || function __assign2(t2) {
+      for (var e3, i2 = 1, o2 = arguments.length; i2 < o2; i2++)
+        for (var s2 in e3 = arguments[i2])
+          Object.prototype.hasOwnProperty.call(e3, s2) && (t2[s2] = e3[s2]);
       return t2;
-    }, t.apply(this, arguments);
+    }, __assign.apply(this, arguments);
+  };
+  function clamp3(t2, e3, i2) {
+    return Math.max(t2, Math.min(e3, i2));
   }
-  function e(t2, e3, i3) {
-    return Math.max(t2, Math.min(e3, i3));
-  }
-  var i = class {
+  var Animate = class {
     advance(t2) {
-      var i3;
+      var _a;
       if (!this.isRunning)
         return;
-      let s3 = false;
+      let e3 = false;
       if (this.lerp)
-        this.value = (o3 = this.value, n3 = this.to, (1 - (l3 = 1 - Math.exp(-60 * this.lerp * t2))) * o3 + l3 * n3), Math.round(this.value) === this.to && (this.value = this.to, s3 = true);
+        this.value = function damp(t3, e4, i2, o2) {
+          return function lerp(t4, e5, i3) {
+            return (1 - i3) * t4 + i3 * e5;
+          }(t3, e4, 1 - Math.exp(-i2 * o2));
+        }(this.value, this.to, 60 * this.lerp, t2), Math.round(this.value) === this.to && (this.value = this.to, e3 = true);
       else {
         this.currentTime += t2;
-        const i4 = e(0, this.currentTime / this.duration, 1);
-        s3 = i4 >= 1;
-        const o4 = s3 ? 1 : this.easing(i4);
-        this.value = this.from + (this.to - this.from) * o4;
+        const i2 = clamp3(0, this.currentTime / this.duration, 1);
+        e3 = i2 >= 1;
+        const o2 = e3 ? 1 : this.easing(i2);
+        this.value = this.from + (this.to - this.from) * o2;
       }
-      var o3, n3, l3;
-      null == (i3 = this.onUpdate) || i3.call(this, this.value, s3), s3 && this.stop();
+      e3 && this.stop(), (_a = this.onUpdate) == null ? void 0 : _a.call(this, this.value, e3);
     }
     stop() {
       this.isRunning = false;
     }
-    fromTo(t2, e3, { lerp: i3 = 0.1, duration: s3 = 1, easing: o3 = (t3) => t3, onStart: n3, onUpdate: l3 }) {
-      this.from = this.value = t2, this.to = e3, this.lerp = i3, this.duration = s3, this.easing = o3, this.currentTime = 0, this.isRunning = true, null == n3 || n3(), this.onUpdate = l3;
+    fromTo(t2, e3, { lerp: i2 = 0.1, duration: o2 = 1, easing: s2 = (t3) => t3, onStart: n2, onUpdate: r2 }) {
+      this.from = this.value = t2, this.to = e3, this.lerp = i2, this.duration = o2, this.easing = s2, this.currentTime = 0, this.isRunning = true, n2 == null ? void 0 : n2(), this.onUpdate = r2;
     }
   };
-  var s = class {
-    constructor({ wrapper: t2, content: e3, autoResize: i3 = true } = {}) {
-      if (this.resize = () => {
+  var Dimensions = class {
+    constructor({ wrapper: t2, content: e3, autoResize: i2 = true, debounce: o2 = 250 } = {}) {
+      __publicField(this, "resize", () => {
         this.onWrapperResize(), this.onContentResize();
-      }, this.onWrapperResize = () => {
+      });
+      __publicField(this, "onWrapperResize", () => {
         this.wrapper === window ? (this.width = window.innerWidth, this.height = window.innerHeight) : (this.width = this.wrapper.clientWidth, this.height = this.wrapper.clientHeight);
-      }, this.onContentResize = () => {
-        this.scrollHeight = this.content.scrollHeight, this.scrollWidth = this.content.scrollWidth;
-      }, this.wrapper = t2, this.content = e3, i3) {
-        const t3 = function(t4, e4) {
-          let i4;
-          return function() {
-            let e5 = arguments, s3 = this;
-            clearTimeout(i4), i4 = setTimeout(function() {
-              t4.apply(s3, e5);
-            }, 250);
-          };
-        }(this.resize);
-        this.wrapper !== window && (this.wrapperResizeObserver = new ResizeObserver(t3), this.wrapperResizeObserver.observe(this.wrapper)), this.contentResizeObserver = new ResizeObserver(t3), this.contentResizeObserver.observe(this.content);
-      }
-      this.resize();
+      });
+      __publicField(this, "onContentResize", () => {
+        this.wrapper === window ? (this.scrollHeight = this.content.scrollHeight, this.scrollWidth = this.content.scrollWidth) : (this.scrollHeight = this.wrapper.scrollHeight, this.scrollWidth = this.wrapper.scrollWidth);
+      });
+      this.wrapper = t2, this.content = e3, i2 && (this.debouncedResize = function debounce(t3, e4) {
+        let i3;
+        return function() {
+          let o3 = arguments, s2 = this;
+          clearTimeout(i3), i3 = setTimeout(function() {
+            t3.apply(s2, o3);
+          }, e4);
+        };
+      }(this.resize, o2), this.wrapper === window ? window.addEventListener("resize", this.debouncedResize, false) : (this.wrapperResizeObserver = new ResizeObserver(this.debouncedResize), this.wrapperResizeObserver.observe(this.wrapper)), this.contentResizeObserver = new ResizeObserver(this.debouncedResize), this.contentResizeObserver.observe(this.content)), this.resize();
     }
     destroy() {
-      var t2, e3;
-      null == (t2 = this.wrapperResizeObserver) || t2.disconnect(), null == (e3 = this.contentResizeObserver) || e3.disconnect();
+      var _a, _b;
+      (_a = this.wrapperResizeObserver) == null ? void 0 : _a.disconnect(), (_b = this.contentResizeObserver) == null ? void 0 : _b.disconnect(), window.removeEventListener("resize", this.debouncedResize, false);
     }
     get limit() {
       return { x: this.scrollWidth - this.width, y: this.scrollHeight - this.height };
     }
   };
-  var o = class {
+  var Emitter = class {
     constructor() {
       this.events = {};
     }
     emit(t2, ...e3) {
-      let i3 = this.events[t2] || [];
-      for (let t3 = 0, s3 = i3.length; t3 < s3; t3++)
-        i3[t3](...e3);
+      let i2 = this.events[t2] || [];
+      for (let t3 = 0, o2 = i2.length; t3 < o2; t3++)
+        i2[t3](...e3);
     }
     on(t2, e3) {
-      var i3;
-      return (null == (i3 = this.events[t2]) ? void 0 : i3.push(e3)) || (this.events[t2] = [e3]), () => {
-        var i4;
-        this.events[t2] = null == (i4 = this.events[t2]) ? void 0 : i4.filter((t3) => e3 !== t3);
+      var _a;
+      return ((_a = this.events[t2]) == null ? void 0 : _a.push(e3)) || (this.events[t2] = [e3]), () => {
+        var _a2;
+        this.events[t2] = (_a2 = this.events[t2]) == null ? void 0 : _a2.filter((t3) => e3 !== t3);
       };
     }
     off(t2, e3) {
-      var i3;
-      this.events[t2] = null == (i3 = this.events[t2]) ? void 0 : i3.filter((t3) => e3 !== t3);
+      var _a;
+      this.events[t2] = (_a = this.events[t2]) == null ? void 0 : _a.filter((t3) => e3 !== t3);
     }
     destroy() {
       this.events = {};
     }
   };
-  var n = class {
-    constructor(t2, { wheelMultiplier: i3 = 1, touchMultiplier: s3 = 2, normalizeWheel: n3 = false }) {
-      this.onTouchStart = (t3) => {
-        const { clientX: e3, clientY: i4 } = t3.targetTouches ? t3.targetTouches[0] : t3;
-        this.touchStart.x = e3, this.touchStart.y = i4, this.lastDelta = { x: 0, y: 0 };
-      }, this.onTouchMove = (t3) => {
-        const { clientX: e3, clientY: i4 } = t3.targetTouches ? t3.targetTouches[0] : t3, s4 = -(e3 - this.touchStart.x) * this.touchMultiplier, o3 = -(i4 - this.touchStart.y) * this.touchMultiplier;
-        this.touchStart.x = e3, this.touchStart.y = i4, this.lastDelta = { x: s4, y: o3 }, this.emitter.emit("scroll", { deltaX: s4, deltaY: o3, event: t3 });
-      }, this.onTouchEnd = (t3) => {
-        this.emitter.emit("scroll", { deltaX: this.lastDelta.x, deltaY: this.lastDelta.y, event: t3 });
-      }, this.onWheel = (t3) => {
-        let { deltaX: i4, deltaY: s4 } = t3;
-        this.normalizeWheel && (i4 = e(-100, i4, 100), s4 = e(-100, s4, 100)), i4 *= this.wheelMultiplier, s4 *= this.wheelMultiplier, this.emitter.emit("scroll", { deltaX: i4, deltaY: s4, event: t3 });
-      }, this.element = t2, this.wheelMultiplier = i3, this.touchMultiplier = s3, this.normalizeWheel = n3, this.touchStart = { x: null, y: null }, this.emitter = new o(), this.element.addEventListener("wheel", this.onWheel, { passive: false }), this.element.addEventListener("touchstart", this.onTouchStart, { passive: false }), this.element.addEventListener("touchmove", this.onTouchMove, { passive: false }), this.element.addEventListener("touchend", this.onTouchEnd, { passive: false });
+  var t = 100 / 6;
+  var VirtualScroll = class {
+    constructor(t2, { wheelMultiplier: e3 = 1, touchMultiplier: i2 = 1 }) {
+      __publicField(this, "onTouchStart", (t2) => {
+        const { clientX: e3, clientY: i2 } = t2.targetTouches ? t2.targetTouches[0] : t2;
+        this.touchStart.x = e3, this.touchStart.y = i2, this.lastDelta = { x: 0, y: 0 }, this.emitter.emit("scroll", { deltaX: 0, deltaY: 0, event: t2 });
+      });
+      __publicField(this, "onTouchMove", (t2) => {
+        const { clientX: e3, clientY: i2 } = t2.targetTouches ? t2.targetTouches[0] : t2, o2 = -(e3 - this.touchStart.x) * this.touchMultiplier, s2 = -(i2 - this.touchStart.y) * this.touchMultiplier;
+        this.touchStart.x = e3, this.touchStart.y = i2, this.lastDelta = { x: o2, y: s2 }, this.emitter.emit("scroll", { deltaX: o2, deltaY: s2, event: t2 });
+      });
+      __publicField(this, "onTouchEnd", (t2) => {
+        this.emitter.emit("scroll", { deltaX: this.lastDelta.x, deltaY: this.lastDelta.y, event: t2 });
+      });
+      __publicField(this, "onWheel", (e3) => {
+        let { deltaX: i2, deltaY: o2, deltaMode: s2 } = e3;
+        i2 *= 1 === s2 ? t : 2 === s2 ? this.windowWidth : 1, o2 *= 1 === s2 ? t : 2 === s2 ? this.windowHeight : 1, i2 *= this.wheelMultiplier, o2 *= this.wheelMultiplier, this.emitter.emit("scroll", { deltaX: i2, deltaY: o2, event: e3 });
+      });
+      __publicField(this, "onWindowResize", () => {
+        this.windowWidth = window.innerWidth, this.windowHeight = window.innerHeight;
+      });
+      this.element = t2, this.wheelMultiplier = e3, this.touchMultiplier = i2, this.touchStart = { x: null, y: null }, this.emitter = new Emitter(), window.addEventListener("resize", this.onWindowResize, false), this.onWindowResize(), this.element.addEventListener("wheel", this.onWheel, { passive: false }), this.element.addEventListener("touchstart", this.onTouchStart, { passive: false }), this.element.addEventListener("touchmove", this.onTouchMove, { passive: false }), this.element.addEventListener("touchend", this.onTouchEnd, { passive: false });
     }
     on(t2, e3) {
       return this.emitter.on(t2, e3);
     }
     destroy() {
-      this.emitter.destroy(), this.element.removeEventListener("wheel", this.onWheel, { passive: false }), this.element.removeEventListener("touchstart", this.onTouchStart, { passive: false }), this.element.removeEventListener("touchmove", this.onTouchMove, { passive: false }), this.element.removeEventListener("touchend", this.onTouchEnd, { passive: false });
+      this.emitter.destroy(), window.removeEventListener("resize", this.onWindowResize, false), this.element.removeEventListener("wheel", this.onWheel, { passive: false }), this.element.removeEventListener("touchstart", this.onTouchStart, { passive: false }), this.element.removeEventListener("touchmove", this.onTouchMove, { passive: false }), this.element.removeEventListener("touchend", this.onTouchEnd, { passive: false });
     }
   };
-  var l = class {
-    constructor({ wrapper: e3 = window, content: l3 = document.documentElement, wheelEventsTarget: r2 = e3, eventsTarget: h2 = r2, smoothWheel: a2 = true, smoothTouch: c2 = false, syncTouch: u = false, syncTouchLerp: p = 0.1, __iosNoInertiaSyncTouchLerp: d = 0.4, touchInertiaMultiplier: m = 35, duration: v, easing: g = (t2) => Math.min(1, 1.001 - Math.pow(2, -10 * t2)), lerp: S = !v && 0.1, infinite: w = false, orientation: f = "vertical", gestureOrientation: y = "vertical", touchMultiplier: T = 1, wheelMultiplier: z = 1, normalizeWheel: _ = false, autoResize: M = true } = {}) {
-      this.onVirtualScroll = ({ deltaX: e4, deltaY: i3, event: s3 }) => {
-        if (s3.ctrlKey)
-          return;
-        const o3 = s3.type.includes("touch"), n3 = s3.type.includes("wheel");
-        if ("both" === this.options.gestureOrientation && 0 === e4 && 0 === i3 || "vertical" === this.options.gestureOrientation && 0 === i3 || "horizontal" === this.options.gestureOrientation && 0 === e4 || o3 && "vertical" === this.options.gestureOrientation && 0 === this.scroll && !this.options.infinite && i3 <= 0)
-          return;
-        let l4 = s3.composedPath();
-        if (l4 = l4.slice(0, l4.indexOf(this.rootElement)), l4.find((t2) => {
-          var e5;
-          return (null == t2.hasAttribute ? void 0 : t2.hasAttribute("data-lenis-prevent")) || o3 && (null == t2.hasAttribute ? void 0 : t2.hasAttribute("data-lenis-prevent-touch")) || n3 && (null == t2.hasAttribute ? void 0 : t2.hasAttribute("data-lenis-prevent-wheel")) || (null == (e5 = t2.classList) ? void 0 : e5.contains("lenis"));
-        }))
-          return;
-        if (this.isStopped || this.isLocked)
-          return void s3.preventDefault();
-        if (this.isSmooth = (this.options.smoothTouch || this.options.syncTouch) && o3 || this.options.smoothWheel && n3, !this.isSmooth)
-          return this.isScrolling = false, void this.animate.stop();
-        s3.preventDefault();
-        let r3 = i3;
-        "both" === this.options.gestureOrientation ? r3 = Math.abs(i3) > Math.abs(e4) ? i3 : e4 : "horizontal" === this.options.gestureOrientation && (r3 = e4);
-        const h3 = o3 && this.options.syncTouch, a3 = o3 && "touchend" === s3.type && Math.abs(r3) > 1;
-        a3 && (r3 = this.velocity * this.options.touchInertiaMultiplier), this.scrollTo(this.targetScroll + r3, t({ programmatic: false }, h3 && { lerp: a3 ? this.syncTouchLerp : this.options.__iosNoInertiaSyncTouchLerp }));
-      }, this.onNativeScroll = () => {
-        if (!this.__preventNextScrollEvent && !this.isScrolling) {
-          const t2 = this.animatedScroll;
-          this.animatedScroll = this.targetScroll = this.actualScroll, this.velocity = 0, this.direction = Math.sign(this.animatedScroll - t2), this.emit();
+  var e = function() {
+    function Lenis(t2) {
+      var e3 = void 0 === t2 ? {} : t2, i2 = e3.wrapper, o2 = void 0 === i2 ? window : i2, s2 = e3.content, n2 = void 0 === s2 ? document.documentElement : s2, r2 = e3.wheelEventsTarget, l2 = void 0 === r2 ? o2 : r2, h2 = e3.eventsTarget, a2 = void 0 === h2 ? l2 : h2, c2 = e3.smoothWheel, p = void 0 === c2 || c2, u = e3.syncTouch, d = void 0 !== u && u, m = e3.syncTouchLerp, v = void 0 === m ? 0.075 : m, g = e3.touchInertiaMultiplier, f = void 0 === g ? 35 : g, S = e3.duration, w = e3.easing, y = void 0 === w ? function(t3) {
+        return Math.min(1, 1.001 - Math.pow(2, -10 * t3));
+      } : w, b = e3.lerp, L = void 0 === b ? !S && 0.1 : b, _ = e3.infinite, z = void 0 !== _ && _, E = e3.orientation, T = void 0 === E ? "vertical" : E, M = e3.gestureOrientation, R = void 0 === M ? "vertical" : M, O = e3.touchMultiplier, W = void 0 === O ? 1 : O, x = e3.wheelMultiplier, H = void 0 === x ? 1 : x, N = e3.autoResize, k = void 0 === N || N, C = e3.__experimental__naiveDimensions, j = void 0 !== C && C, P = this;
+      this.__isSmooth = false, this.__isScrolling = false, this.__isStopped = false, this.__isLocked = false, this.onVirtualScroll = function(t3) {
+        var e4 = t3.deltaX, i3 = t3.deltaY, o3 = t3.event;
+        if (!o3.ctrlKey) {
+          var s3 = o3.type.includes("touch"), n3 = o3.type.includes("wheel");
+          if (P.options.syncTouch && s3 && "touchstart" === o3.type && !P.isStopped && !P.isLocked)
+            P.reset();
+          else {
+            var r3 = 0 === e4 && 0 === i3, l3 = "vertical" === P.options.gestureOrientation && 0 === i3 || "horizontal" === P.options.gestureOrientation && 0 === e4;
+            if (!r3 && !l3) {
+              var h3 = o3.composedPath();
+              if (!(h3 = h3.slice(0, h3.indexOf(P.rootElement))).find(function(t4) {
+                var e5, i4, o4, r4, l4;
+                return (null === (e5 = t4.hasAttribute) || void 0 === e5 ? void 0 : e5.call(t4, "data-lenis-prevent")) || s3 && (null === (i4 = t4.hasAttribute) || void 0 === i4 ? void 0 : i4.call(t4, "data-lenis-prevent-touch")) || n3 && (null === (o4 = t4.hasAttribute) || void 0 === o4 ? void 0 : o4.call(t4, "data-lenis-prevent-wheel")) || (null === (r4 = t4.classList) || void 0 === r4 ? void 0 : r4.contains("lenis")) && !(null === (l4 = t4.classList) || void 0 === l4 ? void 0 : l4.contains("lenis-stopped"));
+              }))
+                if (P.isStopped || P.isLocked)
+                  o3.preventDefault();
+                else {
+                  if (P.isSmooth = P.options.syncTouch && s3 || P.options.smoothWheel && n3, !P.isSmooth)
+                    return P.isScrolling = false, void P.animate.stop();
+                  o3.preventDefault();
+                  var a3 = i3;
+                  "both" === P.options.gestureOrientation ? a3 = Math.abs(i3) > Math.abs(e4) ? i3 : e4 : "horizontal" === P.options.gestureOrientation && (a3 = e4);
+                  var c3 = s3 && P.options.syncTouch, p2 = s3 && "touchend" === o3.type && Math.abs(a3) > 5;
+                  p2 && (a3 = P.velocity * P.options.touchInertiaMultiplier), P.scrollTo(P.targetScroll + a3, __assign({ programmatic: false }, c3 ? { lerp: p2 ? P.options.syncTouchLerp : 1 } : { lerp: P.options.lerp, duration: P.options.duration, easing: P.options.easing }));
+                }
+            }
+          }
         }
-      }, window.lenisVersion = "1.0.29", e3 !== document.documentElement && e3 !== document.body || (e3 = window), this.options = { wrapper: e3, content: l3, wheelEventsTarget: r2, eventsTarget: h2, smoothWheel: a2, smoothTouch: c2, syncTouch: u, syncTouchLerp: p, __iosNoInertiaSyncTouchLerp: d, touchInertiaMultiplier: m, duration: v, easing: g, lerp: S, infinite: w, gestureOrientation: y, orientation: f, touchMultiplier: T, wheelMultiplier: z, normalizeWheel: _, autoResize: M }, this.animate = new i(), this.emitter = new o(), this.dimensions = new s({ wrapper: e3, content: l3, autoResize: M }), this.toggleClass("lenis", true), this.velocity = 0, this.isLocked = false, this.isStopped = false, this.isSmooth = u || a2 || c2, this.isScrolling = false, this.targetScroll = this.animatedScroll = this.actualScroll, this.options.wrapper.addEventListener("scroll", this.onNativeScroll, { passive: false }), this.virtualScroll = new n(h2, { touchMultiplier: T, wheelMultiplier: z, normalizeWheel: _ }), this.virtualScroll.on("scroll", this.onVirtualScroll);
+      }, this.onNativeScroll = function() {
+        if (!P.__preventNextScrollEvent && !P.isScrolling) {
+          var t3 = P.animatedScroll;
+          P.animatedScroll = P.targetScroll = P.actualScroll, P.velocity = 0, P.direction = Math.sign(P.animatedScroll - t3), P.emit();
+        }
+      }, window.lenisVersion = "1.0.45", o2 !== document.documentElement && o2 !== document.body || (o2 = window), this.options = { wrapper: o2, content: n2, wheelEventsTarget: l2, eventsTarget: a2, smoothWheel: p, syncTouch: d, syncTouchLerp: v, touchInertiaMultiplier: f, duration: S, easing: y, lerp: L, infinite: z, gestureOrientation: R, orientation: T, touchMultiplier: W, wheelMultiplier: H, autoResize: k, __experimental__naiveDimensions: j }, this.animate = new Animate(), this.emitter = new Emitter(), this.dimensions = new Dimensions({ wrapper: o2, content: n2, autoResize: k }), this.toggleClassName("lenis", true), this.velocity = 0, this.isLocked = false, this.isStopped = false, this.isSmooth = d || p, this.isScrolling = false, this.targetScroll = this.animatedScroll = this.actualScroll, this.options.wrapper.addEventListener("scroll", this.onNativeScroll, false), this.virtualScroll = new VirtualScroll(a2, { touchMultiplier: W, wheelMultiplier: H }), this.virtualScroll.on("scroll", this.onVirtualScroll);
     }
-    destroy() {
-      this.emitter.destroy(), this.options.wrapper.removeEventListener("scroll", this.onNativeScroll, { passive: false }), this.virtualScroll.destroy(), this.dimensions.destroy(), this.toggleClass("lenis", false), this.toggleClass("lenis-smooth", false), this.toggleClass("lenis-scrolling", false), this.toggleClass("lenis-stopped", false), this.toggleClass("lenis-locked", false);
-    }
-    on(t2, e3) {
+    return Lenis.prototype.destroy = function() {
+      this.emitter.destroy(), this.options.wrapper.removeEventListener("scroll", this.onNativeScroll, false), this.virtualScroll.destroy(), this.dimensions.destroy(), this.toggleClassName("lenis", false), this.toggleClassName("lenis-smooth", false), this.toggleClassName("lenis-scrolling", false), this.toggleClassName("lenis-stopped", false), this.toggleClassName("lenis-locked", false);
+    }, Lenis.prototype.on = function(t2, e3) {
       return this.emitter.on(t2, e3);
-    }
-    off(t2, e3) {
+    }, Lenis.prototype.off = function(t2, e3) {
       return this.emitter.off(t2, e3);
-    }
-    setScroll(t2) {
+    }, Lenis.prototype.setScroll = function(t2) {
       this.isHorizontal ? this.rootElement.scrollLeft = t2 : this.rootElement.scrollTop = t2;
-    }
-    resize() {
+    }, Lenis.prototype.resize = function() {
       this.dimensions.resize();
-    }
-    emit() {
+    }, Lenis.prototype.emit = function() {
       this.emitter.emit("scroll", this);
-    }
-    reset() {
+    }, Lenis.prototype.reset = function() {
       this.isLocked = false, this.isScrolling = false, this.animatedScroll = this.targetScroll = this.actualScroll, this.velocity = 0, this.animate.stop();
-    }
-    start() {
-      this.isStopped = false, this.reset();
-    }
-    stop() {
-      this.isStopped = true, this.animate.stop(), this.reset();
-    }
-    raf(t2) {
-      const e3 = t2 - (this.time || t2);
+    }, Lenis.prototype.start = function() {
+      this.isStopped && (this.isStopped = false, this.reset());
+    }, Lenis.prototype.stop = function() {
+      this.isStopped || (this.isStopped = true, this.animate.stop(), this.reset());
+    }, Lenis.prototype.raf = function(t2) {
+      var e3 = t2 - (this.time || t2);
       this.time = t2, this.animate.advance(1e-3 * e3);
-    }
-    scrollTo(t2, { offset: i3 = 0, immediate: s3 = false, lock: o3 = false, duration: n3 = this.options.duration, easing: l3 = this.options.easing, lerp: r2 = !n3 && this.options.lerp, onComplete: h2 = null, force: a2 = false, programmatic: c2 = true } = {}) {
-      if (!this.isStopped && !this.isLocked || a2) {
+    }, Lenis.prototype.scrollTo = function(t2, e3) {
+      var i2 = this, o2 = void 0 === e3 ? {} : e3, s2 = o2.offset, n2 = void 0 === s2 ? 0 : s2, r2 = o2.immediate, l2 = void 0 !== r2 && r2, h2 = o2.lock, a2 = void 0 !== h2 && h2, c2 = o2.duration, p = void 0 === c2 ? this.options.duration : c2, u = o2.easing, d = void 0 === u ? this.options.easing : u, m = o2.lerp, v = void 0 === m ? !p && this.options.lerp : m, g = o2.onComplete, f = o2.force, S = void 0 !== f && f, w = o2.programmatic, y = void 0 === w || w;
+      if (!this.isStopped && !this.isLocked || S) {
         if (["top", "left", "start"].includes(t2))
           t2 = 0;
         else if (["bottom", "right", "end"].includes(t2))
           t2 = this.limit;
         else {
-          var u;
-          let e3;
-          if ("string" == typeof t2 ? e3 = document.querySelector(t2) : null != (u = t2) && u.nodeType && (e3 = t2), e3) {
+          var b = void 0;
+          if ("string" == typeof t2 ? b = document.querySelector(t2) : (null == t2 ? void 0 : t2.nodeType) && (b = t2), b) {
             if (this.options.wrapper !== window) {
-              const t3 = this.options.wrapper.getBoundingClientRect();
-              i3 -= this.isHorizontal ? t3.left : t3.top;
+              var L = this.options.wrapper.getBoundingClientRect();
+              n2 -= this.isHorizontal ? L.left : L.top;
             }
-            const s4 = e3.getBoundingClientRect();
-            t2 = (this.isHorizontal ? s4.left : s4.top) + this.animatedScroll;
+            var _ = b.getBoundingClientRect();
+            t2 = (this.isHorizontal ? _.left : _.top) + this.animatedScroll;
           }
         }
         if ("number" == typeof t2) {
-          if (t2 += i3, t2 = Math.round(t2), this.options.infinite ? c2 && (this.targetScroll = this.animatedScroll = this.scroll) : t2 = e(0, t2, this.limit), s3)
-            return this.animatedScroll = this.targetScroll = t2, this.setScroll(this.scroll), this.reset(), void (null == h2 || h2(this));
-          if (!c2) {
+          if (t2 += n2, t2 = Math.round(t2), this.options.infinite ? y && (this.targetScroll = this.animatedScroll = this.scroll) : t2 = clamp3(0, t2, this.limit), l2)
+            return this.animatedScroll = this.targetScroll = t2, this.setScroll(this.scroll), this.reset(), void (null == g || g(this));
+          if (!y) {
             if (t2 === this.targetScroll)
               return;
             this.targetScroll = t2;
           }
-          this.animate.fromTo(this.animatedScroll, t2, { duration: n3, easing: l3, lerp: r2, onStart: () => {
-            o3 && (this.isLocked = true), this.isScrolling = true;
-          }, onUpdate: (t3, e3) => {
-            this.isScrolling = true, this.velocity = t3 - this.animatedScroll, this.direction = Math.sign(this.velocity), this.animatedScroll = t3, this.setScroll(this.scroll), c2 && (this.targetScroll = t3), e3 || this.emit(), e3 && (this.reset(), this.emit(), null == h2 || h2(this), this.__preventNextScrollEvent = true, requestAnimationFrame(() => {
-              delete this.__preventNextScrollEvent;
+          this.animate.fromTo(this.animatedScroll, t2, { duration: p, easing: d, lerp: v, onStart: function() {
+            a2 && (i2.isLocked = true), i2.isScrolling = true;
+          }, onUpdate: function(t3, e4) {
+            i2.isScrolling = true, i2.velocity = t3 - i2.animatedScroll, i2.direction = Math.sign(i2.velocity), i2.animatedScroll = t3, i2.setScroll(i2.scroll), y && (i2.targetScroll = t3), e4 || i2.emit(), e4 && (i2.reset(), i2.emit(), null == g || g(i2), i2.__preventNextScrollEvent = true, requestAnimationFrame(function() {
+              delete i2.__preventNextScrollEvent;
             }));
           } });
         }
       }
-    }
-    get rootElement() {
+    }, Object.defineProperty(Lenis.prototype, "rootElement", { get: function() {
       return this.options.wrapper === window ? document.documentElement : this.options.wrapper;
-    }
-    get limit() {
-      return this.dimensions.limit[this.isHorizontal ? "x" : "y"];
-    }
-    get isHorizontal() {
+    }, enumerable: false, configurable: true }), Object.defineProperty(Lenis.prototype, "limit", { get: function() {
+      return this.options.__experimental__naiveDimensions ? this.isHorizontal ? this.rootElement.scrollWidth - this.rootElement.clientWidth : this.rootElement.scrollHeight - this.rootElement.clientHeight : this.dimensions.limit[this.isHorizontal ? "x" : "y"];
+    }, enumerable: false, configurable: true }), Object.defineProperty(Lenis.prototype, "isHorizontal", { get: function() {
       return "horizontal" === this.options.orientation;
-    }
-    get actualScroll() {
+    }, enumerable: false, configurable: true }), Object.defineProperty(Lenis.prototype, "actualScroll", { get: function() {
       return this.isHorizontal ? this.rootElement.scrollLeft : this.rootElement.scrollTop;
-    }
-    get scroll() {
-      return this.options.infinite ? (this.animatedScroll % (t2 = this.limit) + t2) % t2 : this.animatedScroll;
-      var t2;
-    }
-    get progress() {
+    }, enumerable: false, configurable: true }), Object.defineProperty(Lenis.prototype, "scroll", { get: function() {
+      return this.options.infinite ? function modulo(t2, e3) {
+        return (t2 % e3 + e3) % e3;
+      }(this.animatedScroll, this.limit) : this.animatedScroll;
+    }, enumerable: false, configurable: true }), Object.defineProperty(Lenis.prototype, "progress", { get: function() {
       return 0 === this.limit ? 1 : this.scroll / this.limit;
-    }
-    get isSmooth() {
+    }, enumerable: false, configurable: true }), Object.defineProperty(Lenis.prototype, "isSmooth", { get: function() {
       return this.__isSmooth;
-    }
-    set isSmooth(t2) {
-      this.__isSmooth !== t2 && (this.__isSmooth = t2, this.toggleClass("lenis-smooth", t2));
-    }
-    get isScrolling() {
+    }, set: function(t2) {
+      this.__isSmooth !== t2 && (this.__isSmooth = t2, this.toggleClassName("lenis-smooth", t2));
+    }, enumerable: false, configurable: true }), Object.defineProperty(Lenis.prototype, "isScrolling", { get: function() {
       return this.__isScrolling;
-    }
-    set isScrolling(t2) {
-      this.__isScrolling !== t2 && (this.__isScrolling = t2, this.toggleClass("lenis-scrolling", t2));
-    }
-    get isStopped() {
+    }, set: function(t2) {
+      this.__isScrolling !== t2 && (this.__isScrolling = t2, this.toggleClassName("lenis-scrolling", t2));
+    }, enumerable: false, configurable: true }), Object.defineProperty(Lenis.prototype, "isStopped", { get: function() {
       return this.__isStopped;
-    }
-    set isStopped(t2) {
-      this.__isStopped !== t2 && (this.__isStopped = t2, this.toggleClass("lenis-stopped", t2));
-    }
-    get isLocked() {
+    }, set: function(t2) {
+      this.__isStopped !== t2 && (this.__isStopped = t2, this.toggleClassName("lenis-stopped", t2));
+    }, enumerable: false, configurable: true }), Object.defineProperty(Lenis.prototype, "isLocked", { get: function() {
       return this.__isLocked;
-    }
-    set isLocked(t2) {
-      this.__isLocked !== t2 && (this.__isLocked = t2, this.toggleClass("lenis-locked", t2));
-    }
-    get className() {
-      let t2 = "lenis";
+    }, set: function(t2) {
+      this.__isLocked !== t2 && (this.__isLocked = t2, this.toggleClassName("lenis-locked", t2));
+    }, enumerable: false, configurable: true }), Object.defineProperty(Lenis.prototype, "className", { get: function() {
+      var t2 = "lenis";
       return this.isStopped && (t2 += " lenis-stopped"), this.isLocked && (t2 += " lenis-locked"), this.isScrolling && (t2 += " lenis-scrolling"), this.isSmooth && (t2 += " lenis-smooth"), t2;
-    }
-    toggleClass(t2, e3) {
+    }, enumerable: false, configurable: true }), Lenis.prototype.toggleClassName = function(t2, e3) {
       this.rootElement.classList.toggle(t2, e3), this.emitter.emit("className change", this);
-    }
-  };
+    }, Lenis;
+  }();
 
   // ../../dist/locomotive-scroll.modern.mjs
-  function s2() {
-    return s2 = Object.assign ? Object.assign.bind() : function(t2) {
-      for (var s3 = 1; s3 < arguments.length; s3++) {
-        var e3 = arguments[s3];
-        for (var i3 in e3)
-          Object.prototype.hasOwnProperty.call(e3, i3) && (t2[i3] = e3[i3]);
+  function s() {
+    return s = Object.assign ? Object.assign.bind() : function(t2) {
+      for (var s2 = 1; s2 < arguments.length; s2++) {
+        var e3 = arguments[s2];
+        for (var i2 in e3)
+          Object.prototype.hasOwnProperty.call(e3, i2) && (t2[i2] = e3[i2]);
       }
       return t2;
-    }, s2.apply(this, arguments);
+    }, s.apply(this, arguments);
   }
   var e2 = class {
-    constructor({ scrollElements: t2, rootMargin: s3 = "-1px -1px -1px -1px", IORaf: e3 }) {
-      this.scrollElements = void 0, this.rootMargin = void 0, this.IORaf = void 0, this.observer = void 0, this.scrollElements = t2, this.rootMargin = s3, this.IORaf = e3, this._init();
+    constructor({ scrollElements: t2, rootMargin: s2 = "-1px -1px -1px -1px", IORaf: e3 }) {
+      this.scrollElements = void 0, this.rootMargin = void 0, this.IORaf = void 0, this.observer = void 0, this.scrollElements = t2, this.rootMargin = s2, this.IORaf = e3, this._init();
     }
     _init() {
       this.observer = new IntersectionObserver((t2) => {
         t2.forEach((t3) => {
-          const s3 = this.scrollElements.find((s4) => s4.$el === t3.target);
-          t3.isIntersecting ? (s3 && (s3.isAlreadyIntersected = true), this._setInview(t3)) : s3 && s3.isAlreadyIntersected && this._setOutOfView(t3);
+          const s2 = this.scrollElements.find((s3) => s3.$el === t3.target);
+          t3.isIntersecting ? (s2 && (s2.isAlreadyIntersected = true), this._setInview(t3)) : s2 && s2.isAlreadyIntersected && this._setOutOfView(t3);
         });
       }, { rootMargin: this.rootMargin });
       for (const t2 of this.scrollElements)
@@ -5796,24 +5793,24 @@
       t2 && this.observer.unobserve(t2);
     }
     _setInview(t2) {
-      const s3 = this.scrollElements.find((s4) => s4.$el === t2.target);
-      this.IORaf && (null == s3 || s3.setInteractivityOn()), !this.IORaf && (null == s3 || s3.setInview());
+      const s2 = this.scrollElements.find((s3) => s3.$el === t2.target);
+      this.IORaf && (null == s2 || s2.setInteractivityOn()), !this.IORaf && (null == s2 || s2.setInview());
     }
     _setOutOfView(t2) {
-      const s3 = this.scrollElements.find((s4) => s4.$el === t2.target);
-      this.IORaf && (null == s3 || s3.setInteractivityOff()), !this.IORaf && (null == s3 || s3.setOutOfView()), null != s3 && s3.attributes.scrollRepeat || this.IORaf || this.unobserve(t2.target);
+      const s2 = this.scrollElements.find((s3) => s3.$el === t2.target);
+      this.IORaf && (null == s2 || s2.setInteractivityOff()), !this.IORaf && (null == s2 || s2.setOutOfView()), null != s2 && s2.attributes.scrollRepeat || this.IORaf || this.unobserve(t2.target);
     }
   };
-  function i2(t2, s3, e3, i3, r2) {
-    return e3 + ((r2 - t2) / (s3 - t2) * (i3 - e3) || 0);
+  function i(t2, s2, e3, i2, r2) {
+    return e3 + ((r2 - t2) / (s2 - t2) * (i2 - e3) || 0);
   }
-  function r(t2, s3) {
-    return t2.reduce((t3, e3) => Math.abs(e3 - s3) < Math.abs(t3 - s3) ? e3 : t3);
+  function r(t2, s2) {
+    return t2.reduce((t3, e3) => Math.abs(e3 - s2) < Math.abs(t3 - s2) ? e3 : t3);
   }
-  var l2 = class {
-    constructor({ $el: t2, id: s3, modularInstance: e3, subscribeElementUpdateFn: i3, unsubscribeElementUpdateFn: r2, needRaf: l3, scrollOrientation: n3 }) {
-      var o3, a2, c2, h2, d;
-      this.$el = void 0, this.id = void 0, this.needRaf = void 0, this.attributes = void 0, this.scrollOrientation = void 0, this.isAlreadyIntersected = void 0, this.intersection = void 0, this.metrics = void 0, this.currentScroll = void 0, this.translateValue = void 0, this.progress = void 0, this.lastProgress = void 0, this.modularInstance = void 0, this.progressModularModules = void 0, this.isInview = void 0, this.isInteractive = void 0, this.isInFold = void 0, this.isFirstResize = void 0, this.subscribeElementUpdateFn = void 0, this.unsubscribeElementUpdateFn = void 0, this.$el = t2, this.id = s3, this.needRaf = l3, this.scrollOrientation = n3, this.modularInstance = e3, this.subscribeElementUpdateFn = i3, this.unsubscribeElementUpdateFn = r2, this.attributes = { scrollClass: null != (o3 = this.$el.dataset.scrollClass) ? o3 : "is-inview", scrollOffset: null != (a2 = this.$el.dataset.scrollOffset) ? a2 : "0,0", scrollPosition: null != (c2 = this.$el.dataset.scrollPosition) ? c2 : "start,end", scrollModuleProgress: null != this.$el.dataset.scrollModuleProgress, scrollCssProgress: null != this.$el.dataset.scrollCssProgress, scrollEventProgress: null != (h2 = this.$el.dataset.scrollEventProgress) ? h2 : null, scrollSpeed: null != this.$el.dataset.scrollSpeed ? parseFloat(this.$el.dataset.scrollSpeed) : null, scrollRepeat: null != this.$el.dataset.scrollRepeat, scrollCall: null != (d = this.$el.dataset.scrollCall) ? d : null, scrollCallSelf: null != this.$el.dataset.scrollCallSelf, scrollIgnoreFold: null != this.$el.dataset.scrollIgnoreFold, scrollEnableTouchSpeed: null != this.$el.dataset.scrollEnableTouchSpeed }, this.intersection = { start: 0, end: 0 }, this.metrics = { offsetStart: 0, offsetEnd: 0, bcr: {} }, this.currentScroll = "vertical" === this.scrollOrientation ? window.scrollY : window.scrollX, this.translateValue = 0, this.progress = 0, this.lastProgress = null, this.progressModularModules = [], this.isInview = false, this.isInteractive = false, this.isAlreadyIntersected = false, this.isInFold = false, this.isFirstResize = true, this._init();
+  var l = class {
+    constructor({ $el: t2, id: s2, modularInstance: e3, subscribeElementUpdateFn: i2, unsubscribeElementUpdateFn: r2, needRaf: l2, scrollOrientation: n2 }) {
+      var o2, a2, c2, h2, d;
+      this.$el = void 0, this.id = void 0, this.needRaf = void 0, this.attributes = void 0, this.scrollOrientation = void 0, this.isAlreadyIntersected = void 0, this.intersection = void 0, this.metrics = void 0, this.currentScroll = void 0, this.translateValue = void 0, this.progress = void 0, this.lastProgress = void 0, this.modularInstance = void 0, this.progressModularModules = void 0, this.isInview = void 0, this.isInteractive = void 0, this.isInFold = void 0, this.isFirstResize = void 0, this.subscribeElementUpdateFn = void 0, this.unsubscribeElementUpdateFn = void 0, this.$el = t2, this.id = s2, this.needRaf = l2, this.scrollOrientation = n2, this.modularInstance = e3, this.subscribeElementUpdateFn = i2, this.unsubscribeElementUpdateFn = r2, this.attributes = { scrollClass: null != (o2 = this.$el.dataset.scrollClass) ? o2 : "is-inview", scrollOffset: null != (a2 = this.$el.dataset.scrollOffset) ? a2 : "0,0", scrollPosition: null != (c2 = this.$el.dataset.scrollPosition) ? c2 : "start,end", scrollModuleProgress: null != this.$el.dataset.scrollModuleProgress, scrollCssProgress: null != this.$el.dataset.scrollCssProgress, scrollEventProgress: null != (h2 = this.$el.dataset.scrollEventProgress) ? h2 : null, scrollSpeed: null != this.$el.dataset.scrollSpeed ? parseFloat(this.$el.dataset.scrollSpeed) : null, scrollRepeat: null != this.$el.dataset.scrollRepeat, scrollCall: null != (d = this.$el.dataset.scrollCall) ? d : null, scrollCallSelf: null != this.$el.dataset.scrollCallSelf, scrollIgnoreFold: null != this.$el.dataset.scrollIgnoreFold, scrollEnableTouchSpeed: null != this.$el.dataset.scrollEnableTouchSpeed }, this.intersection = { start: 0, end: 0 }, this.metrics = { offsetStart: 0, offsetEnd: 0, bcr: {} }, this.currentScroll = "vertical" === this.scrollOrientation ? window.scrollY : window.scrollX, this.translateValue = 0, this.progress = 0, this.lastProgress = null, this.progressModularModules = [], this.isInview = false, this.isInteractive = false, this.isAlreadyIntersected = false, this.isInFold = false, this.isFirstResize = true, this._init();
     }
     _init() {
       this.needRaf && (this.modularInstance && this.attributes.scrollModuleProgress && this._getProgressModularModules(), this._resize());
@@ -5821,15 +5818,15 @@
     onResize({ currentScroll: t2 }) {
       this.currentScroll = t2, this._resize();
     }
-    onRender({ currentScroll: t2, smooth: s3 }) {
+    onRender({ currentScroll: t2, smooth: s2 }) {
       const e3 = "vertical" === this.scrollOrientation ? window.innerHeight : window.innerWidth;
       if (this.currentScroll = t2, this._computeProgress(), this.attributes.scrollSpeed && !isNaN(this.attributes.scrollSpeed))
-        if (this.attributes.scrollEnableTouchSpeed || s3) {
+        if (this.attributes.scrollEnableTouchSpeed || s2) {
           if (this.isInFold) {
             const t3 = Math.max(0, this.progress);
             this.translateValue = t3 * e3 * this.attributes.scrollSpeed * -1;
           } else {
-            const t3 = i2(0, 1, -1, 1, this.progress);
+            const t3 = i(0, 1, -1, 1, this.progress);
             this.translateValue = t3 * e3 * this.attributes.scrollSpeed * -1;
           }
           this.$el.style.transform = "vertical" === this.scrollOrientation ? `translate3d(0, ${this.translateValue}px, 0)` : `translate3d(${this.translateValue}px, 0, 0)`;
@@ -5860,82 +5857,82 @@
       this.metrics.bcr = this.$el.getBoundingClientRect(), this._computeMetrics(), this._computeIntersection(), this.isFirstResize && (this.isFirstResize = false, this.isInFold && this.setInview());
     }
     _computeMetrics() {
-      const { top: t2, left: s3, height: e3, width: i3 } = this.metrics.bcr, r2 = "vertical" === this.scrollOrientation ? window.innerHeight : window.innerWidth, l3 = "vertical" === this.scrollOrientation ? e3 : i3;
-      this.metrics.offsetStart = this.currentScroll + ("vertical" === this.scrollOrientation ? t2 : s3) - this.translateValue, this.metrics.offsetEnd = this.metrics.offsetStart + l3, this.isInFold = this.metrics.offsetStart < r2 && !this.attributes.scrollIgnoreFold;
+      const { top: t2, left: s2, height: e3, width: i2 } = this.metrics.bcr, r2 = "vertical" === this.scrollOrientation ? window.innerHeight : window.innerWidth, l2 = "vertical" === this.scrollOrientation ? e3 : i2;
+      this.metrics.offsetStart = this.currentScroll + ("vertical" === this.scrollOrientation ? t2 : s2) - this.translateValue, this.metrics.offsetEnd = this.metrics.offsetStart + l2, this.isInFold = this.metrics.offsetStart < r2 && !this.attributes.scrollIgnoreFold;
     }
     _computeIntersection() {
-      const t2 = "vertical" === this.scrollOrientation ? window.innerHeight : window.innerWidth, s3 = "vertical" === this.scrollOrientation ? this.metrics.bcr.height : this.metrics.bcr.width, e3 = this.attributes.scrollOffset.split(","), i3 = null != e3[0] ? e3[0].trim() : "0", r2 = null != e3[1] ? e3[1].trim() : "0", l3 = this.attributes.scrollPosition.split(",");
-      let n3 = null != l3[0] ? l3[0].trim() : "start";
-      const o3 = null != l3[1] ? l3[1].trim() : "end", a2 = i3.includes("%") ? t2 * parseInt(i3.replace("%", "").trim()) * 0.01 : parseInt(i3), c2 = r2.includes("%") ? t2 * parseInt(r2.replace("%", "").trim()) * 0.01 : parseInt(r2);
-      switch (this.isInFold && (n3 = "fold"), n3) {
+      const t2 = "vertical" === this.scrollOrientation ? window.innerHeight : window.innerWidth, s2 = "vertical" === this.scrollOrientation ? this.metrics.bcr.height : this.metrics.bcr.width, e3 = this.attributes.scrollOffset.split(","), i2 = null != e3[0] ? e3[0].trim() : "0", r2 = null != e3[1] ? e3[1].trim() : "0", l2 = this.attributes.scrollPosition.split(",");
+      let n2 = null != l2[0] ? l2[0].trim() : "start";
+      const o2 = null != l2[1] ? l2[1].trim() : "end", a2 = i2.includes("%") ? t2 * parseInt(i2.replace("%", "").trim()) * 0.01 : parseInt(i2), c2 = r2.includes("%") ? t2 * parseInt(r2.replace("%", "").trim()) * 0.01 : parseInt(r2);
+      switch (this.isInFold && (n2 = "fold"), n2) {
         case "start":
         default:
           this.intersection.start = this.metrics.offsetStart - t2 + a2;
           break;
         case "middle":
-          this.intersection.start = this.metrics.offsetStart - t2 + a2 + 0.5 * s3;
+          this.intersection.start = this.metrics.offsetStart - t2 + a2 + 0.5 * s2;
           break;
         case "end":
-          this.intersection.start = this.metrics.offsetStart - t2 + a2 + s3;
+          this.intersection.start = this.metrics.offsetStart - t2 + a2 + s2;
           break;
         case "fold":
           this.intersection.start = 0;
       }
-      switch (o3) {
+      switch (o2) {
         case "start":
           this.intersection.end = this.metrics.offsetStart - c2;
           break;
         case "middle":
-          this.intersection.end = this.metrics.offsetStart - c2 + 0.5 * s3;
+          this.intersection.end = this.metrics.offsetStart - c2 + 0.5 * s2;
           break;
         default:
-          this.intersection.end = this.metrics.offsetStart - c2 + s3;
+          this.intersection.end = this.metrics.offsetStart - c2 + s2;
       }
       if (this.intersection.end <= this.intersection.start)
-        switch (o3) {
+        switch (o2) {
           case "start":
           default:
             this.intersection.end = this.intersection.start + 1;
             break;
           case "middle":
-            this.intersection.end = this.intersection.start + 0.5 * s3;
+            this.intersection.end = this.intersection.start + 0.5 * s2;
             break;
           case "end":
-            this.intersection.end = this.intersection.start + s3;
+            this.intersection.end = this.intersection.start + s2;
         }
     }
     _computeProgress(t2) {
-      const s3 = null != t2 ? t2 : (e3 = i2(this.intersection.start, this.intersection.end, 0, 1, this.currentScroll)) < 0 ? 0 : e3 > 1 ? 1 : e3;
+      const s2 = null != t2 ? t2 : (e3 = i(this.intersection.start, this.intersection.end, 0, 1, this.currentScroll)) < 0 ? 0 : e3 > 1 ? 1 : e3;
       var e3;
-      if (this.progress = s3, s3 != this.lastProgress) {
-        if (this.lastProgress = s3, this.attributes.scrollCssProgress && this._setCssProgress(s3), this.attributes.scrollEventProgress && this._setCustomEventProgress(s3), this.attributes.scrollModuleProgress)
+      if (this.progress = s2, s2 != this.lastProgress) {
+        if (this.lastProgress = s2, this.attributes.scrollCssProgress && this._setCssProgress(s2), this.attributes.scrollEventProgress && this._setCustomEventProgress(s2), this.attributes.scrollModuleProgress)
           for (const t3 of this.progressModularModules)
-            this.modularInstance && this.modularInstance.call("onScrollProgress", s3, t3.moduleName, t3.moduleId);
-        s3 > 0 && s3 < 1 && this.setInview(), 0 === s3 && this.setOutOfView(), 1 === s3 && this.setOutOfView();
+            this.modularInstance && this.modularInstance.call("onScrollProgress", s2, t3.moduleName, t3.moduleId);
+        s2 > 0 && s2 < 1 && this.setInview(), 0 === s2 && this.setOutOfView(), 1 === s2 && this.setOutOfView();
       }
     }
     _setCssProgress(t2 = 0) {
       this.$el.style.setProperty("--progress", t2.toString());
     }
     _setCustomEventProgress(t2 = 0) {
-      const s3 = this.attributes.scrollEventProgress;
-      if (!s3)
+      const s2 = this.attributes.scrollEventProgress;
+      if (!s2)
         return;
-      const e3 = new CustomEvent(s3, { detail: { target: this.$el, progress: t2 } });
+      const e3 = new CustomEvent(s2, { detail: { target: this.$el, progress: t2 } });
       window.dispatchEvent(e3);
     }
     _getProgressModularModules() {
       if (!this.modularInstance)
         return;
-      const t2 = Object.keys(this.$el.dataset).filter((t3) => t3.includes("module")), s3 = Object.entries(this.modularInstance.modules);
+      const t2 = Object.keys(this.$el.dataset).filter((t3) => t3.includes("module")), s2 = Object.entries(this.modularInstance.modules);
       if (t2.length)
         for (const e3 of t2) {
           const t3 = this.$el.dataset[e3];
           if (!t3)
             return;
-          for (const e4 of s3) {
-            const [s4, i3] = e4;
-            t3 in i3 && this.progressModularModules.push({ moduleName: s4, moduleId: t3 });
+          for (const e4 of s2) {
+            const [s3, i2] = e4;
+            t3 in i2 && this.progressModularModules.push({ moduleName: s3, moduleId: t3 });
           }
         }
     }
@@ -5943,69 +5940,69 @@
       const t2 = r([this.intersection.start, this.intersection.end], this.currentScroll);
       return this.intersection.start === t2 ? "start" : "end";
     }
-    _dispatchCall(t2, s3) {
-      var e3, i3;
-      const r2 = null == (e3 = this.attributes.scrollCall) ? void 0 : e3.split(","), l3 = null == (i3 = this.attributes) ? void 0 : i3.scrollCallSelf;
+    _dispatchCall(t2, s2) {
+      var e3, i2;
+      const r2 = null == (e3 = this.attributes.scrollCall) ? void 0 : e3.split(","), l2 = null == (i2 = this.attributes) ? void 0 : i2.scrollCallSelf;
       if (r2 && r2.length > 1) {
-        var n3;
-        const [e4, i4, o3] = r2;
+        var n2;
+        const [e4, i3, o2] = r2;
         let a2;
-        a2 = l3 ? this.$el.dataset[`module${i4.trim()}`] : o3, this.modularInstance && this.modularInstance.call(e4.trim(), { target: this.$el, way: t2, from: s3 }, i4.trim(), null == (n3 = a2) ? void 0 : n3.trim());
+        a2 = l2 ? this.$el.dataset[`module${i3.trim()}`] : o2, this.modularInstance && this.modularInstance.call(e4.trim(), { target: this.$el, way: t2, from: s2 }, i3.trim(), null == (n2 = a2) ? void 0 : n2.trim());
       } else if (r2) {
-        const [e4] = r2, i4 = new CustomEvent(e4, { detail: { target: this.$el, way: t2, from: s3 } });
-        window.dispatchEvent(i4);
+        const [e4] = r2, i3 = new CustomEvent(e4, { detail: { target: this.$el, way: t2, from: s2 } });
+        window.dispatchEvent(i3);
       }
     }
   };
-  var n2 = ["scrollOffset", "scrollPosition", "scrollModuleProgress", "scrollCssProgress", "scrollEventProgress", "scrollSpeed"];
-  var o2 = class {
-    constructor({ $el: t2, modularInstance: s3, triggerRootMargin: e3, rafRootMargin: i3, scrollOrientation: r2 }) {
-      this.$scrollContainer = void 0, this.modularInstance = void 0, this.triggerRootMargin = void 0, this.rafRootMargin = void 0, this.scrollElements = void 0, this.triggeredScrollElements = void 0, this.RAFScrollElements = void 0, this.scrollElementsToUpdate = void 0, this.IOTriggerInstance = void 0, this.IORafInstance = void 0, this.scrollOrientation = void 0, t2 ? (this.$scrollContainer = t2, this.modularInstance = s3, this.scrollOrientation = r2, this.triggerRootMargin = null != e3 ? e3 : "-1px -1px -1px -1px", this.rafRootMargin = null != i3 ? i3 : "100% 100% 100% 100%", this.scrollElements = [], this.triggeredScrollElements = [], this.RAFScrollElements = [], this.scrollElementsToUpdate = [], this._init()) : console.error("Please provide a DOM Element as scrollContainer");
+  var n = ["scrollOffset", "scrollPosition", "scrollModuleProgress", "scrollCssProgress", "scrollEventProgress", "scrollSpeed"];
+  var o = class {
+    constructor({ $el: t2, modularInstance: s2, triggerRootMargin: e3, rafRootMargin: i2, scrollOrientation: r2 }) {
+      this.$scrollContainer = void 0, this.modularInstance = void 0, this.triggerRootMargin = void 0, this.rafRootMargin = void 0, this.scrollElements = void 0, this.triggeredScrollElements = void 0, this.RAFScrollElements = void 0, this.scrollElementsToUpdate = void 0, this.IOTriggerInstance = void 0, this.IORafInstance = void 0, this.scrollOrientation = void 0, t2 ? (this.$scrollContainer = t2, this.modularInstance = s2, this.scrollOrientation = r2, this.triggerRootMargin = null != e3 ? e3 : "-1px -1px -1px -1px", this.rafRootMargin = null != i2 ? i2 : "100% 100% 100% 100%", this.scrollElements = [], this.triggeredScrollElements = [], this.RAFScrollElements = [], this.scrollElementsToUpdate = [], this._init()) : console.error("Please provide a DOM Element as scrollContainer");
     }
     _init() {
-      const t2 = this.$scrollContainer.querySelectorAll("[data-scroll]"), s3 = Array.from(t2);
-      this._subscribeScrollElements(s3), this.IOTriggerInstance = new e2({ scrollElements: [...this.triggeredScrollElements], rootMargin: this.triggerRootMargin, IORaf: false }), this.IORafInstance = new e2({ scrollElements: [...this.RAFScrollElements], rootMargin: this.rafRootMargin, IORaf: true });
+      const t2 = this.$scrollContainer.querySelectorAll("[data-scroll]"), s2 = Array.from(t2);
+      this._subscribeScrollElements(s2), this.IOTriggerInstance = new e2({ scrollElements: [...this.triggeredScrollElements], rootMargin: this.triggerRootMargin, IORaf: false }), this.IORafInstance = new e2({ scrollElements: [...this.RAFScrollElements], rootMargin: this.rafRootMargin, IORaf: true });
     }
     destroy() {
       this.IOTriggerInstance.destroy(), this.IORafInstance.destroy(), this._unsubscribeAllScrollElements();
     }
     onResize({ currentScroll: t2 }) {
-      for (const s3 of this.RAFScrollElements)
-        s3.onResize({ currentScroll: t2 });
+      for (const s2 of this.RAFScrollElements)
+        s2.onResize({ currentScroll: t2 });
     }
-    onRender({ currentScroll: t2, smooth: s3 }) {
+    onRender({ currentScroll: t2, smooth: s2 }) {
       for (const e3 of this.scrollElementsToUpdate)
-        e3.onRender({ currentScroll: t2, smooth: s3 });
+        e3.onRender({ currentScroll: t2, smooth: s2 });
     }
     removeScrollElements(t2) {
-      const s3 = t2.querySelectorAll("[data-scroll]");
-      if (s3.length) {
+      const s2 = t2.querySelectorAll("[data-scroll]");
+      if (s2.length) {
         for (let t3 = 0; t3 < this.triggeredScrollElements.length; t3++) {
           const e3 = this.triggeredScrollElements[t3];
-          Array.from(s3).indexOf(e3.$el) > -1 && (this.IOTriggerInstance.unobserve(e3.$el), this.triggeredScrollElements.splice(t3, 1));
+          Array.from(s2).indexOf(e3.$el) > -1 && (this.IOTriggerInstance.unobserve(e3.$el), this.triggeredScrollElements.splice(t3, 1));
         }
         for (let t3 = 0; t3 < this.RAFScrollElements.length; t3++) {
           const e3 = this.RAFScrollElements[t3];
-          Array.from(s3).indexOf(e3.$el) > -1 && (this.IORafInstance.unobserve(e3.$el), this.RAFScrollElements.splice(t3, 1));
+          Array.from(s2).indexOf(e3.$el) > -1 && (this.IORafInstance.unobserve(e3.$el), this.RAFScrollElements.splice(t3, 1));
         }
-        s3.forEach((t3) => {
-          const s4 = this.scrollElementsToUpdate.find((s5) => s5.$el === t3), e3 = this.scrollElements.find((s5) => s5.$el === t3);
-          s4 && this._unsubscribeElementUpdate(s4), e3 && (this.scrollElements = this.scrollElements.filter((t4) => t4.id != e3.id));
+        s2.forEach((t3) => {
+          const s3 = this.scrollElementsToUpdate.find((s4) => s4.$el === t3), e3 = this.scrollElements.find((s4) => s4.$el === t3);
+          s3 && this._unsubscribeElementUpdate(s3), e3 && (this.scrollElements = this.scrollElements.filter((t4) => t4.id != e3.id));
         });
       }
     }
     addScrollElements(t2) {
-      const s3 = t2.querySelectorAll("[data-scroll]"), e3 = [];
+      const s2 = t2.querySelectorAll("[data-scroll]"), e3 = [];
       this.scrollElements.forEach((t3) => {
         e3.push(t3.id);
       });
-      const i3 = Math.max(...e3) + 1, r2 = Array.from(s3);
-      this._subscribeScrollElements(r2, i3, true);
+      const i2 = Math.max(...e3) + 1, r2 = Array.from(s2);
+      this._subscribeScrollElements(r2, i2, true);
     }
-    _subscribeScrollElements(t2, s3 = 0, e3 = false) {
-      for (let i3 = 0; i3 < t2.length; i3++) {
-        const r2 = t2[i3], n3 = this._checkRafNeeded(r2), o3 = new l2({ $el: r2, id: s3 + i3, scrollOrientation: this.scrollOrientation, modularInstance: this.modularInstance, subscribeElementUpdateFn: this._subscribeElementUpdate.bind(this), unsubscribeElementUpdateFn: this._unsubscribeElementUpdate.bind(this), needRaf: n3 });
-        this.scrollElements.push(o3), n3 ? (this.RAFScrollElements.push(o3), e3 && (this.IORafInstance.scrollElements.push(o3), this.IORafInstance.observe(o3.$el))) : (this.triggeredScrollElements.push(o3), e3 && (this.IOTriggerInstance.scrollElements.push(o3), this.IOTriggerInstance.observe(o3.$el)));
+    _subscribeScrollElements(t2, s2 = 0, e3 = false) {
+      for (let i2 = 0; i2 < t2.length; i2++) {
+        const r2 = t2[i2], n2 = this._checkRafNeeded(r2), o2 = new l({ $el: r2, id: s2 + i2, scrollOrientation: this.scrollOrientation, modularInstance: this.modularInstance, subscribeElementUpdateFn: this._subscribeElementUpdate.bind(this), unsubscribeElementUpdateFn: this._unsubscribeElementUpdate.bind(this), needRaf: n2 });
+        this.scrollElements.push(o2), n2 ? (this.RAFScrollElements.push(o2), e3 && (this.IORafInstance.scrollElements.push(o2), this.IORafInstance.observe(o2.$el))) : (this.triggeredScrollElements.push(o2), e3 && (this.IOTriggerInstance.scrollElements.push(o2), this.IOTriggerInstance.observe(o2.$el)));
       }
     }
     _unsubscribeAllScrollElements() {
@@ -6015,12 +6012,12 @@
       this.scrollElementsToUpdate.push(t2);
     }
     _unsubscribeElementUpdate(t2) {
-      this.scrollElementsToUpdate = this.scrollElementsToUpdate.filter((s3) => s3.id != t2.id);
+      this.scrollElementsToUpdate = this.scrollElementsToUpdate.filter((s2) => s2.id != t2.id);
     }
     _checkRafNeeded(t2) {
-      let s3 = [...n2];
+      let s2 = [...n];
       const e3 = (t3) => {
-        s3 = s3.filter((s4) => s4 != t3);
+        s2 = s2.filter((s3) => s3 != t3);
       };
       if (t2.dataset.scrollOffset) {
         if ("0,0" != t2.dataset.scrollOffset.split(",").map((t3) => t3.replace("%", "").trim()).join(","))
@@ -6037,21 +6034,21 @@
       if (t2.dataset.scrollSpeed && !isNaN(parseFloat(t2.dataset.scrollSpeed)))
         return true;
       e3("scrollSpeed");
-      for (const e4 of s3)
+      for (const e4 of s2)
         if (e4 in t2.dataset)
           return true;
       return false;
     }
   };
   var a = class {
-    constructor({ resizeElements: t2, resizeCallback: s3 = () => {
+    constructor({ resizeElements: t2, resizeCallback: s2 = () => {
     } }) {
-      this.$resizeElements = void 0, this.isFirstObserve = void 0, this.observer = void 0, this.resizeCallback = void 0, this.$resizeElements = t2, this.resizeCallback = s3, this.isFirstObserve = true, this._init();
+      this.$resizeElements = void 0, this.isFirstObserve = void 0, this.observer = void 0, this.resizeCallback = void 0, this.$resizeElements = t2, this.resizeCallback = s2, this.isFirstObserve = true, this._init();
     }
     _init() {
       this.observer = new ResizeObserver((t2) => {
-        var s3;
-        !this.isFirstObserve && (null == (s3 = this.resizeCallback) || s3.call(this)), this.isFirstObserve = false;
+        var s2;
+        !this.isFirstObserve && (null == (s2 = this.resizeCallback) || s2.call(this)), this.isFirstObserve = false;
       });
       for (const t2 of this.$resizeElements)
         this.observer.observe(t2);
@@ -6060,16 +6057,16 @@
       this.observer.disconnect();
     }
   };
-  var c = { wrapper: window, content: document.documentElement, eventsTarget: window, lerp: 0.1, duration: 0.75, orientation: "vertical", gestureOrientation: "vertical", smoothWheel: true, smoothTouch: false, syncTouch: false, syncTouchLerp: 0.1, touchInertiaMultiplier: 35, wheelMultiplier: 1, touchMultiplier: 2, normalizeWheel: false, autoResize: true, easing: (t2) => Math.min(1, 1.001 - Math.pow(2, -10 * t2)) };
+  var c = { wrapper: window, content: document.documentElement, wheelEventsTarget: window, eventsTarget: window, smoothWheel: true, syncTouch: false, syncTouchLerp: 0.075, touchInertiaMultiplier: 35, duration: 0.75, easing: (t2) => Math.min(1, 1.001 - Math.pow(2, -10 * t2)), lerp: 0.1, infinite: false, orientation: "vertical", gestureOrientation: "vertical", touchMultiplier: 1, wheelMultiplier: 1, autoResize: true };
   var h = class {
-    constructor({ lenisOptions: t2 = {}, modularInstance: e3, triggerRootMargin: i3, rafRootMargin: r2, autoResize: l3 = true, autoStart: n3 = true, scrollCallback: o3 = () => {
+    constructor({ lenisOptions: t2 = {}, modularInstance: e3, triggerRootMargin: i2, rafRootMargin: r2, autoResize: l2 = true, autoStart: n2 = true, scrollCallback: o2 = () => {
     }, initCustomTicker: a2, destroyCustomTicker: h2 } = {}) {
-      this.rafPlaying = void 0, this.lenisInstance = void 0, this.coreInstance = void 0, this.lenisOptions = void 0, this.modularInstance = void 0, this.triggerRootMargin = void 0, this.rafRootMargin = void 0, this.rafInstance = void 0, this.autoResize = void 0, this.autoStart = void 0, this.ROInstance = void 0, this.initCustomTicker = void 0, this.destroyCustomTicker = void 0, this._onRenderBind = void 0, this._onResizeBind = void 0, this._onScrollToBind = void 0, this.lenisOptions = s2({}, c, t2), Object.assign(this, { lenisOptions: t2, modularInstance: e3, triggerRootMargin: i3, rafRootMargin: r2, autoResize: l3, autoStart: n3, scrollCallback: o3, initCustomTicker: a2, destroyCustomTicker: h2 }), this._onRenderBind = this._onRender.bind(this), this._onScrollToBind = this._onScrollTo.bind(this), this._onResizeBind = this._onResize.bind(this), this.rafPlaying = false, this._init();
+      this.rafPlaying = void 0, this.lenisInstance = void 0, this.coreInstance = void 0, this.lenisOptions = void 0, this.modularInstance = void 0, this.triggerRootMargin = void 0, this.rafRootMargin = void 0, this.rafInstance = void 0, this.autoResize = void 0, this.autoStart = void 0, this.ROInstance = void 0, this.initCustomTicker = void 0, this.destroyCustomTicker = void 0, this._onRenderBind = void 0, this._onResizeBind = void 0, this._onScrollToBind = void 0, this.lenisOptions = s({}, c, t2), Object.assign(this, { lenisOptions: t2, modularInstance: e3, triggerRootMargin: i2, rafRootMargin: r2, autoResize: l2, autoStart: n2, scrollCallback: o2, initCustomTicker: a2, destroyCustomTicker: h2 }), this._onRenderBind = this._onRender.bind(this), this._onScrollToBind = this._onScrollTo.bind(this), this._onResizeBind = this._onResize.bind(this), this.rafPlaying = false, this._init();
     }
     _init() {
-      var s3;
-      this.lenisInstance = new l({ wrapper: this.lenisOptions.wrapper, content: this.lenisOptions.content, eventsTarget: this.lenisOptions.eventsTarget, lerp: this.lenisOptions.lerp, duration: this.lenisOptions.duration, orientation: this.lenisOptions.orientation, gestureOrientation: this.lenisOptions.gestureOrientation, smoothWheel: this.lenisOptions.smoothWheel, smoothTouch: this.lenisOptions.smoothTouch, syncTouch: this.lenisOptions.syncTouch, syncTouchLerp: this.lenisOptions.syncTouchLerp, touchInertiaMultiplier: this.lenisOptions.touchInertiaMultiplier, wheelMultiplier: this.lenisOptions.wheelMultiplier, touchMultiplier: this.lenisOptions.touchMultiplier, normalizeWheel: this.lenisOptions.normalizeWheel, easing: this.lenisOptions.easing }), null == (s3 = this.lenisInstance) || s3.on("scroll", this.scrollCallback), document.documentElement.setAttribute("data-scroll-orientation", this.lenisInstance.options.orientation), requestAnimationFrame(() => {
-        this.coreInstance = new o2({ $el: this.lenisInstance.rootElement, modularInstance: this.modularInstance, triggerRootMargin: this.triggerRootMargin, rafRootMargin: this.rafRootMargin, scrollOrientation: this.lenisInstance.options.orientation }), this._bindEvents(), this.initCustomTicker && !this.destroyCustomTicker ? console.warn("initCustomTicker callback is declared, but destroyCustomTicker is not. Please pay attention. It could cause trouble.") : !this.initCustomTicker && this.destroyCustomTicker && console.warn("destroyCustomTicker callback is declared, but initCustomTicker is not. Please pay attention. It could cause trouble."), this.autoStart && this.start();
+      var s2;
+      this.lenisInstance = new e({ wrapper: this.lenisOptions.wrapper, content: this.lenisOptions.content, eventsTarget: this.lenisOptions.eventsTarget, lerp: this.lenisOptions.lerp, duration: this.lenisOptions.duration, orientation: this.lenisOptions.orientation, gestureOrientation: this.lenisOptions.gestureOrientation, smoothWheel: this.lenisOptions.smoothWheel, syncTouch: this.lenisOptions.syncTouch, syncTouchLerp: this.lenisOptions.syncTouchLerp, touchInertiaMultiplier: this.lenisOptions.touchInertiaMultiplier, wheelMultiplier: this.lenisOptions.wheelMultiplier, touchMultiplier: this.lenisOptions.touchMultiplier, easing: this.lenisOptions.easing }), null == (s2 = this.lenisInstance) || s2.on("scroll", this.scrollCallback), document.documentElement.setAttribute("data-scroll-orientation", this.lenisInstance.options.orientation), requestAnimationFrame(() => {
+        this.coreInstance = new o({ $el: this.lenisInstance.rootElement, modularInstance: this.modularInstance, triggerRootMargin: this.triggerRootMargin, rafRootMargin: this.rafRootMargin, scrollOrientation: this.lenisInstance.options.orientation }), this._bindEvents(), this.initCustomTicker && !this.destroyCustomTicker ? console.warn("initCustomTicker callback is declared, but destroyCustomTicker is not. Please pay attention. It could cause trouble.") : !this.initCustomTicker && this.destroyCustomTicker && console.warn("destroyCustomTicker callback is declared, but initCustomTicker is not. Please pay attention. It could cause trouble."), this.autoStart && this.start();
       });
     }
     destroy() {
@@ -6086,13 +6083,13 @@
       this._unbindScrollToEvents(), this.autoResize && ("ResizeObserver" in window ? this.ROInstance && this.ROInstance.destroy() : window.removeEventListener("resize", this._onResizeBind));
     }
     _bindScrollToEvents(t2) {
-      const s3 = t2 || this.lenisInstance.rootElement, e3 = null == s3 ? void 0 : s3.querySelectorAll("[data-scroll-to]");
+      const s2 = t2 || this.lenisInstance.rootElement, e3 = null == s2 ? void 0 : s2.querySelectorAll("[data-scroll-to]");
       (null == e3 ? void 0 : e3.length) && e3.forEach((t3) => {
         t3.addEventListener("click", this._onScrollToBind, false);
       });
     }
     _unbindScrollToEvents(t2) {
-      const s3 = t2 || this.lenisInstance.rootElement, e3 = null == s3 ? void 0 : s3.querySelectorAll("[data-scroll-to]");
+      const s2 = t2 || this.lenisInstance.rootElement, e3 = null == s2 ? void 0 : s2.querySelectorAll("[data-scroll-to]");
       (null == e3 ? void 0 : e3.length) && e3.forEach((t3) => {
         t3.removeEventListener("click", this._onScrollToBind, false);
       });
@@ -6104,17 +6101,17 @@
       });
     }
     _onRender() {
-      var t2, s3;
-      null == (t2 = this.lenisInstance) || t2.raf(Date.now()), null == (s3 = this.coreInstance) || s3.onRender({ currentScroll: this.lenisInstance.scroll, smooth: this.lenisInstance.isSmooth });
+      var t2, s2;
+      null == (t2 = this.lenisInstance) || t2.raf(Date.now()), null == (s2 = this.coreInstance) || s2.onRender({ currentScroll: this.lenisInstance.scroll, smooth: this.lenisInstance.isSmooth });
     }
     _onScrollTo(t2) {
-      var s3;
+      var s2;
       t2.preventDefault();
-      const e3 = null != (s3 = t2.currentTarget) ? s3 : null;
+      const e3 = null != (s2 = t2.currentTarget) ? s2 : null;
       if (!e3)
         return;
-      const i3 = e3.getAttribute("data-scroll-to-href") || e3.getAttribute("href"), r2 = e3.getAttribute("data-scroll-to-offset") || 0, l3 = e3.getAttribute("data-scroll-to-duration") || this.lenisOptions.duration || c.duration;
-      i3 && this.scrollTo(i3, { offset: "string" == typeof r2 ? parseInt(r2) : r2, duration: "string" == typeof l3 ? parseInt(l3) : l3 });
+      const i2 = e3.getAttribute("data-scroll-to-href") || e3.getAttribute("href"), r2 = e3.getAttribute("data-scroll-to-offset") || 0, l2 = e3.getAttribute("data-scroll-to-duration") || this.lenisOptions.duration || c.duration;
+      i2 && this.scrollTo(i2, { offset: "string" == typeof r2 ? parseInt(r2) : r2, duration: "string" == typeof l2 ? parseInt(l2) : l2 });
     }
     start() {
       var t2;
@@ -6125,21 +6122,21 @@
       this.rafPlaying && (null == (t2 = this.lenisInstance) || t2.stop(), this.rafPlaying = false, this.destroyCustomTicker ? this.destroyCustomTicker(this._onRenderBind) : this.rafInstance && cancelAnimationFrame(this.rafInstance));
     }
     removeScrollElements(t2) {
-      var s3;
-      t2 ? (this._unbindScrollToEvents(t2), null == (s3 = this.coreInstance) || s3.removeScrollElements(t2)) : console.error("Please provide a DOM Element as $oldContainer");
+      var s2;
+      t2 ? (this._unbindScrollToEvents(t2), null == (s2 = this.coreInstance) || s2.removeScrollElements(t2)) : console.error("Please provide a DOM Element as $oldContainer");
     }
     addScrollElements(t2) {
-      var s3;
-      t2 ? (null == (s3 = this.coreInstance) || s3.addScrollElements(t2), requestAnimationFrame(() => {
+      var s2;
+      t2 ? (null == (s2 = this.coreInstance) || s2.addScrollElements(t2), requestAnimationFrame(() => {
         this._bindScrollToEvents(t2);
       })) : console.error("Please provide a DOM Element as $newContainer");
     }
     resize() {
       this._onResizeBind();
     }
-    scrollTo(t2, s3) {
+    scrollTo(t2, s2) {
       var e3;
-      null == (e3 = this.lenisInstance) || e3.scrollTo(t2, { offset: null == s3 ? void 0 : s3.offset, lerp: null == s3 ? void 0 : s3.lerp, duration: null == s3 ? void 0 : s3.duration, immediate: null == s3 ? void 0 : s3.immediate, lock: null == s3 ? void 0 : s3.lock, force: null == s3 ? void 0 : s3.force, easing: null == s3 ? void 0 : s3.easing, onComplete: null == s3 ? void 0 : s3.onComplete });
+      null == (e3 = this.lenisInstance) || e3.scrollTo(t2, { offset: null == s2 ? void 0 : s2.offset, lerp: null == s2 ? void 0 : s2.lerp, duration: null == s2 ? void 0 : s2.duration, immediate: null == s2 ? void 0 : s2.immediate, lock: null == s2 ? void 0 : s2.lock, force: null == s2 ? void 0 : s2.force, easing: null == s2 ? void 0 : s2.easing, onComplete: null == s2 ? void 0 : s2.onComplete });
     }
     _raf() {
       this._onRenderBind(), this.rafInstance = requestAnimationFrame(() => this._raf());
@@ -6246,7 +6243,7 @@
      * @param {(number|HTMLElement|string)} target - The scrollTo a target
      * @param {Object} options - The scrollTo options (offset, duration, easing, immediate)
      *
-     * @see https://github.com/studio-freight/lenis#methods
+     * @see https://github.com/darkroomengineering/lenis#methods
      *
      */
     scrollTo(params) {
@@ -6258,7 +6255,7 @@
      * Start
      * Resumes the scroll
      *
-     * @see https://github.com/studio-freight/lenis#methods
+     * @see https://github.com/darkroomengineering/lenis#methods
      *
      */
     start() {
@@ -6269,7 +6266,7 @@
      * Stop
      * Pauses the scroll
      *
-     * @see https://github.com/studio-freight/lenis#methods
+     * @see https://github.com/darkroomengineering/lenis#methods
      *
      */
     stop() {

@@ -1,4 +1,5 @@
 import ScrollElement from './core/ScrollElement';
+import type { LenisOptions } from 'lenis';
 export interface IModular {
     el: HTMLElement;
     events: any;
@@ -9,25 +10,6 @@ export interface IModular {
     on(): any;
     getData(): any;
     setData(): any;
-}
-export interface ILenisOptions {
-    wrapper?: HTMLElement | Window;
-    content?: HTMLElement;
-    eventsTarget?: HTMLElement | Window;
-    lerp?: number;
-    duration?: number;
-    orientation?: scrollOrientation;
-    gestureOrientation?: gestureOrientation;
-    smoothWheel?: boolean;
-    smoothTouch?: boolean;
-    syncTouch?: boolean;
-    syncTouchLerp?: number;
-    touchInertiaMultiplier?: number;
-    wheelMultiplier?: number;
-    touchMultiplier?: number;
-    normalizeWheel?: boolean;
-    autoResize?: boolean;
-    easing?(t: number): number;
 }
 export interface ILenisScrollValues {
     scroll: number;
@@ -52,7 +34,7 @@ export interface ILenisScrollToOptions {
     onComplete?(): void;
 }
 export interface ILocomotiveScrollOptions {
-    lenisOptions?: ILenisOptions;
+    lenisOptions?: LenisOptions;
     modularInstance?: IModular;
     triggerRootMargin?: string;
     rafRootMargin?: string;

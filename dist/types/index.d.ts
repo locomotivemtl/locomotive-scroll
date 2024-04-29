@@ -7,7 +7,7 @@ import { ILenisScrollToOptions, ILocomotiveScrollOptions, lenisTargetScrollTo } 
  * Inspired by
  * {@link https://github.com/locomotivemtl/locomotive-scroll locomotive-scroll.js}
  * and built around
- * {@link https://github.com/studio-freight/lenis lenis.js}.
+ * {@link https://github.com/darkroomengineering/lenis lenis.js}.
  */
 export default class LocomotiveScroll {
     rafPlaying: boolean;

@@ -1,37 +1,37 @@
 //@ts-ignore
-import Lenis from '@studio-freight/lenis';
+import Lenis from 'lenis';
 import Core from './core/Core';
 import RO from './core/RO';
 import {
-    ILenisOptions,
     ILenisScrollToOptions,
     ILenisScrollValues,
     ILocomotiveScrollOptions,
     IModular,
     lenisTargetScrollTo,
 } from './types';
+import type { LenisOptions } from 'lenis';
 
 /**
- * @type {ILenisOptions}
+ * @type {LenisOptions}
  */
-const defaultLenisOptions: ILenisOptions = {
+const defaultLenisOptions: LenisOptions = {
     wrapper: window,
     content: document.documentElement,
+    wheelEventsTarget: window,
     eventsTarget: window,
-    lerp: 0.1,
+    smoothWheel: true,
+    syncTouch: false,
+    syncTouchLerp: 0.075,
+    touchInertiaMultiplier: 35,
     duration: 0.75,
+    easing: (t) => Math.min(1, 1.001 - Math.pow(2, -10 * t)), // https://www.desmos.com/calculator/brs54l4xou
+    lerp: 0.1,
+    infinite: false,
     orientation: 'vertical',
     gestureOrientation: 'vertical',
-    smoothWheel: true,
-    smoothTouch: false,
-    syncTouch: false,
-    syncTouchLerp: 0.1,
-    touchInertiaMultiplier: 35,
+    touchMultiplier: 1,
     wheelMultiplier: 1,
-    touchMultiplier: 2,
-    normalizeWheel: false,
-    autoResize: true,
-    easing: (t) => Math.min(1, 1.001 - Math.pow(2, -10 * t)), // https://www.desmos.com/calculator/brs54l4xou
+    autoResize: true
 };
 
 /**
@@ -42,7 +42,7 @@ const defaultLenisOptions: ILenisOptions = {
  * Inspired by
  * {@link https://github.com/locomotivemtl/locomotive-scroll locomotive-scroll.js}
  * and built around
- * {@link https://github.com/studio-freight/lenis lenis.js}.
+ * {@link https://github.com/darkroomengineering/lenis lenis.js}.
  */
 
 export default class LocomotiveScroll {
@@ -51,7 +51,7 @@ export default class LocomotiveScroll {
     private lenisInstance: any;
     private coreInstance: any;
 
-    private lenisOptions: ILenisOptions;
+    private lenisOptions: LenisOptions;
     private modularInstance?: IModular;
     private triggerRootMargin?: string;
     private rafRootMargin?: string;
@@ -120,13 +120,11 @@ export default class LocomotiveScroll {
             orientation: this.lenisOptions.orientation,
             gestureOrientation: this.lenisOptions.gestureOrientation,
             smoothWheel: this.lenisOptions.smoothWheel,
-            smoothTouch: this.lenisOptions.smoothTouch,
             syncTouch: this.lenisOptions.syncTouch,
             syncTouchLerp: this.lenisOptions.syncTouchLerp,
             touchInertiaMultiplier: this.lenisOptions.touchInertiaMultiplier,
             wheelMultiplier: this.lenisOptions.wheelMultiplier,
             touchMultiplier: this.lenisOptions.touchMultiplier,
-            normalizeWheel: this.lenisOptions.normalizeWheel,
             easing: this.lenisOptions.easing,
         });
         this.lenisInstance?.on('scroll', this.scrollCallback);

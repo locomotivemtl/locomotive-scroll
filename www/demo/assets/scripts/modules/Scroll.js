@@ -127,7 +127,7 @@ export default class extends Module {
      * @param {(number|HTMLElement|string)} target - The scrollTo a target
      * @param {Object} options - The scrollTo options (offset, duration, easing, immediate)
      *
-     * @see https://github.com/studio-freight/lenis#methods
+     * @see https://github.com/darkroomengineering/lenis#methods
      *
      */
     scrollTo(params) {
@@ -139,7 +139,7 @@ export default class extends Module {
      * Start
      * Resumes the scroll
      *
-     * @see https://github.com/studio-freight/lenis#methods
+     * @see https://github.com/darkroomengineering/lenis#methods
      *
      */
     start() {
@@ -150,7 +150,7 @@ export default class extends Module {
      * Stop
      * Pauses the scroll
      *
-     * @see https://github.com/studio-freight/lenis#methods
+     * @see https://github.com/darkroomengineering/lenis#methods
      *
      */
     stop() {

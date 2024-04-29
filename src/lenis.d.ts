@@ -1,1 +1,1 @@
-declare module '@studio-freight/lenis';
+declare module 'lenis';
