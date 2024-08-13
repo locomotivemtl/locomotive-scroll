@@ -47,8 +47,8 @@ const defaultLenisOptions: LenisOptions = {
 
 export default class LocomotiveScroll {
     public rafPlaying: boolean;
+    public lenisInstance: any;
 
-    private lenisInstance: any;
     private coreInstance: any;
 
     private lenisOptions: LenisOptions;

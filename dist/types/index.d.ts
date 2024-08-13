@@ -11,7 +11,7 @@ import { ILenisScrollToOptions, ILocomotiveScrollOptions, lenisTargetScrollTo } 
  */
 export default class LocomotiveScroll {
     rafPlaying: boolean;
-    private lenisInstance;
+    lenisInstance: any;
     private coreInstance;
     private lenisOptions;
     private modularInstance?;
