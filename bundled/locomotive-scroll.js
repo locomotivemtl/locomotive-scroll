@@ -860,7 +860,7 @@
       this.scrollElements.forEach(function (scrollElement) {
         ids.push(scrollElement.id);
       });
-      var maxID = Math.max.apply(Math, ids);
+      var maxID = Math.max.apply(Math, ids.concat([0]));
       var fromIndex = maxID + 1;
       var $scrollElementsArr = Array.from($scrollElements);
       this._subscribeScrollElements($scrollElementsArr, fromIndex, true);
