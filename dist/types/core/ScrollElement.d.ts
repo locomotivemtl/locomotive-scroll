@@ -15,7 +15,7 @@
  * - scrollRepeat - Repeat the option to trigger animation each time the element is intersected
  * - scrollCall - Call a custom event or a modular callback when the element is intersected
  */
-import { IScrollElementOptions, IScrollElementAttributes, IScrollElementCallbacksValues, scrollCallWay, scrollCallFrom, scrollOrientation } from '../types';
+import type { IScrollElementOptions, IScrollElementAttributes, IScrollElementCallbacksValues, scrollCallWay, scrollCallFrom, scrollOrientation } from '../types';
 export default class ScrollElement {
     $el: HTMLElement;
     id: number;

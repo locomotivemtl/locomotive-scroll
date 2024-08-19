@@ -1,0 +1,23 @@
+<button class="c-scroll-toggler" type="button" id="scrollToggler">
+    stop scroll
+</button>
+
+<script>
+    import { isScrollStopped } from '../../stores/scroll';
+
+    const $scrollToggler = document.getElementById('scrollToggler');
+
+    $scrollToggler?.addEventListener('click', () => {
+        isScrollStopped.set(!isScrollStopped.get());
+    });
+
+    isScrollStopped.subscribe(value => {
+        if ($scrollToggler) {
+            if (value) {
+                $scrollToggler.innerHTML = 'start scroll';
+            } else {
+                $scrollToggler.innerHTML = 'stop scroll';
+            }
+        }
+    });
+</script>

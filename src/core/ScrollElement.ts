@@ -16,7 +16,7 @@
  * - scrollCall - Call a custom event or a modular callback when the element is intersected
  */
 
-import {
+import type {
     IModular,
     IScrollElementOptions,
     IScrollElementAttributes,

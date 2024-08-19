@@ -1,0 +1,42 @@
+{
+    "extends": "astro/tsconfigs/strict",
+    "compilerOptions": {
+        "baseUrl": ".",
+        "moduleResolution": "Bundler",
+        "paths": {
+            "@root/*": [
+                "./*"
+            ],
+            "@src/*": [
+                "./src/*"
+            ],
+            "@components/*": [
+                "./src/components/*"
+            ],
+            "@layouts/*": [
+                "./src/layouts/*"
+            ],
+            "@images/*": [
+                "./src/assets/images/*"
+            ],
+            "@pages/*": [
+                "./src/pages/*"
+            ],
+            "@scripts/*": [
+                "./src/scripts/*"
+            ],
+            "@styles/*": [
+                "./src/styles/*"
+            ],
+            "@types/*": [
+                "types/*"
+            ],
+            "@images/*": [
+                "./src/assets/images/*"
+            ],
+            "@data/*": [
+                "./src/data/*"
+            ]
+        }
+    }
+}

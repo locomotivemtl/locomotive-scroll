@@ -2,7 +2,7 @@
 import Lenis from 'lenis';
 import Core from './core/Core';
 import RO from './core/RO';
-import {
+import type {
     ILenisScrollToOptions,
     ILenisScrollValues,
     ILocomotiveScrollOptions,
@@ -10,29 +10,6 @@ import {
     lenisTargetScrollTo,
 } from './types';
 import type { LenisOptions } from 'lenis';
-
-/**
- * @type {LenisOptions}
- */
-const defaultLenisOptions: LenisOptions = {
-    wrapper: window,
-    content: document.documentElement,
-    wheelEventsTarget: window,
-    eventsTarget: window,
-    smoothWheel: true,
-    syncTouch: false,
-    syncTouchLerp: 0.075,
-    touchInertiaMultiplier: 35,
-    duration: 0.75,
-    easing: (t) => Math.min(1, 1.001 - Math.pow(2, -10 * t)), // https://www.desmos.com/calculator/brs54l4xou
-    lerp: 0.1,
-    infinite: false,
-    orientation: 'vertical',
-    gestureOrientation: 'vertical',
-    touchMultiplier: 1,
-    wheelMultiplier: 1,
-    autoResize: true
-};
 
 /**
  * Locomotive Scroll
@@ -51,7 +28,7 @@ export default class LocomotiveScroll {
 
     private coreInstance: any;
 
-    private lenisOptions: LenisOptions;
+    private lenisOptions?: LenisOptions;
     private modularInstance?: IModular;
     private triggerRootMargin?: string;
     private rafRootMargin?: string;
@@ -77,9 +54,14 @@ export default class LocomotiveScroll {
         initCustomTicker,
         destroyCustomTicker,
     }: ILocomotiveScrollOptions = {}) {
-        // Arguments
-        this.lenisOptions = { ...defaultLenisOptions, ...lenisOptions };
 
+        for (const [key] of Object.entries(lenisOptions)) {
+            if (["wrapper", "content", "infinite"].includes(key)) {
+                console.warn(`Warning: Key "${key}" is not possible to edit in Locomotive Scroll.`);
+            }
+        }
+
+        // Get arguments
         Object.assign(this, {
             lenisOptions,
             modularInstance,
@@ -91,6 +73,7 @@ export default class LocomotiveScroll {
             initCustomTicker,
             destroyCustomTicker,
         });
+
 
         // Binding
         this._onRenderBind = this._onRender.bind(this);
@@ -112,20 +95,10 @@ export default class LocomotiveScroll {
     private _init(): void {
         // Create Lenis instance
         this.lenisInstance = new Lenis({
-            wrapper: this.lenisOptions.wrapper,
-            content: this.lenisOptions.content,
-            eventsTarget: this.lenisOptions.eventsTarget,
-            lerp: this.lenisOptions.lerp,
-            duration: this.lenisOptions.duration,
-            orientation: this.lenisOptions.orientation,
-            gestureOrientation: this.lenisOptions.gestureOrientation,
-            smoothWheel: this.lenisOptions.smoothWheel,
-            syncTouch: this.lenisOptions.syncTouch,
-            syncTouchLerp: this.lenisOptions.syncTouchLerp,
-            touchInertiaMultiplier: this.lenisOptions.touchInertiaMultiplier,
-            wheelMultiplier: this.lenisOptions.wheelMultiplier,
-            touchMultiplier: this.lenisOptions.touchMultiplier,
-            easing: this.lenisOptions.easing,
+            ...this.lenisOptions,
+            wrapper: window,
+            content: document.documentElement,
+            infinite: false
         });
         this.lenisInstance?.on('scroll', this.scrollCallback);
 
@@ -270,7 +243,7 @@ export default class LocomotiveScroll {
 
         this.coreInstance?.onRender({
             currentScroll: this.lenisInstance.scroll,
-            smooth: this.lenisInstance.isSmooth,
+            smooth: this.lenisInstance.options.smoothWheel,
         });
     }
 
@@ -287,9 +260,7 @@ export default class LocomotiveScroll {
         const offset = $target.getAttribute('data-scroll-to-offset') || 0;
         const duration =
             $target.getAttribute('data-scroll-to-duration') ||
-            this.lenisOptions.duration ||
-            defaultLenisOptions.duration;
-
+            this.lenisInstance.options.duration
         target &&
             this.scrollTo(target, {
                 offset: typeof offset === 'string' ? parseInt(offset) : offset,

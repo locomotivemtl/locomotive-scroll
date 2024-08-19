@@ -3,61 +3,34 @@
         <img src="https://user-images.githubusercontent.com/4596862/54868065-c2aea200-4d5e-11e9-9ce3-e0013c15f48c.png" height="140">
     </a>
 </p>
-<h1 align="center">Locomotive Boilerplate</h1>
-<p align="center">Front-end boilerplate for projects by <a href="https://locomotive.ca/">Locomotive</a>.</p>
+<h1 align="center">Locomotive Astro Boilerplate</h1>
+<p align="center">Front-end Astro boilerplate for projects by <a href="https://locomotive.ca/">Locomotive</a>.</p>
 
 ## Features
 
-* Uses a custom [task runner](docs/development.md) for handling assets.
-* Uses [BrowserSync] for fast development and testing in browsers.
+* Uses [Astro] for all-in-one web framework.
 * Uses [Sass] for a feature rich superset of CSS.
-* Uses [ESBuild] for extremely fast processing of JS/ES modules.
-* Uses [SVG Mixer] for processing SVG files and generating spritesheets.
-* Uses [ITCSS] for a sane and scalable CSS architecture.
+* Uses [Tailwind CSS] for a sane and scalable CSS architecture.
 * Uses [Locomotive Scroll] for smooth scrolling with parallax effects.
-* Uses a custom [grid system](docs/grid.md) for layout creation.
-
-Learn more about [languages and technologies](docs/technologies.md).
+* Uses [Swup] for versatile and extensible page transition.
+* Uses [Prettier] for a formatted and easy to maintain codebase.
 
 ## Getting started
 
 Make sure you have the following installed:
 
-* [Node] — at least 14.17, the latest LTS is recommended.
-* [NPM] — at least 6.0, the latest LTS is recommended.
+* [Node] — at least 20.14, the latest LTS is recommended.
+* [NPM] — at least 8.0, the latest LTS is recommended.
 
 > 💡 You can use [NVM] to install and use different versions of Node via the command-line.
 
 ```sh
 # Clone the repository.
-git clone https://github.com/locomotivemtl/locomotive-boilerplate.git my-new-project
+git clone https://github.com/locomotivemtl/astro-boilerplate.git my-new-project
 
 # Enter the newly-cloned directory.
 cd my-new-project
 ```
-
-Then replace the original remote repository with your project's repository.
-
-Then update the following files to suit your project:
-
-* [`README.md`](README.md):
-  The file you are currently reading.
-* [`package.json`](package.json):
-  * Package name: `@locomotivemtl/boilerplate`
-  * Package title: `Locomotive Boilerplate`
-* [`package-lock.json`](package-lock.json):
-  * Package name: `@locomotivemtl/boilerplate`
-* [`loconfig.json`](loconfig.json):
-  * BrowserSync proxy URL: `locomotive-boilerplate.test`
-    Remove `paths.url` to use BrowserSync's built-in server which uses `paths.dest`.
-  * View path: `./views/boilerplate/template`
-* [`environment.js`](assets/scripts/utils/environment.js):
-  * Application name: `Boilerplate`
-* [`site.webmanifest`](www/site.webmanifest):
-  * Manifest name: `Locomotive Boilerplate`
-  * Manifest short name: `Boilerplate`
-* HTML files:
-  * Page title: `Locomotive Boilerplate`
 
 ## Installation
 
@@ -79,22 +52,61 @@ npm start
 npm run build
 ```
 
-Learn more about [development and building](docs/development.md).
+## Project Structure
+
+Inside of your project, you'll see the following folders and files:
+
+```text
+/
+├── public/
+│   └── favicon.svg
+├── src/
+│   ├── components/
+│   │   └── Card/
+│   │       ├── Card.astro
+│   │       └── Card.scss
+│   ├── layouts/
+│   │   └── Layout.astro
+│   ├── pages/
+│   │   └── index.astro
+│   ├── styles/
+│   │   └── main.scss
+│   └── scripts/
+│       ├── components/
+│       ├── utils/
+│       ├── app.ts
+│       └── config.ts
+└── package.json
+```
+
+## Commands
+
+All commands are run from the root of the project, from a terminal:
+
+| Command                   | Action                                           |
+| :------------------------ | :----------------------------------------------- |
+| `npm install`             | Installs dependencies                            |
+| `npm run dev`             | Starts local dev server at `localhost:4321`      |
+| `npm run build`           | Build your production site to `./dist/`          |
+| `npm run preview`         | Preview your build locally, before deploying     |
+| `npm run astro ...`       | Run CLI commands like `astro add`, `astro check` |
+| `npm run astro -- --help` | Get help using the Astro CLI                     |
+| `npm run format`          | Format files using prettier                      |
 
 ## Documentation
 
-* [Development and building](docs/development.md)
-* [Languages and technologies](docs/technologies.md)
-* [Grid system](docs/grid.md)
+* [Astro]
+* [Locomotive Scroll]
+* [Tailwind CSS]
+* [Swup]
+* [Prettier]
 
-[BrowserSync]:       https://npmjs.com/package/browser-sync
-[ESBuild]:           https://npmjs.com/package/esbuild
-[ITCSS]:             https://itcss.io/
-[Locomotive Scroll]: https://npmjs.com/package/locomotive-scroll
-[modularJS]:         https://npmjs.com/package/modujs
-[modularLoad]:       https://npmjs.com/package/modularload
+[Astro]:             https://docs.astro.build/en/getting-started/
+[Tailwind CSS]:      https://tailwindcss.com/docs/installation
+[Locomotive Scroll]: https://scroll.locomotive.ca/docs
 [Sass]:              https://sass-lang.com/
-[SVG Mixer]:         https://npmjs.com/package/svg-mixer
+[Swup]:              https://swup.js.org/getting-started/
 [Node]:              https://nodejs.org/
 [NPM]:               https://npmjs.com/
 [NVM]:               https://github.com/nvm-sh/nvm
+[Prettier]:          https://prettier.io/

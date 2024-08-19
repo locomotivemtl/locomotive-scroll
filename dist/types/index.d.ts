@@ -1,4 +1,4 @@
-import { ILenisScrollToOptions, ILocomotiveScrollOptions, lenisTargetScrollTo } from './types';
+import type { ILenisScrollToOptions, ILocomotiveScrollOptions, lenisTargetScrollTo } from './types';
 /**
  * Locomotive Scroll
  *
@@ -13,7 +13,7 @@ export default class LocomotiveScroll {
     rafPlaying: boolean;
     lenisInstance: any;
     private coreInstance;
-    private lenisOptions;
+    private lenisOptions?;
     private modularInstance?;
     private triggerRootMargin?;
     private rafRootMargin?;

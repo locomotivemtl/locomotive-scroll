@@ -2,7 +2,7 @@
  * Integrates Lenis with Locomotive's built-in animation system
  */
 
-import {
+import type {
     CoreOptions,
     IModular,
     IScrollElementCallbacksValues,
@@ -199,7 +199,7 @@ export default class Core {
         this.scrollElements.forEach((scrollElement) => {
             ids.push(scrollElement.id);
         });
-        const maxID = Math.max(...ids);
+        const maxID = Math.max(...ids, 0);
         const fromIndex = maxID + 1;
         const $scrollElementsArr = Array.from($scrollElements) as HTMLElement[]
         this._subscribeScrollElements(
