@@ -1,10 +1,10 @@
 import { isScrollStopped } from '@root/src/stores/scroll';
-import LocomotiveScroll from 'node_modules/locomotive-scroll';
+import LocomotiveScroll from '../../../../../src/index';
 
 import type {
     ILenisScrollToOptions,
     lenisTargetScrollTo
-} from 'node_modules/locomotive-scroll/dist/types/types';
+} from '../../../../../src/types';
 
 export class Scroll {
     static locomotiveScroll: LocomotiveScroll;
