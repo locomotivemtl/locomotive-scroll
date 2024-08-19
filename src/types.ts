@@ -90,7 +90,7 @@ export interface ILenisScrollToOptions {
 /**
  * @typedef {Object} ILocomotiveScrollOptions
  *
- * @property {LenisOptions} [lenisOptions]      - Object to override default Lenis options.
+ * @property {LenisOptions}  [lenisOptions]      - Object to override default Lenis options.
  * @property {IModular}      [modularInstance]   - Modular instance to execute call functions.
  * @property {string}        [triggerRootMargin] - Root margin for trigger Intersection Observer.
  * @property {string}        [rafRootMargin]     - Root margin for RAF Intersection Observer.

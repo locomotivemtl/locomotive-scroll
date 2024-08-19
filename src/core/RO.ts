@@ -13,7 +13,7 @@
  * - {@link https://developer.mozilla.org/en-US/docs/Web/API/Resize_Observer_API}
  */
 
-import { IROOptions } from '../types';
+import type { IROOptions } from '../types';
 
 export default class RO {
     private $resizeElements: HTMLElement[];

@@ -1070,30 +1070,6 @@
   }();
 
   /**
-   * @type {LenisOptions}
-   */
-  var defaultLenisOptions = {
-    wrapper: window,
-    content: document.documentElement,
-    wheelEventsTarget: window,
-    eventsTarget: window,
-    smoothWheel: true,
-    syncTouch: false,
-    syncTouchLerp: 0.075,
-    touchInertiaMultiplier: 35,
-    duration: 0.75,
-    easing: function easing(t) {
-      return Math.min(1, 1.001 - Math.pow(2, -10 * t));
-    },
-    lerp: 0.1,
-    infinite: false,
-    orientation: 'vertical',
-    gestureOrientation: 'vertical',
-    touchMultiplier: 1,
-    wheelMultiplier: 1,
-    autoResize: true
-  };
-  /**
    * Locomotive Scroll
    *
    * Detection of elements in viewport & smooth scrolling with parallax.
@@ -1135,8 +1111,14 @@
       this._onRenderBind = void 0;
       this._onResizeBind = void 0;
       this._onScrollToBind = void 0;
-      // Arguments
-      this.lenisOptions = _extends({}, defaultLenisOptions, lenisOptions);
+      for (var _i = 0, _Object$entries = Object.entries(lenisOptions); _i < _Object$entries.length; _i++) {
+        var _Object$entries$_i = _Object$entries[_i],
+          key = _Object$entries$_i[0];
+        if (["wrapper", "content", "infinite"].includes(key)) {
+          console.warn("Warning: Key \"" + key + "\" is not possible to edit in Locomotive Scroll.");
+        }
+      }
+      // Get arguments
       Object.assign(this, {
         lenisOptions: lenisOptions,
         modularInstance: modularInstance,
@@ -1167,22 +1149,11 @@
       var _this$lenisInstance,
         _this = this;
       // Create Lenis instance
-      this.lenisInstance = new Lenis({
-        wrapper: this.lenisOptions.wrapper,
-        content: this.lenisOptions.content,
-        eventsTarget: this.lenisOptions.eventsTarget,
-        lerp: this.lenisOptions.lerp,
-        duration: this.lenisOptions.duration,
-        orientation: this.lenisOptions.orientation,
-        gestureOrientation: this.lenisOptions.gestureOrientation,
-        smoothWheel: this.lenisOptions.smoothWheel,
-        syncTouch: this.lenisOptions.syncTouch,
-        syncTouchLerp: this.lenisOptions.syncTouchLerp,
-        touchInertiaMultiplier: this.lenisOptions.touchInertiaMultiplier,
-        wheelMultiplier: this.lenisOptions.wheelMultiplier,
-        touchMultiplier: this.lenisOptions.touchMultiplier,
-        easing: this.lenisOptions.easing
-      });
+      this.lenisInstance = new Lenis(_extends({}, this.lenisOptions, {
+        wrapper: window,
+        content: document.documentElement,
+        infinite: false
+      }));
       (_this$lenisInstance = this.lenisInstance) == null ? void 0 : _this$lenisInstance.on('scroll', this.scrollCallback);
       // Add scroll direction attribute on body
       document.documentElement.setAttribute('data-scroll-orientation', this.lenisInstance.options.orientation);
@@ -1299,7 +1270,7 @@
       (_this$lenisInstance2 = this.lenisInstance) == null ? void 0 : _this$lenisInstance2.raf(Date.now());
       (_this$coreInstance2 = this.coreInstance) == null ? void 0 : _this$coreInstance2.onRender({
         currentScroll: this.lenisInstance.scroll,
-        smooth: this.lenisInstance.isSmooth
+        smooth: this.lenisInstance.options.smoothWheel
       });
     }
     /**
@@ -1312,7 +1283,7 @@
       if (!$target) return;
       var target = $target.getAttribute('data-scroll-to-href') || $target.getAttribute('href');
       var offset = $target.getAttribute('data-scroll-to-offset') || 0;
-      var duration = $target.getAttribute('data-scroll-to-duration') || this.lenisOptions.duration || defaultLenisOptions.duration;
+      var duration = $target.getAttribute('data-scroll-to-duration') || this.lenisInstance.options.duration;
       target && this.scrollTo(target, {
         offset: typeof offset === 'string' ? parseInt(offset) : offset,
         duration: typeof duration === 'string' ? parseInt(duration) : duration

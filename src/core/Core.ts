@@ -2,7 +2,7 @@
  * Integrates Lenis with Locomotive's built-in animation system
  */
 
-import {
+import type {
     CoreOptions,
     IModular,
     IScrollElementCallbacksValues,
