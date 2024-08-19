@@ -54,7 +54,7 @@
         "watch": "microbundle watch -i src/index.ts --o ./dist --no-compress"
     },
     "dependencies": {
-        "lenis": "1.0.45"
+        "lenis": "1.1.9"
     },
     "devDependencies": {
         "cssnano": "^6.0.1",

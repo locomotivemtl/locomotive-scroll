@@ -1,0 +1,80 @@
+---
+import '@styles/main.scss';
+import { SEO } from 'astro-seo';
+
+interface Props {
+    title: string;
+    seo?: Seo;
+    scrollOrientation?: 'vertical' | 'horizontal';
+}
+
+const { title, scrollOrientation = 'vertical' } = Astro.props;
+
+const FONTS: string[] = [
+    // 'WebfontRegular.woff2',
+    // 'WebfontBold.woff2',
+]
+---
+
+<!doctype html>
+<html lang="en" data-scroll-orientation-settings={scrollOrientation}>
+    <head>
+        <meta charset="UTF-8" />
+        <meta name="viewport" content="width=device-width" />
+        <link rel="icon" type="image/svg+xml" href="/favicon.svg" />
+        <meta name="generator" content={Astro.generator} />
+<!--
+        <SEO
+            title={seo?.title || title || defaultSeo.title}
+            description={seo?.description || defaultSeo.description}
+            openGraph={{
+                basic: {
+                    type: 'website',
+                    title: seo?.social?.facebook?.title || defaultSeo.social.facebook.title,
+                    image: seo?.social?.facebook?.image?.url || defaultSeo.social.facebook.image.url
+                }
+            }}
+            twitter={{
+                creator: seo?.social?.twitter?.creator || defaultSeo.social.twitter.creator,
+                image: seo?.social?.twitter?.image?.url || defaultSeo.social.twitter.image.url,
+                title: seo?.social?.twitter?.title || defaultSeo.social.twitter.title,
+                description:
+                    seo?.social?.twitter?.description || defaultSeo.social.twitter.description
+            }}
+            canonical={seo?.advanced?.canonical || defaultSeo.advanced.canonical}
+            noindex={seo?.advanced?.robots?.includes('noindex') ||
+                defaultSeo?.advanced?.robots?.includes('noindex')}
+            nofollow={seo?.advanced?.robots?.includes('nofollow') ||
+                defaultSeo?.advanced?.robots?.includes('noindex')}
+            extend={{
+                meta: [
+                    {
+                        name: 'robots',
+                        content:
+                            seo?.advanced?.robots?.join(',') || defaultSeo.advanced.robots.join(',')
+                    }
+                ]
+            }}
+        /> -->
+
+        <!-- Fonts -->
+        {FONTS.map(font =>
+            <link
+                rel="preload"
+                href={`/fonts/${font}`}
+                as="font"
+                type="font/woff2"
+                crossorigin
+            />
+        )}
+
+    </head>
+    <body>
+        <main role="main" id="swup" class="transition-fade">
+            <div id="content">
+                <slot />
+            </div>
+        </main>
+        <script src="../scripts/app.ts"></script>
+    </body>
+</html>
