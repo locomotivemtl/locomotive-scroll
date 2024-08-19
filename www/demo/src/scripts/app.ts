@@ -10,30 +10,30 @@ $screenDebounce.subscribe(() => {
 });
 
 // Progress event
-const $progressEventLabel = document.querySelector('[data-custom-event="progress"]')
-const onProgressEventCall = (e) => {
-    const { target, progress } = e.detail;
+const $progressEventLabel = document.querySelector('[data-custom-event="progress"]') as HTMLElement
+const onProgressEventCall = (e: CustomEvent) => {
+    const { progress } = e.detail;
     $progressEventLabel.textContent = `${Math.round(
         (progress + Number.EPSILON) * 100
     )}%`;
 }
-window.addEventListener('progressEvent', onProgressEventCall);
+window.addEventListener('progressEvent', onProgressEventCall as EventListener);
 
 // Progress position
 const $positionProgresses = Array.from(document.querySelectorAll('[data-position-progress]'))
-const onProgressPositionCall = (e) => {
+const onProgressPositionCall = (e: CustomEvent) => {
     const { target, progress } = e.detail;
-    const $positionProgress = $positionProgresses.find(($el) => $el.parentElement === target)
+    const $positionProgress = $positionProgresses.find(($el) => $el.parentElement === target) as HTMLElement;
     $positionProgress.textContent = `${Math.round(
         (progress + Number.EPSILON) * 100
     )}%`;
 }
-window.addEventListener('progressPositionEvent', onProgressPositionCall);
+window.addEventListener('progressPositionEvent', onProgressPositionCall as EventListener);
 
 // Custom event
-const $customEventLabel = document.querySelector('[data-custom-event="event"]')
-const onCustomEventCall = (e) => {
-    const { target, way, from } = e.detail;
+const $customEventLabel = document.querySelector('[data-custom-event="event"]') as HTMLElement
+const onCustomEventCall = (e: CustomEvent) => {
+    const { way } = e.detail;
     $customEventLabel.textContent = `scrollEvent ${way}`;
 }
-window.addEventListener('scrollEvent', onCustomEventCall);
+window.addEventListener('scrollEvent', onCustomEventCall as EventListener);
