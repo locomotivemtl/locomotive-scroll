@@ -1,0 +1,5 @@
+# build output
+dist/
+
+# SVG sprite
+public/assets/images/sprite.svg

@@ -1,8 +1,6 @@
 node_modules
 .DS_Store
 Thumbs.db
-loconfig.*.json
-!loconfig.example.json
 
 # Ignore nested folders: https://stackoverflow.com/questions/3203228/git-ignore-exception/72380673#72380673
 /tmp/*
@@ -14,3 +12,26 @@ loconfig.*.json
 /tmp/esm/*
 !tmp/**/package.json
 !tmp/**/tsconfig.json
+
+# generated types
+.astro
+
+# logs
+npm-debug.log*
+yarn-debug.log*
+yarn-error.log*
+pnpm-debug.log*
+
+# environment variables
+.env
+.env.production
+
+# macOS-specific files
+.DS_Store
+
+# jetbrains setting folder
+.idea
+
+# packages
+!/www/demo
+/www/demo/*
