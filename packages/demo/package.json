@@ -40,5 +40,8 @@
         "prettier": "^3.3.1",
         "prettier-plugin-astro": "^0.14.0",
         "prettier-plugin-tailwindcss": "^0.6.1"
+    },
+    "optionalDependencies": {
+        "@rollup/rollup-linux-x64-gnu": "4.9.5"
     }
 }
