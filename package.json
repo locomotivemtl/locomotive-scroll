@@ -18,6 +18,7 @@
     },
     "scripts": {
         "build": "npm run build --workspaces --if-present",
+        "build:web": "npm run build --workspaces=packages/demo --if-present",
         "dev": "npm run dev --workspace=packages/demo --if-present",
         "publish": "npm run publish:beta --workspace=packages/lib --if-present"
     },
