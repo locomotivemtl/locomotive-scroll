@@ -36,7 +36,7 @@ Find more ways to install the package in our [Quick start](https://scroll.locomo
 | ------------------------------------------------ | ---------------------------- |
 | [Lenis](https://github.com/darkroomengineering/lenis) | How smooth scroll should be. |
 
-## Related
+## Related 
 
 -   [Lenis](https://github.com/darkroomengineering/lenis)
 -   [Modularjs](https://github.com/modularorg/modularjs)
