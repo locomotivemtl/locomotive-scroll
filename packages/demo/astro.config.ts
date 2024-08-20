@@ -6,6 +6,8 @@ import postcssTailwindShortcuts from '@locomotivemtl/postcss-tailwind-shortcuts'
 // https://astro.build/config
 export default defineConfig({
     site: 'https://scroll.locomotive.ca/demo',
+    base: '/demo',
+    outDir: '../../www/demo',
     vite: {
         css: {
             preprocessorOptions: {
@@ -36,6 +38,5 @@ export default defineConfig({
     image: {
         domains: ['locomotive.ca'],
         remotePatterns: [{ protocol: 'https' }],
-    },
-    outDir: '../../www/demo',
+    }
 });
