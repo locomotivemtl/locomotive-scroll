@@ -1,0 +1,70 @@
+{
+    "name": "locomotive-scroll",
+    "version": "5.0.0-beta.15",
+    "description": "Detection of elements in viewport & smooth scrolling with parallax effects.",
+    "license": "MIT",
+    "homepage": "https://github.com/locomotivemtl/locomotive-scroll",
+    "repository": {
+        "type": "git",
+        "url": "https://github.com/locomotivemtl/locomotive-scroll.git"
+    },
+    "author": {
+        "name": "Locomotive",
+        "email": "info@locomotive.ca",
+        "homepage": "https://locomotive.ca"
+    },
+    "keywords": [
+        "front-end",
+        "javascript",
+        "smooth-scrolling",
+        "parallax",
+        "scroll"
+    ],
+    "engines": {
+        "node": ">=20"
+    },
+    "type": "module",
+    "source": "src/index.ts",
+    "main": "dist/locomotive-scroll.js",
+    "umd:main": "dist/locomotive-scroll.umd.js",
+    "module": "dist/locomotive-scroll.mjs",
+    "types": "dist/types/index.d.ts",
+    "exports": {
+        ".": {
+            "types": "./dist/locomotive-scroll.d.ts",
+            "require": "./dist/locomotive-scroll.js",
+            "default": "./dist/locomotive-scroll.modern.mjs"
+        },
+        "./locomotive-scroll.css": "./dist/locomotive-scroll.css"
+    },
+    "scripts": {
+        "clean": "rimraf dist bundled",
+        "build": "npm run clean && npm-run-all --parallel build:dist build:css build:bundle build:types",
+        "build:types": "tsc --allowJs -d --emitDeclarationOnly --declarationDir ./dist/types --removeComments ./index.ts",
+        "build:dist": "microbundle build -i index.ts --o ./dist",
+        "build:bundle": "npm-run-all build:bundle-full build:bundle-min build:bundle-css",
+        "build:bundle-full": "microbundle build -i index.ts --o ./bundled/locomotive-scroll.js --no-sourcemap --no-pkg-main --external none --name LocomotiveScroll --format umd --no-compress",
+        "build:bundle-min": "microbundle build -i index.ts --o ./bundled/locomotive-scroll.min.js --no-sourcemap --no-pkg-main --external none --name LocomotiveScroll --format umd",
+        "build:css": "postcss styles/main.css --o ./dist/locomotive-scroll.css --no-map",
+        "build:bundle-css": "postcss styles/main.css --o ./bundled/locomotive-scroll.css --no-map",
+        "watch": "microbundle watch -i index.ts --o ./dist --no-compress",
+        "publish:beta": "npm publish --tag beta"
+    },
+    "files": [
+        "dist",
+        "bundled"
+    ],
+    "dependencies": {
+        "lenis": "1.1.9"
+    },
+    "devDependencies": {
+        "cssnano": "^6.0.1",
+        "microbundle": "^0.15.1",
+        "npm-run-all": "^4.1.5",
+        "postcss": "^8.4.23",
+        "postcss-cli": "^10.1.0",
+        "postcss-import": "^15.1.0",
+        "rimraf": "^5.0.0",
+        "typescript": "^5.5.4"
+    }
+}
