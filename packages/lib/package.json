@@ -64,6 +64,7 @@
         "postcss": "^8.4.23",
         "postcss-cli": "^10.1.0",
         "postcss-import": "^15.1.0",
-        "rimraf": "^5.0.0"
+        "rimraf": "^5.0.0",
+        "typescript": "^5.5.4"
     }
 }
