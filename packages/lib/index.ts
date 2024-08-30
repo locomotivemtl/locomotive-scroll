@@ -370,3 +370,5 @@ export default class LocomotiveScroll {
         this.rafInstance = requestAnimationFrame(() => this._raf());
     }
 }
+
+export * from './types';
