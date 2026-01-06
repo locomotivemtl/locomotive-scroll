@@ -266,6 +266,33 @@
       this.getWindowSize = void 0;
       this.getMetricsStart = void 0;
       this.getMetricsSize = void 0;
+      // Position handlers for intersection.start (includes wSize)
+      this.startPositionHandlers = {
+        'start': function start(offsetStart, wSize, viewport) {
+          return offsetStart - wSize + viewport;
+        },
+        'middle': function middle(offsetStart, wSize, viewport, size) {
+          return offsetStart - wSize + viewport + size * 0.5;
+        },
+        'end': function end(offsetStart, wSize, viewport, size) {
+          return offsetStart - wSize + viewport + size;
+        },
+        'fold': function fold() {
+          return 0;
+        }
+      };
+      // Position handlers for intersection.end (DOES NOT include wSize - critical difference)
+      this.endPositionHandlers = {
+        'start': function start(offsetStart, viewport) {
+          return offsetStart - viewport;
+        },
+        'middle': function middle(offsetStart, viewport, size) {
+          return offsetStart - viewport + size * 0.5;
+        },
+        'end': function end(offsetStart, viewport, size) {
+          return offsetStart - viewport + size;
+        }
+      };
       // Scroll DOM element
       this.$el = $el;
       // Unique ID
@@ -481,6 +508,7 @@
     }
     /**
      * Compute intersection values depending on the context.
+     * Uses handler-based approach for cleaner, more maintainable code.
      *
      * @private
      */;
@@ -488,55 +516,28 @@
       var _offset$0$trim, _offset$, _offset$1$trim, _offset$2, _scrollPosition$0$tri, _scrollPosition$, _scrollPosition$1$tri, _scrollPosition$2;
       var wSize = this.getWindowSize();
       var metricsSize = this.getMetricsSize(this.metrics.bcr);
-      // Offset
+      // Parse offset
       var offset = this.attributes.scrollOffset.split(',');
       var offsetStart = (_offset$0$trim = (_offset$ = offset[0]) == null ? void 0 : _offset$.trim()) != null ? _offset$0$trim : '0';
       var offsetEnd = (_offset$1$trim = (_offset$2 = offset[1]) == null ? void 0 : _offset$2.trim()) != null ? _offset$1$trim : '0';
-      // Positions
+      // Parse positions
       var scrollPosition = this.attributes.scrollPosition.split(',');
       var scrollPositionStart = (_scrollPosition$0$tri = (_scrollPosition$ = scrollPosition[0]) == null ? void 0 : _scrollPosition$.trim()) != null ? _scrollPosition$0$tri : 'start';
       var scrollPositionEnd = (_scrollPosition$1$tri = (_scrollPosition$2 = scrollPosition[1]) == null ? void 0 : _scrollPosition$2.trim()) != null ? _scrollPosition$1$tri : 'end';
-      // Viewport
+      // Calculate viewport offsets
       var viewportStart = offsetStart.includes('%') ? wSize * parseInt(offsetStart.replace('%', '').trim()) * 0.01 : parseInt(offsetStart);
       var viewportEnd = offsetEnd.includes('%') ? wSize * parseInt(offsetEnd.replace('%', '').trim()) * 0.01 : parseInt(offsetEnd);
       // Fold exception
       if (this.isInFold) {
         scrollPositionStart = 'fold';
       }
-      // Define Intersection Start
-      switch (scrollPositionStart) {
-        case 'start':
-          this.intersection.start = this.metrics.offsetStart - wSize + viewportStart;
-          break;
-        case 'middle':
-          this.intersection.start = this.metrics.offsetStart - wSize + viewportStart + metricsSize * 0.5;
-          break;
-        case 'end':
-          this.intersection.start = this.metrics.offsetStart - wSize + viewportStart + metricsSize;
-          break;
-        case 'fold':
-          this.intersection.start = 0;
-          break;
-        default:
-          this.intersection.start = this.metrics.offsetStart - wSize + viewportStart;
-          break;
-      }
-      // Define Intersection End
-      switch (scrollPositionEnd) {
-        case 'start':
-          this.intersection.end = this.metrics.offsetStart - viewportEnd;
-          break;
-        case 'middle':
-          this.intersection.end = this.metrics.offsetStart - viewportEnd + metricsSize * 0.5;
-          break;
-        case 'end':
-          this.intersection.end = this.metrics.offsetStart - viewportEnd + metricsSize;
-          break;
-        default:
-          this.intersection.end = this.metrics.offsetStart - viewportEnd + metricsSize;
-          break;
-      }
-      // Avoid to have the end < the start intersection
+      // Calculate intersection.start using handlers
+      var startHandler = this.startPositionHandlers[scrollPositionStart];
+      this.intersection.start = startHandler ? startHandler(this.metrics.offsetStart, wSize, viewportStart, metricsSize) : this.metrics.offsetStart - wSize + viewportStart; // default fallback
+      // Calculate intersection.end using handlers
+      var endHandler = this.endPositionHandlers[scrollPositionEnd];
+      this.intersection.end = endHandler ? endHandler(this.metrics.offsetStart, viewportEnd, metricsSize) : this.metrics.offsetStart - viewportEnd + metricsSize; // default fallback
+      // Ensure end > start
       if (this.intersection.end <= this.intersection.start) {
         switch (scrollPositionEnd) {
           case 'start':

@@ -40,6 +40,8 @@ export default class ScrollElement {
     private getWindowSize;
     private getMetricsStart;
     private getMetricsSize;
+    private readonly startPositionHandlers;
+    private readonly endPositionHandlers;
     constructor({ $el, id, modularInstance, subscribeElementUpdateFn, unsubscribeElementUpdateFn, needRaf, scrollOrientation, }: IScrollElementOptions);
     /**
      * Lifecyle - Initialize progress tracking.
@@ -87,6 +89,7 @@ export default class ScrollElement {
     private _computeMetrics;
     /**
      * Compute intersection values depending on the context.
+     * Uses handler-based approach for cleaner, more maintainable code.
      *
      * @private
      */

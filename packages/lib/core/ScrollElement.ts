@@ -64,6 +64,21 @@ export default class ScrollElement {
     private getMetricsStart: (bcr: DOMRect) => number;
     private getMetricsSize: (bcr: DOMRect) => number;
 
+    // Position handlers for intersection.start (includes wSize)
+    private readonly startPositionHandlers: Record<string, (offsetStart: number, wSize: number, viewport: number, size: number) => number> = {
+        'start': (offsetStart, wSize, viewport) => offsetStart - wSize + viewport,
+        'middle': (offsetStart, wSize, viewport, size) => offsetStart - wSize + viewport + size * 0.5,
+        'end': (offsetStart, wSize, viewport, size) => offsetStart - wSize + viewport + size,
+        'fold': () => 0,
+    };
+
+    // Position handlers for intersection.end (DOES NOT include wSize - critical difference)
+    private readonly endPositionHandlers: Record<string, (offsetStart: number, viewport: number, size: number) => number> = {
+        'start': (offsetStart, viewport) => offsetStart - viewport,
+        'middle': (offsetStart, viewport, size) => offsetStart - viewport + size * 0.5,
+        'end': (offsetStart, viewport, size) => offsetStart - viewport + size,
+    };
+
     constructor({
         $el,
         id,
@@ -336,6 +351,7 @@ export default class ScrollElement {
 
     /**
      * Compute intersection values depending on the context.
+     * Uses handler-based approach for cleaner, more maintainable code.
      *
      * @private
      */
@@ -343,17 +359,17 @@ export default class ScrollElement {
         const wSize = this.getWindowSize();
         const metricsSize = this.getMetricsSize(this.metrics.bcr);
 
-        // Offset
+        // Parse offset
         const offset = this.attributes.scrollOffset.split(',');
         const offsetStart = offset[0]?.trim() ?? '0';
         const offsetEnd = offset[1]?.trim() ?? '0';
 
-        // Positions
+        // Parse positions
         const scrollPosition = this.attributes.scrollPosition.split(',');
         let scrollPositionStart = scrollPosition[0]?.trim() ?? 'start';
         const scrollPositionEnd = scrollPosition[1]?.trim() ?? 'end';
 
-        // Viewport
+        // Calculate viewport offsets
         const viewportStart = offsetStart.includes('%')
             ? wSize * parseInt(offsetStart.replace('%', '').trim()) * 0.01
             : parseInt(offsetStart);
@@ -366,78 +382,30 @@ export default class ScrollElement {
             scrollPositionStart = 'fold';
         }
 
-        // Define Intersection Start
-        switch (scrollPositionStart) {
-            case 'start':
-                this.intersection.start =
-                    this.metrics.offsetStart - wSize + viewportStart;
-                break;
+        // Calculate intersection.start using handlers
+        const startHandler = this.startPositionHandlers[scrollPositionStart];
+        this.intersection.start = startHandler
+            ? startHandler(this.metrics.offsetStart, wSize, viewportStart, metricsSize)
+            : this.metrics.offsetStart - wSize + viewportStart; // default fallback
 
-            case 'middle':
-                this.intersection.start =
-                    this.metrics.offsetStart -
-                    wSize +
-                    viewportStart +
-                    metricsSize * 0.5;
-                break;
+        // Calculate intersection.end using handlers
+        const endHandler = this.endPositionHandlers[scrollPositionEnd];
+        this.intersection.end = endHandler
+            ? endHandler(this.metrics.offsetStart, viewportEnd, metricsSize)
+            : this.metrics.offsetStart - viewportEnd + metricsSize; // default fallback
 
-            case 'end':
-                this.intersection.start =
-                    this.metrics.offsetStart -
-                    wSize +
-                    viewportStart +
-                    metricsSize;
-                break;
-
-            case 'fold':
-                this.intersection.start = 0;
-                break;
-
-            default:
-                this.intersection.start =
-                    this.metrics.offsetStart - wSize + viewportStart;
-                break;
-        }
-
-        // Define Intersection End
-        switch (scrollPositionEnd) {
-            case 'start':
-                this.intersection.end = this.metrics.offsetStart - viewportEnd;
-                break;
-
-            case 'middle':
-                this.intersection.end =
-                    this.metrics.offsetStart - viewportEnd + metricsSize * 0.5;
-                break;
-
-            case 'end':
-                this.intersection.end =
-                    this.metrics.offsetStart - viewportEnd + metricsSize;
-                break;
-
-            default:
-                this.intersection.end =
-                    this.metrics.offsetStart - viewportEnd + metricsSize;
-                break;
-        }
-
-        // Avoid to have the end < the start intersection
+        // Ensure end > start
         if (this.intersection.end <= this.intersection.start) {
             switch (scrollPositionEnd) {
                 case 'start':
                     this.intersection.end = this.intersection.start + 1;
                     break;
-
                 case 'middle':
-                    this.intersection.end =
-                        this.intersection.start + metricsSize * 0.5;
+                    this.intersection.end = this.intersection.start + metricsSize * 0.5;
                     break;
-
                 case 'end':
-                    this.intersection.end =
-                        this.intersection.start + metricsSize;
+                    this.intersection.end = this.intersection.start + metricsSize;
                     break;
-
                 default:
                     this.intersection.end = this.intersection.start + 1;
                     break;
