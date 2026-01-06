@@ -8,24 +8,19 @@
  * - scrollClass - Add a custom class when the element is intersected by the offset
  * - scrollOffset - Determine offsets to intersect the element
  * - scrollPosition - Determine the element positions to consider an element as intersected.
- * - scrollModuleProgress - Send scroll progress to modular module that have a specific method (PROGRESS_MODULAR_METHOD)
  * - scrollCssProgress - Add a specific css variable (PROGRESS_CSS_VAR) that store the scroll progress
  * - scrollEventProgress - Send scroll progress to custom event listeners.
  * - scrollSpeed - Add a scroll multiplicator to create a parallax effect
  * - scrollRepeat - Repeat the option to trigger animation each time the element is intersected
- * - scrollCall - Call a custom event or a modular callback when the element is intersected
+ * - scrollCall - Call a custom event when the element is intersected
  */
 
 import type {
-    IModular,
     IScrollElementOptions,
     IScrollElementAttributes,
     IScrollElementIntersection,
     IScrollElementMetrics,
-    IProgressModularModules,
     IScrollElementCallbacksValues,
-    scrollCallWay,
-    scrollCallFrom,
     scrollOrientation,
 } from '../types';
 import { clamp, closestNumber, normalize, mapRange } from '../utils/maths';
@@ -33,7 +28,6 @@ import { clamp, closestNumber, normalize, mapRange } from '../utils/maths';
 /** Constants */
 const INVIEW_CLASS = 'is-inview';
 const PROGRESS_CSS_VAR = '--progress';
-const PROGRESS_MODULAR_METHOD = 'onScrollProgress';
 
 export default class ScrollElement {
     public $el: HTMLElement;
@@ -49,8 +43,6 @@ export default class ScrollElement {
     private translateValue: number;
     private progress: number;
     private lastProgress: number | null;
-    private modularInstance?: IModular;
-    private progressModularModules: IProgressModularModules[];
     private isInview: boolean;
     private isInteractive: boolean;
     private isInFold: boolean;
@@ -82,7 +74,6 @@ export default class ScrollElement {
     constructor({
         $el,
         id,
-        modularInstance,
         subscribeElementUpdateFn,
         unsubscribeElementUpdateFn,
         needRaf,
@@ -96,8 +87,6 @@ export default class ScrollElement {
         this.needRaf = needRaf;
         // Scroll Direction
         this.scrollOrientation = scrollOrientation;
-        // Modular.js
-        this.modularInstance = modularInstance;
         // Parent's callbacks
         this.subscribeElementUpdateFn = subscribeElementUpdateFn;
         this.unsubscribeElementUpdateFn = unsubscribeElementUpdateFn;
@@ -107,8 +96,6 @@ export default class ScrollElement {
             scrollClass: this.$el.dataset['scrollClass'] ?? INVIEW_CLASS,
             scrollOffset: this.$el.dataset['scrollOffset'] ?? '0,0',
             scrollPosition: this.$el.dataset['scrollPosition'] ?? 'start,end',
-            scrollModuleProgress:
-                this.$el.dataset['scrollModuleProgress'] !== undefined,
             scrollCssProgress: this.$el.dataset['scrollCssProgress'] !== undefined,
             scrollEventProgress:
                 this.$el.dataset['scrollEventProgress'] ?? null,
@@ -118,7 +105,6 @@ export default class ScrollElement {
                     : null,
             scrollRepeat: this.$el.dataset['scrollRepeat'] !== undefined,
             scrollCall: this.$el.dataset['scrollCall'] ?? null,
-            scrollCallSelf: this.$el.dataset['scrollCallSelf'] !== undefined,
             scrollIgnoreFold: this.$el.dataset['scrollIgnoreFold'] !== undefined,
             scrollEnableTouchSpeed:
                 this.$el.dataset['scrollEnableTouchSpeed'] !== undefined,
@@ -149,7 +135,6 @@ export default class ScrollElement {
         // Progress
         this.progress = 0;
         this.lastProgress = null;
-        this.progressModularModules = [];
 
         // Inview
         this.isInview = false;
@@ -183,11 +168,6 @@ export default class ScrollElement {
     private _init() {
         if (!this.needRaf) {
             return;
-        }
-
-        // Prepare modules progress
-        if (this.modularInstance && this.attributes.scrollModuleProgress) {
-            this._getProgressModularModules();
         }
 
         // First resize to compute all values
@@ -254,8 +234,8 @@ export default class ScrollElement {
         this.isInview = true;
         this.$el.classList.add(this.attributes.scrollClass);
 
-        const way: scrollCallWay = 'enter';
-        const from: scrollCallFrom = this._getScrollCallFrom();
+        const way = 'enter';
+        const from = this._getScrollCallFrom();
         this.attributes.scrollCall && this._dispatchCall(way, from);
     }
 
@@ -270,8 +250,8 @@ export default class ScrollElement {
         this.isInview = false;
         this.$el.classList.remove(this.attributes.scrollClass);
 
-        const way: scrollCallWay = 'leave';
-        const from: scrollCallFrom = this._getScrollCallFrom();
+        const way = 'leave';
+        const from = this._getScrollCallFrom();
         this.attributes.scrollCall && this._dispatchCall(way, from);
     }
 
@@ -447,18 +427,6 @@ export default class ScrollElement {
             this.attributes.scrollEventProgress &&
                 this._setCustomEventProgress(progress);
 
-            // Set the element's progress to inline modules
-            if (this.attributes.scrollModuleProgress) {
-                for (const modularModules of this.progressModularModules) {
-                    this.modularInstance?.call(
-                        PROGRESS_MODULAR_METHOD,
-                        progress,
-                        modularModules.moduleName,
-                        modularModules.moduleId
-                    );
-                }
-            }
-
             // Logic to trigger the inview/out of view callbacks
             progress > 0 && progress < 1 && this.setInview();
             progress === 0 && this.setOutOfView();
@@ -502,50 +470,11 @@ export default class ScrollElement {
     }
 
     /**
-     * Get modular modules that can listen the element's progress.
-     *
-     * @private
-     */
-    _getProgressModularModules() {
-        if (!this.modularInstance) {
-            return;
-        }
-
-        const modulesIdNames = Object.keys(this.$el.dataset).filter((key) =>
-            key.includes('module')
-        );
-        const modules: [string, any][] = Object.entries(this.modularInstance.modules);
-
-        if (!modulesIdNames.length) {
-            return;
-        }
-
-        for (const modulesIdName of modulesIdNames) {
-            const moduleId = this.$el.dataset[modulesIdName];
-
-            if (!moduleId) {
-                return;
-            }
-
-            for (const module of modules) {
-                const [moduleName, moduleObj] = module;
-
-                if (moduleId in moduleObj) {
-                    this.progressModularModules.push({
-                        moduleName,
-                        moduleId,
-                    });
-                }
-            }
-        }
-    }
-
-    /**
      * Function to get scroll call from.
      *
      * @private
      */
-    _getScrollCallFrom(): scrollCallFrom {
+    _getScrollCallFrom() {
         const closestIntersectionValue = closestNumber(
             [this.intersection.start, this.intersection.end],
             this.currentScroll
@@ -575,56 +504,29 @@ export default class ScrollElement {
         if (this.isInview && this.attributes.scrollClass) {
             this.$el.classList.remove(this.attributes.scrollClass);
         }
-
-        // Clear references
-        this.progressModularModules = [];
     }
 
     /**
-     * Function to dispatch a custom event or call a modular callback.
+     * Function to dispatch a custom event.
      *
      * @private
      *
-     * @param {scrollCallWay} way - Enter or leave.
-     * @param {scrollCallFrom} from - Start or end.
+     * @param {string} way - Enter or leave.
+     * @param {string} from - Start or end.
      */
-    _dispatchCall(way: scrollCallWay, from: scrollCallFrom) {
-        const callParameters = this.attributes.scrollCall?.split(',');
-        const callSelf = this.attributes?.scrollCallSelf;
+    _dispatchCall(way: string, from: string) {
+        const customEventName = this.attributes.scrollCall;
 
-        if (callParameters && callParameters.length > 1) {
-            // Using Modular.js (https://github.com/modularorg/modularjs)
-            const [func, moduleName, moduleId] = callParameters;
-            let targetModuleId;
+        if (!customEventName) return;
 
-            // If the module is set on the scroll element
-            if (callSelf) {
-                targetModuleId = this.$el.dataset[`module${moduleName.trim()}`];
-            } else {
-                targetModuleId = moduleId;
-            }
-
-            this.modularInstance?.call(
-                func.trim(),
-                {
-                    target: this.$el,
-                    way,
-                    from,
-                },
-                moduleName.trim(),
-                targetModuleId?.trim()
-            );
-        } else if (callParameters) {
-            // Using CustomEvent API (https://developer.mozilla.org/en-US/docs/Web/API/CustomEvent)
-            const [customEventName] = callParameters;
-            const customEvent = new CustomEvent(customEventName, {
-                detail: {
-                    target: this.$el,
-                    way,
-                    from,
-                },
-            });
-            window.dispatchEvent(customEvent);
-        }
+        // Using CustomEvent API (https://developer.mozilla.org/en-US/docs/Web/API/CustomEvent)
+        const customEvent = new CustomEvent(customEventName, {
+            detail: {
+                target: this.$el,
+                way,
+                from,
+            },
+        });
+        window.dispatchEvent(customEvent);
     }
 }

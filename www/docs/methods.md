@@ -71,7 +71,7 @@ locomotiveScroll.removeScrollElements($oldContainer);
 The `addScrollElements($newContainer)` method allows you to dynamically observe scroll elements (`[data-scroll]`) by providing their container. This is particularly useful when you're updating the DOM dynamically, such as through Ajax fetching or other operations that add or remove elements from the page.
 
 -   **Parameters:**
-    -   `$newContainer` (_HTMLElement_): The `NodeElement` that has been addeed from the DOM. This container should be the parent element that contains the scroll elements you want to observe.
+    -   `$newContainer` (_HTMLElement_): The `NodeElement` that has been added from the DOM. This container should be the parent element that contains the scroll elements you want to observe.
 
 Here's an example of how to use the `addScrollElements($newContainer)` method:
 

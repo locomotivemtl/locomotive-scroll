@@ -56,7 +56,7 @@ locomotiveScroll.lenisInstance.options.content.addEventListener('wheel', (event)
     const paths = event.composedPath();
 
     paths.find((el) => {
-        if(el instanceof HTMLElement && el?.getAttribute('id') == ('modalSelector')) {
+        if(el instanceof HTMLElement && el?.getAttribute('id') === 'modalSelector') {
             event.stopPropagation();
 
             return;

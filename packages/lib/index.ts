@@ -5,7 +5,6 @@ import type {
     ILenisScrollToOptions,
     ILenisScrollValues,
     ILocomotiveScrollOptions,
-    IModular,
     lenisTargetScrollTo,
 } from './types';
 import type { LenisOptions } from 'lenis';
@@ -28,7 +27,6 @@ export default class LocomotiveScroll {
     private coreInstance: Core | null = null;
 
     private lenisOptions?: LenisOptions;
-    private modularInstance?: IModular;
     private triggerRootMargin?: string;
     private rafRootMargin?: string;
     private rafInstance?: number;
@@ -44,7 +42,6 @@ export default class LocomotiveScroll {
 
     constructor({
         lenisOptions = {},
-        modularInstance,
         triggerRootMargin,
         rafRootMargin,
         autoResize = true,
@@ -63,7 +60,6 @@ export default class LocomotiveScroll {
         // Get arguments
         Object.assign(this, {
             lenisOptions,
-            modularInstance,
             triggerRootMargin,
             rafRootMargin,
             autoResize,
@@ -111,7 +107,6 @@ export default class LocomotiveScroll {
             // Create Core Instance
             this.coreInstance = new Core({
                 $el: this.lenisInstance.rootElement,
-                modularInstance: this.modularInstance,
                 triggerRootMargin: this.triggerRootMargin,
                 rafRootMargin: this.rafRootMargin,
                 scrollOrientation: this.lenisInstance.options.orientation,

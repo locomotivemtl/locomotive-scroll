@@ -5,7 +5,6 @@ import type { CoreOptions, IScrollElementCallbacksValues } from '../types';
 import ScrollElement from './ScrollElement';
 export default class Core {
     private $scrollContainer;
-    private modularInstance?;
     private triggerRootMargin;
     private rafRootMargin;
     private scrollElements;
@@ -15,7 +14,7 @@ export default class Core {
     private IOTriggerInstance;
     private IORafInstance;
     private scrollOrientation;
-    constructor({ $el, modularInstance, triggerRootMargin, rafRootMargin, scrollOrientation, }: CoreOptions);
+    constructor({ $el, triggerRootMargin, rafRootMargin, scrollOrientation, }: CoreOptions);
     /**
      * Lifecyle - Initialize the core.
      *

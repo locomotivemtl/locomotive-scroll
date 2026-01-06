@@ -41,7 +41,7 @@
     "scripts": {
         "clean": "rimraf dist bundled",
         "build": "npm run clean && npm-run-all --parallel build:dist build:css build:bundle build:types",
-        "build:types": "tsc --allowJs -d --emitDeclarationOnly --declarationDir ./dist/types --removeComments ./index.ts",
+        "build:types": "tsc --allowJs -d --emitDeclarationOnly --declarationDir ./dist/types --removeComments --skipLibCheck ./index.ts",
         "build:dist": "microbundle build -i index.ts --o ./dist",
         "build:bundle": "npm-run-all build:bundle-full build:bundle-min build:bundle-css",
         "build:bundle-full": "microbundle build -i index.ts --o ./bundled/locomotive-scroll.js --no-sourcemap --no-pkg-main --external none --name LocomotiveScroll --format umd --no-compress",
@@ -56,7 +56,7 @@
         "bundled"
     ],
     "dependencies": {
-        "lenis": "1.1.9"
+        "lenis": "1.3.17"
     },
     "devDependencies": {
         "cssnano": "^6.0.1",

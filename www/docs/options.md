@@ -59,7 +59,7 @@ const locomotiveScroll = new LocomotiveScroll({
 -   **Type:** `string`
 -   **Default:** `'100% 100% 100% 100%'`
 
-_(Optional)_ Specifies the root margin for scroll elements that need to be triggered by the [IntersectionObserver](https://developer.mozilla.org/en-US/docs/Web/API/IntersectionObserver/rootMargin) based on a **RequestAnimationFrame**. This option is relevant for elements with any of the following attributes: `data-scroll-offset`, `data-scroll-position`, `data-scroll-module-progress`, `data-scroll-css-progress`, `data-scroll-speed`.
+_(Optional)_ Specifies the root margin for scroll elements that need to be triggered by the [IntersectionObserver](https://developer.mozilla.org/en-US/docs/Web/API/IntersectionObserver/rootMargin) based on a **RequestAnimationFrame**. This option is relevant for elements with any of the following attributes: `data-scroll-offset`, `data-scroll-position`, `data-scroll-css-progress`, `data-scroll-event-progress`, `data-scroll-speed`.
 
 ```js
 // Default Value
@@ -149,9 +149,9 @@ const locomotiveScroll = new LocomotiveScroll({
     initCustomTicker: (render) => {
         gsap.ticker.add(render);
     },
-    /* destroyCustomTicker: (render) => {
+    destroyCustomTicker: (render) => {
         gsap.ticker.remove(render);
-    }, */
+    },
 });
 ```
 
@@ -168,9 +168,9 @@ import LocomotiveScroll from 'locomotive-scroll';
 import { gsap } from 'gsap/all';
 
 const locomotiveScroll = new LocomotiveScroll({
-    /* initCustomTicker: (render) => {
+    initCustomTicker: (render) => {
         gsap.ticker.add(render);
-    }, */
+    },
     destroyCustomTicker: (render) => {
         gsap.ticker.remove(render);
     },

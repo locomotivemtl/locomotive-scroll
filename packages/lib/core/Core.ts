@@ -4,7 +4,6 @@
 
 import type {
     CoreOptions,
-    IModular,
     IScrollElementCallbacksValues,
     scrollOrientation,
 } from '../types';
@@ -15,7 +14,6 @@ import ScrollElement from './ScrollElement';
 const ATTRIBUTES_THAT_NEED_RAF = [
     'scrollOffset',
     'scrollPosition',
-    'scrollModuleProgress',
     'scrollCssProgress',
     'scrollEventProgress',
     'scrollSpeed',
@@ -31,7 +29,6 @@ const DEFAULT_SCROLL_POSITION = 'top,bottom';
 
 export default class Core {
     private $scrollContainer!: HTMLElement;
-    private modularInstance?: IModular;
     private triggerRootMargin!: string;
     private rafRootMargin!: string;
     private scrollElements!: ScrollElement[];
@@ -44,7 +41,6 @@ export default class Core {
 
     constructor({
         $el,
-        modularInstance,
         triggerRootMargin,
         rafRootMargin,
         scrollOrientation,
@@ -56,9 +52,6 @@ export default class Core {
 
         // Scroll container
         this.$scrollContainer = $el;
-
-        // Modular.js
-        this.modularInstance = modularInstance;
 
         // Scroll Direction
         this.scrollOrientation = scrollOrientation;
@@ -236,7 +229,6 @@ export default class Core {
                 $el: $scrollElement,
                 id: fromIndex + index,
                 scrollOrientation: this.scrollOrientation,
-                modularInstance: this.modularInstance,
                 subscribeElementUpdateFn:
                     this._subscribeElementUpdate.bind(this),
                 unsubscribeElementUpdateFn:

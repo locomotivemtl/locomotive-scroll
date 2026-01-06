@@ -15,7 +15,6 @@ export default class LocomotiveScroll {
     lenisInstance: Lenis | null;
     private coreInstance;
     private lenisOptions?;
-    private modularInstance?;
     private triggerRootMargin?;
     private rafRootMargin?;
     private rafInstance?;
@@ -28,7 +27,7 @@ export default class LocomotiveScroll {
     private _onRenderBind;
     private _onResizeBind;
     private _onScrollToBind;
-    constructor({ lenisOptions, modularInstance, triggerRootMargin, rafRootMargin, autoResize, autoStart, scrollCallback, initCustomTicker, destroyCustomTicker, }?: ILocomotiveScrollOptions);
+    constructor({ lenisOptions, triggerRootMargin, rafRootMargin, autoResize, autoStart, scrollCallback, initCustomTicker, destroyCustomTicker, }?: ILocomotiveScrollOptions);
     /**
      * Lifecyle - Initialize instance.
      *
