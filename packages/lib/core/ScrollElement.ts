@@ -59,6 +59,11 @@ export default class ScrollElement {
     private subscribeElementUpdateFn: (scrollElement: ScrollElement) => void;
     private unsubscribeElementUpdateFn: (scrollElement: ScrollElement) => void;
 
+    // Cached functions to avoid orientation checks every frame
+    private getWindowSize: () => number;
+    private getMetricsStart: (bcr: DOMRect) => number;
+    private getMetricsSize: (bcr: DOMRect) => number;
+
     constructor({
         $el,
         id,
@@ -88,20 +93,20 @@ export default class ScrollElement {
             scrollOffset: this.$el.dataset['scrollOffset'] ?? '0,0',
             scrollPosition: this.$el.dataset['scrollPosition'] ?? 'start,end',
             scrollModuleProgress:
-                this.$el.dataset['scrollModuleProgress'] != null,
-            scrollCssProgress: this.$el.dataset['scrollCssProgress'] != null,
+                this.$el.dataset['scrollModuleProgress'] !== undefined,
+            scrollCssProgress: this.$el.dataset['scrollCssProgress'] !== undefined,
             scrollEventProgress:
                 this.$el.dataset['scrollEventProgress'] ?? null,
             scrollSpeed:
-                this.$el.dataset['scrollSpeed'] != null
+                this.$el.dataset['scrollSpeed'] !== undefined
                     ? parseFloat(this.$el.dataset['scrollSpeed'])
                     : null,
-            scrollRepeat: this.$el.dataset['scrollRepeat'] != null,
+            scrollRepeat: this.$el.dataset['scrollRepeat'] !== undefined,
             scrollCall: this.$el.dataset['scrollCall'] ?? null,
-            scrollCallSelf: this.$el.dataset['scrollCallSelf'] != null,
-            scrollIgnoreFold: this.$el.dataset['scrollIgnoreFold'] != null,
+            scrollCallSelf: this.$el.dataset['scrollCallSelf'] !== undefined,
+            scrollIgnoreFold: this.$el.dataset['scrollIgnoreFold'] !== undefined,
             scrollEnableTouchSpeed:
-                this.$el.dataset['scrollEnableTouchSpeed'] != null,
+                this.$el.dataset['scrollEnableTouchSpeed'] !== undefined,
         };
 
         // Limits
@@ -138,6 +143,19 @@ export default class ScrollElement {
         this.isInFold = false;
         this.isFirstResize = true;
 
+        // Cache orientation-dependent functions to avoid repeated conditionals
+        this.getWindowSize = this.scrollOrientation === 'vertical'
+            ? () => window.innerHeight
+            : () => window.innerWidth;
+
+        this.getMetricsStart = this.scrollOrientation === 'vertical'
+            ? (bcr: DOMRect) => bcr.top
+            : (bcr: DOMRect) => bcr.left;
+
+        this.getMetricsSize = this.scrollOrientation === 'vertical'
+            ? (bcr: DOMRect) => bcr.height
+            : (bcr: DOMRect) => bcr.width;
+
         // Init
         this._init();
     }
@@ -173,10 +191,7 @@ export default class ScrollElement {
      * Callback - RAF callback
      */
     public onRender({ currentScroll, smooth }: IScrollElementCallbacksValues) {
-        const wSize =
-            this.scrollOrientation === 'vertical'
-                ? window.innerHeight
-                : window.innerWidth;
+        const wSize = this.getWindowSize();
         this.currentScroll = currentScroll;
         this._computeProgress();
 
@@ -271,7 +286,7 @@ export default class ScrollElement {
         this.unsubscribeElementUpdateFn(this);
 
         // Force progress to progress limit when the element is out
-        this.lastProgress != null &&
+        this.lastProgress !== null &&
             this._computeProgress(closestNumber([0, 1], this.lastProgress));
     }
 
@@ -301,14 +316,9 @@ export default class ScrollElement {
      * @private
      */
     private _computeMetrics() {
-        const { top, left, height, width } = this.metrics.bcr;
-        const wSize =
-            this.scrollOrientation === 'vertical'
-                ? window.innerHeight
-                : window.innerWidth;
-        const metricsStart = this.scrollOrientation === 'vertical' ? top : left;
-        const metricsSize =
-            this.scrollOrientation === 'vertical' ? height : width;
+        const wSize = this.getWindowSize();
+        const metricsStart = this.getMetricsStart(this.metrics.bcr);
+        const metricsSize = this.getMetricsSize(this.metrics.bcr);
 
         this.metrics.offsetStart =
             this.currentScroll + metricsStart - this.translateValue;
@@ -330,29 +340,18 @@ export default class ScrollElement {
      * @private
      */
     private _computeIntersection() {
-        // Window size
-        const wSize =
-            this.scrollOrientation === 'vertical'
-                ? window.innerHeight
-                : window.innerWidth;
-
-        // Metrics size
-        const metricsSize =
-            this.scrollOrientation === 'vertical'
-                ? this.metrics.bcr.height
-                : this.metrics.bcr.width;
+        const wSize = this.getWindowSize();
+        const metricsSize = this.getMetricsSize(this.metrics.bcr);
 
         // Offset
         const offset = this.attributes.scrollOffset.split(',');
-        const offsetStart = offset[0] != undefined ? offset[0].trim() : '0';
-        const offsetEnd = offset[1] != undefined ? offset[1].trim() : '0';
+        const offsetStart = offset[0]?.trim() ?? '0';
+        const offsetEnd = offset[1]?.trim() ?? '0';
 
         // Positions
         const scrollPosition = this.attributes.scrollPosition.split(',');
-        let scrollPositionStart =
-            scrollPosition[0] != undefined ? scrollPosition[0].trim() : 'start';
-        const scrollPositionEnd =
-            scrollPosition[1] != undefined ? scrollPosition[1].trim() : 'end';
+        let scrollPositionStart = scrollPosition[0]?.trim() ?? 'start';
+        const scrollPositionEnd = scrollPosition[1]?.trim() ?? 'end';
 
         // Viewport
         const viewportStart = offsetStart.includes('%')
@@ -422,7 +421,7 @@ export default class ScrollElement {
                 break;
         }
 
-        // Avoid to have the end < the start intersection >
+        // Avoid to have the end < the start intersection
         if (this.intersection.end <= this.intersection.start) {
             switch (scrollPositionEnd) {
                 case 'start':
@@ -470,7 +469,7 @@ export default class ScrollElement {
 
         this.progress = progress;
 
-        if (progress != this.lastProgress) {
+        if (progress !== this.lastProgress) {
             this.lastProgress = progress;
 
             // Set the element's progress to the css variable
@@ -483,13 +482,12 @@ export default class ScrollElement {
             // Set the element's progress to inline modules
             if (this.attributes.scrollModuleProgress) {
                 for (const modularModules of this.progressModularModules) {
-                    this.modularInstance &&
-                        this.modularInstance.call(
-                            PROGRESS_MODULAR_METHOD,
-                            progress,
-                            modularModules.moduleName,
-                            modularModules.moduleId
-                        );
+                    this.modularInstance?.call(
+                        PROGRESS_MODULAR_METHOD,
+                        progress,
+                        modularModules.moduleName,
+                        modularModules.moduleId
+                    );
                 }
             }
 
@@ -548,7 +546,7 @@ export default class ScrollElement {
         const modulesIdNames = Object.keys(this.$el.dataset).filter((key) =>
             key.includes('module')
         );
-        const modules: any[] = Object.entries(this.modularInstance.modules);
+        const modules: [string, any][] = Object.entries(this.modularInstance.modules);
 
         if (!modulesIdNames.length) {
             return;
@@ -590,6 +588,31 @@ export default class ScrollElement {
     }
 
     /**
+     * Lifecyle - Destroy and cleanup the scroll element.
+     *
+     * Removes all CSS modifications and clears references to prevent memory leaks.
+     */
+    public destroy(): void {
+        // Remove CSS variables
+        if (this.attributes.scrollCssProgress) {
+            this.$el.style.removeProperty(PROGRESS_CSS_VAR);
+        }
+
+        // Remove transform if parallax was applied
+        if (this.attributes.scrollSpeed) {
+            this.$el.style.removeProperty('transform');
+        }
+
+        // Remove class if added
+        if (this.isInview && this.attributes.scrollClass) {
+            this.$el.classList.remove(this.attributes.scrollClass);
+        }
+
+        // Clear references
+        this.progressModularModules = [];
+    }
+
+    /**
      * Function to dispatch a custom event or call a modular callback.
      *
      * @private
@@ -613,17 +636,16 @@ export default class ScrollElement {
                 targetModuleId = moduleId;
             }
 
-            this.modularInstance &&
-                this.modularInstance.call(
-                    func.trim(),
-                    {
-                        target: this.$el,
-                        way,
-                        from,
-                    },
-                    moduleName.trim(),
-                    targetModuleId?.trim()
-                );
+            this.modularInstance?.call(
+                func.trim(),
+                {
+                    target: this.$el,
+                    way,
+                    from,
+                },
+                moduleName.trim(),
+                targetModuleId?.trim()
+            );
         } else if (callParameters) {
             // Using CustomEvent API (https://developer.mozilla.org/en-US/docs/Web/API/CustomEvent)
             const [customEventName] = callParameters;

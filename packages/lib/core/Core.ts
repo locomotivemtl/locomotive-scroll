@@ -25,6 +25,10 @@ const ATTRIBUTES_THAT_NEED_RAF = [
 const TRIGGER_ROOT_MARGIN = '-1px -1px -1px -1px';
 const RAF_ROOT_MARGIN = '100% 100% 100% 100%'; // Add 100vh top/bottom && 100vw left/right to use a biggest value with data-scroll-speed
 
+/** Default scroll attribute values */
+const DEFAULT_SCROLL_OFFSET = '0,0';
+const DEFAULT_SCROLL_POSITION = 'top,bottom';
+
 export default class Core {
     private $scrollContainer!: HTMLElement;
     private modularInstance?: IModular;
@@ -83,7 +87,7 @@ export default class Core {
         const $scrollElements =
             this.$scrollContainer.querySelectorAll('[data-scroll]');
 
-        const $scrollElementsArr = Array.from($scrollElements) as HTMLElement[]
+        const $scrollElementsArr = this.toElementArray($scrollElements);
         this._subscribeScrollElements($scrollElementsArr);
 
         // Trigger IO
@@ -144,11 +148,12 @@ export default class Core {
 
         if (!$scrollElementsToRemove.length) return;
 
+        const $scrollElementsToRemoveSet = new Set(Array.from($scrollElementsToRemove));
+
         // 1. Remove from IO
         for (let index = 0; index < this.triggeredScrollElements.length; index++) {
             const scrollElement = this.triggeredScrollElements[index];
-            const $scrollElementsToRemoveArr = Array.from($scrollElementsToRemove) as HTMLElement []
-            if ($scrollElementsToRemoveArr.indexOf(scrollElement.$el) > -1) {
+            if ($scrollElementsToRemoveSet.has(scrollElement.$el)) {
                 this.IOTriggerInstance.unobserve(scrollElement.$el);
                 this.triggeredScrollElements.splice(index, 1);
             }
@@ -156,8 +161,7 @@ export default class Core {
 
         for (let index = 0; index < this.RAFScrollElements.length; index++) {
             const scrollElement = this.RAFScrollElements[index];
-            const $scrollElementsToRemoveArr = Array.from($scrollElementsToRemove) as HTMLElement []
-            if ($scrollElementsToRemoveArr.indexOf(scrollElement.$el) > -1) {
+            if ($scrollElementsToRemoveSet.has(scrollElement.$el)) {
                 this.IORafInstance.unobserve(scrollElement.$el);
                 this.RAFScrollElements.splice(index, 1);
             }
@@ -201,7 +205,7 @@ export default class Core {
         });
         const maxID = Math.max(...ids, 0);
         const fromIndex = maxID + 1;
-        const $scrollElementsArr = Array.from($scrollElements) as HTMLElement[]
+        const $scrollElementsArr = this.toElementArray($scrollElements);
         this._subscribeScrollElements(
             $scrollElementsArr,
             fromIndex,
@@ -274,6 +278,11 @@ export default class Core {
      * @private
      */
     _unsubscribeAllScrollElements() {
+        // Destroy all scroll elements to clean up CSS and references
+        for (const scrollElement of this.scrollElements) {
+            scrollElement.destroy();
+        }
+
         this.scrollElements = [];
         this.RAFScrollElements = [];
         this.triggeredScrollElements = [];
@@ -308,6 +317,19 @@ export default class Core {
     }
 
     /**
+     * Convert NodeListOf<Element> to HTMLElement array.
+     *
+     * @private
+     *
+     * @param {NodeListOf<Element>} elements - The NodeList to convert.
+     *
+     * @returns {HTMLElement[]}
+     */
+    private toElementArray(elements: NodeListOf<Element>): HTMLElement[] {
+        return Array.from(elements) as HTMLElement[];
+    }
+
+    /**
      * Check if a DOM Element need a requestAnimationFrame to be used.
      *
      * @private
@@ -322,7 +344,7 @@ export default class Core {
         // Remove utils
         const removeAttribute = (attributeToRemove: string) => {
             attributesThatNeedRaf = attributesThatNeedRaf.filter(
-                (attribute) => attribute != attributeToRemove
+                (attribute) => attribute !== attributeToRemove
             );
         };
 
@@ -332,7 +354,7 @@ export default class Core {
                 .split(',')
                 .map((test) => test.replace('%', '').trim())
                 .join(',');
-            if (value != '0,0') {
+            if (value !== DEFAULT_SCROLL_OFFSET) {
                 return true;
             } else {
                 removeAttribute('scrollOffset');
@@ -344,7 +366,7 @@ export default class Core {
         // 2. Check scroll position values
         if ($scrollElement.dataset.scrollPosition) {
             const value = $scrollElement.dataset.scrollPosition.trim();
-            if (value != 'top,bottom') {
+            if (value !== DEFAULT_SCROLL_POSITION) {
                 return true;
             } else {
                 removeAttribute('scrollPosition');

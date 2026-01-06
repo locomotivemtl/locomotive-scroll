@@ -262,6 +262,10 @@
       this.isFirstResize = void 0;
       this.subscribeElementUpdateFn = void 0;
       this.unsubscribeElementUpdateFn = void 0;
+      // Cached functions to avoid orientation checks every frame
+      this.getWindowSize = void 0;
+      this.getMetricsStart = void 0;
+      this.getMetricsSize = void 0;
       // Scroll DOM element
       this.$el = $el;
       // Unique ID
@@ -280,15 +284,15 @@
         scrollClass: (_this$$el$dataset$scr = this.$el.dataset['scrollClass']) != null ? _this$$el$dataset$scr : INVIEW_CLASS,
         scrollOffset: (_this$$el$dataset$scr2 = this.$el.dataset['scrollOffset']) != null ? _this$$el$dataset$scr2 : '0,0',
         scrollPosition: (_this$$el$dataset$scr3 = this.$el.dataset['scrollPosition']) != null ? _this$$el$dataset$scr3 : 'start,end',
-        scrollModuleProgress: this.$el.dataset['scrollModuleProgress'] != null,
-        scrollCssProgress: this.$el.dataset['scrollCssProgress'] != null,
+        scrollModuleProgress: this.$el.dataset['scrollModuleProgress'] !== undefined,
+        scrollCssProgress: this.$el.dataset['scrollCssProgress'] !== undefined,
         scrollEventProgress: (_this$$el$dataset$scr4 = this.$el.dataset['scrollEventProgress']) != null ? _this$$el$dataset$scr4 : null,
-        scrollSpeed: this.$el.dataset['scrollSpeed'] != null ? parseFloat(this.$el.dataset['scrollSpeed']) : null,
-        scrollRepeat: this.$el.dataset['scrollRepeat'] != null,
+        scrollSpeed: this.$el.dataset['scrollSpeed'] !== undefined ? parseFloat(this.$el.dataset['scrollSpeed']) : null,
+        scrollRepeat: this.$el.dataset['scrollRepeat'] !== undefined,
         scrollCall: (_this$$el$dataset$scr5 = this.$el.dataset['scrollCall']) != null ? _this$$el$dataset$scr5 : null,
-        scrollCallSelf: this.$el.dataset['scrollCallSelf'] != null,
-        scrollIgnoreFold: this.$el.dataset['scrollIgnoreFold'] != null,
-        scrollEnableTouchSpeed: this.$el.dataset['scrollEnableTouchSpeed'] != null
+        scrollCallSelf: this.$el.dataset['scrollCallSelf'] !== undefined,
+        scrollIgnoreFold: this.$el.dataset['scrollIgnoreFold'] !== undefined,
+        scrollEnableTouchSpeed: this.$el.dataset['scrollEnableTouchSpeed'] !== undefined
       };
       // Limits
       this.intersection = {
@@ -315,6 +319,22 @@
       this.isAlreadyIntersected = false;
       this.isInFold = false;
       this.isFirstResize = true;
+      // Cache orientation-dependent functions to avoid repeated conditionals
+      this.getWindowSize = this.scrollOrientation === 'vertical' ? function () {
+        return window.innerHeight;
+      } : function () {
+        return window.innerWidth;
+      };
+      this.getMetricsStart = this.scrollOrientation === 'vertical' ? function (bcr) {
+        return bcr.top;
+      } : function (bcr) {
+        return bcr.left;
+      };
+      this.getMetricsSize = this.scrollOrientation === 'vertical' ? function (bcr) {
+        return bcr.height;
+      } : function (bcr) {
+        return bcr.width;
+      };
       // Init
       this._init();
     }
@@ -349,7 +369,7 @@
     _proto.onRender = function onRender(_ref3) {
       var currentScroll = _ref3.currentScroll,
         smooth = _ref3.smooth;
-      var wSize = this.scrollOrientation === 'vertical' ? window.innerHeight : window.innerWidth;
+      var wSize = this.getWindowSize();
       this.currentScroll = currentScroll;
       this._computeProgress();
       // Parallax
@@ -422,7 +442,7 @@
       this.isInteractive = false;
       this.unsubscribeElementUpdateFn(this);
       // Force progress to progress limit when the element is out
-      this.lastProgress != null && this._computeProgress(closestNumber([0, 1], this.lastProgress));
+      this.lastProgress !== null && this._computeProgress(closestNumber([0, 1], this.lastProgress));
     }
     /**
      * Resize method that compute the element's values.
@@ -448,14 +468,9 @@
      * @private
      */;
     _proto._computeMetrics = function _computeMetrics() {
-      var _this$metrics$bcr = this.metrics.bcr,
-        top = _this$metrics$bcr.top,
-        left = _this$metrics$bcr.left,
-        height = _this$metrics$bcr.height,
-        width = _this$metrics$bcr.width;
-      var wSize = this.scrollOrientation === 'vertical' ? window.innerHeight : window.innerWidth;
-      var metricsStart = this.scrollOrientation === 'vertical' ? top : left;
-      var metricsSize = this.scrollOrientation === 'vertical' ? height : width;
+      var wSize = this.getWindowSize();
+      var metricsStart = this.getMetricsStart(this.metrics.bcr);
+      var metricsSize = this.getMetricsSize(this.metrics.bcr);
       this.metrics.offsetStart = this.currentScroll + metricsStart - this.translateValue;
       this.metrics.offsetEnd = this.metrics.offsetStart + metricsSize;
       if (this.metrics.offsetStart < wSize && !this.attributes.scrollIgnoreFold) {
@@ -470,18 +485,17 @@
      * @private
      */;
     _proto._computeIntersection = function _computeIntersection() {
-      // Window size
-      var wSize = this.scrollOrientation === 'vertical' ? window.innerHeight : window.innerWidth;
-      // Metrics size
-      var metricsSize = this.scrollOrientation === 'vertical' ? this.metrics.bcr.height : this.metrics.bcr.width;
+      var _offset$0$trim, _offset$, _offset$1$trim, _offset$2, _scrollPosition$0$tri, _scrollPosition$, _scrollPosition$1$tri, _scrollPosition$2;
+      var wSize = this.getWindowSize();
+      var metricsSize = this.getMetricsSize(this.metrics.bcr);
       // Offset
       var offset = this.attributes.scrollOffset.split(',');
-      var offsetStart = offset[0] != undefined ? offset[0].trim() : '0';
-      var offsetEnd = offset[1] != undefined ? offset[1].trim() : '0';
+      var offsetStart = (_offset$0$trim = (_offset$ = offset[0]) == null ? void 0 : _offset$.trim()) != null ? _offset$0$trim : '0';
+      var offsetEnd = (_offset$1$trim = (_offset$2 = offset[1]) == null ? void 0 : _offset$2.trim()) != null ? _offset$1$trim : '0';
       // Positions
       var scrollPosition = this.attributes.scrollPosition.split(',');
-      var scrollPositionStart = scrollPosition[0] != undefined ? scrollPosition[0].trim() : 'start';
-      var scrollPositionEnd = scrollPosition[1] != undefined ? scrollPosition[1].trim() : 'end';
+      var scrollPositionStart = (_scrollPosition$0$tri = (_scrollPosition$ = scrollPosition[0]) == null ? void 0 : _scrollPosition$.trim()) != null ? _scrollPosition$0$tri : 'start';
+      var scrollPositionEnd = (_scrollPosition$1$tri = (_scrollPosition$2 = scrollPosition[1]) == null ? void 0 : _scrollPosition$2.trim()) != null ? _scrollPosition$1$tri : 'end';
       // Viewport
       var viewportStart = offsetStart.includes('%') ? wSize * parseInt(offsetStart.replace('%', '').trim()) * 0.01 : parseInt(offsetStart);
       var viewportEnd = offsetEnd.includes('%') ? wSize * parseInt(offsetEnd.replace('%', '').trim()) * 0.01 : parseInt(offsetEnd);
@@ -522,7 +536,7 @@
           this.intersection.end = this.metrics.offsetStart - viewportEnd + metricsSize;
           break;
       }
-      // Avoid to have the end < the start intersection >
+      // Avoid to have the end < the start intersection
       if (this.intersection.end <= this.intersection.start) {
         switch (scrollPositionEnd) {
           case 'start':
@@ -552,7 +566,7 @@
       // Progress
       var progress = forcedProgress != null ? forcedProgress : clamp(0, 1, normalize(this.intersection.start, this.intersection.end, this.currentScroll));
       this.progress = progress;
-      if (progress != this.lastProgress) {
+      if (progress !== this.lastProgress) {
         this.lastProgress = progress;
         // Set the element's progress to the css variable
         this.attributes.scrollCssProgress && this._setCssProgress(progress);
@@ -561,8 +575,9 @@
         // Set the element's progress to inline modules
         if (this.attributes.scrollModuleProgress) {
           for (var _iterator = _createForOfIteratorHelperLoose(this.progressModularModules), _step; !(_step = _iterator()).done;) {
+            var _this$modularInstance;
             var modularModules = _step.value;
-            this.modularInstance && this.modularInstance.call(PROGRESS_MODULAR_METHOD, progress, modularModules.moduleName, modularModules.moduleId);
+            (_this$modularInstance = this.modularInstance) == null || _this$modularInstance.call(PROGRESS_MODULAR_METHOD, progress, modularModules.moduleName, modularModules.moduleId);
           }
         }
         // Logic to trigger the inview/out of view callbacks
@@ -650,6 +665,27 @@
       return this.intersection.start === closestIntersectionValue ? 'start' : 'end';
     }
     /**
+     * Lifecyle - Destroy and cleanup the scroll element.
+     *
+     * Removes all CSS modifications and clears references to prevent memory leaks.
+     */;
+    _proto.destroy = function destroy() {
+      // Remove CSS variables
+      if (this.attributes.scrollCssProgress) {
+        this.$el.style.removeProperty(PROGRESS_CSS_VAR);
+      }
+      // Remove transform if parallax was applied
+      if (this.attributes.scrollSpeed) {
+        this.$el.style.removeProperty('transform');
+      }
+      // Remove class if added
+      if (this.isInview && this.attributes.scrollClass) {
+        this.$el.classList.remove(this.attributes.scrollClass);
+      }
+      // Clear references
+      this.progressModularModules = [];
+    }
+    /**
      * Function to dispatch a custom event or call a modular callback.
      *
      * @private
@@ -662,7 +698,7 @@
       var callParameters = (_this$attributes$scro = this.attributes.scrollCall) == null ? void 0 : _this$attributes$scro.split(',');
       var callSelf = (_this$attributes = this.attributes) == null ? void 0 : _this$attributes.scrollCallSelf;
       if (callParameters && callParameters.length > 1) {
-        var _targetModuleId;
+        var _this$modularInstance2, _targetModuleId;
         // Using Modular.js (https://github.com/modularorg/modularjs)
         var func = callParameters[0],
           moduleName = callParameters[1],
@@ -674,7 +710,7 @@
         } else {
           targetModuleId = moduleId;
         }
-        this.modularInstance && this.modularInstance.call(func.trim(), {
+        (_this$modularInstance2 = this.modularInstance) == null || _this$modularInstance2.call(func.trim(), {
           target: this.$el,
           way: way,
           from: from
@@ -700,6 +736,9 @@
   /** Default root margins */
   var TRIGGER_ROOT_MARGIN = '-1px -1px -1px -1px';
   var RAF_ROOT_MARGIN = '100% 100% 100% 100%'; // Add 100vh top/bottom && 100vw left/right to use a biggest value with data-scroll-speed
+  /** Default scroll attribute values */
+  var DEFAULT_SCROLL_OFFSET = '0,0';
+  var DEFAULT_SCROLL_POSITION = 'top,bottom';
   var Core = /*#__PURE__*/function () {
     function Core(_ref) {
       var $el = _ref.$el,
@@ -747,7 +786,7 @@
     var _proto = Core.prototype;
     _proto._init = function _init() {
       var $scrollElements = this.$scrollContainer.querySelectorAll('[data-scroll]');
-      var $scrollElementsArr = Array.from($scrollElements);
+      var $scrollElementsArr = this.toElementArray($scrollElements);
       this._subscribeScrollElements($scrollElementsArr);
       // Trigger IO
       this.IOTriggerInstance = new IO({
@@ -805,19 +844,18 @@
       var _this = this;
       var $scrollElementsToRemove = $oldContainer.querySelectorAll('[data-scroll]');
       if (!$scrollElementsToRemove.length) return;
+      var $scrollElementsToRemoveSet = new Set(Array.from($scrollElementsToRemove));
       // 1. Remove from IO
       for (var index = 0; index < this.triggeredScrollElements.length; index++) {
         var scrollElement = this.triggeredScrollElements[index];
-        var $scrollElementsToRemoveArr = Array.from($scrollElementsToRemove);
-        if ($scrollElementsToRemoveArr.indexOf(scrollElement.$el) > -1) {
+        if ($scrollElementsToRemoveSet.has(scrollElement.$el)) {
           this.IOTriggerInstance.unobserve(scrollElement.$el);
           this.triggeredScrollElements.splice(index, 1);
         }
       }
       for (var _index = 0; _index < this.RAFScrollElements.length; _index++) {
         var _scrollElement = this.RAFScrollElements[_index];
-        var _$scrollElementsToRemoveArr = Array.from($scrollElementsToRemove);
-        if (_$scrollElementsToRemoveArr.indexOf(_scrollElement.$el) > -1) {
+        if ($scrollElementsToRemoveSet.has(_scrollElement.$el)) {
           this.IORafInstance.unobserve(_scrollElement.$el);
           this.RAFScrollElements.splice(_index, 1);
         }
@@ -855,7 +893,7 @@
       });
       var maxID = Math.max.apply(Math, ids.concat([0]));
       var fromIndex = maxID + 1;
-      var $scrollElementsArr = Array.from($scrollElements);
+      var $scrollElementsArr = this.toElementArray($scrollElements);
       this._subscribeScrollElements($scrollElementsArr, fromIndex, true);
     }
     /**
@@ -913,6 +951,11 @@
      * @private
      */;
     _proto._unsubscribeAllScrollElements = function _unsubscribeAllScrollElements() {
+      // Destroy all scroll elements to clean up CSS and references
+      for (var _iterator3 = _createForOfIteratorHelperLoose(this.scrollElements), _step3; !(_step3 = _iterator3()).done;) {
+        var scrollElement = _step3.value;
+        scrollElement.destroy();
+      }
       this.scrollElements = [];
       this.RAFScrollElements = [];
       this.triggeredScrollElements = [];
@@ -943,6 +986,18 @@
       });
     }
     /**
+     * Convert NodeListOf<Element> to HTMLElement array.
+     *
+     * @private
+     *
+     * @param {NodeListOf<Element>} elements - The NodeList to convert.
+     *
+     * @returns {HTMLElement[]}
+     */;
+    _proto.toElementArray = function toElementArray(elements) {
+      return Array.from(elements);
+    }
+    /**
      * Check if a DOM Element need a requestAnimationFrame to be used.
      *
      * @private
@@ -956,7 +1011,7 @@
       // Remove utils
       var removeAttribute = function removeAttribute(attributeToRemove) {
         attributesThatNeedRaf = attributesThatNeedRaf.filter(function (attribute) {
-          return attribute != attributeToRemove;
+          return attribute !== attributeToRemove;
         });
       };
       // 1. Check scroll offset values
@@ -964,7 +1019,7 @@
         var value = $scrollElement.dataset.scrollOffset.split(',').map(function (test) {
           return test.replace('%', '').trim();
         }).join(',');
-        if (value != '0,0') {
+        if (value !== DEFAULT_SCROLL_OFFSET) {
           return true;
         } else {
           removeAttribute('scrollOffset');
@@ -975,7 +1030,7 @@
       // 2. Check scroll position values
       if ($scrollElement.dataset.scrollPosition) {
         var _value = $scrollElement.dataset.scrollPosition.trim();
-        if (_value != 'top,bottom') {
+        if (_value !== DEFAULT_SCROLL_POSITION) {
           return true;
         } else {
           removeAttribute('scrollPosition');
@@ -990,8 +1045,8 @@
         removeAttribute('scrollSpeed');
       }
       // 4. Check others attributes
-      for (var _iterator3 = _createForOfIteratorHelperLoose(attributesThatNeedRaf), _step3; !(_step3 = _iterator3()).done;) {
-        var attribute = _step3.value;
+      for (var _iterator4 = _createForOfIteratorHelperLoose(attributesThatNeedRaf), _step4; !(_step4 = _iterator4()).done;) {
+        var attribute = _step4.value;
         if (attribute in $scrollElement.dataset) {
           return true;
         }
@@ -1089,8 +1144,8 @@
         initCustomTicker = _ref.initCustomTicker,
         destroyCustomTicker = _ref.destroyCustomTicker;
       this.rafPlaying = void 0;
-      this.lenisInstance = void 0;
-      this.coreInstance = void 0;
+      this.lenisInstance = null;
+      this.coreInstance = null;
       this.lenisOptions = void 0;
       this.modularInstance = void 0;
       this.triggerRootMargin = void 0;
@@ -1139,15 +1194,14 @@
      */
     var _proto = LocomotiveScroll.prototype;
     _proto._init = function _init() {
-      var _this$lenisInstance,
-        _this = this;
+      var _this = this;
       // Create Lenis instance
       this.lenisInstance = new Lenis(_extends({}, this.lenisOptions, {
         wrapper: window,
         content: document.documentElement,
         infinite: false
       }));
-      (_this$lenisInstance = this.lenisInstance) == null || _this$lenisInstance.on('scroll', this.scrollCallback);
+      this.lenisInstance.on('scroll', this.scrollCallback);
       // Add scroll direction attribute on body
       document.documentElement.setAttribute('data-scroll-orientation', this.lenisInstance.options.orientation);
       requestAnimationFrame(function () {
@@ -1175,17 +1229,16 @@
      * Lifecyle - Destroy instance.
      */;
     _proto.destroy = function destroy() {
-      var _this$coreInstance,
+      var _this$lenisInstance,
         _this2 = this;
       // Stop raf
       this.stop();
       // Unbind Events
       this._unbindEvents();
       // Destroy Lenis
-      this.lenisInstance.destroy();
-      // Destroy Core
-      (_this$coreInstance = this.coreInstance) == null || _this$coreInstance.destroy();
-      // Ensure a delay before destroying to handle cases of instant destruction
+      (_this$lenisInstance = this.lenisInstance) == null || _this$lenisInstance.destroy();
+      // Destroy Core after RAF to ensure any pending Intersection Observer callbacks complete
+      // This prevents race conditions when destroy() is called while IO callbacks are queued
       requestAnimationFrame(function () {
         var _this2$coreInstance;
         (_this2$coreInstance = _this2.coreInstance) == null || _this2$coreInstance.destroy();
@@ -1224,8 +1277,9 @@
      * Events - Subscribe scrollTo events to listen.
      */;
     _proto._bindScrollToEvents = function _bindScrollToEvents($container) {
-      var _this3 = this;
-      var $rootContainer = $container ? $container : this.lenisInstance.rootElement;
+      var _this$lenisInstance2,
+        _this3 = this;
+      var $rootContainer = $container ? $container : (_this$lenisInstance2 = this.lenisInstance) == null ? void 0 : _this$lenisInstance2.rootElement;
       var $scrollToElements = $rootContainer == null ? void 0 : $rootContainer.querySelectorAll('[data-scroll-to]');
       ($scrollToElements == null ? void 0 : $scrollToElements.length) && $scrollToElements.forEach(function ($el) {
         $el.addEventListener('click', _this3._onScrollToBind, false);
@@ -1235,8 +1289,9 @@
      * Events - Unsubscribe scrollTo listened events.
      */;
     _proto._unbindScrollToEvents = function _unbindScrollToEvents($container) {
-      var _this4 = this;
-      var $rootContainer = $container ? $container : this.lenisInstance.rootElement;
+      var _this$lenisInstance3,
+        _this4 = this;
+      var $rootContainer = $container ? $container : (_this$lenisInstance3 = this.lenisInstance) == null ? void 0 : _this$lenisInstance3.rootElement;
       var $scrollToElements = $rootContainer == null ? void 0 : $rootContainer.querySelectorAll('[data-scroll-to]');
       ($scrollToElements == null ? void 0 : $scrollToElements.length) && $scrollToElements.forEach(function ($el) {
         $el.removeEventListener('click', _this4._onScrollToBind, false);
@@ -1249,9 +1304,10 @@
       var _this5 = this;
       // Waiting the next frame to get the new current scroll value return by Lenis
       requestAnimationFrame(function () {
-        var _this5$coreInstance;
+        var _this5$coreInstance, _this5$lenisInstance$, _this5$lenisInstance, _this5$lenisInstance$2, _this5$lenisInstance2;
         (_this5$coreInstance = _this5.coreInstance) == null || _this5$coreInstance.onResize({
-          currentScroll: _this5.lenisInstance.scroll
+          currentScroll: (_this5$lenisInstance$ = (_this5$lenisInstance = _this5.lenisInstance) == null ? void 0 : _this5$lenisInstance.scroll) != null ? _this5$lenisInstance$ : 0,
+          smooth: (_this5$lenisInstance$2 = (_this5$lenisInstance2 = _this5.lenisInstance) == null ? void 0 : _this5$lenisInstance2.options.smoothWheel) != null ? _this5$lenisInstance$2 : false
         });
       });
     }
@@ -1259,24 +1315,24 @@
      * Callback - Render callback.
      */;
     _proto._onRender = function _onRender() {
-      var _this$lenisInstance2, _this$coreInstance2;
-      (_this$lenisInstance2 = this.lenisInstance) == null || _this$lenisInstance2.raf(Date.now());
-      (_this$coreInstance2 = this.coreInstance) == null || _this$coreInstance2.onRender({
-        currentScroll: this.lenisInstance.scroll,
-        smooth: this.lenisInstance.options.smoothWheel
+      var _this$lenisInstance4, _this$coreInstance, _this$lenisInstance$s, _this$lenisInstance5, _this$lenisInstance$o, _this$lenisInstance6;
+      (_this$lenisInstance4 = this.lenisInstance) == null || _this$lenisInstance4.raf(Date.now());
+      (_this$coreInstance = this.coreInstance) == null || _this$coreInstance.onRender({
+        currentScroll: (_this$lenisInstance$s = (_this$lenisInstance5 = this.lenisInstance) == null ? void 0 : _this$lenisInstance5.scroll) != null ? _this$lenisInstance$s : 0,
+        smooth: (_this$lenisInstance$o = (_this$lenisInstance6 = this.lenisInstance) == null ? void 0 : _this$lenisInstance6.options.smoothWheel) != null ? _this$lenisInstance$o : false
       });
     }
     /**
      * Callback - Scroll To callback.
      */;
     _proto._onScrollTo = function _onScrollTo(event) {
-      var _event$currentTarget;
+      var _event$currentTarget, _this$lenisInstance7;
       event.preventDefault();
       var $target = (_event$currentTarget = event.currentTarget) != null ? _event$currentTarget : null;
       if (!$target) return;
       var target = $target.getAttribute('data-scroll-to-href') || $target.getAttribute('href');
       var offset = $target.getAttribute('data-scroll-to-offset') || 0;
-      var duration = $target.getAttribute('data-scroll-to-duration') || this.lenisInstance.options.duration;
+      var duration = $target.getAttribute('data-scroll-to-duration') || ((_this$lenisInstance7 = this.lenisInstance) == null ? void 0 : _this$lenisInstance7.options.duration);
       target && this.scrollTo(target, {
         offset: typeof offset === 'string' ? parseInt(offset) : offset,
         duration: typeof duration === 'string' ? parseInt(duration) : duration
@@ -1286,12 +1342,12 @@
      * Start RequestAnimationFrame that active Lenis smooth and scroll progress.
      */;
     _proto.start = function start() {
-      var _this$lenisInstance3;
+      var _this$lenisInstance8;
       if (this.rafPlaying) {
         return;
       }
       // Call lenis start method
-      (_this$lenisInstance3 = this.lenisInstance) == null || _this$lenisInstance3.start();
+      (_this$lenisInstance8 = this.lenisInstance) == null || _this$lenisInstance8.start();
       this.rafPlaying = true;
       this.initCustomTicker ? this.initCustomTicker(this._onRenderBind) : this._raf();
     }
@@ -1299,12 +1355,12 @@
      * Stop RequestAnimationFrame that active Lenis smooth and scroll progress.
      */;
     _proto.stop = function stop() {
-      var _this$lenisInstance4;
+      var _this$lenisInstance9;
       if (!this.rafPlaying) {
         return;
       }
       // Call lenis stop method
-      (_this$lenisInstance4 = this.lenisInstance) == null || _this$lenisInstance4.stop();
+      (_this$lenisInstance9 = this.lenisInstance) == null || _this$lenisInstance9.stop();
       this.rafPlaying = false;
       this.destroyCustomTicker ? this.destroyCustomTicker(this._onRenderBind) : this.rafInstance && cancelAnimationFrame(this.rafInstance);
     }
@@ -1312,25 +1368,25 @@
      * Remove old scroll elements items and rebuild ScrollElements instances.
      */;
     _proto.removeScrollElements = function removeScrollElements($oldContainer) {
-      var _this$coreInstance3;
+      var _this$coreInstance2;
       if (!$oldContainer) {
         console.error('Please provide a DOM Element as $oldContainer');
         return;
       }
       this._unbindScrollToEvents($oldContainer);
-      (_this$coreInstance3 = this.coreInstance) == null || _this$coreInstance3.removeScrollElements($oldContainer);
+      (_this$coreInstance2 = this.coreInstance) == null || _this$coreInstance2.removeScrollElements($oldContainer);
     }
     /**
      * Add new scroll elements items and rebuild ScrollElements instances.
      */;
     _proto.addScrollElements = function addScrollElements($newContainer) {
-      var _this$coreInstance4,
+      var _this$coreInstance3,
         _this6 = this;
       if (!$newContainer) {
         console.error('Please provide a DOM Element as $newContainer');
         return;
       }
-      (_this$coreInstance4 = this.coreInstance) == null || _this$coreInstance4.addScrollElements($newContainer);
+      (_this$coreInstance3 = this.coreInstance) == null || _this$coreInstance3.addScrollElements($newContainer);
       requestAnimationFrame(function () {
         _this6._bindScrollToEvents($newContainer);
       });
@@ -1345,8 +1401,8 @@
      * Trigger scroll to callback.
      */;
     _proto.scrollTo = function scrollTo(target, options) {
-      var _this$lenisInstance5;
-      (_this$lenisInstance5 = this.lenisInstance) == null || _this$lenisInstance5.scrollTo(target, {
+      var _this$lenisInstance10;
+      (_this$lenisInstance10 = this.lenisInstance) == null || _this$lenisInstance10.scrollTo(target, {
         offset: options == null ? void 0 : options.offset,
         lerp: options == null ? void 0 : options.lerp,
         duration: options == null ? void 0 : options.duration,

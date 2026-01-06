@@ -37,6 +37,9 @@ export default class ScrollElement {
     private isFirstResize;
     private subscribeElementUpdateFn;
     private unsubscribeElementUpdateFn;
+    private getWindowSize;
+    private getMetricsStart;
+    private getMetricsSize;
     constructor({ $el, id, modularInstance, subscribeElementUpdateFn, unsubscribeElementUpdateFn, needRaf, scrollOrientation, }: IScrollElementOptions);
     /**
      * Lifecyle - Initialize progress tracking.
@@ -125,6 +128,12 @@ export default class ScrollElement {
      * @private
      */
     _getScrollCallFrom(): scrollCallFrom;
+    /**
+     * Lifecyle - Destroy and cleanup the scroll element.
+     *
+     * Removes all CSS modifications and clears references to prevent memory leaks.
+     */
+    destroy(): void;
     /**
      * Function to dispatch a custom event or call a modular callback.
      *

@@ -1,4 +1,3 @@
-//@ts-ignore
 import Lenis from 'lenis';
 import Core from './core/Core';
 import RO from './core/RO';
@@ -24,15 +23,15 @@ import type { LenisOptions } from 'lenis';
 
 export default class LocomotiveScroll {
     public rafPlaying: boolean;
-    public lenisInstance: any;
+    public lenisInstance: Lenis | null = null;
 
-    private coreInstance: any;
+    private coreInstance: Core | null = null;
 
     private lenisOptions?: LenisOptions;
     private modularInstance?: IModular;
     private triggerRootMargin?: string;
     private rafRootMargin?: string;
-    private rafInstance?: any;
+    private rafInstance?: number;
     private autoResize?: boolean;
     private autoStart?: boolean;
     private ROInstance?: RO;
@@ -100,7 +99,7 @@ export default class LocomotiveScroll {
             content: document.documentElement,
             infinite: false
         });
-        this.lenisInstance?.on('scroll', this.scrollCallback);
+        this.lenisInstance.on('scroll', this.scrollCallback);
 
         // Add scroll direction attribute on body
         document.documentElement.setAttribute(
@@ -146,11 +145,10 @@ export default class LocomotiveScroll {
         // Unbind Events
         this._unbindEvents();
         // Destroy Lenis
-        this.lenisInstance.destroy();
-        // Destroy Core
-        this.coreInstance?.destroy();
+        this.lenisInstance?.destroy();
 
-        // Ensure a delay before destroying to handle cases of instant destruction
+        // Destroy Core after RAF to ensure any pending Intersection Observer callbacks complete
+        // This prevents race conditions when destroy() is called while IO callbacks are queued
         requestAnimationFrame(() => {
             this.coreInstance?.destroy();
         });
@@ -198,7 +196,7 @@ export default class LocomotiveScroll {
     private _bindScrollToEvents($container?: HTMLElement) {
         const $rootContainer = $container
             ? $container
-            : this.lenisInstance.rootElement;
+            : this.lenisInstance?.rootElement;
         const $scrollToElements =
             $rootContainer?.querySelectorAll('[data-scroll-to]');
 
@@ -214,7 +212,7 @@ export default class LocomotiveScroll {
     private _unbindScrollToEvents($container?: HTMLElement) {
         const $rootContainer = $container
             ? $container
-            : this.lenisInstance.rootElement;
+            : this.lenisInstance?.rootElement;
         const $scrollToElements =
             $rootContainer?.querySelectorAll('[data-scroll-to]');
         $scrollToElements?.length &&
@@ -230,7 +228,8 @@ export default class LocomotiveScroll {
         // Waiting the next frame to get the new current scroll value return by Lenis
         requestAnimationFrame(() => {
             this.coreInstance?.onResize({
-                currentScroll: this.lenisInstance.scroll,
+                currentScroll: this.lenisInstance?.scroll ?? 0,
+                smooth: this.lenisInstance?.options.smoothWheel ?? false,
             });
         });
     }
@@ -242,8 +241,8 @@ export default class LocomotiveScroll {
         this.lenisInstance?.raf(Date.now());
 
         this.coreInstance?.onRender({
-            currentScroll: this.lenisInstance.scroll,
-            smooth: this.lenisInstance.options.smoothWheel,
+            currentScroll: this.lenisInstance?.scroll ?? 0,
+            smooth: this.lenisInstance?.options.smoothWheel ?? false,
         });
     }
 
@@ -260,7 +259,7 @@ export default class LocomotiveScroll {
         const offset = $target.getAttribute('data-scroll-to-offset') || 0;
         const duration =
             $target.getAttribute('data-scroll-to-duration') ||
-            this.lenisInstance.options.duration
+            this.lenisInstance?.options.duration
         target &&
             this.scrollTo(target, {
                 offset: typeof offset === 'string' ? parseInt(offset) : offset,

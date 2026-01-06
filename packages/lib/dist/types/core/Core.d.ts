@@ -81,6 +81,16 @@ export default class Core {
      */
     _unsubscribeElementUpdate(scrollElement: ScrollElement): void;
     /**
+     * Convert NodeListOf<Element> to HTMLElement array.
+     *
+     * @private
+     *
+     * @param {NodeListOf<Element>} elements - The NodeList to convert.
+     *
+     * @returns {HTMLElement[]}
+     */
+    private toElementArray;
+    /**
      * Check if a DOM Element need a requestAnimationFrame to be used.
      *
      * @private

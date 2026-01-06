@@ -1,3 +1,4 @@
+import Lenis from 'lenis';
 import type { ILenisScrollToOptions, ILocomotiveScrollOptions, lenisTargetScrollTo } from './types';
 /**
  * Locomotive Scroll
@@ -11,7 +12,7 @@ import type { ILenisScrollToOptions, ILocomotiveScrollOptions, lenisTargetScroll
  */
 export default class LocomotiveScroll {
     rafPlaying: boolean;
-    lenisInstance: any;
+    lenisInstance: Lenis | null;
     private coreInstance;
     private lenisOptions?;
     private modularInstance?;
