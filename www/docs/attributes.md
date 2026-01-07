@@ -55,7 +55,9 @@ By default, the in-view detection of elements is not repeated. **Simply declarin
 
 Specifies the parallax speed for the element. A negative value will reverse the direction of the parallax effect.
 
-Note: The value represents the translation of the element relative to the scrolling. For example, if the value is `1`, it means that for every 1px scrolled, the element translates by 1px. If the value is `.5`, it means that for every 1px scrolled, the element translates by 0.5px.
+**Note:** The value represents the translation of the element relative to the scrolling. For example, if the value is `1`, it means that for every 1px scrolled, the element translates by 1px. If the value is `.5`, it means that for every 1px scrolled, the element translates by 0.5px.
+
+**Touch devices:** Parallax is automatically disabled on touch devices by default. To enable it on mobile/tablets, add the [`data-scroll-enable-touch-speed`](#data-scroll-enable-touch-speed) attribute.
 
 ## data-scroll-call
 
@@ -137,10 +139,24 @@ If an element is within the fold (visible portion of the viewport), its offset i
 
 Please note that by using the `data-scroll-ignore-fold` attribute, the element's progress will not be influenced by its position within the fold, and its offset will remain unchanged throughout the scrolling process.
 
-## data-enable-touch-speed
+## data-scroll-enable-touch-speed
 
-We disable the parallax effect when a touch event is detected by default. However, if you want to enable the parallax effect on touch devices, you can use the `data-enable-touch-speed` attribute.
+By default, the parallax effect (`data-scroll-speed`) is **automatically disabled on touch devices** to ensure smooth scrolling performance. Touch devices are detected using `'ontouchstart' in window || navigator.maxTouchPoints > 0`.
 
-By adding this attribute to the element, you can override the default behavior and allow the parallax effect to be active even on touch devices. This allows for a consistent parallax experience across different types of devices.
+If you want to enable the parallax effect on touch devices, add the `data-scroll-enable-touch-speed` attribute to the element.
 
-Please note that enabling the parallax effect on touch devices may have implications for the user experience, as touch interactions and scrolling may behave differently compared to traditional mouse-based interactions. Use this attribute with caution and ensure that the parallax effect enhances the overall user experience on touch devices.
+**Example:**
+
+```html
+<!-- Parallax disabled on touch devices (default) -->
+<div data-scroll data-scroll-speed="0.5">
+    Parallax only on desktop
+</div>
+
+<!-- Parallax enabled on all devices including touch -->
+<div data-scroll data-scroll-speed="0.5" data-scroll-enable-touch-speed>
+    Parallax on desktop AND mobile
+</div>
+```
+
+**Note:** Enabling parallax on touch devices may impact scrolling smoothness, especially on lower-end mobile devices. Use this attribute judiciously and test thoroughly on target devices.

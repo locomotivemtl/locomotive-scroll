@@ -27,6 +27,7 @@ export default class LocomotiveScroll {
     private _onRenderBind;
     private _onResizeBind;
     private _onScrollToBind;
+    private isTouchDevice;
     constructor({ lenisOptions, triggerRootMargin, rafRootMargin, autoResize, autoStart, scrollCallback, initCustomTicker, destroyCustomTicker, }?: ILocomotiveScrollOptions);
     /**
      * Lifecyle - Initialize instance.

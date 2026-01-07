@@ -143,12 +143,12 @@ export interface IScrollElementMetrics {
 /**
  * @typedef {Object} IScrollElementCallbacksValues
  *
- *  @property {number}   currentScroll - Scroll value returned by Lenis.
- *  @property {?boolean} smooth        - Lenis smooth option status.
+ *  @property {number}  currentScroll - Scroll value returned by Lenis.
+ *  @property {boolean} smooth        - Whether parallax should be enabled (false on touch devices).
  */
 export interface IScrollElementCallbacksValues {
     currentScroll: number;
-    smooth: boolean | null;
+    smooth: boolean;
 }
 /**
  * @typedef {Object} IIOOptions

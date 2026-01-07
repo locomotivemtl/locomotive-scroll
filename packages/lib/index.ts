@@ -39,6 +39,7 @@ export default class LocomotiveScroll {
     private _onRenderBind: () => void;
     private _onResizeBind: () => void;
     private _onScrollToBind: (event: MouseEvent) => void;
+    private isTouchDevice: boolean;
 
     constructor({
         lenisOptions = {},
@@ -77,6 +78,9 @@ export default class LocomotiveScroll {
 
         // Data
         this.rafPlaying = false;
+
+        // Detect if device has touch capability
+        this.isTouchDevice = 'ontouchstart' in window || navigator.maxTouchPoints > 0;
 
         // Init
         this._init();
@@ -224,7 +228,7 @@ export default class LocomotiveScroll {
         requestAnimationFrame(() => {
             this.coreInstance?.onResize({
                 currentScroll: this.lenisInstance?.scroll ?? 0,
-                smooth: this.lenisInstance?.options.smoothWheel ?? false,
+                smooth: !this.isTouchDevice,
             });
         });
     }
@@ -237,7 +241,7 @@ export default class LocomotiveScroll {
 
         this.coreInstance?.onRender({
             currentScroll: this.lenisInstance?.scroll ?? 0,
-            smooth: this.lenisInstance?.options.smoothWheel ?? false,
+            smooth: !this.isTouchDevice,
         });
     }
 

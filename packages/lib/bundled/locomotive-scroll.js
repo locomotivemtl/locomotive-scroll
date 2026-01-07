@@ -2191,6 +2191,7 @@
       this._onRenderBind = void 0;
       this._onResizeBind = void 0;
       this._onScrollToBind = void 0;
+      this.isTouchDevice = void 0;
       for (var _i = 0, _Object$entries = Object.entries(lenisOptions); _i < _Object$entries.length; _i++) {
         var _Object$entries$_i = _Object$entries[_i],
           key = _Object$entries$_i[0];
@@ -2215,6 +2216,8 @@
       this._onResizeBind = this._onResize.bind(this);
       // Data
       this.rafPlaying = false;
+      // Detect if device has touch capability
+      this.isTouchDevice = 'ontouchstart' in window || navigator.maxTouchPoints > 0;
       // Init
       this._init();
     }
@@ -2334,10 +2337,10 @@
       var _this5 = this;
       // Waiting the next frame to get the new current scroll value return by Lenis
       requestAnimationFrame(function () {
-        var _this5$coreInstance, _this5$lenisInstance$, _this5$lenisInstance, _this5$lenisInstance$2, _this5$lenisInstance2;
+        var _this5$coreInstance, _this5$lenisInstance$, _this5$lenisInstance;
         (_this5$coreInstance = _this5.coreInstance) == null || _this5$coreInstance.onResize({
           currentScroll: (_this5$lenisInstance$ = (_this5$lenisInstance = _this5.lenisInstance) == null ? void 0 : _this5$lenisInstance.scroll) != null ? _this5$lenisInstance$ : 0,
-          smooth: (_this5$lenisInstance$2 = (_this5$lenisInstance2 = _this5.lenisInstance) == null ? void 0 : _this5$lenisInstance2.options.smoothWheel) != null ? _this5$lenisInstance$2 : false
+          smooth: !_this5.isTouchDevice
         });
       });
     }
@@ -2345,24 +2348,24 @@
      * Callback - Render callback.
      */;
     _proto._onRender = function _onRender() {
-      var _this$lenisInstance4, _this$coreInstance, _this$lenisInstance$s, _this$lenisInstance5, _this$lenisInstance$o, _this$lenisInstance6;
+      var _this$lenisInstance4, _this$coreInstance, _this$lenisInstance$s, _this$lenisInstance5;
       (_this$lenisInstance4 = this.lenisInstance) == null || _this$lenisInstance4.raf(Date.now());
       (_this$coreInstance = this.coreInstance) == null || _this$coreInstance.onRender({
         currentScroll: (_this$lenisInstance$s = (_this$lenisInstance5 = this.lenisInstance) == null ? void 0 : _this$lenisInstance5.scroll) != null ? _this$lenisInstance$s : 0,
-        smooth: (_this$lenisInstance$o = (_this$lenisInstance6 = this.lenisInstance) == null ? void 0 : _this$lenisInstance6.options.smoothWheel) != null ? _this$lenisInstance$o : false
+        smooth: !this.isTouchDevice
       });
     }
     /**
      * Callback - Scroll To callback.
      */;
     _proto._onScrollTo = function _onScrollTo(event) {
-      var _event$currentTarget, _this$lenisInstance7;
+      var _event$currentTarget, _this$lenisInstance6;
       event.preventDefault();
       var $target = (_event$currentTarget = event.currentTarget) != null ? _event$currentTarget : null;
       if (!$target) return;
       var target = $target.getAttribute('data-scroll-to-href') || $target.getAttribute('href');
       var offset = $target.getAttribute('data-scroll-to-offset') || 0;
-      var duration = $target.getAttribute('data-scroll-to-duration') || ((_this$lenisInstance7 = this.lenisInstance) == null ? void 0 : _this$lenisInstance7.options.duration);
+      var duration = $target.getAttribute('data-scroll-to-duration') || ((_this$lenisInstance6 = this.lenisInstance) == null ? void 0 : _this$lenisInstance6.options.duration);
       target && this.scrollTo(target, {
         offset: typeof offset === 'string' ? parseInt(offset) : offset,
         duration: typeof duration === 'string' ? parseInt(duration) : duration
@@ -2372,12 +2375,12 @@
      * Start RequestAnimationFrame that active Lenis smooth and scroll progress.
      */;
     _proto.start = function start() {
-      var _this$lenisInstance8;
+      var _this$lenisInstance7;
       if (this.rafPlaying) {
         return;
       }
       // Call lenis start method
-      (_this$lenisInstance8 = this.lenisInstance) == null || _this$lenisInstance8.start();
+      (_this$lenisInstance7 = this.lenisInstance) == null || _this$lenisInstance7.start();
       this.rafPlaying = true;
       this.initCustomTicker ? this.initCustomTicker(this._onRenderBind) : this._raf();
     }
@@ -2385,12 +2388,12 @@
      * Stop RequestAnimationFrame that active Lenis smooth and scroll progress.
      */;
     _proto.stop = function stop() {
-      var _this$lenisInstance9;
+      var _this$lenisInstance8;
       if (!this.rafPlaying) {
         return;
       }
       // Call lenis stop method
-      (_this$lenisInstance9 = this.lenisInstance) == null || _this$lenisInstance9.stop();
+      (_this$lenisInstance8 = this.lenisInstance) == null || _this$lenisInstance8.stop();
       this.rafPlaying = false;
       this.destroyCustomTicker ? this.destroyCustomTicker(this._onRenderBind) : this.rafInstance && cancelAnimationFrame(this.rafInstance);
     }
@@ -2431,8 +2434,8 @@
      * Trigger scroll to callback.
      */;
     _proto.scrollTo = function scrollTo(target, options) {
-      var _this$lenisInstance10;
-      (_this$lenisInstance10 = this.lenisInstance) == null || _this$lenisInstance10.scrollTo(target, {
+      var _this$lenisInstance9;
+      (_this$lenisInstance9 = this.lenisInstance) == null || _this$lenisInstance9.scrollTo(target, {
         offset: options == null ? void 0 : options.offset,
         lerp: options == null ? void 0 : options.lerp,
         duration: options == null ? void 0 : options.duration,
