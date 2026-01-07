@@ -168,11 +168,13 @@ export interface IScrollElementCallbacksValues {
  *  @property {ScrollElement[]} scrollElements - A list of objects with property values to match.
  *  @property {boolean}         IORaf          - Defined if it concern elements which need a RAF.
  *  @property {string}          [rootMargin]   - Margin around the root.
+ *  @property {HTMLElement}     [root]         - The Element that is used as the viewport for checking visibility (null for window).
  */
 export interface IIOOptions {
     scrollElements: ScrollElement[];
     IORaf: boolean;
     rootMargin?: string;
+    root?: HTMLElement | null;
 }
 
 /**

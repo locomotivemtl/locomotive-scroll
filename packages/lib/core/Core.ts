@@ -90,9 +90,15 @@ export default class Core {
         const $scrollElementsArr = this.toElementArray($scrollElements);
         this._subscribeScrollElements($scrollElementsArr);
 
+        // Determine IO root (null for window, wrapper element for custom container)
+        const ioRoot = this.lenisInstance.options.wrapper === window
+            ? null
+            : this.lenisInstance.options.wrapper as HTMLElement;
+
         // Trigger IO
         this.IOTriggerInstance = new IO({
             scrollElements: [...this.triggeredScrollElements],
+            root: ioRoot,
             rootMargin: this.triggerRootMargin,
             IORaf: false,
         });
@@ -100,6 +106,7 @@ export default class Core {
         // Raf IO
         this.IORafInstance = new IO({
             scrollElements: [...this.RAFScrollElements],
+            root: ioRoot,
             rootMargin: this.rafRootMargin,
             IORaf: true,
         });

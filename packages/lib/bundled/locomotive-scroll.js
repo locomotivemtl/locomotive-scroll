@@ -1165,14 +1165,18 @@
       var scrollElements = _ref.scrollElements,
         _ref$rootMargin = _ref.rootMargin,
         rootMargin = _ref$rootMargin === void 0 ? '-1px -1px -1px -1px' : _ref$rootMargin,
+        _ref$root = _ref.root,
+        root = _ref$root === void 0 ? null : _ref$root,
         IORaf = _ref.IORaf;
       this.scrollElements = void 0;
       this.rootMargin = void 0;
+      this.root = void 0;
       this.IORaf = void 0;
       this.observer = void 0;
       // Parameters
       this.scrollElements = scrollElements;
       this.rootMargin = rootMargin;
+      this.root = root;
       this.IORaf = IORaf;
       // Init
       this._init();
@@ -1187,6 +1191,7 @@
       var _this = this;
       // Options
       var observerOptions = {
+        root: this.root,
         rootMargin: this.rootMargin
       };
       // Callback
@@ -1569,6 +1574,13 @@
       if (this.isInteractive) {
         return;
       }
+      console.log('setInteractivityOn', {
+        id: this.id,
+        element: this.$el,
+        currentScroll: this.currentScroll,
+        intersection: this.intersection,
+        scrollSpeed: this.attributes.scrollSpeed
+      });
       this.isInteractive = true;
       this.subscribeElementUpdateFn(this);
     }
@@ -1580,6 +1592,10 @@
       if (!this.isInteractive) {
         return;
       }
+      console.log('setInteractivityOff', {
+        id: this.id,
+        element: this.$el
+      });
       this.isInteractive = false;
       this.unsubscribeElementUpdateFn(this);
       // Force progress to progress limit when the element is out
@@ -1591,9 +1607,23 @@
      * @private
      */;
     _proto._resize = function _resize() {
+      console.log('_resize', {
+        id: this.id,
+        element: this.$el,
+        currentScroll: this.currentScroll,
+        lenisScroll: this.lenisInstance.scroll,
+        wSize: this.getWindowSize(),
+        isFirstResize: this.isFirstResize,
+        scrollSpeed: this.attributes.scrollSpeed
+      });
       this.metrics.bcr = this.$el.getBoundingClientRect();
       this._computeMetrics();
       this._computeIntersection();
+      console.log('intersection calculated:', {
+        id: this.id,
+        intersection: this.intersection,
+        isInFold: this.isInFold
+      });
       // First resize logic
       if (this.isFirstResize) {
         this.isFirstResize = false;
@@ -1837,15 +1867,19 @@
       var $scrollElements = this.$scrollContainer.querySelectorAll('[data-scroll]');
       var $scrollElementsArr = this.toElementArray($scrollElements);
       this._subscribeScrollElements($scrollElementsArr);
+      // Determine IO root (null for window, wrapper element for custom container)
+      var ioRoot = this.lenisInstance.options.wrapper === window ? null : this.lenisInstance.options.wrapper;
       // Trigger IO
       this.IOTriggerInstance = new IO({
         scrollElements: [].concat(this.triggeredScrollElements),
+        root: ioRoot,
         rootMargin: this.triggerRootMargin,
         IORaf: false
       });
       // Raf IO
       this.IORafInstance = new IO({
         scrollElements: [].concat(this.RAFScrollElements),
+        root: ioRoot,
         rootMargin: this.rafRootMargin,
         IORaf: true
       });

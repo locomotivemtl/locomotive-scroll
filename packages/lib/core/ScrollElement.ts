@@ -265,6 +265,14 @@ export default class ScrollElement {
             return;
         }
 
+        console.log('setInteractivityOn', {
+            id: this.id,
+            element: this.$el,
+            currentScroll: this.currentScroll,
+            intersection: this.intersection,
+            scrollSpeed: this.attributes.scrollSpeed
+        });
+
         this.isInteractive = true;
         this.subscribeElementUpdateFn(this);
     }
@@ -277,6 +285,11 @@ export default class ScrollElement {
         if (!this.isInteractive) {
             return;
         }
+
+        console.log('setInteractivityOff', {
+            id: this.id,
+            element: this.$el
+        });
 
         this.isInteractive = false;
         this.unsubscribeElementUpdateFn(this);
@@ -292,9 +305,25 @@ export default class ScrollElement {
      * @private
      */
     private _resize() {
+        console.log('_resize', {
+            id: this.id,
+            element: this.$el,
+            currentScroll: this.currentScroll,
+            lenisScroll: this.lenisInstance.scroll,
+            wSize: this.getWindowSize(),
+            isFirstResize: this.isFirstResize,
+            scrollSpeed: this.attributes.scrollSpeed
+        });
+
         this.metrics.bcr = this.$el.getBoundingClientRect();
         this._computeMetrics();
         this._computeIntersection();
+
+        console.log('intersection calculated:', {
+            id: this.id,
+            intersection: this.intersection,
+            isInFold: this.isInFold
+        });
 
         // First resize logic
         if (this.isFirstResize) {
