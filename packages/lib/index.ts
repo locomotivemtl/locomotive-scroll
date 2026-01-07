@@ -83,17 +83,10 @@ export default class LocomotiveScroll {
      * @private
      */
     private _init(): void {
-        // Default to window/documentElement if not provided
-        const defaultWrapper = this.lenisOptions?.wrapper || window;
-        const defaultContent = this.lenisOptions?.content || document.documentElement;
-        const defaultInfinite = this.lenisOptions?.infinite ?? false;
-
+        
         // Create Lenis instance
         this.lenisInstance = new Lenis({
-            ...this.lenisOptions,
-            wrapper: defaultWrapper,
-            content: defaultContent,
-            infinite: defaultInfinite
+            ...this.lenisOptions
         });
         this.lenisInstance.on('scroll', this.scrollCallback);
 

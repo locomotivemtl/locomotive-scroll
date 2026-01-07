@@ -19,8 +19,6 @@ export class Scroll {
 
         this.locomotiveScroll = new LocomotiveScroll({
             lenisOptions: {
-                wrapper: document.querySelector('.c-scroll') as HTMLElement,
-                content: document.querySelector('.c-scroll-children') as HTMLElement,
                 orientation: scrollOrientation,
             },
             scrollCallback: ({ progress }) => {
