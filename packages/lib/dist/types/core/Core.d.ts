@@ -14,7 +14,8 @@ export default class Core {
     private IOTriggerInstance;
     private IORafInstance;
     private scrollOrientation;
-    constructor({ $el, triggerRootMargin, rafRootMargin, scrollOrientation, }: CoreOptions);
+    private lenisInstance;
+    constructor({ $el, triggerRootMargin, rafRootMargin, scrollOrientation, lenisInstance, }: CoreOptions);
     /**
      * Lifecyle - Initialize the core.
      *

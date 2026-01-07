@@ -50,6 +50,7 @@ export default class ScrollElement {
 
     private subscribeElementUpdateFn: (scrollElement: ScrollElement) => void;
     private unsubscribeElementUpdateFn: (scrollElement: ScrollElement) => void;
+    private lenisInstance: any;
 
     // Cached functions to avoid orientation checks every frame
     private getWindowSize: () => number;
@@ -78,6 +79,7 @@ export default class ScrollElement {
         unsubscribeElementUpdateFn,
         needRaf,
         scrollOrientation,
+        lenisInstance,
     }: IScrollElementOptions) {
         // Scroll DOM element
         this.$el = $el;
@@ -87,6 +89,8 @@ export default class ScrollElement {
         this.needRaf = needRaf;
         // Scroll Direction
         this.scrollOrientation = scrollOrientation;
+        // Lenis instance
+        this.lenisInstance = lenisInstance;
         // Parent's callbacks
         this.subscribeElementUpdateFn = subscribeElementUpdateFn;
         this.unsubscribeElementUpdateFn = unsubscribeElementUpdateFn;
@@ -124,10 +128,7 @@ export default class ScrollElement {
         };
 
         // Scroll Values
-        this.currentScroll =
-            this.scrollOrientation === 'vertical'
-                ? window.scrollY
-                : window.scrollX;
+        this.currentScroll = this.lenisInstance.scroll;
 
         // Parallax
         this.translateValue = 0;
@@ -145,8 +146,8 @@ export default class ScrollElement {
 
         // Cache orientation-dependent functions to avoid repeated conditionals
         this.getWindowSize = this.scrollOrientation === 'vertical'
-            ? () => window.innerHeight
-            : () => window.innerWidth;
+            ? () => this.lenisInstance.dimensions.height
+            : () => this.lenisInstance.dimensions.width;
 
         this.getMetricsStart = this.scrollOrientation === 'vertical'
             ? (bcr: DOMRect) => bcr.top

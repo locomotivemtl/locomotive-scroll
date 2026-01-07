@@ -34,12 +34,13 @@ export default class ScrollElement {
     private isFirstResize;
     private subscribeElementUpdateFn;
     private unsubscribeElementUpdateFn;
+    private lenisInstance;
     private getWindowSize;
     private getMetricsStart;
     private getMetricsSize;
     private readonly startPositionHandlers;
     private readonly endPositionHandlers;
-    constructor({ $el, id, subscribeElementUpdateFn, unsubscribeElementUpdateFn, needRaf, scrollOrientation, }: IScrollElementOptions);
+    constructor({ $el, id, subscribeElementUpdateFn, unsubscribeElementUpdateFn, needRaf, scrollOrientation, lenisInstance, }: IScrollElementOptions);
     /**
      * Lifecyle - Initialize progress tracking.
      *

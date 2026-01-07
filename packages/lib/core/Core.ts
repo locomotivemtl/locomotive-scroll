@@ -38,12 +38,14 @@ export default class Core {
     private IOTriggerInstance!: IO;
     private IORafInstance!: IO;
     private scrollOrientation!: scrollOrientation;
+    private lenisInstance: any;
 
     constructor({
         $el,
         triggerRootMargin,
         rafRootMargin,
         scrollOrientation,
+        lenisInstance,
     }: CoreOptions) {
         if (!$el) {
             console.error('Please provide a DOM Element as scrollContainer');
@@ -52,6 +54,9 @@ export default class Core {
 
         // Scroll container
         this.$scrollContainer = $el;
+
+        // Lenis instance
+        this.lenisInstance = lenisInstance;
 
         // Scroll Direction
         this.scrollOrientation = scrollOrientation;
@@ -69,6 +74,8 @@ export default class Core {
 
         // Init
         this._init();
+
+        console.log(this.lenisInstance);
     }
 
     /**
@@ -229,6 +236,7 @@ export default class Core {
                 $el: $scrollElement,
                 id: fromIndex + index,
                 scrollOrientation: this.scrollOrientation,
+                lenisInstance: this.lenisInstance,
                 subscribeElementUpdateFn:
                     this._subscribeElementUpdate.bind(this),
                 unsubscribeElementUpdateFn:

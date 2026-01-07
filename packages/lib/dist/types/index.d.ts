@@ -18,17 +18,17 @@ export default class LocomotiveScroll {
     private triggerRootMargin?;
     private rafRootMargin?;
     private rafInstance?;
-    private autoResize?;
     private autoStart?;
-    private ROInstance?;
+    private isTouchDevice;
     private scrollCallback;
     private initCustomTicker?;
     private destroyCustomTicker?;
     private _onRenderBind;
     private _onResizeBind;
     private _onScrollToBind;
-    private isTouchDevice;
-    constructor({ lenisOptions, triggerRootMargin, rafRootMargin, autoResize, autoStart, scrollCallback, initCustomTicker, destroyCustomTicker, }?: ILocomotiveScrollOptions);
+    private _originalOnContentResize?;
+    private _originalOnWrapperResize?;
+    constructor({ lenisOptions, triggerRootMargin, rafRootMargin, autoStart, scrollCallback, initCustomTicker, destroyCustomTicker, }?: ILocomotiveScrollOptions);
     /**
      * Lifecyle - Initialize instance.
      *
@@ -57,6 +57,9 @@ export default class LocomotiveScroll {
     private _unbindScrollToEvents;
     /**
      * Callback - Resize callback.
+     *
+     * Called synchronously after Lenis updates its dimensions via onContentResize/onWrapperResize.
+     * All dimension values are already up-to-date when this executes.
      */
     private _onResize;
     /**

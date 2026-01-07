@@ -1351,13 +1351,19 @@
   var PROGRESS_CSS_VAR = '--progress';
   var ScrollElement = /*#__PURE__*/function () {
     function ScrollElement(_ref) {
-      var _this$$el$dataset$scr, _this$$el$dataset$scr2, _this$$el$dataset$scr3, _this$$el$dataset$scr4, _this$$el$dataset$scr5;
+      var _this$$el$dataset$scr,
+        _this$$el$dataset$scr2,
+        _this$$el$dataset$scr3,
+        _this$$el$dataset$scr4,
+        _this$$el$dataset$scr5,
+        _this = this;
       var $el = _ref.$el,
         id = _ref.id,
         subscribeElementUpdateFn = _ref.subscribeElementUpdateFn,
         unsubscribeElementUpdateFn = _ref.unsubscribeElementUpdateFn,
         needRaf = _ref.needRaf,
-        scrollOrientation = _ref.scrollOrientation;
+        scrollOrientation = _ref.scrollOrientation,
+        lenisInstance = _ref.lenisInstance;
       this.$el = void 0;
       this.id = void 0;
       this.needRaf = void 0;
@@ -1376,6 +1382,7 @@
       this.isFirstResize = void 0;
       this.subscribeElementUpdateFn = void 0;
       this.unsubscribeElementUpdateFn = void 0;
+      this.lenisInstance = void 0;
       // Cached functions to avoid orientation checks every frame
       this.getWindowSize = void 0;
       this.getMetricsStart = void 0;
@@ -1415,6 +1422,8 @@
       this.needRaf = needRaf;
       // Scroll Direction
       this.scrollOrientation = scrollOrientation;
+      // Lenis instance
+      this.lenisInstance = lenisInstance;
       // Parent's callbacks
       this.subscribeElementUpdateFn = subscribeElementUpdateFn;
       this.unsubscribeElementUpdateFn = unsubscribeElementUpdateFn;
@@ -1443,7 +1452,7 @@
         bcr: {}
       };
       // Scroll Values
-      this.currentScroll = this.scrollOrientation === 'vertical' ? window.scrollY : window.scrollX;
+      this.currentScroll = this.lenisInstance.scroll;
       // Parallax
       this.translateValue = 0;
       // Progress
@@ -1457,9 +1466,9 @@
       this.isFirstResize = true;
       // Cache orientation-dependent functions to avoid repeated conditionals
       this.getWindowSize = this.scrollOrientation === 'vertical' ? function () {
-        return window.innerHeight;
+        return _this.lenisInstance.dimensions.height;
       } : function () {
-        return window.innerWidth;
+        return _this.lenisInstance.dimensions.width;
       };
       this.getMetricsStart = this.scrollOrientation === 'vertical' ? function (bcr) {
         return bcr.top;
@@ -1783,7 +1792,8 @@
       var $el = _ref.$el,
         triggerRootMargin = _ref.triggerRootMargin,
         rafRootMargin = _ref.rafRootMargin,
-        scrollOrientation = _ref.scrollOrientation;
+        scrollOrientation = _ref.scrollOrientation,
+        lenisInstance = _ref.lenisInstance;
       this.$scrollContainer = void 0;
       this.triggerRootMargin = void 0;
       this.rafRootMargin = void 0;
@@ -1794,12 +1804,15 @@
       this.IOTriggerInstance = void 0;
       this.IORafInstance = void 0;
       this.scrollOrientation = void 0;
+      this.lenisInstance = void 0;
       if (!$el) {
         console.error('Please provide a DOM Element as scrollContainer');
         return;
       }
       // Scroll container
       this.$scrollContainer = $el;
+      // Lenis instance
+      this.lenisInstance = lenisInstance;
       // Scroll Direction
       this.scrollOrientation = scrollOrientation;
       // IO Margins
@@ -1812,6 +1825,7 @@
       this.scrollElementsToUpdate = [];
       // Init
       this._init();
+      console.log(this.lenisInstance);
     }
     /**
      * Lifecyle - Initialize the core.
@@ -1955,6 +1969,7 @@
           $el: $scrollElement,
           id: fromIndex + index,
           scrollOrientation: this.scrollOrientation,
+          lenisInstance: this.lenisInstance,
           subscribeElementUpdateFn: this._subscribeElementUpdate.bind(this),
           unsubscribeElementUpdateFn: this._unsubscribeElementUpdate.bind(this),
           needRaf: needRaf
@@ -2091,67 +2106,6 @@
   }();
 
   /**
-   * Resize Observer
-   *
-   * The Resize Observer API provides a performant mechanism by which code can monitor an element for changes to its size,
-   * with notifications being delivered to the observer each time the size changes.
-   *
-   * Features functions to:
-   *
-   * - Trigger the resize callback if the specified element's size change.
-   *
-   * References:
-   *
-   * - {@link https://developer.mozilla.org/en-US/docs/Web/API/Resize_Observer_API}
-   */
-  var RO = /*#__PURE__*/function () {
-    function RO(_ref) {
-      var resizeElements = _ref.resizeElements,
-        _ref$resizeCallback = _ref.resizeCallback,
-        resizeCallback = _ref$resizeCallback === void 0 ? function () {} : _ref$resizeCallback;
-      this.$resizeElements = void 0;
-      this.isFirstObserve = void 0;
-      this.observer = void 0;
-      this.resizeCallback = void 0;
-      // Parameters
-      this.$resizeElements = resizeElements;
-      this.resizeCallback = resizeCallback;
-      // Flags
-      this.isFirstObserve = true;
-      // Init
-      this._init();
-    }
-    /**
-     * Lifecyle - Initialize Resize Observer.
-     *
-     * @private
-     */
-    var _proto = RO.prototype;
-    _proto._init = function _init() {
-      var _this = this;
-      // Callback
-      var onResize = function onResize(entries) {
-        !_this.isFirstObserve && (_this.resizeCallback == null ? void 0 : _this.resizeCallback());
-        _this.isFirstObserve = false;
-      };
-      // Instance
-      this.observer = new ResizeObserver(onResize);
-      // Observe each default elements
-      for (var _iterator = _createForOfIteratorHelperLoose(this.$resizeElements), _step; !(_step = _iterator()).done;) {
-        var $resizeElement = _step.value;
-        this.observer.observe($resizeElement);
-      }
-    }
-    /**
-     * Lifecyle - Destroy Resize Observer.
-     */;
-    _proto.destroy = function destroy() {
-      this.observer.disconnect();
-    };
-    return RO;
-  }();
-
-  /**
    * Locomotive Scroll
    *
    * Detection of elements in viewport & smooth scrolling with parallax.
@@ -2168,8 +2122,6 @@
         lenisOptions = _ref$lenisOptions === void 0 ? {} : _ref$lenisOptions,
         triggerRootMargin = _ref.triggerRootMargin,
         rafRootMargin = _ref.rafRootMargin,
-        _ref$autoResize = _ref.autoResize,
-        autoResize = _ref$autoResize === void 0 ? true : _ref$autoResize,
         _ref$autoStart = _ref.autoStart,
         autoStart = _ref$autoStart === void 0 ? true : _ref$autoStart,
         _ref$scrollCallback = _ref.scrollCallback,
@@ -2183,28 +2135,20 @@
       this.triggerRootMargin = void 0;
       this.rafRootMargin = void 0;
       this.rafInstance = void 0;
-      this.autoResize = void 0;
       this.autoStart = void 0;
-      this.ROInstance = void 0;
+      this.isTouchDevice = void 0;
       this.initCustomTicker = void 0;
       this.destroyCustomTicker = void 0;
       this._onRenderBind = void 0;
       this._onResizeBind = void 0;
       this._onScrollToBind = void 0;
-      this.isTouchDevice = void 0;
-      for (var _i = 0, _Object$entries = Object.entries(lenisOptions); _i < _Object$entries.length; _i++) {
-        var _Object$entries$_i = _Object$entries[_i],
-          key = _Object$entries$_i[0];
-        if (["wrapper", "content", "infinite"].includes(key)) {
-          console.warn("Warning: Key \"" + key + "\" is not possible to edit in Locomotive Scroll.");
-        }
-      }
+      this._originalOnContentResize = void 0;
+      this._originalOnWrapperResize = void 0;
       // Get arguments
       Object.assign(this, {
         lenisOptions: lenisOptions,
         triggerRootMargin: triggerRootMargin,
         rafRootMargin: rafRootMargin,
-        autoResize: autoResize,
         autoStart: autoStart,
         scrollCallback: scrollCallback,
         initCustomTicker: initCustomTicker,
@@ -2228,12 +2172,20 @@
      */
     var _proto = LocomotiveScroll.prototype;
     _proto._init = function _init() {
-      var _this = this;
+      var _this$lenisOptions,
+        _this$lenisOptions2,
+        _this$lenisOptions$in,
+        _this$lenisOptions3,
+        _this = this;
+      // Default to window/documentElement if not provided
+      var defaultWrapper = ((_this$lenisOptions = this.lenisOptions) == null ? void 0 : _this$lenisOptions.wrapper) || window;
+      var defaultContent = ((_this$lenisOptions2 = this.lenisOptions) == null ? void 0 : _this$lenisOptions2.content) || document.documentElement;
+      var defaultInfinite = (_this$lenisOptions$in = (_this$lenisOptions3 = this.lenisOptions) == null ? void 0 : _this$lenisOptions3.infinite) != null ? _this$lenisOptions$in : false;
       // Create Lenis instance
       this.lenisInstance = new Lenis(_extends({}, this.lenisOptions, {
-        wrapper: window,
-        content: document.documentElement,
-        infinite: false
+        wrapper: defaultWrapper,
+        content: defaultContent,
+        infinite: defaultInfinite
       }));
       this.lenisInstance.on('scroll', this.scrollCallback);
       // Add scroll direction attribute on body
@@ -2244,7 +2196,8 @@
           $el: _this.lenisInstance.rootElement,
           triggerRootMargin: _this.triggerRootMargin,
           rafRootMargin: _this.rafRootMargin,
-          scrollOrientation: _this.lenisInstance.options.orientation
+          scrollOrientation: _this.lenisInstance.options.orientation,
+          lenisInstance: _this.lenisInstance
         });
         // Bind Events
         _this._bindEvents();
@@ -2281,16 +2234,22 @@
      * Events - Subscribe events to listen.
      */;
     _proto._bindEvents = function _bindEvents() {
+      var _this3 = this;
       this._bindScrollToEvents();
-      if (this.autoResize) {
-        if ('ResizeObserver' in window) {
-          this.ROInstance = new RO({
-            resizeElements: [document.body],
-            resizeCallback: this._onResizeBind
-          });
-        } else {
-          window.addEventListener('resize', this._onResizeBind);
-        }
+      // Hook into Lenis dimensions resize callbacks
+      // onContentResize: called when content size changes (images load, dynamic content)
+      // onWrapperResize: called when wrapper size changes (window resize, layout changes)
+      if (this.lenisInstance) {
+        this._originalOnContentResize = this.lenisInstance.dimensions.onContentResize.bind(this.lenisInstance.dimensions);
+        this._originalOnWrapperResize = this.lenisInstance.dimensions.onWrapperResize.bind(this.lenisInstance.dimensions);
+        this.lenisInstance.dimensions.onContentResize = function () {
+          _this3._originalOnContentResize == null || _this3._originalOnContentResize();
+          _this3._onResizeBind();
+        };
+        this.lenisInstance.dimensions.onWrapperResize = function () {
+          _this3._originalOnWrapperResize == null || _this3._originalOnWrapperResize();
+          _this3._onResizeBind();
+        };
       }
     }
     /**
@@ -2298,11 +2257,13 @@
      */;
     _proto._unbindEvents = function _unbindEvents() {
       this._unbindScrollToEvents();
-      if (this.autoResize) {
-        if ('ResizeObserver' in window) {
-          this.ROInstance && this.ROInstance.destroy();
-        } else {
-          window.removeEventListener('resize', this._onResizeBind);
+      // Restore original Lenis dimensions resize callbacks
+      if (this.lenisInstance) {
+        if (this._originalOnContentResize) {
+          this.lenisInstance.dimensions.onContentResize = this._originalOnContentResize;
+        }
+        if (this._originalOnWrapperResize) {
+          this.lenisInstance.dimensions.onWrapperResize = this._originalOnWrapperResize;
         }
       }
     }
@@ -2311,11 +2272,11 @@
      */;
     _proto._bindScrollToEvents = function _bindScrollToEvents($container) {
       var _this$lenisInstance2,
-        _this3 = this;
+        _this4 = this;
       var $rootContainer = $container ? $container : (_this$lenisInstance2 = this.lenisInstance) == null ? void 0 : _this$lenisInstance2.rootElement;
       var $scrollToElements = $rootContainer == null ? void 0 : $rootContainer.querySelectorAll('[data-scroll-to]');
       ($scrollToElements == null ? void 0 : $scrollToElements.length) && $scrollToElements.forEach(function ($el) {
-        $el.addEventListener('click', _this3._onScrollToBind, false);
+        $el.addEventListener('click', _this4._onScrollToBind, false);
       });
     }
     /**
@@ -2323,35 +2284,34 @@
      */;
     _proto._unbindScrollToEvents = function _unbindScrollToEvents($container) {
       var _this$lenisInstance3,
-        _this4 = this;
+        _this5 = this;
       var $rootContainer = $container ? $container : (_this$lenisInstance3 = this.lenisInstance) == null ? void 0 : _this$lenisInstance3.rootElement;
       var $scrollToElements = $rootContainer == null ? void 0 : $rootContainer.querySelectorAll('[data-scroll-to]');
       ($scrollToElements == null ? void 0 : $scrollToElements.length) && $scrollToElements.forEach(function ($el) {
-        $el.removeEventListener('click', _this4._onScrollToBind, false);
+        $el.removeEventListener('click', _this5._onScrollToBind, false);
       });
     }
     /**
      * Callback - Resize callback.
+     *
+     * Called synchronously after Lenis updates its dimensions via onContentResize/onWrapperResize.
+     * All dimension values are already up-to-date when this executes.
      */;
     _proto._onResize = function _onResize() {
-      var _this5 = this;
-      // Waiting the next frame to get the new current scroll value return by Lenis
-      requestAnimationFrame(function () {
-        var _this5$coreInstance, _this5$lenisInstance$, _this5$lenisInstance;
-        (_this5$coreInstance = _this5.coreInstance) == null || _this5$coreInstance.onResize({
-          currentScroll: (_this5$lenisInstance$ = (_this5$lenisInstance = _this5.lenisInstance) == null ? void 0 : _this5$lenisInstance.scroll) != null ? _this5$lenisInstance$ : 0,
-          smooth: !_this5.isTouchDevice
-        });
+      var _this$coreInstance, _this$lenisInstance$s, _this$lenisInstance4;
+      (_this$coreInstance = this.coreInstance) == null || _this$coreInstance.onResize({
+        currentScroll: (_this$lenisInstance$s = (_this$lenisInstance4 = this.lenisInstance) == null ? void 0 : _this$lenisInstance4.scroll) != null ? _this$lenisInstance$s : 0,
+        smooth: !this.isTouchDevice
       });
     }
     /**
      * Callback - Render callback.
      */;
     _proto._onRender = function _onRender() {
-      var _this$lenisInstance4, _this$coreInstance, _this$lenisInstance$s, _this$lenisInstance5;
-      (_this$lenisInstance4 = this.lenisInstance) == null || _this$lenisInstance4.raf(Date.now());
-      (_this$coreInstance = this.coreInstance) == null || _this$coreInstance.onRender({
-        currentScroll: (_this$lenisInstance$s = (_this$lenisInstance5 = this.lenisInstance) == null ? void 0 : _this$lenisInstance5.scroll) != null ? _this$lenisInstance$s : 0,
+      var _this$lenisInstance5, _this$coreInstance2, _this$lenisInstance$s2, _this$lenisInstance6;
+      (_this$lenisInstance5 = this.lenisInstance) == null || _this$lenisInstance5.raf(Date.now());
+      (_this$coreInstance2 = this.coreInstance) == null || _this$coreInstance2.onRender({
+        currentScroll: (_this$lenisInstance$s2 = (_this$lenisInstance6 = this.lenisInstance) == null ? void 0 : _this$lenisInstance6.scroll) != null ? _this$lenisInstance$s2 : 0,
         smooth: !this.isTouchDevice
       });
     }
@@ -2359,13 +2319,13 @@
      * Callback - Scroll To callback.
      */;
     _proto._onScrollTo = function _onScrollTo(event) {
-      var _event$currentTarget, _this$lenisInstance6;
+      var _event$currentTarget, _this$lenisInstance7;
       event.preventDefault();
       var $target = (_event$currentTarget = event.currentTarget) != null ? _event$currentTarget : null;
       if (!$target) return;
       var target = $target.getAttribute('data-scroll-to-href') || $target.getAttribute('href');
       var offset = $target.getAttribute('data-scroll-to-offset') || 0;
-      var duration = $target.getAttribute('data-scroll-to-duration') || ((_this$lenisInstance6 = this.lenisInstance) == null ? void 0 : _this$lenisInstance6.options.duration);
+      var duration = $target.getAttribute('data-scroll-to-duration') || ((_this$lenisInstance7 = this.lenisInstance) == null ? void 0 : _this$lenisInstance7.options.duration);
       target && this.scrollTo(target, {
         offset: typeof offset === 'string' ? parseInt(offset) : offset,
         duration: typeof duration === 'string' ? parseInt(duration) : duration
@@ -2375,12 +2335,12 @@
      * Start RequestAnimationFrame that active Lenis smooth and scroll progress.
      */;
     _proto.start = function start() {
-      var _this$lenisInstance7;
+      var _this$lenisInstance8;
       if (this.rafPlaying) {
         return;
       }
       // Call lenis start method
-      (_this$lenisInstance7 = this.lenisInstance) == null || _this$lenisInstance7.start();
+      (_this$lenisInstance8 = this.lenisInstance) == null || _this$lenisInstance8.start();
       this.rafPlaying = true;
       this.initCustomTicker ? this.initCustomTicker(this._onRenderBind) : this._raf();
     }
@@ -2388,12 +2348,12 @@
      * Stop RequestAnimationFrame that active Lenis smooth and scroll progress.
      */;
     _proto.stop = function stop() {
-      var _this$lenisInstance8;
+      var _this$lenisInstance9;
       if (!this.rafPlaying) {
         return;
       }
       // Call lenis stop method
-      (_this$lenisInstance8 = this.lenisInstance) == null || _this$lenisInstance8.stop();
+      (_this$lenisInstance9 = this.lenisInstance) == null || _this$lenisInstance9.stop();
       this.rafPlaying = false;
       this.destroyCustomTicker ? this.destroyCustomTicker(this._onRenderBind) : this.rafInstance && cancelAnimationFrame(this.rafInstance);
     }
@@ -2401,25 +2361,25 @@
      * Remove old scroll elements items and rebuild ScrollElements instances.
      */;
     _proto.removeScrollElements = function removeScrollElements($oldContainer) {
-      var _this$coreInstance2;
+      var _this$coreInstance3;
       if (!$oldContainer) {
         console.error('Please provide a DOM Element as $oldContainer');
         return;
       }
       this._unbindScrollToEvents($oldContainer);
-      (_this$coreInstance2 = this.coreInstance) == null || _this$coreInstance2.removeScrollElements($oldContainer);
+      (_this$coreInstance3 = this.coreInstance) == null || _this$coreInstance3.removeScrollElements($oldContainer);
     }
     /**
      * Add new scroll elements items and rebuild ScrollElements instances.
      */;
     _proto.addScrollElements = function addScrollElements($newContainer) {
-      var _this$coreInstance3,
+      var _this$coreInstance4,
         _this6 = this;
       if (!$newContainer) {
         console.error('Please provide a DOM Element as $newContainer');
         return;
       }
-      (_this$coreInstance3 = this.coreInstance) == null || _this$coreInstance3.addScrollElements($newContainer);
+      (_this$coreInstance4 = this.coreInstance) == null || _this$coreInstance4.addScrollElements($newContainer);
       requestAnimationFrame(function () {
         _this6._bindScrollToEvents($newContainer);
       });
@@ -2434,8 +2394,8 @@
      * Trigger scroll to callback.
      */;
     _proto.scrollTo = function scrollTo(target, options) {
-      var _this$lenisInstance9;
-      (_this$lenisInstance9 = this.lenisInstance) == null || _this$lenisInstance9.scrollTo(target, {
+      var _this$lenisInstance10;
+      (_this$lenisInstance10 = this.lenisInstance) == null || _this$lenisInstance10.scrollTo(target, {
         offset: options == null ? void 0 : options.offset,
         lerp: options == null ? void 0 : options.lerp,
         duration: options == null ? void 0 : options.duration,

@@ -1,6 +1,5 @@
 import Lenis from 'lenis';
 import Core from './core/Core';
-import RO from './core/RO';
 import type {
     ILenisScrollToOptions,
     ILenisScrollValues,
@@ -30,40 +29,32 @@ export default class LocomotiveScroll {
     private triggerRootMargin?: string;
     private rafRootMargin?: string;
     private rafInstance?: number;
-    private autoResize?: boolean;
     private autoStart?: boolean;
-    private ROInstance?: RO;
+    private isTouchDevice: boolean;
     private scrollCallback?(scrollValues: ILenisScrollValues): void;
     private initCustomTicker?: (render: () => void) => void;
     private destroyCustomTicker?: (render: () => void) => void;
     private _onRenderBind: () => void;
     private _onResizeBind: () => void;
     private _onScrollToBind: (event: MouseEvent) => void;
-    private isTouchDevice: boolean;
+    private _originalOnContentResize?: () => void;
+    private _originalOnWrapperResize?: () => void;
 
     constructor({
         lenisOptions = {},
         triggerRootMargin,
         rafRootMargin,
-        autoResize = true,
         autoStart = true,
         scrollCallback = () => {},
         initCustomTicker,
         destroyCustomTicker,
     }: ILocomotiveScrollOptions = {}) {
 
-        for (const [key] of Object.entries(lenisOptions)) {
-            if (["wrapper", "content", "infinite"].includes(key)) {
-                console.warn(`Warning: Key "${key}" is not possible to edit in Locomotive Scroll.`);
-            }
-        }
-
         // Get arguments
         Object.assign(this, {
             lenisOptions,
             triggerRootMargin,
             rafRootMargin,
-            autoResize,
             autoStart,
             scrollCallback,
             initCustomTicker,
@@ -92,12 +83,17 @@ export default class LocomotiveScroll {
      * @private
      */
     private _init(): void {
+        // Default to window/documentElement if not provided
+        const defaultWrapper = this.lenisOptions?.wrapper || window;
+        const defaultContent = this.lenisOptions?.content || document.documentElement;
+        const defaultInfinite = this.lenisOptions?.infinite ?? false;
+
         // Create Lenis instance
         this.lenisInstance = new Lenis({
             ...this.lenisOptions,
-            wrapper: window,
-            content: document.documentElement,
-            infinite: false
+            wrapper: defaultWrapper,
+            content: defaultContent,
+            infinite: defaultInfinite
         });
         this.lenisInstance.on('scroll', this.scrollCallback);
 
@@ -114,6 +110,7 @@ export default class LocomotiveScroll {
                 triggerRootMargin: this.triggerRootMargin,
                 rafRootMargin: this.rafRootMargin,
                 scrollOrientation: this.lenisInstance.options.orientation,
+                lenisInstance: this.lenisInstance,
             });
 
             // Bind Events
@@ -159,15 +156,26 @@ export default class LocomotiveScroll {
     private _bindEvents() {
         this._bindScrollToEvents();
 
-        if (this.autoResize) {
-            if ('ResizeObserver' in window) {
-                this.ROInstance = new RO({
-                    resizeElements: [document.body],
-                    resizeCallback: this._onResizeBind,
-                });
-            } else {
-                (window as any).addEventListener('resize', this._onResizeBind);
-            }
+        // Hook into Lenis dimensions resize callbacks
+        // onContentResize: called when content size changes (images load, dynamic content)
+        // onWrapperResize: called when wrapper size changes (window resize, layout changes)
+        if (this.lenisInstance) {
+            this._originalOnContentResize = this.lenisInstance.dimensions.onContentResize.bind(
+                this.lenisInstance.dimensions
+            );
+            this._originalOnWrapperResize = this.lenisInstance.dimensions.onWrapperResize.bind(
+                this.lenisInstance.dimensions
+            );
+
+            this.lenisInstance.dimensions.onContentResize = () => {
+                this._originalOnContentResize?.();
+                this._onResizeBind();
+            };
+
+            this.lenisInstance.dimensions.onWrapperResize = () => {
+                this._originalOnWrapperResize?.();
+                this._onResizeBind();
+            };
         }
     }
 
@@ -177,14 +185,13 @@ export default class LocomotiveScroll {
     private _unbindEvents() {
         this._unbindScrollToEvents();
 
-        if (this.autoResize) {
-            if ('ResizeObserver' in window) {
-                this.ROInstance && this.ROInstance.destroy();
-            } else {
-                (window as any).removeEventListener(
-                    'resize',
-                    this._onResizeBind
-                );
+        // Restore original Lenis dimensions resize callbacks
+        if (this.lenisInstance) {
+            if (this._originalOnContentResize) {
+                this.lenisInstance.dimensions.onContentResize = this._originalOnContentResize;
+            }
+            if (this._originalOnWrapperResize) {
+                this.lenisInstance.dimensions.onWrapperResize = this._originalOnWrapperResize;
             }
         }
     }
@@ -222,14 +229,14 @@ export default class LocomotiveScroll {
 
     /**
      * Callback - Resize callback.
+     *
+     * Called synchronously after Lenis updates its dimensions via onContentResize/onWrapperResize.
+     * All dimension values are already up-to-date when this executes.
      */
     private _onResize() {
-        // Waiting the next frame to get the new current scroll value return by Lenis
-        requestAnimationFrame(() => {
-            this.coreInstance?.onResize({
-                currentScroll: this.lenisInstance?.scroll ?? 0,
-                smooth: !this.isTouchDevice,
-            });
+        this.coreInstance?.onResize({
+            currentScroll: this.lenisInstance?.scroll ?? 0,
+            smooth: !this.isTouchDevice,
         });
     }
 

@@ -1,5 +1,6 @@
 import ScrollElement from './core/ScrollElement';
 import type { LenisOptions } from 'lenis';
+import type Lenis from 'lenis';
 
 /**
  * @typedef {Object} ILenisScrollValues
@@ -64,7 +65,6 @@ export interface ILenisScrollToOptions {
  * @property {LenisOptions}  [lenisOptions]      - Object to override default Lenis options.
  * @property {string}        [triggerRootMargin] - Root margin for trigger Intersection Observer.
  * @property {string}        [rafRootMargin]     - Root margin for RAF Intersection Observer.
- * @property {boolean}       [autoResize]        - Enable/Disable the resize logic of the library.
  * @property {boolean}       [autoStart]         - Enable/Disable RAF auto start.
  * @property {function}      [scrollCallback]    - Scroll callback binded on the Lenis scroll event.
  */
@@ -72,7 +72,6 @@ export interface ILocomotiveScrollOptions {
     lenisOptions?: LenisOptions;
     triggerRootMargin?: string;
     rafRootMargin?: string;
-    autoResize?: boolean;
     autoStart?: boolean;
     scrollCallback?(scrollValues: ILenisScrollValues): void;
     initCustomTicker?(render: () => void): void;
@@ -85,6 +84,7 @@ export interface ILocomotiveScrollOptions {
  * @property {HTMLElement} $el                        - DOM Element with data-scroll attribute.
  * @property {number}      id                         - Instance UID.
  * @property {boolean}     needRaf                    - RequestAnimationFrame status.
+ * @property {Lenis}       lenisInstance              - Lenis instance for scroll data.
  * @property {function}    subscribeElementUpdateFn   - Callback to subscribe instance to the main RAF.
  * @property {function}    unsubscribeElementUpdateFn - Callback to unsubscribe instance to the main RAF.
  * @property {function}    [scrollCallback]           - Scroll callback binded on the Lenis scroll event.
@@ -94,6 +94,7 @@ export interface IScrollElementOptions {
     id: number;
     needRaf: boolean;
     scrollOrientation: scrollOrientation;
+    lenisInstance: Lenis;
     subscribeElementUpdateFn(scrollElement: ScrollElement): void;
     unsubscribeElementUpdateFn(scrollElement: ScrollElement): void;
     scrollCallback?(scrollValues: ILenisScrollValues): void;
@@ -180,25 +181,16 @@ export interface IIOOptions {
  * @property {HTMLElement} $el                                     - DOM Element used as scroll container.
  * @property {string}      [triggerRootMargin=TRIGGER_ROOT_MARGIN] - Root margin for trigger Intersection Observer.
  * @property {string}      [rafRootMargin=RAF_ROOT_MARGIN]         - Root margin for raf Intersection Observer.
+ * @property {Lenis}       lenisInstance                          - Lenis instance for scroll data.
  */
 export interface CoreOptions {
     $el: HTMLElement;
     triggerRootMargin?: string;
     rafRootMargin?: string;
     scrollOrientation: scrollOrientation;
+    lenisInstance: Lenis;
 }
 
 export type scrollOrientation = 'vertical' | 'horizontal';
 
 export type gestureOrientation = 'vertical' | 'horizontal' | 'both';
-
-/**
- * @typedef {Object} IROOptions
- *
- *  @property {HTMLElement[]} resizeElements - A list of DOM elements to watch.
- *  @property {function} resizeCallback      - Resize callback function.
- */
-export interface IROOptions {
-    resizeElements: HTMLElement[];
-    resizeCallback(): void;
-}
