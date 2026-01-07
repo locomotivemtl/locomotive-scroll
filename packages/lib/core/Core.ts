@@ -74,8 +74,6 @@ export default class Core {
 
         // Init
         this._init();
-
-        console.log(this.lenisInstance);
     }
 
     /**

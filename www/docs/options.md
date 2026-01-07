@@ -6,8 +6,8 @@
 
 _(Optional)_ The `lenisOptions` parameter is an optional object that allows you to configure specific settings based on some of [Lenis's instance settings](https://github.com/darkroomengineering/lenis#instance-settings):
 
--   `wrapper` (**HTMLElement|Window**): Specifies the element that will be used as the scroll container.
--   `content` (**HTMLElement**): Specifies the element that contains the content that will be scrolled, usually `wrapper`'s direct child.
+-   `wrapper` (**HTMLElement|Window**): Specifies the element that will be used as the scroll container. Defaults to `window` for full-page scrolling. Can be set to a custom element for contained scrolling (e.g., `document.querySelector('.scroll-container')`).
+-   `content` (**HTMLElement**): Specifies the element that contains the content that will be scrolled, usually `wrapper`'s direct child. Defaults to `document.documentElement`. Can be set to a custom element when using a custom wrapper.
 -   `lerp` (**number**): Specifies the intensity of linear interpolation (lerp) between frames, ranging from 0 to 1.
 -   `duration` (**number**): Specifies the duration of the animation.
 -   `orientation` (**string**): Specifies whether the scrolling is `vertical` or `horizontal`. It adds a `data-scroll-orientation` attribute on the `<html>` tag.
@@ -40,6 +40,33 @@ const locomotiveScroll = new LocomotiveScroll({
 });
 ```
 
+### Custom Scroll Container
+
+You can use a custom scroll container instead of the default full-page scroll:
+
+```js
+const locomotiveScroll = new LocomotiveScroll({
+    lenisOptions: {
+        wrapper: document.querySelector('.scroll-container'),
+        content: document.querySelector('.scroll-content'),
+    },
+});
+```
+
+```html
+<div class="scroll-container" style="height: 100vh; overflow: hidden;">
+    <div class="scroll-content">
+        <div data-scroll data-scroll-speed="0.5">Parallax element</div>
+    </div>
+</div>
+```
+
+**Requirements:**
+- The `wrapper` must have a fixed height and `overflow: hidden` (or `auto`/`scroll`)
+- The `content` must be a direct child of the wrapper
+- Intersection Observers will automatically use the wrapper as their root
+- Resize detection is automatically synchronized with Lenis's ResizeObservers
+
 ## triggerRootMargin
 
 -   **Type:** `string`
@@ -66,32 +93,6 @@ _(Optional)_ Specifies the root margin for scroll elements that need to be trigg
 const locomotiveScroll = new LocomotiveScroll({
     rafRootMargin: '100% 100% 100% 100%',
 });
-```
-
-## autoResize
-
--   Type: `boolean`
--   Default: `true`
-
-_(Optional)_ Enable or disable the resize logic of the library. By default, the library uses a [ResizeObserver](https://developer.mozilla.org/en-US/docs/Web/API/ResizeObserver) to trigger its resize logic.
-
-```js
-// Default Value
-const locomotiveScroll = new LocomotiveScroll({
-    autoResize: true,
-});
-```
-
-You can also use your own resize logic to override the default resize behavior used by Locomotive Scroll. Here's an example:
-
-```js
-import LocomotiveScroll from 'locomotive-scroll';
-
-const locomotiveScroll = new LocomotiveScroll({
-    autoResize: false,
-});
-
-window.addEventListener('resize', locomotiveScroll.resize.bind(locomotiveScroll));
 ```
 
 ## autoStart

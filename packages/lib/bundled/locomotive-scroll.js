@@ -1574,13 +1574,6 @@
       if (this.isInteractive) {
         return;
       }
-      console.log('setInteractivityOn', {
-        id: this.id,
-        element: this.$el,
-        currentScroll: this.currentScroll,
-        intersection: this.intersection,
-        scrollSpeed: this.attributes.scrollSpeed
-      });
       this.isInteractive = true;
       this.subscribeElementUpdateFn(this);
     }
@@ -1592,10 +1585,6 @@
       if (!this.isInteractive) {
         return;
       }
-      console.log('setInteractivityOff', {
-        id: this.id,
-        element: this.$el
-      });
       this.isInteractive = false;
       this.unsubscribeElementUpdateFn(this);
       // Force progress to progress limit when the element is out
@@ -1607,23 +1596,9 @@
      * @private
      */;
     _proto._resize = function _resize() {
-      console.log('_resize', {
-        id: this.id,
-        element: this.$el,
-        currentScroll: this.currentScroll,
-        lenisScroll: this.lenisInstance.scroll,
-        wSize: this.getWindowSize(),
-        isFirstResize: this.isFirstResize,
-        scrollSpeed: this.attributes.scrollSpeed
-      });
       this.metrics.bcr = this.$el.getBoundingClientRect();
       this._computeMetrics();
       this._computeIntersection();
-      console.log('intersection calculated:', {
-        id: this.id,
-        intersection: this.intersection,
-        isInFold: this.isInFold
-      });
       // First resize logic
       if (this.isFirstResize) {
         this.isFirstResize = false;
@@ -1855,7 +1830,6 @@
       this.scrollElementsToUpdate = [];
       // Init
       this._init();
-      console.log(this.lenisInstance);
     }
     /**
      * Lifecyle - Initialize the core.

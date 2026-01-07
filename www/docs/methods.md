@@ -42,7 +42,7 @@ requestAnimationFrame(() => {
 
 The `resize()` method allows you to manually trigger the resize callback of the Locomotive Scroll instance. This is useful when you need to handle resizing events programmatically or when you want to manually update the scroll calculations after a layout change.
 
-> :warning: **Note**: Locomotive Scroll automatically handles resize events, eliminating the need for manual resizing. For more information, please refer to the [Autoresize](/options?id=autoresize) section in the documentation.
+> :bulb: **Note**: Locomotive Scroll automatically handles resize events by synchronizing with Lenis's internal ResizeObservers (`onContentResize` and `onWrapperResize`). Manual resizing is rarely needed unless you're making dynamic layout changes that Lenis doesn't detect.
 
 ```js
 const locomotiveScroll = new LocomotiveScroll();

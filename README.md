@@ -9,7 +9,7 @@
 [![bundle size](https://img.shields.io/bundlephobia/minzip/locomotive-scroll)](https://bundlephobia.com/package/locomotive-scroll@beta)
 [![license](https://img.shields.io/npm/l/locomotive-scroll.svg)](https://github.com/locomotivemtl/locomotive-scroll/blob/master/LICENSE)
 
-A lightweight scroll library for modern web experiences. Detection, animation, and smooth scrolling — all in **8.3kB**.
+A lightweight scroll library for modern web experiences. Detection, animation, and smooth scrolling — all in **9.6kB**.
 
 Built on top of [Lenis](https://github.com/darkroomengineering/lenis).
 
@@ -19,7 +19,7 @@ Built on top of [Lenis](https://github.com/darkroomengineering/lenis).
 
 ## Features
 
-- **Lightweight** — Only 8.3kB gzipped
+- **Lightweight** — Only 9.6kB gzipped
 - **TypeScript First** — Fully typed
 - **Built on Lenis 1.3.17** — Latest stable release with improved performance
 - **Dual Intersection Observers** — Optimized detection for simple triggers vs. continuous animations
@@ -125,7 +125,7 @@ Simple, performant parallax with one attribute.
 </div>
 ```
 
-**Note:** Parallax is automatically disabled on touch devices for smooth 60fps scrolling. Enable it explicitly with `data-scroll-enable-touch-speed` when needed.
+**Note:** Parallax is automatically disabled on touch devices for native scrolling performance. Enable it explicitly with `data-scroll-enable-touch-speed` when needed.
 
 ### Custom Callbacks
 
@@ -155,7 +155,6 @@ window.addEventListener('videoTrigger', (e) => {
 
 | Option | Type | Default | Description |
 |--------|------|---------|-------------|
-| `autoResize` | `boolean` | `true` | Enable automatic resize detection using ResizeObserver |
 | `autoStart` | `boolean` | `true` | Automatically start the scroll on initialization |
 | `destroyCustomTicker` | `function` | `undefined` | Callback to destroy custom ticker (e.g., GSAP) |
 | `initCustomTicker` | `function` | `undefined` | Callback to initialize custom ticker (e.g., GSAP) |
@@ -180,12 +179,33 @@ const scroll = new LocomotiveScroll({
 });
 ```
 
-**Note:** The following Lenis options are locked and cannot be modified:
-- `wrapper` (always `window`) — Locomotive Scroll v5 only supports full-page scrolling
-- `content` (always `document.documentElement`) — Required for full-page scrolling
-- `infinite` (always `false`) — Infinite scroll is not supported
+#### Custom Scroll Containers
 
-This is an architectural decision to simplify implementation and cover the majority of use cases. Custom scroll containers (e.g., `overflow: scroll` divs) are not supported in v5.
+Locomotive Scroll v5 supports custom scroll containers via Lenis options. By default, it scrolls the entire page (`window`), but you can specify a custom wrapper and content element:
+
+```js
+const scroll = new LocomotiveScroll({
+  lenisOptions: {
+    wrapper: document.querySelector('.scroll-container'),
+    content: document.querySelector('.scroll-content'),
+  },
+});
+```
+
+```html
+<div class="scroll-container" style="height: 100vh; overflow: hidden;">
+  <div class="scroll-content">
+    <div data-scroll data-scroll-speed="0.5">Parallax element</div>
+  </div>
+</div>
+```
+
+**Requirements for custom containers:**
+- The `wrapper` must have a fixed height and `overflow: hidden` (or `auto`/`scroll`)
+- The `content` must be a direct child of the wrapper
+- Intersection Observers will automatically use the wrapper as their root
+
+**Note:** Resize detection is automatically synchronized with Lenis's internal ResizeObservers, ensuring perfect timing for dimension updates.
 
 [See all options →](https://scroll.locomotive.ca/docs/#/options)
 
@@ -296,7 +316,7 @@ Elements only subscribe to RAF when visible **and** animating.
 
 Permanent touch device detection using `'ontouchstart' in window || navigator.maxTouchPoints > 0`.
 
-Parallax automatically disabled on touch devices for smooth 60fps native scrolling.
+Parallax automatically disabled on touch devices for native scrolling.
 
 ### No Layout Shifts
 
