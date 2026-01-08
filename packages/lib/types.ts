@@ -1,34 +1,6 @@
 import ScrollElement from './core/ScrollElement';
 import type { LenisOptions } from 'lenis';
-
-/**
- * @typedef {Object} IModular
- *
- * @property {HTMLElement} el
- * @property {any}         events
- * @property {function}    $
- * @property {function}    parent
- * @property {function}    call
- * @property {function}    on
- * @property {function}    getData
- * @property {function}    setData
- */
-export interface IModular {
-    el: HTMLElement;
-    events: any;
-    modules: any;
-    $(): any;
-    parent(): any;
-    call(
-        func: string,
-        args: any | null,
-        moduleName: string,
-        moduleId?: string
-    ): any;
-    on(): any;
-    getData(): any;
-    setData(): any;
-}
+import type Lenis from 'lenis';
 
 /**
  * @typedef {Object} ILenisScrollValues
@@ -91,19 +63,15 @@ export interface ILenisScrollToOptions {
  * @typedef {Object} ILocomotiveScrollOptions
  *
  * @property {LenisOptions}  [lenisOptions]      - Object to override default Lenis options.
- * @property {IModular}      [modularInstance]   - Modular instance to execute call functions.
  * @property {string}        [triggerRootMargin] - Root margin for trigger Intersection Observer.
  * @property {string}        [rafRootMargin]     - Root margin for RAF Intersection Observer.
- * @property {boolean}       [autoResize]        - Enable/Disable the resize logic of the library.
  * @property {boolean}       [autoStart]         - Enable/Disable RAF auto start.
  * @property {function}      [scrollCallback]    - Scroll callback binded on the Lenis scroll event.
  */
 export interface ILocomotiveScrollOptions {
     lenisOptions?: LenisOptions;
-    modularInstance?: IModular;
     triggerRootMargin?: string;
     rafRootMargin?: string;
-    autoResize?: boolean;
     autoStart?: boolean;
     scrollCallback?(scrollValues: ILenisScrollValues): void;
     initCustomTicker?(render: () => void): void;
@@ -116,7 +84,7 @@ export interface ILocomotiveScrollOptions {
  * @property {HTMLElement} $el                        - DOM Element with data-scroll attribute.
  * @property {number}      id                         - Instance UID.
  * @property {boolean}     needRaf                    - RequestAnimationFrame status.
- * @property {IModular}    [modularInstance]          - Modular instance to execute call functions.
+ * @property {Lenis}       lenisInstance              - Lenis instance for scroll data.
  * @property {function}    subscribeElementUpdateFn   - Callback to subscribe instance to the main RAF.
  * @property {function}    unsubscribeElementUpdateFn - Callback to unsubscribe instance to the main RAF.
  * @property {function}    [scrollCallback]           - Scroll callback binded on the Lenis scroll event.
@@ -126,7 +94,7 @@ export interface IScrollElementOptions {
     id: number;
     needRaf: boolean;
     scrollOrientation: scrollOrientation;
-    modularInstance?: IModular;
+    lenisInstance: Lenis;
     subscribeElementUpdateFn(scrollElement: ScrollElement): void;
     unsubscribeElementUpdateFn(scrollElement: ScrollElement): void;
     scrollCallback?(scrollValues: ILenisScrollValues): void;
@@ -138,13 +106,11 @@ export interface IScrollElementOptions {
  *  @property {string}  scrollClass             - Add a custom class when the element is intersected by the offset.
  *  @property {string}  scrollOffset            - Determine offsets to intersect the element.
  *  @property {string}  scrollPosition          - Determine the element positions to consider an element as intersected..
- *  @property {boolean} scrollModuleProgress    - Send scroll progress to modular module that have a specific method (PROGRESS_MODULAR_METHOD).
  *  @property {boolean} scrollCssProgress       - Add a specific css variable (PROGRESS_CSS_VAR) that store the scroll progress.
  *  @property {?string} scrollEventProgress     - Send scroll progress to custom event listeners.
  *  @property {?number} scrollSpeed             - Add a scroll multiplicator to create a parallax effect.
  *  @property {boolean} scrollRepeat            - Repeat the option to trigger animation each time the element is intersected.
- *  @property {?string} scrollCall              - Call a custom event or a modular callback when the element is intersected.
- *  @property {?string} scrollCallSelf          - Specify that the modular callback is set on the scroll element itself.
+ *  @property {?string} scrollCall              - Call a custom event when the element is intersected.
  *  @property {boolean} scrollIgnoreFold        - Ignore fold progress remapping.
  *  @property {boolean} scrollEnableTouchSpeed  - Enable parallax on touch devices.
  */
@@ -152,13 +118,11 @@ export interface IScrollElementAttributes {
     scrollClass: string;
     scrollOffset: string;
     scrollPosition: string;
-    scrollModuleProgress: boolean;
     scrollCssProgress: boolean;
     scrollEventProgress: string | null;
     scrollSpeed: number | null;
     scrollRepeat: boolean;
     scrollCall: string | null;
-    scrollCallSelf: boolean;
     scrollIgnoreFold: boolean;
     scrollEnableTouchSpeed: boolean;
 }
@@ -190,27 +154,13 @@ export interface IScrollElementMetrics {
 /**
  * @typedef {Object} IScrollElementCallbacksValues
  *
- *  @property {number}   currentScroll - Scroll value returned by Lenis.
- *  @property {?boolean} smooth        - Lenis smooth option status.
+ *  @property {number}  currentScroll - Scroll value returned by Lenis.
+ *  @property {boolean} smooth        - Whether parallax should be enabled (false on touch devices).
  */
 export interface IScrollElementCallbacksValues {
     currentScroll: number;
-    smooth: boolean | null;
+    smooth: boolean;
 }
-
-/**
- * @typedef {Object} IProgressModularModules
- *
- *  @property {string} moduleName
- *  @property {string} moduleId
- */
-export interface IProgressModularModules {
-    moduleName: string;
-    moduleId: string;
-}
-
-export type scrollCallWay = 'enter' | 'leave';
-export type scrollCallFrom = 'start' | 'end';
 
 /**
  * @typedef {Object} IIOOptions
@@ -218,40 +168,31 @@ export type scrollCallFrom = 'start' | 'end';
  *  @property {ScrollElement[]} scrollElements - A list of objects with property values to match.
  *  @property {boolean}         IORaf          - Defined if it concern elements which need a RAF.
  *  @property {string}          [rootMargin]   - Margin around the root.
+ *  @property {HTMLElement}     [root]         - The Element that is used as the viewport for checking visibility (null for window).
  */
 export interface IIOOptions {
     scrollElements: ScrollElement[];
     IORaf: boolean;
     rootMargin?: string;
+    root?: HTMLElement | null;
 }
 
 /**
  * @typedef {Object} CoreOptions
  *
  * @property {HTMLElement} $el                                     - DOM Element used as scroll container.
- * @property {IModular}    [modularInstance]                       - Modular instance to execute call functions.
  * @property {string}      [triggerRootMargin=TRIGGER_ROOT_MARGIN] - Root margin for trigger Intersection Observer.
  * @property {string}      [rafRootMargin=RAF_ROOT_MARGIN]         - Root margin for raf Intersection Observer.
+ * @property {Lenis}       lenisInstance                          - Lenis instance for scroll data.
  */
 export interface CoreOptions {
     $el: HTMLElement;
-    modularInstance?: IModular;
     triggerRootMargin?: string;
     rafRootMargin?: string;
     scrollOrientation: scrollOrientation;
+    lenisInstance: Lenis;
 }
 
 export type scrollOrientation = 'vertical' | 'horizontal';
 
 export type gestureOrientation = 'vertical' | 'horizontal' | 'both';
-
-/**
- * @typedef {Object} IROOptions
- *
- *  @property {HTMLElement[]} resizeElements - A list of DOM elements to watch.
- *  @property {function} resizeCallback      - Resize callback function.
- */
-export interface IROOptions {
-    resizeElements: HTMLElement[];
-    resizeCallback(): void;
-}

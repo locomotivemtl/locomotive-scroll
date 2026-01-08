@@ -13,5 +13,4 @@
 - Informations
     - [Limitations](limitations.md)
     - [Locomotive Scroll in use](in-use.md)
-    - [ModularJS](modularjs.md)
     - [Changelog](changelog.md)

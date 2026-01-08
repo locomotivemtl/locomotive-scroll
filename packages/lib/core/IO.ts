@@ -19,17 +19,20 @@ import ScrollElement from './ScrollElement';
 export default class IO {
     public scrollElements: ScrollElement[];
     private rootMargin: string;
+    private root: HTMLElement | null;
     private IORaf: boolean;
     private observer!: IntersectionObserver;
 
     constructor({
         scrollElements,
         rootMargin = '-1px -1px -1px -1px',
+        root = null,
         IORaf,
     }: IIOOptions) {
         // Parameters
         this.scrollElements = scrollElements;
         this.rootMargin = rootMargin;
+        this.root = root;
         this.IORaf = IORaf;
 
         // Init
@@ -44,6 +47,7 @@ export default class IO {
     private _init() {
         // Options
         const observerOptions = {
+            root: this.root,
             rootMargin: this.rootMargin,
         };
 

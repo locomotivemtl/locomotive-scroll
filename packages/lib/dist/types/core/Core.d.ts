@@ -5,7 +5,6 @@ import type { CoreOptions, IScrollElementCallbacksValues } from '../types';
 import ScrollElement from './ScrollElement';
 export default class Core {
     private $scrollContainer;
-    private modularInstance?;
     private triggerRootMargin;
     private rafRootMargin;
     private scrollElements;
@@ -15,7 +14,8 @@ export default class Core {
     private IOTriggerInstance;
     private IORafInstance;
     private scrollOrientation;
-    constructor({ $el, modularInstance, triggerRootMargin, rafRootMargin, scrollOrientation, }: CoreOptions);
+    private lenisInstance;
+    constructor({ $el, triggerRootMargin, rafRootMargin, scrollOrientation, lenisInstance, }: CoreOptions);
     /**
      * Lifecyle - Initialize the core.
      *
@@ -81,6 +81,16 @@ export default class Core {
      */
     _unsubscribeElementUpdate(scrollElement: ScrollElement): void;
     /**
+     * Convert NodeListOf<Element> to HTMLElement array.
+     *
+     * @private
+     *
+     * @param {NodeListOf<Element>} elements - The NodeList to convert.
+     *
+     * @returns {HTMLElement[]}
+     */
+    private toElementArray;
+    /**
      * Check if a DOM Element need a requestAnimationFrame to be used.
      *
      * @private
@@ -91,3 +101,4 @@ export default class Core {
      */
     _checkRafNeeded($scrollElement: HTMLElement): boolean;
 }
+//# sourceMappingURL=Core.d.ts.map

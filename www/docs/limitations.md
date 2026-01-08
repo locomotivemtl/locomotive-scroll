@@ -4,11 +4,7 @@
 
 ## Lenis
 
-Lenis already have its own [considerations](https://github.com/darkroomengineering/lenis#considerations). We recommend reviewing them before using Locomotive Scroll to ensure a smooth integration and avoid any potential conflicts. 
-
-There are certain Lenis `options` that are not supported in the Locomotive Scroll layer :
-
-- `infinite` Due to the way we handle the Intersection Observer, the infinite feature is currently not supported. However, we may consider supporting this feature in the future.
+Lenis already have its own [considerations](https://github.com/darkroomengineering/lenis#considerations). We recommend reviewing them before using Locomotive Scroll to ensure a smooth integration and avoid any potential conflicts.
 
 ## SSR
 
@@ -56,7 +52,7 @@ locomotiveScroll.lenisInstance.options.content.addEventListener('wheel', (event)
     const paths = event.composedPath();
 
     paths.find((el) => {
-        if(el instanceof HTMLElement && el?.getAttribute('id') == ('modalSelector')) {
+        if(el instanceof HTMLElement && el?.getAttribute('id') === 'modalSelector') {
             event.stopPropagation();
 
             return;

@@ -17,9 +17,10 @@ import ScrollElement from './ScrollElement';
 export default class IO {
     scrollElements: ScrollElement[];
     private rootMargin;
+    private root;
     private IORaf;
     private observer;
-    constructor({ scrollElements, rootMargin, IORaf, }: IIOOptions);
+    constructor({ scrollElements, rootMargin, root, IORaf, }: IIOOptions);
     /**
      * Lifecyle - Initialize Intersection Observer.
      *
@@ -59,3 +60,4 @@ export default class IO {
      */
     private _setOutOfView;
 }
+//# sourceMappingURL=IO.d.ts.map

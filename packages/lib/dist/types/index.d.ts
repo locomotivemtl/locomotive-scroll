@@ -1,3 +1,4 @@
+import Lenis from 'lenis';
 import type { ILenisScrollToOptions, ILocomotiveScrollOptions, lenisTargetScrollTo } from './types';
 /**
  * Locomotive Scroll
@@ -11,23 +12,23 @@ import type { ILenisScrollToOptions, ILocomotiveScrollOptions, lenisTargetScroll
  */
 export default class LocomotiveScroll {
     rafPlaying: boolean;
-    lenisInstance: any;
+    lenisInstance: Lenis | null;
     private coreInstance;
     private lenisOptions?;
-    private modularInstance?;
     private triggerRootMargin?;
     private rafRootMargin?;
     private rafInstance?;
-    private autoResize?;
     private autoStart?;
-    private ROInstance?;
+    private isTouchDevice;
     private scrollCallback;
     private initCustomTicker?;
     private destroyCustomTicker?;
     private _onRenderBind;
     private _onResizeBind;
     private _onScrollToBind;
-    constructor({ lenisOptions, modularInstance, triggerRootMargin, rafRootMargin, autoResize, autoStart, scrollCallback, initCustomTicker, destroyCustomTicker, }?: ILocomotiveScrollOptions);
+    private _originalOnContentResize?;
+    private _originalOnWrapperResize?;
+    constructor({ lenisOptions, triggerRootMargin, rafRootMargin, autoStart, scrollCallback, initCustomTicker, destroyCustomTicker, }?: ILocomotiveScrollOptions);
     /**
      * Lifecyle - Initialize instance.
      *
@@ -56,6 +57,9 @@ export default class LocomotiveScroll {
     private _unbindScrollToEvents;
     /**
      * Callback - Resize callback.
+     *
+     * Called synchronously after Lenis updates its dimensions via onContentResize/onWrapperResize.
+     * All dimension values are already up-to-date when this executes.
      */
     private _onResize;
     /**
@@ -99,3 +103,4 @@ export default class LocomotiveScroll {
     private _raf;
 }
 export * from './types';
+//# sourceMappingURL=index.d.ts.map

@@ -39,3 +39,4 @@ export declare function normalize(min: number, max: number, value: number): numb
  * @returns {number} - Closest number.
  */
 export declare function closestNumber(array: number[], target: number): number;
+//# sourceMappingURL=maths.d.ts.map
