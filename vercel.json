@@ -1,5 +1,5 @@
 {
-    "buildCommand": "npm run build && cd packages/docs && npm run build",
+    "buildCommand": "npm run build",
     "outputDirectory": "www",
     "redirects": [
         {
