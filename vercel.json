@@ -1,4 +1,6 @@
 {
+    "buildCommand": "npm run build && cd packages/docs && npm run build",
+    "outputDirectory": "www",
     "redirects": [
         {
             "source": "/",

@@ -184,28 +184,19 @@ console.log(scroll.lenisInstance.velocity);  // Get speed
 <div data-scroll data-scroll-speed="2">
     Fast parallax
 </div>
-
-<div data-scroll data-scroll-speed="-1" data-scroll-direction="horizontal">
-    Horizontal parallax
-</div>
 ```
 
 ### v5
 
 ```html
 <!-- Parallax disabled on touch by default -->
-<div data-scroll data-scroll-speed="2">
+<div data-scroll data-scroll-speed=".5">
     Fast parallax (desktop only)
 </div>
 
 <!-- Enable on touch devices -->
-<div data-scroll data-scroll-speed="2" data-scroll-enable-touch-speed>
+<div data-scroll data-scroll-speed=".5" data-scroll-enable-touch-speed>
     Fast parallax (all devices)
-</div>
-
-<!-- Horizontal parallax follows scroll orientation -->
-<div data-scroll data-scroll-speed="-1">
-    Direction follows lenisOptions.orientation
 </div>
 ```
 
