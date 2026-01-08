@@ -15,6 +15,7 @@ Thumbs.db
 
 # generated types
 .astro
+.docusaurus
 
 # logs
 npm-debug.log*
@@ -32,6 +33,8 @@ pnpm-debug.log*
 # jetbrains setting folder
 .idea
 
-# packages
+# packages build output
 !/www/demo
 /www/demo/*
+!/www/docs
+/www/docs/*

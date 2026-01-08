@@ -1,9 +1,12 @@
 {
+    "buildCommand": "npm run build",
+    "outputDirectory": "www",
     "redirects": [
         {
             "source": "/",
             "destination": "/docs",
             "statusCode": 301
         }
-    ]
+    ],
+    "cleanUrls": true
 }
