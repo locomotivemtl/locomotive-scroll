@@ -11,10 +11,10 @@ To install Locomotive Scroll, you have two options:
 You can install it via NPM by running the following command:
 
 ```bash
-npm install locomotive-scroll@next
+npm install locomotive-scroll
 ```
 
-This will install the latest Release Candidate version (5.0.0-rc.1).
+This will install the latest version.
 
 ## CDN
 
