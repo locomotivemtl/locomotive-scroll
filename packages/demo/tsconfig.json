@@ -16,12 +16,6 @@
             "@layouts/*": [
                 "./src/layouts/*"
             ],
-            "@images/*": [
-                "./src/assets/images/*"
-            ],
-            "@pages/*": [
-                "./src/pages/*"
-            ],
             "@scripts/*": [
                 "./src/scripts/*"
             ],
@@ -30,9 +24,6 @@
             ],
             "@types/*": [
                 "types/*"
-            ],
-            "@images/*": [
-                "./src/assets/images/*"
             ],
             "@data/*": [
                 "./src/data/*"

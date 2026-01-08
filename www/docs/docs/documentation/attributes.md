@@ -1,4 +1,8 @@
-# Element Attributes
+---
+sidebar_position: 3
+---
+
+# Attributes
 
 ## data-scroll
 
@@ -9,18 +13,31 @@ Enable viewport detection on an element.
 -   **Type:** `string`
 -   **Default:** `start,end`
 
-![Data Scroll Position](assets/data-scroll-position.jpg)
+![Data Scroll Position](/assets/data-scroll-position.jpg)
 
-This attribute specifies the trigger position of the element within the viewport when using the Locomotive Scroll library. It accepts two values: one for the position when the element enters the viewport, and a second for the position when the element leaves the viewport.
+This attribute specifies the trigger position of the element within the scroll container when using Locomotive Scroll. It accepts two values: one for the position when the element enters the viewport, and a second for the position when the element leaves the viewport.
+
+The position is calculated relative to the **Lenis scroll container** (which defaults to `window`, but can be customized via `lenisOptions.wrapper`).
 
 Accepted values are: `'start'`, `'middle'`, `'end'`.
+
+### Examples
+
+![Data Scroll Position](/assets/data-scroll-position-example-1.jpg)
+![Data Scroll Position](/assets/data-scroll-position-example-2.jpg)
+
+Here's an example of using Locomotive Scroll's data-scroll-position attribute on an HTML element:
+
+```html
+<div data-scroll data-scroll-position="start, start"></div>
+```
 
 ## data-scroll-offset
 
 -   **Type:** `string`
 -   **Default:** `0,0`
 
-![Data Scroll Offset](assets/scroll-offset-1.jpg)
+![Data Scroll Offset](/assets/scroll-offset-1.jpg)
 
 Specifies the trigger offset of the element within the viewport when using the Locomotive Scroll library. It takes two values: one for the offset when the element enters the viewport, and a second for the offset when the element leaves the viewport.
 
@@ -33,6 +50,16 @@ For example:
 
 -   `'100,50%'` represents an offset of `100` pixels for the enter position and `50%` of the viewport height for the leave position.
 -   `'25%, 15%'` represents an offset of `25%` of the viewport height for the enter position and `15%` of the viewport height for the leave position.
+
+### Example
+
+![Data Scroll Offset](/assets/data-scroll-offset-example.jpg)
+
+Here's an example of using Locomotive Scroll's data-scroll-offset attribute on an HTML element:
+
+```html
+<div data-scroll data-scroll-offset="400, 200"></div>
+```
 
 ## data-scroll-class
 
@@ -53,11 +80,41 @@ By default, the in-view detection of elements is not repeated. **Simply declarin
 
 -   **Type:** `number`
 
-Specifies the parallax speed for the element. A negative value will reverse the direction of the parallax effect.
+Specifies the parallax speed for the element. The speed is relative to the scroll container size (not pixels), making it predictable across different viewport sizes.
 
-**Note:** The value represents the translation of the element relative to the scrolling. For example, if the value is `1`, it means that for every 1px scrolled, the element translates by 1px. If the value is `.5`, it means that for every 1px scrolled, the element translates by 0.5px.
+### How it works
 
-**Touch devices:** Parallax is automatically disabled on touch devices by default. To enable it on mobile/tablets, add the [`data-scroll-enable-touch-speed`](#data-scroll-enable-touch-speed) attribute.
+The parallax displacement is calculated using:
+```
+displacement = progress × containerSize × speed × -1
+```
+
+Where:
+- `containerSize` = Height (or width for horizontal) of the Lenis scroll container
+- `progress` = Element's progress through the viewport (`-1` to `1` for normal elements, `0` to `1` for in-fold elements)
+- `speed` = Your specified value
+
+### Examples
+
+**With `data-scroll-speed="1"`:**
+- Normal element: Moves from `+containerHeight` to `-containerHeight` (total = 2× container height)
+- In-fold element: Moves from `0` to `-containerHeight` (total = 1× container height)
+
+**With `data-scroll-speed="0.5"`:**
+- Normal element: Total displacement = 1× container height
+- In-fold element: Total displacement = 0.5× container height
+
+**With `data-scroll-speed="-0.3"` (negative = reversed):**
+- Element moves in opposite direction
+- Total displacement = 0.6× container height
+
+### Touch devices
+
+Parallax is **automatically disabled on touch devices** by default for better native scrolling performance. To enable it on mobile/tablets, add the [`data-scroll-enable-touch-speed`](#data-scroll-enable-touch-speed) attribute.
+
+:::tip
+Start with small values like `0.1` to `0.5` for subtle effects. The value is now relative to container size, so effects scale naturally with viewport changes.
+:::
 
 ## data-scroll-call
 

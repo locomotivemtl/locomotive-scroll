@@ -1,3 +1,7 @@
+---
+sidebar_position: 1
+---
+
 # Limitations
 
 > We encourage the open-source community to develop and share their own solutions to overcome limitations in Locomotive Scroll.

@@ -1,3 +1,7 @@
+---
+sidebar_position: 3
+---
+
 # Changelog
 
 ## [v5.0.0-beta.22](#) (2026-01-07)
