@@ -103,3 +103,4 @@ export default class LocomotiveScroll {
     private _raf;
 }
 export * from './types';
+//# sourceMappingURL=index.d.ts.map

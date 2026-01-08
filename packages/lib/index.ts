@@ -88,7 +88,11 @@ export default class LocomotiveScroll {
         this.lenisInstance = new Lenis({
             ...this.lenisOptions
         });
-        this.lenisInstance.on('scroll', this.scrollCallback);
+
+        // Subscribe to scroll callback if provided
+        if (this.scrollCallback) {
+            this.lenisInstance.on('scroll', this.scrollCallback);
+        }
 
         // Add scroll direction attribute on body
         document.documentElement.setAttribute(
@@ -98,12 +102,13 @@ export default class LocomotiveScroll {
 
         requestAnimationFrame(() => {
             // Create Core Instance
+            // lenisInstance is guaranteed to exist at this point (created above)
             this.coreInstance = new Core({
-                $el: this.lenisInstance.rootElement,
+                $el: this.lenisInstance!.rootElement,
                 triggerRootMargin: this.triggerRootMargin,
                 rafRootMargin: this.rafRootMargin,
-                scrollOrientation: this.lenisInstance.options.orientation,
-                lenisInstance: this.lenisInstance,
+                scrollOrientation: this.lenisInstance!.options.orientation,
+                lenisInstance: this.lenisInstance!,
             });
 
             // Bind Events
@@ -200,8 +205,8 @@ export default class LocomotiveScroll {
             $rootContainer?.querySelectorAll('[data-scroll-to]');
 
         $scrollToElements?.length &&
-            $scrollToElements.forEach(($el: HTMLElement): void => {
-                $el.addEventListener('click', this._onScrollToBind, false);
+            $scrollToElements.forEach(($el): void => {
+                ($el as HTMLElement).addEventListener('click', this._onScrollToBind, false);
             });
     }
 
@@ -215,8 +220,8 @@ export default class LocomotiveScroll {
         const $scrollToElements =
             $rootContainer?.querySelectorAll('[data-scroll-to]');
         $scrollToElements?.length &&
-            $scrollToElements.forEach(($el: HTMLElement) => {
-                $el.removeEventListener('click', this._onScrollToBind, false);
+            $scrollToElements.forEach(($el) => {
+                ($el as HTMLElement).removeEventListener('click', this._onScrollToBind, false);
             });
     }
 

@@ -2180,26 +2180,18 @@
      */
     var _proto = LocomotiveScroll.prototype;
     _proto._init = function _init() {
-      var _this$lenisOptions,
-        _this$lenisOptions2,
-        _this$lenisOptions$in,
-        _this$lenisOptions3,
-        _this = this;
-      // Default to window/documentElement if not provided
-      var defaultWrapper = ((_this$lenisOptions = this.lenisOptions) == null ? void 0 : _this$lenisOptions.wrapper) || window;
-      var defaultContent = ((_this$lenisOptions2 = this.lenisOptions) == null ? void 0 : _this$lenisOptions2.content) || document.documentElement;
-      var defaultInfinite = (_this$lenisOptions$in = (_this$lenisOptions3 = this.lenisOptions) == null ? void 0 : _this$lenisOptions3.infinite) != null ? _this$lenisOptions$in : false;
+      var _this = this;
       // Create Lenis instance
-      this.lenisInstance = new Lenis(_extends({}, this.lenisOptions, {
-        wrapper: defaultWrapper,
-        content: defaultContent,
-        infinite: defaultInfinite
-      }));
-      this.lenisInstance.on('scroll', this.scrollCallback);
+      this.lenisInstance = new Lenis(_extends({}, this.lenisOptions));
+      // Subscribe to scroll callback if provided
+      if (this.scrollCallback) {
+        this.lenisInstance.on('scroll', this.scrollCallback);
+      }
       // Add scroll direction attribute on body
       document.documentElement.setAttribute('data-scroll-orientation', this.lenisInstance.options.orientation);
       requestAnimationFrame(function () {
         // Create Core Instance
+        // lenisInstance is guaranteed to exist at this point (created above)
         _this.coreInstance = new Core({
           $el: _this.lenisInstance.rootElement,
           triggerRootMargin: _this.triggerRootMargin,

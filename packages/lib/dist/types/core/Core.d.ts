@@ -101,3 +101,4 @@ export default class Core {
      */
     _checkRafNeeded($scrollElement: HTMLElement): boolean;
 }
+//# sourceMappingURL=Core.d.ts.map

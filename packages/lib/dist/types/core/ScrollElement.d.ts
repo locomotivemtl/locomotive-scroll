@@ -139,3 +139,4 @@ export default class ScrollElement {
      */
     _dispatchCall(way: string, from: string): void;
 }
+//# sourceMappingURL=ScrollElement.d.ts.map
