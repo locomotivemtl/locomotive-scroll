@@ -1,6 +1,6 @@
 import { module } from 'modujs'
 import { $html } from '../utils/dom'
-import LocomotiveScroll from 'locomotive-scroll'
+import LocomotiveScroll from '../../../../lib/index';
 
 export default class Scroll extends module {
     constructor(m) {

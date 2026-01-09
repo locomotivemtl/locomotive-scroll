@@ -55,6 +55,7 @@
     @media (max-width: $to-small) {
         flex-direction: column;
         align-items: flex-start;
+        gap: var(--grid-margin);
 
         &:last-of-type {
             align-items: flex-end;

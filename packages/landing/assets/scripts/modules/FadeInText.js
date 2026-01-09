@@ -7,20 +7,19 @@ export default class extends module {
     constructor(m) {
         super(m);
 
-        console.log("constructor")
         // Binding
-        this.onFadeinTextProgressBind = this.onFadeinTextProgress.bind(this)
-        this.onResizeBind = this.onResize.bind(this)
+        this.onFadeinTextProgressBind = this.onFadeinTextProgress.bind(this);
 
         // UI
         this.$texts = this.el;
 
         // Data
-        this.windowWidth = window.innerWidth;
         this.progress = 0;
         this.metrics = [];
         this.baseColor = getComputedStyle(this.el).getPropertyValue('--color-cta-fadein');
         this.targetColor = getComputedStyle(this.el).getPropertyValue('--color');
+        console.log(this);
+        
     }
 
     ///////////////
@@ -28,18 +27,20 @@ export default class extends module {
     ///////////////
     init() {
         // Bind
-        this.bindEvents()
+        this.bindEvents();
 
-        // Split
+        // Split with autoSplit for automatic resize handling
         this.splitText();
-
-        // Compute progress again
-        this.computeProgress();
     }
 
     destroy() {
         // Unbind
         this.unbindEvents();
+
+        // Clean up split
+        if (this.split) {
+            this.split.revert();
+        }
     }
 
     ///////////////
@@ -47,12 +48,10 @@ export default class extends module {
     ///////////////
     bindEvents() {
         window.addEventListener("fadeinTextProgress", this.onFadeinTextProgressBind);
-        window.addEventListener("resize", this.onResizeBind)
     }
 
     unbindEvents() {
         window.removeEventListener("fadeinTextProgress", this.onFadeinTextProgressBind);
-        window.removeEventListener("resize", this.onResizeBind)
     }
 
     ///////////////
@@ -65,53 +64,50 @@ export default class extends module {
         this.computeProgress();
     }
 
-    onResize({width}) {
-        if (this.windowWidth == width || this.split.lines.length == 0)
-            return;
-
-        // Store window width
-        this.windowWidth = width;
-
-        // Reset metrics
-        this.metrics = [];
-
-        // Reset text as default
-        this.split.revert();
-
-        // Wait a frame to get split reverted
-        requestAnimationFrame(() => {
-            // Split again
-            this.splitText();
-        });
-    }
-
     ///////////////
     // Methods
     ///////////////
     splitText() {
-        this.split = new SplitText(this.$texts, {
+        // Use SplitText.create with autoSplit for automatic resize handling
+        this.split = SplitText.create(this.$texts, {
             type: "lines",
-            linesClass: "c-fadein-text_line"
+            linesClass: "c-fadein-text_line",
+            autoSplit: true,
+            onSplit: (self) => {
+                // This callback is called every time the text is split, including on resize
+                this.computeMetrics(self);
+
+                requestAnimationFrame(() => {
+                    this.computeProgress();
+                });
+            }
         });
 
-        const widths = this.split.lines.map(line => line.getBoundingClientRect().width)
-        
-        const totalWidth = widths.reduce((total, width) => {return total += width}, 0);
+        // Initial metrics computation
+        this.computeMetrics(this.split);
+    }
+
+    computeMetrics(split) {
+        // Reset metrics
+        this.metrics = [];
+
+        const widths = split.lines.map(line => line.getBoundingClientRect().width);
+        const totalWidth = widths.reduce((total, width) => total + width, 0);
         let widthIncrementor = 0;
 
-        for (let index = 0; index < this.split.lines.length; index++) {
-            /* Compute metrics */
+        for (let index = 0; index < split.lines.length; index++) {
+            // Compute metrics
             const from = widthIncrementor / totalWidth;
             const ratio = widths[index] / totalWidth;
-            widthIncrementor+= widths[index];
+            widthIncrementor += widths[index];
             this.metrics.push({
                 from: from,
                 to: from + ratio
-            })
+            });
         }
     }
 
-    computeProgress() {
+    computeProgress() {        
         for (let index = 0; index < this.split.lines.length; index++) {
             const $line = this.split.lines[index];
             const { from, to } =  this.metrics[index];            

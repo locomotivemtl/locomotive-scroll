@@ -12,7 +12,7 @@
     &::before {
         content: '';
         display: block;
-        height: 100vh;
+        height: 200vh;
     }
 }
 
@@ -44,6 +44,11 @@
 }
 
 .c-hero_heading {
+    display: flex;
+    flex-direction: column;
+    row-gap: spacingClamp('md');
+    height: 100%;
+
     @media (max-width: $to-small) {
         grid-row: 2/3;
     }
@@ -64,78 +69,49 @@
     }
 }
 
+.c-hero_title {
+    margin-block: auto;
+}
+
 .c-hero_links_item {
     .c-hero_links_item + & {
         margin-top: rem(8px);
     }
 }
 
-.c-hero_secondary {
-    position: relative;
-    margin-top: spacingClamp('xl');
-    padding-top: var(--header-height);
-    max-height: calc(var(--vh) * 100);
-    display: flex;
-    align-items: flex-start;
-}
-
-.c-hero_secondary_inner {
-    position: relative;
-    width: 100%;
-}
-
 .c-hero_description_container {
-    @media (max-width: $to-big) {
-        position: relative;
-    }
-
-    @media (max-width: $to-small) {
-        margin-left: calc((100% + var(--grid-gutter)) / 4);
-        padding-bottom: spacingClamp('3xl');
-    }
-
-    @media (min-width: $from-small) and (max-width: $to-big) {
-        margin-left: calc(50% + var(--grid-gutter) / 2);
-        padding-bottom: spacingClamp('xl');
-    }
-
-    @media (min-width: $from-big) {
-        position: absolute;
-        top: 0;
-        left: calc((100% + var(--grid-gutter)) / 2);
-        display: grid;
-        grid-template-columns: 1fr 1fr;
-        column-gap: var(--grid-gutter);
-        align-items: flex-end;
-    }
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    column-gap: var(--grid-gutter);
+    align-items: flex-end;
 }
 
 .c-hero_version {
     display: flex;
     justify-content: flex-end;
     column-gap: .5em;
+
+    @media (max-width: $to-small) {
+        position: absolute;
+        bottom: var(--grid-margin);
+        right: 0;
+    }
     
     span {
         transition: transform t('slow') ease('power3.out');
         transform: translate3d(0,100%,0);
+
+        &:nth-child(1) {
+            position: relative;
+            top: .2em;
+        }
     }
+    
     &.is-inview {
         span {
             transform: translate3d(0,0,0);
         }
     }
-
-    @media (max-width: $to-big) {
-        position: absolute;
-        top: 100%;
-        left: 0;
-        width: 100%;
-    }
-}
-
-.c-hero_secondary_title {
-    @include heading-serif;
-    font-size: calc(#{math.div(870, 1440)} * 100 * var(--vw, 1vw));
 }
 
 .c-hero_line {

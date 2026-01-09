@@ -24,6 +24,16 @@
                             <span class="c-hero_word || -hero">Scroll</span>
                         </span>
                     </h1>
+
+                    <div class="c-hero_description_container || fadeInText -blue">
+                        <p class="c-text -body-medium || u-max-w440 || c-hero_description" data-module-fade-in-text data-scroll data-scroll-event-progress="fadeinTextProgress">
+                            {{ general.description }}
+                        </p>
+                        <p class="c-hero_version || c-text -body-medium || u-clipped" data-scroll data-scroll-offset="25%">
+                            <span class="u-glyph">🔻</span>
+                            <span>Version {{ general.version }}</span>
+                        </p>
+                    </div>
                 </div>
                 <nav class="c-hero_nav">
                     <ul class="c-hero_links">
@@ -45,23 +55,6 @@
                     </ul>
                 </nav>
             </div>
-
-            <div class="c-hero_secondary">
-                <div class="c-hero_secondary_inner">
-                    <div class="c-hero_description_container || fadeInText -blue">
-                        <p class="c-text -body-medium || u-max-w440 || c-hero_description" data-module-fade-in-text data-scroll data-scroll-offset="0, 25%" data-scroll-event-progress="fadeinTextProgress">
-                            {{ general.description }}
-                        </p>
-                        <p class="c-hero_version || c-text -body-medium || u-clipped" data-scroll data-scroll-offset="25%">
-                            <span class="u-glyph">🔻</span>
-                            <span>Version {{ general.version }}</span>
-                        </p>
-                    </div>
-                    <p class="c-hero_secondary_title">New</p>
-                </div>
-            </div>
-
         </div>
     </div>
-
 </section>
