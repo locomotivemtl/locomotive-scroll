@@ -1,11 +1,10 @@
 {
     "buildCommand": "npm run build",
     "outputDirectory": "www",
-    "redirects": [
+    "rewrites": [
         {
             "source": "/",
-            "destination": "/landing",
-            "statusCode": 301
+            "destination": "/landing/index.html"
         }
     ],
     "cleanUrls": true
