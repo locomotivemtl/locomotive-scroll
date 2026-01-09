@@ -4,7 +4,7 @@
     "rewrites": [
         {
             "source": "/",
-            "destination": "/landing/index.html"
+            "destination": "/landing"
         },
         {
             "source": "/assets/:path*",
