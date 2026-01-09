@@ -1,0 +1,54 @@
+/**
+ * Any CSS included here will be global. The classic template
+ * bundles Infima by default. Infima is a CSS framework designed to
+ * work well for content-centric websites.
+ */
+
+@font-face {
+  font-display: swap;
+  font-family: "HelveticaNowDisplay";
+  src: url("/fonts/HelveticaNowDisplay-Regular.woff2") format("woff2");
+  font-weight: 400;
+  font-style: normal
+}
+
+@font-face {
+  font-display: swap;
+  font-family: "LocomotiveNew";
+  src: url("/fonts/PPLocomotiveNew-Light.woff2") format("woff2");
+  font-weight: 400;
+  font-style: normal
+}
+
+/* You can override the default Infima variables here. */
+:root {
+  --ifm-color-primary: #312dfb;
+  --ifm-color-primary-dark: #1510fa;
+  --ifm-color-primary-darker: #0905f7;
+  --ifm-color-primary-darkest: #0804cb;
+  --ifm-color-primary-light: #4d4afc;
+  --ifm-color-primary-lighter: #5c59fc;
+  --ifm-color-primary-lightest: #8684fd;
+
+  --ifm-font-family-base: "HelveticaNowDisplay", sans-serif;
+  --ifm-font-weight-base: var(--ifm-font-weight-semibold);
+}
+
+/* For readability concerns, you should choose a lighter palette in dark mode. */
+[data-theme='dark'] {
+  --ifm-color-primary: #ffb3b3;
+  --ifm-color-primary-dark: #ff8888;
+  --ifm-color-primary-darker: #ff7272;
+  --ifm-color-primary-darkest: #ff3131;
+  --ifm-color-primary-light: #ffdede;
+  --ifm-color-primary-lighter: #fff4f4;
+  --ifm-color-primary-lightest: #ffffff;
+}
+
+/* Add logo */
+.navbar__title:before {
+  display: inline-block;
+  content: '🟠🔁';
+  font-family: "LocomotiveNew", sans-serif;
+  padding-right: .5rem;
+}

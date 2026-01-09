@@ -1,4 +1,8 @@
-# Locomotive Scroll in use
+---
+sidebar_position: 2
+---
+
+# Showcase
 
 Here is a curated list of websites that utilize Locomotive Scroll:
 

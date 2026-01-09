@@ -2394,8 +2394,8 @@
      * Trigger scroll to callback.
      */;
     _proto.scrollTo = function scrollTo(target, options) {
-      var _this$lenisInstance10;
-      (_this$lenisInstance10 = this.lenisInstance) == null || _this$lenisInstance10.scrollTo(target, {
+      var _this$lenisInstance0;
+      (_this$lenisInstance0 = this.lenisInstance) == null || _this$lenisInstance0.scrollTo(target, {
         offset: options == null ? void 0 : options.offset,
         lerp: options == null ? void 0 : options.lerp,
         duration: options == null ? void 0 : options.duration,
