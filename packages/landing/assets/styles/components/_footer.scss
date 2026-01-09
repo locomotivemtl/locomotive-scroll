@@ -1,0 +1,71 @@
+@use "../core" as *;
+
+.c-footer_attributes {
+    align-items: flex-start;
+    div {
+        @media (max-width: $to-medium) {
+            white-space: nowrap;
+        }
+        p{
+            line-height: 1.25;
+            opacity: 0;
+        }
+        &:nth-of-type(1){
+            @media (max-width: $to-medium) {
+                grid-column: 3 / 1;
+            }
+        }
+        &:nth-of-type(2){
+            
+            @media (max-width: $to-medium) {
+                grid-column: 5 / 3;
+                margin-top: 10rem;
+            }
+
+            @media (min-width: $from-medium) {
+                margin-top: 15rem;
+            }
+        }
+        &:nth-of-type(3){
+            @media (max-width: $to-medium) {
+                grid-column: 5 / 2;
+                margin-top: 5rem;
+            }
+            @media (min-width: $from-medium) {
+                margin-top: 10rem;
+            }
+        }
+        &:nth-of-type(4){
+            @media (max-width: $to-medium) {
+                grid-column: 3 / 1;
+                margin-top: 5rem;
+            }
+            @media (min-width: $from-medium) {
+                margin-top: 25rem;
+            }
+        }
+    }
+}
+
+.c-footer_thanks {
+    grid-column: 5 / 2;
+    margin-top: calc(spacingClamp('3xl') * 1.5);
+
+   
+    // @for $i from 0 through 10 {
+    //     span {
+    //         &:nth-of-type(#{$i}) {
+    //             transform: translateX(calc(-100px + calc(100px * var(--progress))));
+    //         }
+    //     }
+    // }
+
+    // span {
+    //     transform: translateX(calc(-100px * var(--progress)));
+    // }
+
+    @media (min-width: $from-medium) {
+        grid-column: 5 / 3;
+        margin-top: spacingClamp('3xl');
+    }
+}

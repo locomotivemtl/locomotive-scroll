@@ -1,0 +1,14 @@
+{
+    "inview": {
+        "title": "In-view detection",
+        "description": "Add classes, trigger callbacks, or fire custom events when elements enter the viewport. Built on Intersection Observer for native performance."
+    },
+    "progress": {
+        "title": "Progress tracking",
+        "description": "Get real-time scroll progress (0-1) as CSS variables or JavaScript events. Perfect for progress bars, scroll-driven animations, or custom interactions."
+    },
+    "parallax": {
+        "title": "Parallax effects",
+        "description": "Create smooth parallax effects instantly with a single data-scroll-speed attribute. No complex setup, no math, just add a number and it works."
+    }
+}

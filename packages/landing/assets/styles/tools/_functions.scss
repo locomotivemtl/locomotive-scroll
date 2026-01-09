@@ -1,0 +1,221 @@
+// ==========================================================================
+// Tools / Functions
+// ==========================================================================
+@use "sass:math";
+@use "sass:meta";
+@use "sass:list";
+@use "maths" as *;
+
+// Default font size for em() and rem() functions
+$font-size: 16px !default;
+
+// Check if the given value is a number in pixel
+//
+// @param  {Number} $number - The value to check
+// @return {Boolean}
+
+@function is-pixel-number($number) {
+    @return meta.type-of($number) == number and math.unit($number) == "px";
+}
+
+// Converts the given pixel value to its EM quivalent.
+//
+// @param  {Number} $size                     - The pixel value to convert.
+// @param  {Number} $base [$font-size] - The assumed base font size.
+// @return {Number} Scalable pixel value in EMs.
+
+@function em($size, $base: $font-size) {
+    @if not is-pixel-number($size) {
+        @error "`#{$size}` needs to be a number in pixel.";
+    }
+
+    @if not is-pixel-number($base) {
+        @error "`#{$base}` needs to be a number in pixel.";
+    }
+
+    @return math.div($size, $base) * 1em;
+}
+
+// Converts the given pixel value to its REM quivalent.
+//
+// @param  {Number} $size                     - The pixel value to convert.
+// @param  {Number} $base [$font-size] - The assumed base font size.
+// @return {Number} Scalable pixel value in REMs.
+
+@function rem($size, $base: $font-size) {
+
+    @if not is-pixel-number($size) {
+        @error "`#{$size}` needs to be a number in pixel.";
+    }
+
+    @if not is-pixel-number($base) {
+        @error "`#{$base}` needs to be a number in pixel.";
+    }
+
+    @return math.div($size, $base) * 1rem;
+}
+
+// Converts a number to a percentage.
+//
+// @alias  percentage()
+// @link   http://sassdoc.com/annotations/#alias
+// @param  {Number} $number - The value to convert.
+// @return {Number} A percentage.
+
+@function span($number) {
+    @return percentage($number);
+}
+
+// Checks if a list contains a value(s).
+//
+// @link   https://github.com/thoughtbot/bourbon/blob/master/core/bourbon/validators/_contains.scss
+// @param  {List} $list   - The list to check against.
+// @param  {List} $values - A single value or list of values to check for.
+// @return {Boolean}
+// @access private
+
+@function list-contains(
+    $list,
+    $values...
+) {
+    @each $value in $values {
+        @if meta.type-of(list.index($list, $value)) != "number" {
+            @return false;
+        }
+    }
+
+    @return true;
+}
+
+// Resolve whether a rule is important or not.
+//
+// @param  {Boolean}     $flag - Whether a rule is important (TRUE) or not (FALSE).
+// @return {String|Null} Returns `!important` or NULL.
+
+@function important($flag: false) {
+    @if ($flag == true) {
+        @return !important;
+    } @else if ($flag == false) {
+        @return null;
+    } @else {
+        @error "`#{$flag}` needs to be `true` or `false`.";
+    }
+}
+
+// Determine if the current context is for a WYSIWYG editor.
+//
+// @requires {String} $context - The global context of the stylesheet.
+// @return   {Boolean} If the $context is set to "editor".
+
+@function is-editor() {
+    @return ('editor' == $context);
+}
+
+// Determine if the current context is for the front-end.
+//
+// @requires {String} $context - The global context of the stylesheet.
+// @return   {Boolean} If the $context is set to "frontend".
+
+@function is-frontend() {
+    @return ('frontend' == $context);
+}
+
+$context: 'frontend' !default;
+
+// Returns calculation of a percentage of the grid cell width
+// with optional inset of grid gutter.
+//
+// ```scss
+// .c-box {
+//     width: grid-space(6/12);
+//     margin-left: grid-space(1/12, 1);
+// }
+// ```
+//
+// @param  {number} $number - The percentage spacer
+// @param  {number} $inset  - The grid gutter inset
+// @return {function<number>}
+@function grid-space($percentage, $inset: 0) {
+    @return calc(#{$percentage} * (100vw - 2 * var(--grid-margin, 0px)) - (1 - #{$percentage}) * var(--grid-gutter, 0px) + #{$inset} * var(--grid-gutter, 0px));
+}
+
+// Returns calculation of a percentage of the viewport height.
+//
+// ```scss
+// .c-box {
+//     height: vh(100);
+// }
+// ```
+//
+// @param  {number} $number - The percentage number
+// @return {function<number>} in vh
+@function vh($number) {
+    @return calc(#{$number} * var(--vh, 1vh));
+}
+
+// Returns calculation of a percentage of the viewport width.
+//
+// ```scss
+// .c-box {
+//     width: vw(100);
+// }
+// ```
+//
+// @param  {number} $number - The percentage number
+// @return {function<number>} in vw
+
+@function vw($number) {
+    @return calc(#{$number} * var(--vw, 1vw));
+}
+
+// Returns calculation of a percentage of the viewport width.
+//
+// ```scss
+// .c-box {
+//     width: vw(100);
+// }
+// ```
+//
+// @param  {number} $number - The percentage number
+// @return {function<number>} in vw
+
+$vw-viewport: 1440;
+@function vw($number) {
+    @return calc(#{$number} * var(--vw, 1vw));
+}
+
+
+@function clampWithMax($min, $size, $max) {
+    $vw-context: $vw-viewport * 0.01;
+    @return clamp(#{$min}, calc(#{$size} / #{$vw-context} * 1vw), #{$max});
+}
+
+@function spacingClamp($size) {
+    @return clampWithMax(
+        calc(#{rem(1px)} * var(--spacing-#{$size}-mobile)),
+        var(--spacing-#{$size}-desktop),
+        calc(#{rem(1px)} * var(--spacing-#{$size}-desktop))
+    );
+}
+
+// Returns clamp of calculated preferred responsive font size
+// within a font size and breakpoint range.
+//
+// ```scss
+// .c-heading.-h1 {
+//     font-size: responsive-value(30px, 60px, 1800);
+// }
+//
+// .c-heading.-h2 {
+//     font-size: responsive-value(20px, 40px, $from-big);
+// }
+// ```
+//
+// @param  {number} $min-size   - Minimum font size in pixels.
+// @param  {number} $max-size   - Maximum font size in pixels.
+// @param  {number} $breakpoint - Maximum breakpoint.
+// @return {function<number, function<number>, number>}
+@function responsive-value($min-size, $max-size, $breakpoint) {
+    $delta: math.div($max-size, $breakpoint);
+    @return clamp($min-size, calc(#{strip-unit($delta)} * #{vw(100)}), $max-size);
+}

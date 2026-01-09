@@ -1,0 +1,31 @@
+{
+    "bigText": "Version 5 is a complete rewrite. Designed for modern workflows, built on top of Lenis, and optimized for production.",
+    "smallText": "This library has evolved considerably over the years. From jQuery to vanilla ES6, from custom engines to Lenis foundation.",
+    "items": [
+        {
+            "title": "Built on top of Lenis",
+            "description": "Latest stable release with improved touch handling and performance fixes. No more greedy CSS transforms!"
+        },
+        {
+            "title": "TypeScript First",
+            "description": "Fully typed. Better autocomplete, fewer bugs, happier developers."
+        },
+        {
+            "title": "Dual Intersection Observers",
+            "description": "Separate observers for simple triggers vs. continuous animations. No wasted RAF cycles."
+        },
+        {
+            "title": "Smart Touch Detection",
+            "description": "Parallax auto-disabled on mobile. Opt-in with one attribute."
+        },
+        {
+            "title": "Production Ready",
+            "description": "Accessible by default. Native scrollbar, keyboard nav, and proper cleanup for SPAs."
+        },
+        {
+            "title": "Lightweight",
+            "description": "Only 8.3kB gzipped"
+        }
+    ]
+
+}

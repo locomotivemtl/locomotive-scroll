@@ -1,0 +1,63 @@
+// ==========================================================================
+// Components / Headings
+// ==========================================================================
+
+// Font sizes
+// ==========================================================================
+
+@use "../core" as *;
+:root {
+    --font-size-serif-large:  #{responsive-value(100px, 300px, $from-figma)};
+    --font-size-serif-medium: #{responsive-value(40px, 120px, $from-figma)};
+
+    --font-size-h1:     #{responsive-value(54px, 120px, $from-figma)};
+    --font-size-h2:     #{responsive-value(32px, 90px, $from-figma)};
+    --font-size-h3:     #{responsive-value(14px, 28px, $from-figma)};
+}
+
+// Mixins
+// ==========================================================================
+@mixin heading {
+    font-family: ff('display');
+    font-weight: $font-weight-regular;
+    line-height: 1;
+    letter-spacing: -0.03em;
+}
+
+@mixin heading-serif {
+    font-family: ff('serif');
+    font-weight: $font-weight-light;
+    line-height: 0.85;
+    letter-spacing: -0.03em;
+}
+
+// Styles
+// ==========================================================================
+
+.c-heading {
+    @include heading;
+
+    &.-h1 {
+        font-size: var(--font-size-h1);
+    }
+
+    &.-h2 {
+        font-size: var(--font-size-h2);
+    }
+
+    &.-h3 {
+        font-size: var(--font-size-h3);
+    }
+}
+
+.c-heading-serif {
+    @include heading-serif;
+
+    &.-large {
+        font-size: var(--font-size-serif-large);
+    }
+
+    &.-medium {
+        font-size: var(--font-size-serif-medium);
+    }
+}

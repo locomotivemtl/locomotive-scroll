@@ -1,0 +1,142 @@
+<section class="o-container || u-relative || u-clipped || u-padding-bottom-2xl" data-theme="blue">
+
+    <div
+        class="c-header-theme-toggler"
+        data-scroll
+        data-scroll-repeat
+        data-scroll-call="changeHeaderTheme, Scroll"
+        data-scroll-offset="100%"
+    ></div>
+
+    {% include "@partials/section-heading.twig" with {
+        title: [
+            'Built-in',
+            'Tools'
+        ],
+        labelLeft: '<span class="u-glyph">🔴</span>Work faster',
+        labelRight: 'Work smarter<span class="u-glyph">🔴</span>',
+    } %}
+
+    <div class="c-tool -inview" data-scroll data-scroll-offset="5%">
+        <div class="c-tool_head">
+            <span class="c-tool_index">01</span>
+            <span class="c-tool_label">{{ tools.inview.title }}</span>
+            <span class="c-tool_description">{{ tools.inview.description }}</span>
+            <h2 class="c-tool_title || c-heading -h2">
+                {{ tools.inview.title }}
+            </h2>
+        </div>
+
+        <div class="c-tool_playground">
+            <div class="c-tool_shape -first" data-scroll data-scroll-offset="10%">
+                <div class="c-tool_shape_inner" data-scroll data-scroll-speed="0.01" data-scroll-css-progress>
+                    {% include "@snippets/icon.twig" with { icon: 'inview-01', modifiers: 'c-tool_shape_svg' } %}
+                </div>
+            </div>
+            <div class="c-tool_shape -second" data-scroll data-scroll-offset="30%">
+                <div class="c-tool_shape_inner" data-scroll data-scroll-speed="0.1">
+                    {% include "@snippets/icon.twig" with { icon: 'inview-02', modifiers: 'c-tool_shape_svg' } %}
+                </div>
+            </div>
+            <div class="c-tool_shape -third" data-scroll data-scroll-offset="25%">
+                <div class="c-tool_shape_inner" data-scroll data-scroll-speed="0.02">
+                    {% include "@snippets/icon.twig" with { icon: 'inview-03', modifiers: 'c-tool_shape_svg' } %}
+                </div>
+            </div>
+            <div class="c-tool_shape -fourth" data-scroll data-scroll-offset="45%">
+                <div class="c-tool_shape_inner" data-scroll data-scroll-speed="0.05">
+                    {% include "@snippets/icon.twig" with { icon: 'inview-04', modifiers: 'c-tool_shape_svg' } %}
+                </div>
+            </div>
+            <div class="c-tool_shape -fifth" data-scroll data-scroll-offset="20%">
+                <div class="c-tool_shape_inner" data-scroll data-scroll-speed="0.15" data-scroll-css-progress>
+                    {% include "@snippets/icon.twig" with { icon: 'inview-05', modifiers: 'c-tool_shape_svg' } %}
+                </div>
+            </div>
+            <div class="c-tool_shape -sixth" data-scroll data-scroll-offset="60%">
+                <div class="c-tool_shape_inner" data-scroll data-scroll-speed="0.05">
+                    {% include "@snippets/icon.twig" with { icon: 'inview-06', modifiers: 'c-tool_shape_svg' } %}
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <div class="c-tool -progress" data-scroll data-scroll-offset="5%">
+        <div class="c-tool_head">
+            <span class="c-tool_index">02</span>
+            <span class="c-tool_label">{{ tools.progress.title }}</span>
+            <span class="c-tool_description">{{ tools.progress.description }}</span>
+            <h2 class="c-tool_title || c-heading -h2">
+                {{ tools.progress.title }}
+            </h2>
+        </div>
+
+        <div class="c-tool_playground">
+            <div class="c-tool_shape -first" style="--index: -2" data-scroll data-scroll-css-progress>
+                <div class="c-tool_shape_inner">
+                    {% include "@snippets/icon.twig" with { icon: 'progress-01', modifiers: 'c-tool_shape_svg' } %}
+                </div>
+            </div>
+            <div class="c-tool_shape -second" style="--index: -1" data-scroll data-scroll-css-progress>
+                <div class="c-tool_shape_inner">
+                    {% include "@snippets/icon.twig" with { icon: 'progress-02', modifiers: 'c-tool_shape_svg' } %}
+                </div>
+            </div>
+            <div class="c-tool_shape -third" style="--index: 0" data-scroll data-scroll-css-progress>
+                <div class="c-tool_shape_inner">
+                    {% include "@snippets/icon.twig" with { icon: 'progress-03', modifiers: 'c-tool_shape_svg' } %}
+                </div>
+            </div>
+            <div class="c-tool_shape -fourth" style="--index: 1" data-scroll data-scroll-css-progress>
+                <div class="c-tool_shape_inner">
+                    {% include "@snippets/icon.twig" with { icon: 'progress-04', modifiers: 'c-tool_shape_svg' } %}
+                </div>
+            </div>
+            <div class="c-tool_shape -fifth" style="--index: 2" data-scroll data-scroll-css-progress>
+                <div class="c-tool_shape_inner">
+                    {% include "@snippets/icon.twig" with { icon: 'progress-05', modifiers: 'c-tool_shape_svg' } %}
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <div class="c-tool -parallax" data-scroll data-scroll-offset="5%">
+        <div class="c-tool_head">
+            <span class="c-tool_index">02</span>
+            <span class="c-tool_label">{{ tools.parallax.title }}</span>
+            <span class="c-tool_description">{{ tools.parallax.description }}</span>
+            <h2 class="c-tool_title || c-heading -h2">
+                {{ tools.parallax.title }}
+            </h2>
+        </div>
+
+        <div class="c-tool_playground">
+            <div class="c-tool_shape -first">
+                <div class="c-tool_shape_inner" data-scroll data-scroll-speed="0.04">
+                    {% include "@snippets/icon.twig" with { icon: 'parallax-01', modifiers: 'c-tool_shape_svg' } %}
+                </div>
+            </div>
+            <div class="c-tool_shape -second">
+                <div class="c-tool_shape_inner" data-scroll data-scroll-speed="0.2">
+                    {% include "@snippets/icon.twig" with { icon: 'parallax-02', modifiers: 'c-tool_shape_svg' } %}
+                </div>
+            </div>
+            <div class="c-tool_shape -third">
+                <div class="c-tool_shape_inner" data-scroll data-scroll-speed="0.40">
+                    {% include "@snippets/icon.twig" with { icon: 'parallax-03', modifiers: 'c-tool_shape_svg' } %}
+                </div>
+            </div>
+            <div class="c-tool_shape -fourth">
+                <div class="c-tool_shape_inner" data-scroll data-scroll-speed="0.15">
+                    {% include "@snippets/icon.twig" with { icon: 'parallax-04', modifiers: 'c-tool_shape_svg' } %}
+                </div>
+            </div>
+            <div class="c-tool_shape -fifth">
+                <div class="c-tool_shape_inner" data-scroll data-scroll-speed="0.25">
+                    {% include "@snippets/icon.twig" with { icon: 'parallax-05', modifiers: 'c-tool_shape_svg' } %}
+                </div>
+            </div>
+        </div>
+        </div>
+    </div>
+</section>

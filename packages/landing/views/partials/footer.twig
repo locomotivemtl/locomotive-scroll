@@ -1,0 +1,91 @@
+<footer class="u-relative || c-footer || o-container || u-padding-top-sm" data-theme="blue">
+
+    <div
+        class="c-header-theme-toggler"
+        data-scroll
+        data-scroll-repeat
+        data-scroll-call="changeHeaderTheme, Scroll"
+        data-scroll-offset="100%"
+    ></div>
+
+    <div aria-hidden data-module-randomize class="c-footer_attributes || o-grid -cols">
+        <div data-scroll data-scroll-position="end" data-scroll-call="inView, Randomize">
+            <p>npm</p>
+            <p>npm install</p>
+            <p>npm install locomotive</p>
+            <p>npm install locomotive-scroll</p>
+            <p>npm</p>
+        </div>
+        <div data-scroll data-scroll-position="end" data-scroll-call="inView, Randomize">
+            <p>locomotive</p>
+            <p>locomotive-scroll</p>
+            <p>locomotive-scroll v5.x</p>
+            <p>locomotive-scroll v5.x</p>
+            <p>locomotive-scroll</p>
+            <p>locomotive</p>
+        </div>
+        <div data-scroll data-scroll-position="end" data-scroll-call="inView, Randomize">
+            <p>data</p>
+            <p>data-scroll</p>
+            <p>data-scroll-speed</p>
+            <p>data-scroll-class</p>
+            <p>data-scroll-repeat</p>
+        </div>
+        <div data-scroll data-scroll-position="end" data-scroll-call="inView, Randomize">
+            <p>data</p>
+            <p>data-scroll</p>
+            <p>data-scroll-position</p>
+            <p>data-scroll-call</p>
+            <p>data-scroll-event-progress</p>
+        </div>
+    </div>
+
+    <div class="o-grid -cols">
+        <h5 
+            data-module-mask-lines 
+            data-scroll
+            data-scroll-event-progress="progressEvent"
+            data-scroll-position="start, end" 
+            data-scroll-offset="100px, 75%"
+            class="c-footer_thanks || c-hero_title || c-heading -h1">
+            We hope that you enjoy our library.
+        </h5>
+    </div>
+
+
+    <div class="c-hero_main || -footer || u-padding-bottom-lg">
+        <div class="c-hero_heading">
+            <h1 class="c-hero_title || c-heading -h1" data-scroll data-scroll-position="end">
+                <span class="c-hero_line" style="--index: 0">
+                    <span class="u-glyph || c-hero_word || -footer">🟦🔁</span>
+                </span>
+                <span class="c-hero_line" style="--index: 1">
+                    <span class="c-hero_word || -footer">Locomotive®</span>
+                </span>
+                <span class="c-hero_line" style="--index: 2">
+                    <span class="c-hero_word || -footer">Scroll</span>
+                </span>
+            </h1>
+        </div>
+        <nav class="c-hero_nav">
+            <ul class="c-hero_links">
+                <li class="c-hero_links_item">
+                    {% include "@snippets/button.twig" with {
+                        label: "View on Github",
+                        icon: "github",
+                        href: general.github
+                    } %}
+                </li>
+                <li class="c-hero_links_item">
+                    {% include "@snippets/button.twig" with {
+                        label: "Read documentation",
+                        icon: "doc",
+                        href: general.documentation,
+                        modifiers: '-stroke'
+                    } %}
+                </li>
+            </ul>
+        </nav>
+    </div>
+
+</footer>

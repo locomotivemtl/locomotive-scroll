@@ -1,0 +1,71 @@
+// ==========================================================================
+// Settings / Config / Spacers
+// ==========================================================================
+@use "sass:map";
+@use "../tools/functions" as *;
+
+:root {
+    --spacing-2xs-mobile: 6;
+    --spacing-2xs-desktop: 10;
+
+    --spacing-xs-mobile: 14;
+    --spacing-xs-desktop: 16;
+
+    --spacing-sm-mobile: 28;
+    --spacing-sm-desktop: 32;
+
+    --spacing-md-mobile: 42;
+    --spacing-md-desktop: 56;
+
+    --spacing-lg-mobile: 72;
+    --spacing-lg-desktop: 96;
+
+    --spacing-xl-mobile: 90;
+    --spacing-xl-desktop: 120;
+
+    --spacing-2xl-mobile: 96;
+    --spacing-2xl-desktop: 160;
+
+    --spacing-3xl-mobile: 112;
+    --spacing-3xl-desktop: 224;
+}
+
+// Spacers
+// ==========================================================================
+
+$spacers: (
+    'gutter':   var(--grid-gutter),
+    '2xs':      #{spacingClamp('2xs')},
+    'xs':       #{spacingClamp('xs')},
+    'sm':       #{spacingClamp('sm')},
+    'md':       #{spacingClamp('md')},
+    'lg':       #{spacingClamp('lg')},
+    'xl':       #{spacingClamp('xl')},
+    '2xl':      #{spacingClamp('2xl')},
+    '3xl':      #{spacingClamp('3xl')},
+);
+
+// Function
+// ==========================================================================
+
+// Returns spacer.
+//
+// ```scss
+// .c-box {
+//     margin-top: spacer(gutter);
+// }
+// ```
+//
+// @param  {string} $key - The spacer key in $spacers.
+// @param  {number} $multiplier - The multiplier of the spacer value.
+// @return {size}
+
+@function spacer($spacer: $spacer-default, $multiplier: 1) {
+    @if not map.has-key($spacers, $spacer) {
+        @error "Unknown master spacer: #{$spacer}";
+    }
+
+    $index: map.get($spacers, $spacer);
+
+    @return calc(#{$index} * #{$multiplier});
+}

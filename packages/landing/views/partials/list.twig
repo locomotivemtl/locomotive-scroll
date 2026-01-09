@@ -1,0 +1,19 @@
+{# List #}
+{% set _items     = items %}
+{% set _classes   = classes | default(null) %}
+{% set _modifiers = modifiers | default(null) %}
+{% set _link      = link | default(null) %}
+
+<ul class="c-list {{ _modifiers }} {{ _classes }}" data-scroll>
+    <div class="c-list_inner">
+        {% for item in _items %}
+            <li class="c-list_item" style="--index: {{ loop.index0}}">
+                <p class="c-list_title || c-text -body-regular">{{ item.title }}</p>
+                <p class="c-list_description || c-text -body-regular">{{ item.description }}</p>
+                {% if _link %}
+                    <a class="c-list-anchor" href={{item.url}} target="_blank">↗</a>
+                {% endif %}
+            </li>
+        {% endfor %}
+    </div>
+</ul>
