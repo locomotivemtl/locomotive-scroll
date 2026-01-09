@@ -18,6 +18,7 @@
     },
     "scripts": {
         "build": "npm run build --workspace=packages/lib && npm run build --workspace=packages/demo && npm run build --workspace=packages/landing && npm run build --workspace=packages/docs",
+        "build:vercel": "npm run build --workspace=packages/lib && npm run build --workspace=packages/demo && npm run build --workspace=packages/docs",
         "dev": "npm run dev --workspace=packages/demo --if-present",
         "publish": "npm run publish:beta --workspace=packages/lib --if-present"
     },
