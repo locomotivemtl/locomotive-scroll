@@ -1,0 +1,63 @@
+// ==========================================================================
+// Settings / Config / Colors
+// ==========================================================================
+@use "sass:map";
+@use "sass:color";
+
+// Palette
+// ==========================================================================
+
+$colors: (
+    'blue':  #202ded,
+    'white': #FFFFFF,
+    'black': #000000,
+    'red':   #F4574D,
+);
+
+// Function
+// ==========================================================================
+
+// Returns color code.
+//
+// ```scss
+// .c-box {
+//     color: color(blue);
+// }
+// ```
+//
+// @param  {string} $key - The color key in $colors.
+// @param  {number} $alpha - The alpha for the color value.
+// @return {color}
+
+@function color($key, $alpha: 1) {
+    $key: #{$key}; // Force string conversion
+    @if not map.has-key($colors, $key) {
+        @error "Unknown '#{$key}' in $colors.";
+    }
+
+    @if($alpha < 0 or $alpha > 1) {
+        @error "Alpha '#{$alpha}' must be in range [0, 1].";
+    }
+
+    $color: map.get($colors, $key);
+
+    @return rgba($color, $alpha);
+}
+
+// Specifics
+// ==========================================================================
+
+// Link
+$color-link:           color(blue);
+$color-link-focus:     color(blue);
+$color-link-hover:     color.adjust(color(blue), $lightness: -10%);
+
+// Selection
+$color-selection-text:         color(black);
+$color-selection-background:   color(white);
+
+// Socials
+$color-facebook:    #3B5998;
+$color-instagram:   #E1306C;
+$color-youtube:     #CD201F;
+$color-twitter:     #1DA1F2;

@@ -1,11 +1,26 @@
 {
-    "buildCommand": "npm run build",
+    "buildCommand": "npm run build:vercel",
     "outputDirectory": "www",
-    "redirects": [
+    "rewrites": [
         {
             "source": "/",
-            "destination": "/docs",
-            "statusCode": 301
+            "destination": "/landing"
+        },
+        {
+            "source": "/assets/:path*",
+            "destination": "/landing/assets/:path*"
+        },
+        {
+            "source": "/site.webmanifest",
+            "destination": "/landing/site.webmanifest"
+        },
+        {
+            "source": "/browserconfig.xml",
+            "destination": "/landing/browserconfig.xml"
+        },
+        {
+            "source": "/favicon.ico",
+            "destination": "/landing/favicon.ico"
         }
     ],
     "cleanUrls": true

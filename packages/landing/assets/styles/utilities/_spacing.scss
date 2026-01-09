@@ -1,0 +1,90 @@
+// ==========================================================================
+// Utilities / Spacing
+// ==========================================================================
+
+@use "../core" as *;
+@use "sass:list";
+
+////
+/// Utility classes to put specific spacing values onto elements. The below loop
+/// will generate us a suite of classes like:
+///
+/// @example
+///   .u-margin-top {}
+///   .u-padding-left-large {}
+///   .u-margin-right-small {}
+///   .u-padding {}
+///   .u-padding-right-none {}
+///   .u-padding-horizontal {}
+///   .u-padding-vertical-small {}
+///
+/// @link https://github.com/inuitcss/inuitcss/blob/512977a/utilities/_utilities.spacing.scss
+////
+
+/* stylelint-disable string-quotes */
+
+$spacing-directions: (
+    null:          null,
+    '-top':        '-top',
+    '-right':      '-right',
+    '-bottom':     '-bottom',
+    '-left':       '-left',
+    '-x':          '-left' '-right',
+    '-y':          '-top'  '-bottom',
+) !default;
+
+$spacing-properties: (
+    'padding': 'padding',
+    'margin':  'margin',
+) !default;
+
+$spacing-sizes: list.join($spacers, (
+    null:       var(--grid-gutter),
+    'none':    0
+));
+
+@each $breakpoint, $mediaquery in $breakpoints {
+    @each $property-namespace, $property in $spacing-properties {
+        @each $direction-namespace, $directions in $spacing-directions {
+            @each $size-namespace, $size in $spacing-sizes {
+
+                // Prepend "-" to spacing sizes if not null
+                @if ($size-namespace != null) {
+                    $size-namespace: "-" + $size-namespace;
+                }
+
+                // Base class
+                $base-class: ".u-" + #{$property-namespace}#{$direction-namespace}#{$size-namespace};
+
+                // Spacer without media query
+                @if $breakpoint == "tiny" {
+                    #{$base-class} {
+                        @each $direction in $directions {
+                            #{$property}#{$direction}: $size !important;
+                        }
+                    }
+                }
+
+                // Spacer min-width breakpoints `@from-*`
+                #{$base-class}\@from-#{$breakpoint} {
+                    @media #{mq-min($breakpoint)} {
+                        @each $direction in $directions {
+                            #{$property}#{$direction}: $size !important;
+                        }
+                    }
+                }
+
+                // Spacer max-width breakpoints @to-*`
+                #{$base-class}\@to-#{$breakpoint} {
+                    @media #{mq-max($breakpoint)} {
+                        @each $direction in $directions {
+                            #{$property}#{$direction}: $size !important;
+                        }
+                    }
+                }
+            }
+        }
+    }
+}
+
+/* stylelint-enable string-quotes */

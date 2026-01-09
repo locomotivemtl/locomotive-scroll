@@ -1,0 +1,169 @@
+<section class="u-relative || o-container || u-clipped" data-theme="black" id="features">
+
+    <div
+        class="c-header-theme-toggler"
+        data-scroll
+        data-scroll-repeat
+        data-scroll-call="changeHeaderTheme"
+        data-scroll-offset="100%"
+    ></div>
+    
+    {% include "@partials/section-heading.twig" with {
+        "title": [
+            'Features'
+        ],
+        "attr": {
+            'data-scroll': true,
+            'data-scroll-speed': -0.1
+        }
+    } %}
+
+    <div class="o-grid -col-2 -gutters">
+        <div class="o-grid_item u-gc-2/3">
+            <div class="u-max-w300 || c-text -body-medium || fadeInText -black">
+                <span class="u-glyph">⛵</span>
+                <p class="u-margin-top-sm" data-module-fade-in-text data-scroll data-scroll-offset="0, 25%" data-scroll-event-progress="fadeinTextProgress">{{ features.description }}</p>
+            </div>
+        </div>
+    </div>
+    
+    <div class="c-features-grid">
+        <div class="c-features-grid_container">
+            <div class="c-features-grid_inner">
+
+                <div class="c-features-grid_cell -lenis -link">
+                    <div class="c-features-grid_cell_ratio">
+                        <a href="https://lenis.darkroom.engineering/" class="c-features-grid_link" target="_blank">
+                            <span class="u-screen-reader-text">Visit Lenis website</span>
+                            <span class="c-features-grid_icon-container">
+                                {% include "@snippets/icon.twig" with {
+                                    icon: 'arrow-external',
+                                    classes: 'c-features-grid_icon'
+                                } %}
+                                {% include "@snippets/icon.twig" with {
+                                    icon: 'arrow-external',
+                                    classes: 'c-features-grid_icon'
+                                } %}
+                            </span>
+                        </a>
+                        <div class="c-features-grid_cell_inner">
+                            <span class="c-features-grid_title || c-text -body-regular" aria-hidden="true">
+                                <span class="c-features-grid_title_label">Lenis®</span>
+                                <span class="c-features-grid_title_label">Lenis®</span>
+                            </span>
+                            {% include "@snippets/icon.twig" with {
+                                icon: 'logo-lenis',
+                                classes: 'c-features-grid_logo'
+                            } %}
+                        </div>
+                    </div>
+                </div>
+
+                <div class="c-features-grid_cell -locomotive -link">
+                    <div class="c-features-grid_cell_ratio">
+                        <a href="https://lenis.darkroom.engineering/" class="c-features-grid_link" target="_blank">
+                            <span class="u-screen-reader-text">Visit Locomotive website</span>
+                            <span class="c-features-grid_icon-container">
+                                {% include "@snippets/icon.twig" with {
+                                    icon: 'arrow-external',
+                                    classes: 'c-features-grid_icon'
+                                } %}
+                                {% include "@snippets/icon.twig" with {
+                                    icon: 'arrow-external',
+                                    classes: 'c-features-grid_icon'
+                                } %}
+                            </span>
+                        </a>
+                        <div class="c-features-grid_cell_inner">
+                            <span class="c-features-grid_title || c-text -body-regular" aria-hidden="true">
+                                <span class="c-features-grid_title_label">Locomotive®</span>
+                                <span class="c-features-grid_title_label">Locomotive®</span>
+                            </span>
+                            {% include "@snippets/icon.twig" with {
+                                icon: 'logo-locomotive',
+                                classes: 'c-features-grid_logo'
+                            } %}
+                        </div>
+                    </div>
+                </div>
+
+                <div class="c-features-grid_cell -scrollbar">
+                    <div class="c-features-grid_cell_ratio">
+                        <div class="c-features-grid_cell_inner">
+                            <span class="c-features-grid_index || c-text -label-small">01</span>
+                            <p class="c-features-grid_title || c-heading -h3">{{ features.scrollbar.title }}</p>
+                            <p class="c-features-grid_desc || c-text -body-regular">{{ features.scrollbar.description }}</p>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="c-features-grid_cell -normalized">
+                    <div class="c-features-grid_cell_ratio">
+                        <div class="c-features-grid_cell_inner">
+                            <span class="c-features-grid_index || c-text -label-small">02</span>
+                            <p class="c-features-grid_title || c-heading -h3">{{ features.normalized.title }}</p>
+                            <p class="c-features-grid_desc || c-text -body-regular">{{ features.normalized.description }}</p>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="c-features-grid_cell -sticky">
+                    <div class="c-features-grid_cell_ratio">
+                        <div class="c-features-grid_cell_inner">
+                            <span class="c-features-grid_index || c-text -label-small">03</span>
+                            <p class="c-features-grid_title || c-heading -h3">{{ features.sticky.title }}</p>
+                            <p class="c-features-grid_desc || c-text -body-regular">{{ features.sticky.description }}</p>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="c-features-grid_cell -io" data-scroll data-scroll-offset="60%" data-scroll-repeat>
+                    <div class="c-features-grid_cell_ratio">
+                        <div class="c-features-grid_cell_inner">
+                            <span class="c-features-grid_index || c-text -label-small">04</span>
+                            <p class="c-features-grid_title || c-heading -h3">{{ features.intersectionObserver.title }}</p>
+                            <p class="c-features-grid_desc || c-text -body-regular">{{ features.intersectionObserver.description }}</p>
+                        </div>
+                    </div>
+                </div>
+
+                <button type="button" data-scroll data-scroll-to data-scroll-to-href="#features" data-scroll-to-offset="-40" data-scroll-to-duration="1" class="c-features-grid_cell -scroll-to || u-hover" data-module-hover-shuffle data-hover-shuffle="children">
+                    <span class="c-features-grid_cell_ratio">
+                        <span class="c-features-grid_cell_inner">
+                            <span class="c-features-grid_index || c-text -label-small">05</span>
+                            <span class="c-features-grid_title || c-heading -h3 || u-hover-underline" data-hover-shuffle-child>{{ features.scrollTo.title }}</span>
+                            <span class="c-features-grid_desc || c-text -body-regular">{{ features.scrollTo.description }}</span>
+                        </span>
+                    </span>
+                </button>
+
+                <div class="c-features-grid_cell -direction">
+                    <div class="c-features-grid_cell_ratio">
+                        <div class="c-features-grid_cell_inner">
+                            <span class="c-features-grid_index || c-text -label-small">06</span>
+                            <div class="c-features_direction_title">
+                                <p class="c-features-grid_title || c-heading -h3">{{ features.direction.title }}</p>
+                                <div class="c-heading -h3 || c-features_direction_arrows">
+                                    <span>↓</span>
+                                    <span>↑</span>
+                                </div>
+                            </div>
+                            <p class="c-features-grid_desc || c-text -body-regular">{{ features.direction.description }}</p>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="c-features-grid_cell -custom-easing">
+                    <div class="c-features-grid_cell_ratio">
+                        <div class="c-features-grid_cell_inner">
+                            <span class="c-features-grid_index || c-text -label-small">07</span>
+                            <p class="c-features-grid_title || c-heading -h3">{{ features.layoutShifts.title }}</p>
+                            <p class="c-features-grid_desc || c-text -body-regular">{{ features.layoutShifts.description }}</p>
+                        </div>
+                    </div>
+                </div>
+
+            </div>
+        </div>
+    </div>
+</section>

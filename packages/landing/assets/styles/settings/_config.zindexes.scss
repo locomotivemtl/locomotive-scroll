@@ -1,0 +1,45 @@
+// ==========================================================================
+// Settings / Config / Z-indexes
+// ==========================================================================
+@use "sass:map";
+
+// Timings
+// ==========================================================================
+
+$z-indexes: (
+    "header":   200,
+    "above":    1,
+    "default":  0,
+    "below":    -1
+);
+
+// Default z-index for z()
+$z-index-default: "above" !default;
+
+// Function
+// ==========================================================================
+
+// Retrieves the z-index from the {@see $layers master list}.
+//
+// @link on http://css-tricks.com/handling-z-index/
+//
+// @param  {string} $layer    The name of the z-index.
+// @param  {number} $modifier A positive or negative modifier to apply
+//     to the returned z-index value.
+// @throw  Error if the $layer does not exist.
+// @throw  Warning if the $modifier might overlap another master z-index.
+// @return {number}           The computed z-index of $layer and $modifier.
+
+@function z($layer: $z-index-default, $modifier: 0) {
+    @if not map.has-key($z-indexes, $layer) {
+        @error "Unknown master z-index layer: #{$layer}";
+    }
+
+    @if ($modifier >= 50 or $modifier <= -50) {
+        @warn "Modifier may overlap the another master z-index layer: #{$modifier}";
+    }
+
+    $index: map.get($z-indexes, $layer);
+
+    @return $index + $modifier;
+}

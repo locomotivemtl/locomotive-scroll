@@ -1,0 +1,76 @@
+{
+    "paths": {
+        "url": "locomotive-scroll-website.test",
+        "src": "./assets",
+        "dest": "../../www/landing",
+        "images": {
+            "src": "./assets/images"
+        },
+        "styles": {
+            "src": "./assets/styles",
+            "dest": "../../www/landing/assets/styles"
+        },
+        "scripts": {
+            "src": "./assets/scripts",
+            "dest": "../../www/landing/assets/scripts"
+        },
+        "svgs": {
+            "src": "./assets/images/sprite",
+            "dest": "../../www/landing/assets/images"
+        },
+        "views": {
+            "src": "./views/"
+        },
+        "data": {
+            "src": "./data/"
+        }
+    },
+    "tasks": {
+        "concats": [
+            {
+                "includes": [
+                    "{% paths.scripts.src %}/vendors/*.js"
+                ],
+                "outfile": "{% paths.scripts.dest %}/vendors.js"
+            }
+        ],
+        "scripts": [
+            {
+                "includes": [
+                    "{% paths.scripts.src %}/app.js"
+                ],
+                "outfile": "{% paths.scripts.dest %}/app.js"
+            }
+        ],
+        "styles": [
+            {
+                "infile": "{% paths.styles.src %}/critical.scss",
+                "outfile": "{% paths.styles.dest %}/critical.css"
+            },
+            {
+                "infile": "{% paths.styles.src %}/main.scss",
+                "outfile": "{% paths.styles.dest %}/main.css"
+            }
+        ],
+        "svgs": [
+            {
+                "includes": [
+                    "{% paths.svgs.src %}/*.svg"
+                ],
+                "outfile": "{% paths.svgs.dest %}/sprite.svg"
+            }
+        ],
+        "purgeCSS": {
+            "content": [
+                "../../www/landing/**/*.html",
+                "./views/**/*.twig",
+                "../../www/landing/assets/scripts/**/*"
+            ]
+        },
+        "versions": [
+            {
+                "outfile": "../../www/landing/assets.json"
+            }
+        ]
+    }
+}

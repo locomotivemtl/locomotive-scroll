@@ -1,0 +1,267 @@
+// ==========================================================================
+// Components / Tool
+// ==========================================================================
+
+
+@use "../core" as *;
+.c-tool {
+    position: relative;    
+    background-color: color(blue);
+    overflow: hidden;
+
+    &.-parallax {
+        padding-bottom: spacingClamp('sm');
+
+        &:before {
+            content: "";
+            position: absolute;
+            bottom: 0;
+            left: 0;
+            width: 100%;
+            height: spacingClamp('xl');
+            background-image: linear-gradient(
+                to bottom,
+                hsla(236, 85%, 53%, 0) 0%,
+                hsla(236, 85%, 53%, 0.013) 8.1%,
+                hsla(236, 85%, 53%, 0.049) 15.5%,
+                hsla(236, 85%, 53%, 0.104) 22.5%,
+                hsla(236, 85%, 53%, 0.175) 29%,
+                hsla(236, 85%, 53%, 0.259) 35.3%,
+                hsla(236, 85%, 53%, 0.352) 41.2%,
+                hsla(236, 85%, 53%, 0.45) 47.1%,
+                hsla(236, 85%, 53%, 0.55) 52.9%,
+                hsla(236, 85%, 53%, 0.648) 58.8%,
+                hsla(236, 85%, 53%, 0.741) 64.7%,
+                hsla(236, 85%, 53%, 0.825) 71%,
+                hsla(236, 85%, 53%, 0.896) 77.5%,
+                hsla(236, 85%, 53%, 0.951) 84.5%,
+                hsla(236, 85%, 53%, 0.987) 91.9%,
+                hsla(236, 85%, 53%, 1.00) 100%
+            );
+
+            z-index: 1;
+        }
+    }
+}
+
+.c-tool_head {
+    position: relative;
+    display: grid;
+    column-gap: var(--grid-gutter);
+    z-index: 1;
+    padding-top: 0.5rem;
+    @media (max-width: $to-medium) {
+        grid-template-columns: repeat(4, 1fr);
+    }
+
+    @media (min-width: $from-medium) {
+        grid-template-columns: repeat(3, 1fr);
+    }
+
+    &::before {
+        content: "";
+        position: absolute;
+        top: 0;
+        left: 0;
+        width: 100%;
+        height: 1px;
+        background-color: currentColor;
+        transform-origin: top right;
+        transform: scale3d(0,1,1);
+
+        html.is-first-loaded & {
+            transition: transform t(slow) ease('power3.inOut');
+        }
+
+        html.is-first-loaded .c-tool.is-inview & {
+            transform: scale3d(1,1,1);
+        }
+    }
+
+    @media (min-width: $from-medium) {
+        margin-left: calc((100% + var(--grid-gutter)) / 4);
+    }
+}
+
+.c-tool_index {
+    @media (max-width: $to-medium) {
+        grid-column: span 2;
+    }
+    @media (min-width: $from-medium) {
+        grid-column: span 1;
+    }
+}
+
+.c-tool_label {
+    @media (max-width: $to-small) {
+        grid-column: span 2;
+    }
+    @media (min-width: $from-small) {
+        grid-column: span 1;
+    }
+}
+
+.c-tool_description {
+    @media (max-width: $to-small) {
+        grid-column: 1/-1;
+        grid-row: 3/4;
+        max-width: rem(280px);
+        margin-top: rem(10px);
+    }
+    @media (min-width: $from-small) {
+        grid-column: span 1;
+        grid-column-end: -1;
+    }
+}
+
+.c-tool_title {
+    grid-column: 1/-1;
+    max-width: rem(500px);
+
+    @media (max-width: $to-small) {
+        grid-row: 2/3;
+        margin-top: .8em;
+        margin-bottom: .4em;
+    }
+}
+
+.c-tool_playground {
+    /* position: absolute;
+    top: 0;
+    left: calc(-1 * var(--grid-margin));
+    width: calc(100% + 2 * var(--grid-margin));
+    height: 100%;
+    overflow: hidden;
+    
+    @media (max-width: $to-medium) {
+        margin-top: 15%;
+    }
+    
+    @media (max-width: $to-small) {
+        margin-top: 25%;
+    } */
+
+    position: relative;
+    aspect-ratio: var(--container-ratio);   
+    width: 100%;
+}
+
+.c-tool_shape {
+    position: absolute;
+
+    // Inview
+    // ========================================
+    .c-tool.-inview & {
+        left: calc(var(--left, 0) / 1440 * 100%);
+        top: calc(var(--top, 0) / (1 / (var(--container-ratio)) * 1440) * 100%);
+        transform: translateX(-50%) translateY(-50%);
+
+        &.-first {
+            --top: 502;
+            --left: 90;
+        }
+        &.-second {
+            --top: 700;
+            --left: 355;
+        }
+        &.-third {
+            --top: 475;
+            --left: 655;
+        }
+        &.-fourth {
+            --top: 250;
+            --left: 987;
+        }
+        &.-fifth {
+            --top: 345;
+            --left: 1310;
+        }
+        &.-sixth {
+            --top: 750;
+            --left: 1050;
+        }
+
+        &.-first {
+            svg {
+                transform: rotate(calc(var(--progress) * -90deg));
+            }
+        }
+
+        &.-fifth {
+            svg {
+                transform: rotate(calc(var(--progress) * 150deg));
+            }
+        }
+    }
+
+    // Progress
+    // ========================================
+    .c-tool.-progress & {
+        top: 50%;
+        left: 50%;
+        transform: translateX(-50%) translateY(-50%);
+
+        &.-fourth {
+            z-index: 1;
+        }
+    }
+
+    // Parallax
+    // ========================================
+    .c-tool.-parallax & {
+        left: calc(var(--left, 0));
+        top: calc(var(--top, 0));
+        transform: translateX(-50%) translateY(-50%);
+
+        &.-first {
+            --top: 40%;
+            --left: 16%;
+        }
+        &.-second {
+            --top: 55%;
+            --left: 34%;
+        }
+        &.-third {
+            --top: 30%;
+            --left: 53%;
+        }
+        &.-fourth {
+            --top: 65%;
+            --left: 68%;
+        }
+        &.-fifth {
+            --top: 40%;
+            --left: 86%;
+        }
+    }
+}
+
+.c-tool_shape_svg {
+
+    // Inview
+    // ========================================
+    .c-tool.-inview & {
+        transform: scale3d(0,0,1);
+
+        html.is-first-loaded & {
+            transition: transform t(normal) ease('power3.out');
+        }
+    }
+
+    .c-tool.-inview .c-tool_shape.is-inview & {
+        transform: scale3d(1,1,1);
+    }
+
+    // Progress
+    // ========================================
+    .c-tool.-progress & {
+        display: block;
+        transform: translate3d(calc((0.5 + 0.5 * var(--progress)) * var(--index) * 100%), 0, 0);
+    }
+}
+
+// Keyframes
+@keyframes rotation {
+    from { transform: rotate(0deg) }
+    to { transform: rotate(180deg) }
+}

@@ -1,0 +1,99 @@
+// ==========================================================================
+// Settings / Config / Breakpoints
+// ==========================================================================
+@use "sass:map";
+
+// Breakpoints
+// ==========================================================================
+
+$breakpoints: (
+    "tiny":     500px,
+    "small":    700px,
+    "medium":   1000px,
+    "large":    1200px,
+    "big":      1400px,
+    "figma":    1440px,
+    "huge":     1600px,
+    "enormous": 1800px,
+    "gigantic": 2000px,
+    "colossal": 2400px
+);
+
+// Functions
+// ==========================================================================
+
+// Creates a min-width or max-width media query expression.
+//
+// @param  {string} $breakpoint The breakpoint.
+// @param  {string} $type       Either "min" or "max".
+// @return {string}
+
+@function mq($breakpoint, $type: "min") {
+    @if not map.has-key($breakpoints, $breakpoint) {
+        @warn "Unknown media query breakpoint: `#{$breakpoint}`";
+    }
+
+    $value: map.get($breakpoints, $breakpoint);
+
+    @if ($type == "min") {
+        @return "(min-width: #{$value})";
+    }
+    @if ($type == "max") {
+        @return "(max-width: #{$value - 1px})";
+    }
+
+    @error "Unknown media query type: #{$type}";
+}
+
+// Creates a min-width media query expression.
+//
+// @param  {string} $breakpoint The breakpoint.
+// @return {string}
+
+@function mq-min($breakpoint) {
+    @return mq($breakpoint, "min");
+}
+
+// Creates a max-width media query expression.
+//
+// @param  {string} $breakpoint The breakpoint.
+// @return {string}
+
+@function mq-max($breakpoint) {
+    @return mq($breakpoint, "max");
+}
+
+// Creates a min-width and max-width media query expression.
+//
+// @param  {string} $from  The min-width breakpoint.
+// @param  {string} $until The max-width breakpoint.
+// @return {string}
+
+@function mq-between($breakpointMin, $breakpointMax) {
+    @return "#{mq-min($breakpointMin)} and #{mq-max($breakpointMax)}";
+}
+
+
+// Legacy
+// ==========================================================================
+
+$from-tiny:     map.get($breakpoints, "tiny")           !default;
+$to-tiny:       map.get($breakpoints, "tiny") - 1       !default;
+$from-small:    map.get($breakpoints, "small")          !default;
+$to-small:      map.get($breakpoints, "small") - 1      !default;
+$from-medium:   map.get($breakpoints, "medium")         !default;
+$to-medium:     map.get($breakpoints, "medium") - 1     !default;
+$from-large:    map.get($breakpoints, "large")          !default;
+$to-large:      map.get($breakpoints, "large") - 1      !default;
+$from-big:      map.get($breakpoints, "big")            !default;
+$to-big:        map.get($breakpoints, "big") - 1        !default;
+$from-figma:    map.get($breakpoints, "figma")          !default;
+$to-figma:      map.get($breakpoints, "figma") - 1      !default;
+$from-huge:     map.get($breakpoints, "huge")           !default;
+$to-huge:       map.get($breakpoints, "huge") - 1       !default;
+$from-enormous: map.get($breakpoints, "enormous")       !default;
+$to-enormous:   map.get($breakpoints, "enormous") - 1   !default;
+$from-gigantic: map.get($breakpoints, "gigantic")       !default;
+$to-gigantic:   map.get($breakpoints, "gigantic") - 1   !default;
+$from-colossal: map.get($breakpoints, "colossal")       !default;
+$to-colossal:   map.get($breakpoints, "colossal") - 1   !default;

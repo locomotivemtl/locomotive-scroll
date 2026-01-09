@@ -1,0 +1,50 @@
+<!doctype html>
+<html class="is-loading" lang="en" data-header-theme="blue">
+    <head>
+        <meta charset="utf-8">
+
+        <base href="/">
+
+        <title>{% if title %}{{ title }} | {% endif %}{{ metadata.title }}</title>
+        <meta name="description" content="{% if description %}{{description}}{% else %}{{ metadata.description }}{% endif %}">
+        <meta name="viewport" content="width=device-width, initial-scale=1">
+
+        <meta name="theme-color" content="#ffffff">
+        <meta name="msapplication-TileColor" content="#ffffff">
+        <link rel="manifest" href="site.webmanifest">
+        <link rel="apple-touch-icon" sizes="180x180" href="assets/images/favicons/apple-touch-icon.png">
+        <link rel="icon" type="image/png" sizes="32x32" href="assets/images/favicons/favicon-32x32.png">
+        <link rel="icon" type="image/png" sizes="16x16" href="assets/images/favicons/favicon-16x16.png">
+        <link rel="mask-icon" href="assets/images/favicons/safari-pinned-tab.svg" color="#000000">
+        <link id="main-css" rel="stylesheet" href="{{ 'assets/styles/main.css' | asset }}">
+    </head>
+    <body data-module-load>
+        <!-- Preloader -->
+        <div class="c-preloader"></div>
+
+        <div data-load-container>
+            {% block beforeMain %}
+                <div data-module-scroll="main">
+                    {% include "@partials/header.twig" %}
+                    {% endblock %}
+
+                        <main>
+                            {% block content %}{% endblock %}
+
+                            {% block afterContent %}
+                                {% include "@partials/footer.twig" %}
+                            {% endblock %}
+                        </main>
+
+                    {% block afterMain %}
+                </div>
+            {% endblock %}
+        </div>
+
+        <script nomodule src="https://cdnjs.cloudflare.com/ajax/libs/babel-polyfill/7.6.0/polyfill.min.js" crossorigin="anonymous"></script>
+        <script nomodule src="https://polyfill.io/v3/polyfill.min.js?features=Element.prototype.remove%2CElement.prototype.append%2Cfetch%2CCustomEvent%2CElement.prototype.matches%2CNodeList.prototype.forEach%2CAbortController" crossorigin="anonymous"></script>
+
+        <script src="{{ 'assets/scripts/vendors.js' | asset }}" defer></script>
+        <script src="{{ 'assets/scripts/app.js' | asset }}" defer></script>
+    </body>
+</html>

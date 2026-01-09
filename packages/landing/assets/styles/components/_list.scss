@@ -1,0 +1,170 @@
+// ==========================================================================
+// Components / Perks list
+// ==========================================================================
+
+
+@use "../core" as *;
+.c-list {
+    position: relative;
+
+    &::before {
+        content: "";
+        position: absolute;
+        top: 0;
+        left: 0;
+        width: 100%;
+        height: 1px;
+        background-color: currentColor;
+        transform-origin: top right;
+        transform: scale3d(0,1,1);
+    }
+
+    html.is-first-loaded & {
+        &::before {
+            transition: transform t() ease('power3.inOut');
+        }
+
+        &.is-inview::before {
+            transform: scale3d(1,1,1);
+            // transition-delay: var(--master-delay);
+        }
+    }
+
+    @media (min-width: $from-medium) {
+        display: grid;
+        grid-template-columns: repeat(4, 1fr);
+        column-gap: var(--grid-gutter);
+    }
+}
+
+.c-list_inner {
+    @media (min-width: $from-medium) {
+        grid-column: 2/-1;
+    }
+}
+
+.c-list_item {
+    
+}
+
+.c-list_item_inner {
+position: relative;
+    margin: rem(8px) 0 rem(10px);
+    clip-path: inset(0);
+    padding-top: rem(10px);
+    @media (min-width: $from-small) {
+        margin: 0px;
+        padding: rem(8px) 0 rem(10px);
+    }
+
+    &::before {
+        content: "";
+        position: absolute;
+        top: 0;
+        left: 0;
+        width: 100%;
+        height: 1px;
+        background-color: currentColor;
+        transform-origin: top right;
+        transform: scale3d(0,1,1);
+
+        html.is-first-loaded & {
+            transition: transform t() ease('power3.inOut');
+        }
+
+        html.is-first-loaded .c-list.is-inview & {
+            transform: scale3d(1,1,1);
+            transition-delay: calc((var(--index) + 1) * 0.08s);
+        }
+    }
+
+    @media (max-width: $to-small) {
+        display: flex;
+        flex-direction: column;
+
+        .-showcase & {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: rem(15px);
+        }
+    }
+
+    @media (min-width: $from-small) {
+        display: grid;
+        align-items: flex-start;
+    }
+
+    @media (min-width: $from-small) and (max-width: $to-medium) {
+        grid-template-columns: 1fr 1fr;
+
+        .c-list.-showcase & {
+            grid-template-columns: 4fr 2fr 1fr;
+        }
+    }
+
+    @media (min-width: $from-medium) {
+        grid-template-columns: 1fr 2fr;
+
+        .c-list.-showcase & {
+            grid-template-columns: 4fr 2fr 1fr;
+        }
+    }
+
+    .c-list-anchor {
+        text-align: end;
+        @media (max-width: $to-small) {
+            position: absolute;
+            right: 0;
+            bottom: 0;
+            .-showcase & {
+                top: rem(10px);
+            }
+        }
+    }
+}
+    
+
+.c-list_title {
+    @media (max-width: $to-small) {
+        &.-body-regular{
+            --font-size-body-regular: var(--font-size-body-medium);
+        }
+    }
+    @media (min-width: $from-medium) {
+        grid-column: 1/2;
+    }
+}
+
+.c-list_description {
+    @media (max-width: $to-small) {
+        margin-top: rem(5px);
+        margin-bottom: rem(25px);
+        .-showcase & {
+            margin-top: 0px;
+        }
+    }
+    @media (min-width: $from-medium) {
+        grid-column: 2/-1;
+
+        .c-list.-showcase & {
+            grid-column: auto;
+        }
+    }
+}
+
+.c-list_title,
+.c-list_description,
+.c-list-anchor {
+    opacity: 0;
+    transform: translate3d(0, 100%, 0);
+
+    html.is-first-loaded & {
+        transition: transform t(normal) ease('power3.out'), opacity t(normal) ease('power3.out');
+    }
+
+    html.is-first-loaded .c-list.is-inview & {
+        opacity: 1;
+        transform: translate3d(0,0,0);
+        transition-delay: calc((var(--index) + 1) * 0.08s + .25s);
+    }
+}

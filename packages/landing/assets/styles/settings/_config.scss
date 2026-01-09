@@ -1,0 +1,47 @@
+// ==========================================================================
+// Settings / Config
+// ==========================================================================
+@use "sass:math";
+@use "config.colors" as *;
+@use "config.timings" as *;
+@use "config.eases" as *;
+
+// Context
+// =============================================================================
+
+// The current stylesheet context. Available values: frontend, editor.
+$context: frontend  !default;
+
+// Path is relative to the stylesheets directory.
+$assets-path: "../"  !default;
+
+// Typography
+// =============================================================================
+
+// Base
+$font-size:     16px;
+$line-height:   math.div(24px, $font-size);
+$font-color:    color(black);
+
+// Weights
+$font-weight-light:     300;
+$font-weight-regular:    400;
+$font-weight-medium:    500;
+
+// Transition defaults
+// =============================================================================
+$speed:     t(normal);
+$easing:    ease("power3.out");
+
+// Spacing Units
+// =============================================================================
+$unit:       60px;
+$unit-small: 20px;
+
+// Container
+// ==========================================================================
+$padding:         $unit;
+
+// Grid
+// ==========================================================================
+$base-column-nb: 4;

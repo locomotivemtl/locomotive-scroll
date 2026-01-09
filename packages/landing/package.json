@@ -1,0 +1,49 @@
+{
+    "private": true,
+    "name": "@locomotivemtl/boilerplate",
+    "title": "Locomotive Boilerplate",
+    "version": "1.0.0",
+    "author": "Locomotive <info@locomotive.ca>",
+    "type": "module",
+    "engines": {
+        "node": ">=20.1",
+        "npm": ">=8.0"
+    },
+    "scripts": {
+        "start": "node --experimental-json-modules --no-warnings build/watch.js",
+        "build": "node --experimental-json-modules --no-warnings build/build.js"
+    },
+    "dependencies": {
+        "@11ty/eleventy-img": "^4.0.2",
+        "gsap": "^3.14.2",
+        "locomotive-scroll": "^5.0.0-beta.11",
+        "modujs": "^1.4.2",
+        "modularload": "^1.2.6",
+        "normalize.css": "^8.0.1",
+        "svg4everybody": "^2.1.9"
+    },
+    "devDependencies": {
+        "@11ty/eleventy": "^2.0.1",
+        "@factorial/eleventy-plugin-twig": "^0.1.2",
+        "autoprefixer": "^10.4.13",
+        "browser-sync": "^3.0.2",
+        "concat": "^1.0.3",
+        "esbuild": "^0.17.6",
+        "kleur": "^4.1.5",
+        "node-notifier": "^10.0.1",
+        "postcss": "^8.4.21",
+        "purgecss": "^5.0.0",
+        "sass": "^1.69.5",
+        "svg-mixer": "~2.3.14",
+        "tiny-glob": "^0.2.9",
+        "twig": "^1.16.0"
+    },
+    "overrides": {
+        "browser-sync": {
+            "ua-parser-js": "~1.0.33"
+        },
+        "svg-mixer": {
+            "postcss": "^8.4.20"
+        }
+    }
+}

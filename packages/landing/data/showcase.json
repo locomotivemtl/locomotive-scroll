@@ -1,0 +1,51 @@
+{
+    "title": "Showcase",
+    "description": "Real projects built with Locomotive Scroll by leading studios and developers.",
+    "items": [
+        {
+            "title": "Mission.dev",
+            "description": "Locomotive",
+            "url": "https://mission.dev"
+        },
+        {
+            "title": "Scroll Animation Ideas",
+            "description": "Codrops",
+            "url": "https://tympanus.net/codrops"
+        },
+        {
+            "title": "Locomotive",
+            "description": "Locomotive",
+            "url": "https://locomotive.ca"
+        },
+        {
+            "title": "Cira",
+            "description": "Locomotive",
+            "url": "https://cira.ca"
+        },
+        {
+            "title": "Billyclub",
+            "description": "P-L & Deven",
+            "url": "https://billyclub.com"
+        },
+        {
+            "title": "Mission.dev",
+            "description": "Locomotive",
+            "url": "https://mission.dev"
+        },
+        {
+            "title": "Scroll Animation Ideas",
+            "description": "Codrops",
+            "url": "https://tympanus.net/codrops"
+        },
+        {
+            "title": "Locomotive",
+            "description": "Locomotive",
+            "url": "https://locomotive.ca"
+        },
+        {
+            "title": "Cira",
+            "description": "Locomotive",
+            "url": "https://cira.design"
+        }
+    ]
+}

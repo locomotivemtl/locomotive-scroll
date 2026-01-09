@@ -1,0 +1,31 @@
+// ==========================================================================
+// Utilities / Theme
+// ==========================================================================
+
+
+@use "../core" as *;
+:root {
+    --color-text: #{color(blue)};
+    --color-background: #{color(white)};
+}
+
+[data-theme="white"] {
+    color: var(--color-text);
+    background-color: var(--color-background);
+}
+
+[data-theme="blue"] {
+    --color-text: #{color(white)};
+    --color-background: #{color(blue)};
+
+    color: var(--color-text);
+    background-color: var(--color-background);
+}
+
+[data-theme="black"] {
+    --color-text: #{color(white)};
+    --color-background: #{color(black)};
+
+    color: var(--color-text);
+    background-color: var(--color-background);
+}

@@ -1,0 +1,43 @@
+// ==========================================================================
+// Settings / Config / Timings
+// ==========================================================================
+@use "sass:map";
+
+// Timings
+// ==========================================================================
+
+$timings: (
+    fastest:    0.1s,
+    faster:     0.15s,
+    fast:       0.25s,
+    normal:     0.5s,
+    medium:     0.6s,
+    slow:       0.75s,
+    slower:     1s,
+    slowest:    2s,
+);
+
+// Default timing for t()
+$timing-default: "normal" !default;
+
+// Function
+// ==========================================================================
+
+// Returns timing.
+//
+// ```scss
+// .c-box {
+//     transition-duration: t(slow);
+// }
+// ```
+//
+// @param  {string} $key - The timing key in $timings.
+// @return {duration}
+
+@function t($key: $timing-default) {
+    @if not map.has-key($timings, $key) {
+        @error "Unknown '#{$key}' in $timings.";
+    }
+
+    @return map.get($timings, $key);
+}
