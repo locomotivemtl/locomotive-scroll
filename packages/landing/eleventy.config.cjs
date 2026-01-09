@@ -28,7 +28,7 @@ module.exports = function(eleventyConfig) {
         },
         dir: {
             input: 'views/templates',
-            output: './dist'
+            output: '../../www/landing'
         }
     });
 
@@ -53,7 +53,7 @@ module.exports = function(eleventyConfig) {
 
     twig.extendFunction("critical_css", function() {
         try {
-            return fs.readFileSync('./dist/assets/styles/critical.css', 'utf-8')
+            return fs.readFileSync('../../www/landing/assets/styles/critical.css', 'utf-8')
         } catch(error) {
             return '';
         }
@@ -64,7 +64,7 @@ module.exports = function(eleventyConfig) {
         templateFormats: ['twig'],
         dir: {
             input: 'views/templates',
-            output: './dist',
+            output: '../../www/landing',
             data: '../../data'
         }
     };
