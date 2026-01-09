@@ -7,9 +7,30 @@ gsap.registerPlugin(ScrambleTextPlugin)
 export default class Ramdomize extends module {
     constructor(m) {
         super(m);
+
+        // Binding
+        this.inViewBind = this.inView.bind(this)
     }
 
-    inView({target}) {
+    init() {
+        this.bindEvents();
+    }
+
+    destroy() {
+        this.unbindEvents();
+    }
+
+    bindEvents() {
+        window.addEventListener("randomize", this.inViewBind);
+    }
+
+    unbindEvents() {
+        window.removeEventListener("randomize", this.inViewBind);
+    }
+
+    inView(args) {
+        const { target } = args.detail
+
         const words = [...target.querySelectorAll("p")]
         words.forEach((word, i) => {
             gsap.to(word, {opacity: 1, duration: 0, delay: 0.1 * i})

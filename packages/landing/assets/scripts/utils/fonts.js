@@ -389,7 +389,21 @@ async function whenReady(queries)
 {
     const fonts = getMany(queries);
 
-    return await Promise.all(fonts.map((font) => font.loaded));
+    // Handle each font's loaded promise, catching errors so that
+    // Promise.all doesn't reject if one font fails
+    return await Promise.all(
+        fonts.map((font) =>
+            font.loaded.then(
+                (loadedFont) => loadedFont,
+                (error) => {
+                    // Return the font even if it failed to load
+                    // This allows the promise to resolve instead of reject
+                    console.warn(`Font failed to load: ${font.family} ${font.style} ${font.weight}`, error);
+                    return font;
+                }
+            )
+        )
+    );
 }
 
 export {

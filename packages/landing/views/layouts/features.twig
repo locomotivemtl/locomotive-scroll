@@ -4,7 +4,7 @@
         class="c-header-theme-toggler"
         data-scroll
         data-scroll-repeat
-        data-scroll-call="changeHeaderTheme, Scroll"
+        data-scroll-call="changeHeaderTheme"
         data-scroll-offset="100%"
     ></div>
     
@@ -127,14 +127,14 @@
                     </div>
                 </div>
 
-                <button type="button" data-scroll data-scroll-to data-scroll-to-href="#features" data-scroll-to-offset="-40" data-scroll-to-duration="1" class="c-features-grid_cell -scroll-to || u-hover">
-                    <div class="c-features-grid_cell_ratio">
-                        <div class="c-features-grid_cell_inner">
+                <button type="button" data-scroll data-scroll-to data-scroll-to-href="#features" data-scroll-to-offset="-40" data-scroll-to-duration="1" class="c-features-grid_cell -scroll-to || u-hover" data-module-hover-shuffle data-hover-shuffle="children">
+                    <span class="c-features-grid_cell_ratio">
+                        <span class="c-features-grid_cell_inner">
                             <span class="c-features-grid_index || c-text -label-small">05</span>
-                            <p class="c-features-grid_title || c-heading -h3 || u-hover-underline">{{ features.scrollTo.title }}</p>
-                            <p class="c-features-grid_desc || c-text -body-regular">{{ features.scrollTo.description }}</p>
-                        </div>
-                    </div>
+                            <span class="c-features-grid_title || c-heading -h3 || u-hover-underline" data-hover-shuffle-child>{{ features.scrollTo.title }}</span>
+                            <span class="c-features-grid_desc || c-text -body-regular">{{ features.scrollTo.description }}</span>
+                        </span>
+                    </span>
                 </button>
 
                 <div class="c-features-grid_cell -direction">

@@ -44,7 +44,11 @@
 }
 
 .c-list_item {
-    position: relative;
+    
+}
+
+.c-list_item_inner {
+position: relative;
     margin: rem(8px) 0 rem(10px);
     clip-path: inset(0);
     padding-top: rem(10px);
@@ -118,6 +122,7 @@
         }
     }
 }
+    
 
 .c-list_title {
     @media (max-width: $to-small) {

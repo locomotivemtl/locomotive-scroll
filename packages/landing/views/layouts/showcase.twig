@@ -4,7 +4,7 @@
         class="c-header-theme-toggler"
         data-scroll
         data-scroll-repeat
-        data-scroll-call="changeHeaderTheme, Scroll"
+        data-scroll-call="changeHeaderTheme"
         data-scroll-offset="100%"
     ></div>
 
@@ -14,10 +14,12 @@
         <div class="c-sticky-heading_inner || o-container">
             <div class="c-sticky-heading_text">
                 <div class="c-sticky-heading_description || fadeInText -white">
-                    <span class="u-glyph">⛵</span>
-                    <p class="u-margin-top-2xs || c-text -body-medium"  data-module-fade-in-text data-scroll data-scroll-offset="0, 25%"  data-scroll-event-progress="fadeinTextProgress">
-                    {{showcase.description}}
-                    </p>
+                    <div class="c-text -body-medium"> 
+                        <span class="u-glyph">⛵</span>
+                        <p class="u-margin-top-2xs"  data-module-fade-in-text data-scroll data-scroll-offset="0, 25%"  data-scroll-event-progress="fadeinTextProgress">
+                            {{showcase.description}}
+                        </p>
+                    </div>
                 </div>
                 <h2 class="c-sticky-heading_title">
                     {{showcase.title}}

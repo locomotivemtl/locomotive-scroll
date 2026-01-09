@@ -9,7 +9,7 @@
 {% if _icon %}
     <span class="o-icon {{ _modifiers }} {{ _classes }}">
         <svg class="svg-{{ _icon }}" focusable="false" aria-hidden="true">
-            <use xlink:href="assets/images/sprite.svg#{{ _icon }}"></use>
+            <use xlink:href="{{ 'assets/images/sprite.svg' | asset }}#{{ _icon }}"></use>
         </svg>
     </span>
 {% endif %}

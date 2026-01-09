@@ -1,14 +1,26 @@
 // Import required modules
 const twig = require("twig");
-const fs = require('fs')
+const fs = require('fs');
+const path = require('path');
 const eleventyPluginTwig = require("@factorial/eleventy-plugin-twig");
 
 // Export Eleventy configuration
 module.exports = function(eleventyConfig) {
-    // Function to generate a version identifier
-    function generateVersion() {
-        // You can use a timestamp, a hash of asset files, or any other method you prefer
-        return Date.now();
+    // Load assets.json version
+    const assetsJsonPath = path.resolve(__dirname, '../../www/landing/assets.json');
+    let assetsVersion = null;
+
+    function getAssetsVersion() {
+        if (assetsVersion === null) {
+            try {
+                const assetsData = JSON.parse(fs.readFileSync(assetsJsonPath, 'utf-8'));
+                assetsVersion = assetsData.version;
+            } catch(error) {
+                console.warn('Could not load assets.json, using timestamp instead');
+                assetsVersion = Date.now();
+            }
+        }
+        return assetsVersion;
     }
 
     eleventyConfig.setServerOptions({
@@ -43,12 +55,17 @@ module.exports = function(eleventyConfig) {
             .replace(/[^\w-]/g, '') // Remove non-word characters
             .replace(/--+/g, '-') // Replace consecutive dashes with a single dash
             .trim(); // Trim any leading or trailing dashes
-    })
+    });
 
-    // // Add a filter to append the version to asset URLs
-    twig.extendFilter('version', function(url) {
-        const version = generateVersion();
+    // Add a filter to append the version to asset URLs from assets.json
+    twig.extendFilter('asset', function(url) {
+        const version = getAssetsVersion();
         return `${url}?v=${version}`;
+    });
+
+    // Add global data for assets version
+    eleventyConfig.addGlobalData('assetsVersion', function() {
+        return getAssetsVersion();
     });
 
     twig.extendFunction("critical_css", function() {

@@ -10,7 +10,7 @@ export default class extends Module {
         // Binding
         this.onUpdateBind = this.onUpdate.bind(this);
         this.onResizeBind = this.onResize.bind(this);
-        this.onFontsLoadedBind = this.onFontsLoaded.bind(this);
+        this.onToggleBind = this.onToggle.bind(this);
 
         // UI
         this.$container = this.$("container")[0];
@@ -38,8 +38,9 @@ export default class extends Module {
     ///////////////
     init() {
         this.bindEvents();
-
-        whenReady(FONT.EAGER).then((fonts) => this.onFontsLoaded(fonts));
+        whenReady(FONT.EAGER).then((fonts) => {
+            this.onFontsLoaded(fonts);
+        });
     }
 
     destroy() {
@@ -53,10 +54,12 @@ export default class extends Module {
     ///////////////
     bindEvents() {
         window.addEventListener(CUSTOM_EVENT.RESIZE_END, this.onResizeBind);
+        window.addEventListener("toggleRail", this.onToggleBind);
     }
 
     unbindEvents() {
         window.removeEventListener(CUSTOM_EVENT.RESIZE_END, this.onResizeBind);
+        window.removeEventListener("toggleRail", this.onToggleBind);
     }
 
     ///////////////
@@ -106,6 +109,11 @@ export default class extends Module {
         this.scrollVelocity = Math.round(Math.abs(velocity)) * this.scrollLerp;
     }
 
+    onToggle(e) {
+        const { way } = e.detail;
+        way === "enter" ? this.start() : this.stop();
+    }
+
     ///////////////
     // Methods
     ///////////////
@@ -119,11 +127,6 @@ export default class extends Module {
         if (!this.isPlaying) return;
         this.isPlaying = false;
         gsap.ticker.remove(this.onUpdateBind);
-    }
-
-    toggle(e) {
-        const { way } = e;
-        way === "enter" ? this.start() : this.stop();
     }
 
     computeMetrics(reset = false) {

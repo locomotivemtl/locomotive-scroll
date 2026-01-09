@@ -133,6 +133,7 @@ $color-grid: 282828;
 }
 
 .c-features-grid_cell_ratio {
+    display: block;
     aspect-ratio: var(--cell-ratio);
     padding: rem(16px);
     pointer-events: auto;

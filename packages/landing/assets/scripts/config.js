@@ -44,9 +44,9 @@ const CUSTOM_EVENT = Object.freeze({
 // Fonts parameters
 const FONT = Object.freeze({
     EAGER: [
-        { family: 'PP Locomotive New', style: 'normal', weight: 300 },
-        { family: 'Helvetica Now Display', style: 'normal', weight: 400 },
-        { family: 'Helvetica Now Display', style: 'normal', weight: 500 }
+        { family: 'PP Locomotive New', style: 'normal', weight: '300' },
+        { family:  'Helvetica Now Display', style: 'normal', weight: '400' },
+        { family: 'Helvetica Now Display', style: 'normal', weight: '500' }
     ],
 })
 

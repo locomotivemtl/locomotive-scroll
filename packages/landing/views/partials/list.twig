@@ -8,10 +8,17 @@
     <div class="c-list_inner">
         {% for item in _items %}
             <li class="c-list_item" style="--index: {{ loop.index0}}">
-                <p class="c-list_title || c-text -body-regular">{{ item.title }}</p>
-                <p class="c-list_description || c-text -body-regular">{{ item.description }}</p>
                 {% if _link %}
-                    <a class="c-list-anchor" href={{item.url}} target="_blank">↗</a>
+                    <a class="c-list_item_inner u-hover-underline" href={{item.url}} target="_blank" data-module-hover-shuffle data-hover-shuffle="children">
+                        <span class="c-list_title || c-text -body-regular" data-hover-shuffle-child>{{ item.title }}</span>
+                        <span class="c-list_description || c-text -body-regular" data-hover-shuffle-child>{{ item.description }}</span>
+                        <span class="c-list-anchor">↗</span>
+                    </a>
+                {% else %}
+                    <div class="c-list_item_inner">
+                        <p class="c-list_title || c-text -body-regular">{{ item.title }}</p>
+                        <p class="c-list_description || c-text -body-regular">{{ item.description }}</p>
+                    </div>
                 {% endif %}
             </li>
         {% endfor %}

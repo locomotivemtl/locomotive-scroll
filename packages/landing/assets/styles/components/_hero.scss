@@ -71,6 +71,11 @@
 
 .c-hero_title {
     margin-block: auto;
+
+    .c-footer & {
+        margin-top: auto;
+        margin-bottom: 0;
+    }
 }
 
 .c-hero_links_item {

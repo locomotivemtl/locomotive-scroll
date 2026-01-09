@@ -1,0 +1,1194 @@
+<!doctype html>
+<html class="is-loading" lang="en" data-header-theme="blue">
+    <head>
+        <meta charset="utf-8">
+
+        <base href="/">
+
+        <title>Locomotive Scroll V5</title>
+        <meta name="description" content="A lightweight scroll library for modern web experiences. Detection, animation, and smooth scrolling — all in 9.4kB.">
+        <meta name="viewport" content="width=device-width, initial-scale=1">
+
+        <meta name="theme-color" content="#ffffff">
+        <meta name="msapplication-TileColor" content="#ffffff">
+        <link rel="manifest" href="site.webmanifest">
+        <link rel="apple-touch-icon" sizes="180x180" href="assets/images/favicons/apple-touch-icon.png">
+        <link rel="icon" type="image/png" sizes="32x32" href="assets/images/favicons/favicon-32x32.png">
+        <link rel="icon" type="image/png" sizes="16x16" href="assets/images/favicons/favicon-16x16.png">
+        <link rel="mask-icon" href="assets/images/favicons/safari-pinned-tab.svg" color="#000000">
+        <link id="main-css" rel="stylesheet" href="assets/styles/main.css?v=1767993722287">
+    </head>
+    <body data-module-load>
+        <!-- Preloader -->
+        <div class="c-preloader"></div>
+
+        <div data-load-container>
+                            <div data-module-scroll="main">
+                    <header class="c-header">
+    <div class="c-header_col">
+        <p class="c-text -body-regular">Locomotive Scroll</p>
+        <p class="c-text -body-regular">Version 5.0</p>
+    </div>
+    <div class="c-header_col  || -center">
+        <a class="c-text -body-regular || u-hover-underline" href="https://github.com/locomotivemtl/locomotive-scroll" target="_blank" data-module-hover-shuffle>Github</a>
+    </div>
+    <div class="c-header_col">
+        <a class="c-text -body-regular || u-hover-underline" href="https://scroll.locomotive.ca/docs/#/" target="_blank" data-module-hover-shuffle>Documentation</a>
+        <p>©2026</p>
+    </div>
+</header>
+                    
+                        <main>
+                            
+    <section class="o-container || u-relative" data-theme="blue">
+
+    <div
+        class="c-header-theme-toggler -hero"
+        data-scroll
+        data-scroll-repeat
+        data-scroll-call="changeHeaderTheme"
+        data-scroll-offset="100%"
+    ></div>
+
+    <div class="c-hero">
+        <div class="c-hero_sticky">
+
+            <div class="c-hero_main">
+                <div class="c-hero_heading">
+                    <h1 class="c-hero_title || c-heading -h1">
+                        <span class="c-hero_line" style="--index: 0">
+                            <span class="u-glyph || c-hero_word || -hero">🟦🔁</span>
+                        </span>
+                        <span class="c-hero_line" style="--index: 1">
+                            <span class="c-hero_word || -hero">Locomotive®</span>
+                        </span>
+                        <span class="c-hero_line" style="--index: 2">
+                            <span class="c-hero_word || -hero">Scroll</span>
+                        </span>
+                    </h1>
+
+                    <div class="c-hero_description_container || fadeInText -blue">
+                        <p class="c-text -body-medium || u-max-w440 || c-hero_description" data-module-fade-in-text data-scroll data-scroll-event-progress="fadeinTextProgress">
+                            A lightweight scroll library for modern web experiences. Detection, animation, and smooth scrolling — all in 9.4kB. Built on top of Lenis.
+                        </p>
+                        <p class="c-hero_version || c-text -body-medium || u-clipped" data-scroll data-scroll-offset="25%">
+                            <span class="u-glyph">🔻</span>
+                            <span>Version 5.0</span>
+                        </p>
+                    </div>
+                </div>
+                <nav class="c-hero_nav">
+                    <ul class="c-hero_links">
+                        <li class="c-hero_links_item">
+                            
+
+
+
+
+    
+
+
+
+
+
+
+<a
+    class="c-button"
+    href="https://github.com/locomotivemtl/locomotive-scroll"            >
+                    <span
+                class="c-button_wrap"
+                            >
+                <span class="c-button_inner">
+                                            
+
+
+
+
+    <span class="o-icon  c-button_icon">
+        <svg class="svg-github" focusable="false" aria-hidden="true">
+            <use xlink:href="assets/images/sprite.svg?v=1767993722287#github"></use>
+        </svg>
+    </span>
+                    
+                                            <span class="c-button_label">
+                            View on Github
+                        </span>
+                                    </span>
+            </span>
+                    <span
+                class="c-button_wrap"
+                                    aria-hidden="true"
+                            >
+                <span class="c-button_inner">
+                                            
+
+
+
+
+    <span class="o-icon  c-button_icon">
+        <svg class="svg-github" focusable="false" aria-hidden="true">
+            <use xlink:href="assets/images/sprite.svg?v=1767993722287#github"></use>
+        </svg>
+    </span>
+                    
+                                            <span class="c-button_label">
+                            View on Github
+                        </span>
+                                    </span>
+            </span>
+        </a>
+                        </li>
+                        <li class="c-hero_links_item">
+                            
+
+
+
+
+    
+
+    
+
+
+
+
+<a
+    class="c-button -stroke"
+    href="https://scroll.locomotive.ca/docs/#/"            >
+                    <span
+                class="c-button_wrap"
+                            >
+                <span class="c-button_inner">
+                                            
+
+
+
+
+    <span class="o-icon  c-button_icon">
+        <svg class="svg-doc" focusable="false" aria-hidden="true">
+            <use xlink:href="assets/images/sprite.svg?v=1767993722287#doc"></use>
+        </svg>
+    </span>
+                    
+                                            <span class="c-button_label">
+                            Read documentation
+                        </span>
+                                    </span>
+            </span>
+                    <span
+                class="c-button_wrap"
+                                    aria-hidden="true"
+                            >
+                <span class="c-button_inner">
+                                            
+
+
+
+
+    <span class="o-icon  c-button_icon">
+        <svg class="svg-doc" focusable="false" aria-hidden="true">
+            <use xlink:href="assets/images/sprite.svg?v=1767993722287#doc"></use>
+        </svg>
+    </span>
+                    
+                                            <span class="c-button_label">
+                            Read documentation
+                        </span>
+                                    </span>
+            </span>
+        </a>
+                        </li>
+                    </ul>
+                </nav>
+            </div>
+        </div>
+    </div>
+</section>
+    <section class="u-relative" data-theme="white">
+
+    <div
+        class="c-header-theme-toggler"
+        data-scroll
+        data-scroll-repeat
+        data-scroll-call="changeHeaderTheme"
+        data-scroll-offset="100%"
+    ></div>
+
+    <div
+    class="c-rail"
+    data-module-rail
+    data-values="rail"
+    data-rail-direction="-1"
+    data-scroll
+    data-scroll-call="toggleRail"    
+    data-scroll-repeat
+>
+    <div class="c-rail_inner" data-rail="container" aria-hidden="true">
+        <div data-rail="pattern">
+            <p class="c-rail_item" data-rail-item>
+                Version (5.0)
+                <span class="c-rail_glyph">🏢</span>
+            </p>
+        </div>
+    </div>
+</div>
+
+
+    <div class="o-container">
+        
+
+        
+
+<ul class="c-list  " data-scroll>
+    <div class="c-list_inner">
+                    <li class="c-list_item" style="--index: 0">
+                                    <div class="c-list_item_inner">
+                        <p class="c-list_title || c-text -body-regular">Built on top of Lenis</p>
+                        <p class="c-list_description || c-text -body-regular">Latest stable release with improved touch handling and performance fixes. No more greedy CSS transforms!</p>
+                    </div>
+                            </li>
+                    <li class="c-list_item" style="--index: 1">
+                                    <div class="c-list_item_inner">
+                        <p class="c-list_title || c-text -body-regular">TypeScript First</p>
+                        <p class="c-list_description || c-text -body-regular">Fully typed. Better autocomplete, fewer bugs, happier developers.</p>
+                    </div>
+                            </li>
+                    <li class="c-list_item" style="--index: 2">
+                                    <div class="c-list_item_inner">
+                        <p class="c-list_title || c-text -body-regular">Dual Intersection Observers</p>
+                        <p class="c-list_description || c-text -body-regular">Separate observers for simple triggers vs. continuous animations. No wasted RAF cycles.</p>
+                    </div>
+                            </li>
+                    <li class="c-list_item" style="--index: 3">
+                                    <div class="c-list_item_inner">
+                        <p class="c-list_title || c-text -body-regular">Smart Touch Detection</p>
+                        <p class="c-list_description || c-text -body-regular">Parallax auto-disabled on mobile. Opt-in with one attribute.</p>
+                    </div>
+                            </li>
+                    <li class="c-list_item" style="--index: 4">
+                                    <div class="c-list_item_inner">
+                        <p class="c-list_title || c-text -body-regular">Production Ready</p>
+                        <p class="c-list_description || c-text -body-regular">Accessible by default. Native scrollbar, keyboard nav, and proper cleanup for SPAs.</p>
+                    </div>
+                            </li>
+                    <li class="c-list_item" style="--index: 5">
+                                    <div class="c-list_item_inner">
+                        <p class="c-list_title || c-text -body-regular">Lightweight</p>
+                        <p class="c-list_description || c-text -body-regular">Only 9.4kB gzipped</p>
+                    </div>
+                            </li>
+            </div>
+</ul>
+        
+        <div class="o-grid -gutters -col-4@from-medium || u-margin-top-xl u-margin-bottom-3xl">
+            <div class="o-grid_item u-gc-2/5@from-medium">
+                <p class="c-heading -h2">
+                    Version 5 is a complete rewrite. Designed for modern workflows, built on top of Lenis, and optimized for production.
+                </p>
+            </div>
+        </div>
+
+        
+        <div class="c-cascade || u-margin-3xl-top" aria-hidden="true">
+            <div class="c-cascade_text || || fadeInText -white">
+                <span class="u-glyph">⛵</span>
+                <p class="c-text -body-medium || u-margin-top-2xs" data-module-fade-in-text data-scroll data-scroll-offset="0, 25%" data-scroll-event-progress="fadeinTextProgress">This library has evolved considerably over the years. From jQuery to vanilla ES6, from custom engines to Lenis foundation.</p>
+            </div>
+            <div class="c-cascade_container" data-scroll data-scroll-css-progress data-scroll-offset="10%, 60%">
+                <div class="c-cascade_inner">
+                                            <p class="c-cascade_item || c-heading -h2" style="--item-index: 0">
+                            <span class="c-cascade_line">
+                                <span class="c-cascade_word">Locomotive®</span>
+                            </span>
+                            <span class="c-cascade_line">
+                                <span class="c-cascade_word">Scroll</span>
+                            </span>
+                        </p>
+                                            <p class="c-cascade_item || c-heading -h2" style="--item-index: 1">
+                            <span class="c-cascade_line">
+                                <span class="c-cascade_word">Locomotive®</span>
+                            </span>
+                            <span class="c-cascade_line">
+                                <span class="c-cascade_word">Scroll</span>
+                            </span>
+                        </p>
+                                            <p class="c-cascade_item || c-heading -h2" style="--item-index: 2">
+                            <span class="c-cascade_line">
+                                <span class="c-cascade_word">Locomotive®</span>
+                            </span>
+                            <span class="c-cascade_line">
+                                <span class="c-cascade_word">Scroll</span>
+                            </span>
+                        </p>
+                                            <p class="c-cascade_item || c-heading -h2" style="--item-index: 3">
+                            <span class="c-cascade_line">
+                                <span class="c-cascade_word">Locomotive®</span>
+                            </span>
+                            <span class="c-cascade_line">
+                                <span class="c-cascade_word">Scroll</span>
+                            </span>
+                        </p>
+                                            <p class="c-cascade_item || c-heading -h2" style="--item-index: 4">
+                            <span class="c-cascade_line">
+                                <span class="c-cascade_word">Locomotive®</span>
+                            </span>
+                            <span class="c-cascade_line">
+                                <span class="c-cascade_word">Scroll</span>
+                            </span>
+                        </p>
+                                            <p class="c-cascade_item || c-heading -h2" style="--item-index: 5">
+                            <span class="c-cascade_line">
+                                <span class="c-cascade_word">Locomotive®</span>
+                            </span>
+                            <span class="c-cascade_line">
+                                <span class="c-cascade_word">Scroll</span>
+                            </span>
+                        </p>
+                                            <p class="c-cascade_item || c-heading -h2" style="--item-index: 6">
+                            <span class="c-cascade_line">
+                                <span class="c-cascade_word">Locomotive®</span>
+                            </span>
+                            <span class="c-cascade_line">
+                                <span class="c-cascade_word">Scroll</span>
+                            </span>
+                        </p>
+                                            <p class="c-cascade_item || c-heading -h2" style="--item-index: 7">
+                            <span class="c-cascade_line">
+                                <span class="c-cascade_word">Locomotive®</span>
+                            </span>
+                            <span class="c-cascade_line">
+                                <span class="c-cascade_word">Scroll</span>
+                            </span>
+                        </p>
+                                    </div>
+            </div>
+            <p class="c-cascade_glyph || u-glyph">👀</p>
+        </div>
+    </div>
+
+
+
+</section>
+    <section class="u-relative || u-clipped || u-padding-bottom-2xl" data-theme="blue">
+
+    <div
+        class="c-header-theme-toggler"
+        data-scroll
+        data-scroll-repeat
+        data-scroll-call="changeHeaderTheme"
+        data-scroll-offset="100%"
+    ></div>
+
+    <h2 class="c-heading-serif -large || c-section-heading || u-padding-bottom-3xl u-padding-top-md">
+    <span class="c-section-heading_line">
+        <span class="c-section-heading_word">
+            Built-in
+        </span>
+    </span>
+    <span class="c-section-heading_line">
+        <span class="c-section-heading_word">
+            Tools
+        </span>
+
+                    <span class="c-text -body-medium || c-section-heading_label -left">
+                <span class="u-glyph">🔴</span>Work faster
+            </span>
+        
+                    <span class="c-text -body-medium || c-section-heading_label -right">
+                Work smarter<span class="u-glyph">🔴</span>
+            </span>
+        
+    </span>
+</h2>
+
+    <div class="c-tool -inview" data-scroll data-scroll-offset="5%">
+        <div class="o-container">
+            <div class="c-tool_head">
+                <span class="c-tool_index">01</span>
+                <span class="c-tool_label">In-view detection</span>
+                <span class="c-tool_description">Add classes, trigger callbacks, or fire custom events when elements enter the viewport. Built on Intersection Observer for native performance.</span>
+                <h2 class="c-tool_title || c-heading -h2">
+                    In-view detection
+                </h2>
+            </div>
+        </div>
+
+        <div class="c-tool_playground" style="--container-ratio: 7/5">
+            <div class="c-tool_shape -first" data-scroll data-scroll-offset="10%" data-scroll-repeat>
+                <div class="c-tool_shape_inner" data-scroll data-scroll-speed="0.01" data-scroll-css-progress>
+                    
+
+
+
+
+    <span class="o-icon c-tool_shape_svg ">
+        <svg class="svg-inview-01" focusable="false" aria-hidden="true">
+            <use xlink:href="assets/images/sprite.svg?v=1767993722287#inview-01"></use>
+        </svg>
+    </span>
+                </div>
+            </div>
+            <div class="c-tool_shape -second" data-scroll data-scroll-offset="30%" data-scroll-repeat>
+                <div class="c-tool_shape_inner" data-scroll data-scroll-speed="0.1">
+                    
+
+
+
+
+    <span class="o-icon c-tool_shape_svg ">
+        <svg class="svg-inview-02" focusable="false" aria-hidden="true">
+            <use xlink:href="assets/images/sprite.svg?v=1767993722287#inview-02"></use>
+        </svg>
+    </span>
+                </div>
+            </div>
+            <div class="c-tool_shape -third" data-scroll data-scroll-offset="25%" data-scroll-repeat>
+                <div class="c-tool_shape_inner" data-scroll data-scroll-speed="0.02">
+                    
+
+
+
+
+    <span class="o-icon c-tool_shape_svg ">
+        <svg class="svg-inview-03" focusable="false" aria-hidden="true">
+            <use xlink:href="assets/images/sprite.svg?v=1767993722287#inview-03"></use>
+        </svg>
+    </span>
+                </div>
+            </div>
+            <div class="c-tool_shape -fourth" data-scroll data-scroll-offset="45%" data-scroll-repeat>
+                <div class="c-tool_shape_inner" data-scroll data-scroll-speed="0.05">
+                    
+
+
+
+
+    <span class="o-icon c-tool_shape_svg ">
+        <svg class="svg-inview-04" focusable="false" aria-hidden="true">
+            <use xlink:href="assets/images/sprite.svg?v=1767993722287#inview-04"></use>
+        </svg>
+    </span>
+                </div>
+            </div>
+            <div class="c-tool_shape -fifth" data-scroll data-scroll-offset="20%" data-scroll-repeat>
+                <div class="c-tool_shape_inner" data-scroll data-scroll-speed="0.15" data-scroll-css-progress>
+                    
+
+
+
+
+    <span class="o-icon c-tool_shape_svg ">
+        <svg class="svg-inview-05" focusable="false" aria-hidden="true">
+            <use xlink:href="assets/images/sprite.svg?v=1767993722287#inview-05"></use>
+        </svg>
+    </span>
+                </div>
+            </div>
+            <div class="c-tool_shape -sixth" data-scroll data-scroll-offset="60%" data-scroll-repeat>
+                <div class="c-tool_shape_inner" data-scroll data-scroll-speed="0.05">
+                    
+
+
+
+
+    <span class="o-icon c-tool_shape_svg ">
+        <svg class="svg-inview-06" focusable="false" aria-hidden="true">
+            <use xlink:href="assets/images/sprite.svg?v=1767993722287#inview-06"></use>
+        </svg>
+    </span>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <div class="c-tool -progress" data-scroll data-scroll-offset="5%">
+        <div class="o-container">
+            <div class="c-tool_head">
+                <span class="c-tool_index">02</span>
+                <span class="c-tool_label">Progress tracking</span>
+                <span class="c-tool_description">Get real-time scroll progress (0-1) as CSS variables or JavaScript events. Perfect for progress bars, scroll-driven animations, or custom interactions.</span>
+                <h2 class="c-tool_title || c-heading -h2">
+                    Progress tracking
+                </h2>
+            </div>
+        </div>
+
+        <div class="c-tool_playground" style="--container-ratio: 12/5">
+            <div class="c-tool_shape -first" style="--index: -2" data-scroll data-scroll-css-progress>
+                <div class="c-tool_shape_inner">
+                    
+
+
+
+
+    <span class="o-icon c-tool_shape_svg ">
+        <svg class="svg-progress-01" focusable="false" aria-hidden="true">
+            <use xlink:href="assets/images/sprite.svg?v=1767993722287#progress-01"></use>
+        </svg>
+    </span>
+                </div>
+            </div>
+            <div class="c-tool_shape -second" style="--index: -1" data-scroll data-scroll-css-progress>
+                <div class="c-tool_shape_inner">
+                    
+
+
+
+
+    <span class="o-icon c-tool_shape_svg ">
+        <svg class="svg-progress-02" focusable="false" aria-hidden="true">
+            <use xlink:href="assets/images/sprite.svg?v=1767993722287#progress-02"></use>
+        </svg>
+    </span>
+                </div>
+            </div>
+            <div class="c-tool_shape -third" style="--index: 0" data-scroll data-scroll-css-progress>
+                <div class="c-tool_shape_inner">
+                    
+
+
+
+
+    <span class="o-icon c-tool_shape_svg ">
+        <svg class="svg-progress-03" focusable="false" aria-hidden="true">
+            <use xlink:href="assets/images/sprite.svg?v=1767993722287#progress-03"></use>
+        </svg>
+    </span>
+                </div>
+            </div>
+            <div class="c-tool_shape -fourth" style="--index: 1" data-scroll data-scroll-css-progress>
+                <div class="c-tool_shape_inner">
+                    
+
+
+
+
+    <span class="o-icon c-tool_shape_svg ">
+        <svg class="svg-progress-04" focusable="false" aria-hidden="true">
+            <use xlink:href="assets/images/sprite.svg?v=1767993722287#progress-04"></use>
+        </svg>
+    </span>
+                </div>
+            </div>
+            <div class="c-tool_shape -fifth" style="--index: 2" data-scroll data-scroll-css-progress>
+                <div class="c-tool_shape_inner">
+                    
+
+
+
+
+    <span class="o-icon c-tool_shape_svg ">
+        <svg class="svg-progress-05" focusable="false" aria-hidden="true">
+            <use xlink:href="assets/images/sprite.svg?v=1767993722287#progress-05"></use>
+        </svg>
+    </span>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <div class="c-tool -parallax" data-scroll data-scroll-offset="5%">
+        <div class="o-container">
+            <div class="c-tool_head">
+                <span class="c-tool_index">02</span>
+                <span class="c-tool_label">Parallax effects</span>
+                <span class="c-tool_description">Create smooth parallax effects instantly with a single data-scroll-speed attribute. No complex setup, no math, just add a number and it works.</span>
+                <h2 class="c-tool_title || c-heading -h2">
+                    Parallax effects
+                </h2>
+            </div>
+        </div>
+
+        <div class="c-tool_playground" style="--container-ratio: 10/5">
+            <div class="c-tool_shape -first">
+                <div class="c-tool_shape_inner" data-scroll data-scroll-speed="0.04">
+                    
+
+
+
+
+    <span class="o-icon c-tool_shape_svg ">
+        <svg class="svg-parallax-01" focusable="false" aria-hidden="true">
+            <use xlink:href="assets/images/sprite.svg?v=1767993722287#parallax-01"></use>
+        </svg>
+    </span>
+                </div>
+            </div>
+            <div class="c-tool_shape -second">
+                <div class="c-tool_shape_inner" data-scroll data-scroll-speed="0.2">
+                    
+
+
+
+
+    <span class="o-icon c-tool_shape_svg ">
+        <svg class="svg-parallax-02" focusable="false" aria-hidden="true">
+            <use xlink:href="assets/images/sprite.svg?v=1767993722287#parallax-02"></use>
+        </svg>
+    </span>
+                </div>
+            </div>
+            <div class="c-tool_shape -third">
+                <div class="c-tool_shape_inner" data-scroll data-scroll-speed="0.3">
+                    
+
+
+
+
+    <span class="o-icon c-tool_shape_svg ">
+        <svg class="svg-parallax-03" focusable="false" aria-hidden="true">
+            <use xlink:href="assets/images/sprite.svg?v=1767993722287#parallax-03"></use>
+        </svg>
+    </span>
+                </div>
+            </div>
+            <div class="c-tool_shape -fourth">
+                <div class="c-tool_shape_inner" data-scroll data-scroll-speed="0.15">
+                    
+
+
+
+
+    <span class="o-icon c-tool_shape_svg ">
+        <svg class="svg-parallax-04" focusable="false" aria-hidden="true">
+            <use xlink:href="assets/images/sprite.svg?v=1767993722287#parallax-04"></use>
+        </svg>
+    </span>
+                </div>
+            </div>
+            <div class="c-tool_shape -fifth">
+                <div class="c-tool_shape_inner" data-scroll data-scroll-speed="0.25">
+                    
+
+
+
+
+    <span class="o-icon c-tool_shape_svg ">
+        <svg class="svg-parallax-05" focusable="false" aria-hidden="true">
+            <use xlink:href="assets/images/sprite.svg?v=1767993722287#parallax-05"></use>
+        </svg>
+    </span>
+                </div>
+            </div>
+        </div>
+        </div>
+    </div>
+</section>
+    <section class="u-relative || o-container || u-clipped" data-theme="black" id="features">
+
+    <div
+        class="c-header-theme-toggler"
+        data-scroll
+        data-scroll-repeat
+        data-scroll-call="changeHeaderTheme"
+        data-scroll-offset="100%"
+    ></div>
+    
+    <h2 class="c-heading-serif -large || c-section-heading || u-padding-bottom-3xl u-padding-top-md">
+    <span class="c-section-heading_line">
+        <span class="c-section-heading_word">
+            Features
+        </span>
+    </span>
+    <span class="c-section-heading_line">
+        <span class="c-section-heading_word">
+            
+        </span>
+
+        
+        
+    </span>
+</h2>
+
+    <div class="o-grid -col-2 -gutters">
+        <div class="o-grid_item u-gc-2/3">
+            <div class="u-max-w300 || c-text -body-medium || fadeInText -black">
+                <span class="u-glyph">⛵</span>
+                <p class="u-margin-top-sm" data-module-fade-in-text data-scroll data-scroll-offset="0, 25%" data-scroll-event-progress="fadeinTextProgress">Locomotive Scroll is a thin, opinionated wrapper around Lenis. You get all of Lenis's power plus our detection and animation layer.</p>
+            </div>
+        </div>
+    </div>
+    
+    <div class="c-features-grid">
+        <div class="c-features-grid_container">
+            <div class="c-features-grid_inner">
+
+                <div class="c-features-grid_cell -lenis -link">
+                    <div class="c-features-grid_cell_ratio">
+                        <a href="https://lenis.darkroom.engineering/" class="c-features-grid_link" target="_blank">
+                            <span class="u-screen-reader-text">Visit Lenis website</span>
+                            <span class="c-features-grid_icon-container">
+                                
+
+
+
+
+    <span class="o-icon  c-features-grid_icon">
+        <svg class="svg-arrow-external" focusable="false" aria-hidden="true">
+            <use xlink:href="assets/images/sprite.svg?v=1767993722287#arrow-external"></use>
+        </svg>
+    </span>
+                                
+
+
+
+
+    <span class="o-icon  c-features-grid_icon">
+        <svg class="svg-arrow-external" focusable="false" aria-hidden="true">
+            <use xlink:href="assets/images/sprite.svg?v=1767993722287#arrow-external"></use>
+        </svg>
+    </span>
+                            </span>
+                        </a>
+                        <div class="c-features-grid_cell_inner">
+                            <span class="c-features-grid_title || c-text -body-regular" aria-hidden="true">
+                                <span class="c-features-grid_title_label">Lenis®</span>
+                                <span class="c-features-grid_title_label">Lenis®</span>
+                            </span>
+                            
+
+
+
+
+    <span class="o-icon  c-features-grid_logo">
+        <svg class="svg-logo-lenis" focusable="false" aria-hidden="true">
+            <use xlink:href="assets/images/sprite.svg?v=1767993722287#logo-lenis"></use>
+        </svg>
+    </span>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="c-features-grid_cell -locomotive -link">
+                    <div class="c-features-grid_cell_ratio">
+                        <a href="https://lenis.darkroom.engineering/" class="c-features-grid_link" target="_blank">
+                            <span class="u-screen-reader-text">Visit Locomotive website</span>
+                            <span class="c-features-grid_icon-container">
+                                
+
+
+
+
+    <span class="o-icon  c-features-grid_icon">
+        <svg class="svg-arrow-external" focusable="false" aria-hidden="true">
+            <use xlink:href="assets/images/sprite.svg?v=1767993722287#arrow-external"></use>
+        </svg>
+    </span>
+                                
+
+
+
+
+    <span class="o-icon  c-features-grid_icon">
+        <svg class="svg-arrow-external" focusable="false" aria-hidden="true">
+            <use xlink:href="assets/images/sprite.svg?v=1767993722287#arrow-external"></use>
+        </svg>
+    </span>
+                            </span>
+                        </a>
+                        <div class="c-features-grid_cell_inner">
+                            <span class="c-features-grid_title || c-text -body-regular" aria-hidden="true">
+                                <span class="c-features-grid_title_label">Locomotive®</span>
+                                <span class="c-features-grid_title_label">Locomotive®</span>
+                            </span>
+                            
+
+
+
+
+    <span class="o-icon  c-features-grid_logo">
+        <svg class="svg-logo-locomotive" focusable="false" aria-hidden="true">
+            <use xlink:href="assets/images/sprite.svg?v=1767993722287#logo-locomotive"></use>
+        </svg>
+    </span>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="c-features-grid_cell -scrollbar">
+                    <div class="c-features-grid_cell_ratio">
+                        <div class="c-features-grid_cell_inner">
+                            <span class="c-features-grid_index || c-text -label-small">01</span>
+                            <p class="c-features-grid_title || c-heading -h3">Native dddscrollbar</p>
+                            <p class="c-features-grid_desc || c-text -body-regular">Real browser scrollbar. No fake alternatives. Accessible, performant, and familiar to users.</p>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="c-features-grid_cell -normalized">
+                    <div class="c-features-grid_cell_ratio">
+                        <div class="c-features-grid_cell_inner">
+                            <span class="c-features-grid_index || c-text -label-small">02</span>
+                            <p class="c-features-grid_title || c-heading -h3">Smooth easing</p>
+                            <p class="c-features-grid_desc || c-text -body-regular">Configurable lerp, duration, and custom easing functions thanks to Lenis options.</p>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="c-features-grid_cell -sticky">
+                    <div class="c-features-grid_cell_ratio">
+                        <div class="c-features-grid_cell_inner">
+                            <span class="c-features-grid_index || c-text -label-small">03</span>
+                            <p class="c-features-grid_title || c-heading -h3">CSS Sticky</p>
+                            <p class="c-features-grid_desc || c-text -body-regular">Works perfectly with position: sticky. No conflicts, no workarounds.</p>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="c-features-grid_cell -io" data-scroll data-scroll-offset="60%" data-scroll-repeat>
+                    <div class="c-features-grid_cell_ratio">
+                        <div class="c-features-grid_cell_inner">
+                            <span class="c-features-grid_index || c-text -label-small">04</span>
+                            <p class="c-features-grid_title || c-heading -h3">Intersection Observer API</p>
+                            <p class="c-features-grid_desc || c-text -body-regular">Browser-native detection. No polling, no performance hits, just efficient viewport tracking.</p>
+                        </div>
+                    </div>
+                </div>
+
+                <button type="button" data-scroll data-scroll-to data-scroll-to-href="#features" data-scroll-to-offset="-40" data-scroll-to-duration="1" class="c-features-grid_cell -scroll-to || u-hover" data-module-hover-shuffle data-hover-shuffle="children">
+                    <span class="c-features-grid_cell_ratio">
+                        <span class="c-features-grid_cell_inner">
+                            <span class="c-features-grid_index || c-text -label-small">05</span>
+                            <span class="c-features-grid_title || c-heading -h3 || u-hover-underline" data-hover-shuffle-child>Scroll to</span>
+                            <span class="c-features-grid_desc || c-text -body-regular">Programmatic scrolling to any element, selector, or pixel value via Lenis. Supports offset, duration, and custom easing.</span>
+                        </span>
+                    </span>
+                </button>
+
+                <div class="c-features-grid_cell -direction">
+                    <div class="c-features-grid_cell_ratio">
+                        <div class="c-features-grid_cell_inner">
+                            <span class="c-features-grid_index || c-text -label-small">06</span>
+                            <div class="c-features_direction_title">
+                                <p class="c-features-grid_title || c-heading -h3">Scroll direction</p>
+                                <div class="c-heading -h3 || c-features_direction_arrows">
+                                    <span>↓</span>
+                                    <span>↑</span>
+                                </div>
+                            </div>
+                            <p class="c-features-grid_desc || c-text -body-regular">Track direction changes in real-time thanks to Lenis. Perfect for hiding/showing headers or reversing animations.</p>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="c-features-grid_cell -custom-easing">
+                    <div class="c-features-grid_cell_ratio">
+                        <div class="c-features-grid_cell_inner">
+                            <span class="c-features-grid_index || c-text -label-small">07</span>
+                            <p class="c-features-grid_title || c-heading -h3">No layout shifts</p>
+                            <p class="c-features-grid_desc || c-text -body-regular">No more greedy CSS transforms breaking your layouts. Plays nice with position: sticky, fixed headers, and existing CSS.</p>
+                        </div>
+                    </div>
+                </div>
+
+            </div>
+        </div>
+    </div>
+</section>
+    <section class="u-relative || u-padding-bottom-2xl" data-theme="white" id="showcase">
+
+    <div
+        class="c-header-theme-toggler"
+        data-scroll
+        data-scroll-repeat
+        data-scroll-call="changeHeaderTheme"
+        data-scroll-offset="100%"
+    ></div>
+
+    <div class="c-sticky-heading" data-scroll data-scroll-offset="100%, 100%" data-scroll-css-progress>
+        
+        <div class="c-sticky-heading_inner || o-container">
+            <div class="c-sticky-heading_text">
+                <div class="c-sticky-heading_description || fadeInText -white">
+                    <div class="c-text -body-medium"> 
+                        <span class="u-glyph">⛵</span>
+                        <p class="u-margin-top-2xs"  data-module-fade-in-text data-scroll data-scroll-offset="0, 25%"  data-scroll-event-progress="fadeinTextProgress">
+                            Real projects built with Locomotive Scroll by leading studios and developers.
+                        </p>
+                    </div>
+                </div>
+                <h2 class="c-sticky-heading_title">
+                    Showcase
+                </h2>
+            </div>
+        </div>
+    </div>
+
+    <div class="o-container || u-margin-top-sm">
+        
+
+<ul class="c-list -showcase " data-scroll>
+    <div class="c-list_inner">
+                    <li class="c-list_item" style="--index: 0">
+                                    <a class="c-list_item_inner u-hover-underline" href=https://mission.dev target="_blank" data-module-hover-shuffle data-hover-shuffle="children">
+                        <span class="c-list_title || c-text -body-regular" data-hover-shuffle-child>Mission.dev</span>
+                        <span class="c-list_description || c-text -body-regular" data-hover-shuffle-child>Locomotive</span>
+                        <span class="c-list-anchor">↗</span>
+                    </a>
+                            </li>
+                    <li class="c-list_item" style="--index: 1">
+                                    <a class="c-list_item_inner u-hover-underline" href=https://tympanus.net/codrops target="_blank" data-module-hover-shuffle data-hover-shuffle="children">
+                        <span class="c-list_title || c-text -body-regular" data-hover-shuffle-child>Scroll Animation Ideas</span>
+                        <span class="c-list_description || c-text -body-regular" data-hover-shuffle-child>Codrops</span>
+                        <span class="c-list-anchor">↗</span>
+                    </a>
+                            </li>
+                    <li class="c-list_item" style="--index: 2">
+                                    <a class="c-list_item_inner u-hover-underline" href=https://locomotive.ca target="_blank" data-module-hover-shuffle data-hover-shuffle="children">
+                        <span class="c-list_title || c-text -body-regular" data-hover-shuffle-child>Locomotive</span>
+                        <span class="c-list_description || c-text -body-regular" data-hover-shuffle-child>Locomotive</span>
+                        <span class="c-list-anchor">↗</span>
+                    </a>
+                            </li>
+                    <li class="c-list_item" style="--index: 3">
+                                    <a class="c-list_item_inner u-hover-underline" href=https://cira.ca target="_blank" data-module-hover-shuffle data-hover-shuffle="children">
+                        <span class="c-list_title || c-text -body-regular" data-hover-shuffle-child>Cira</span>
+                        <span class="c-list_description || c-text -body-regular" data-hover-shuffle-child>Locomotive</span>
+                        <span class="c-list-anchor">↗</span>
+                    </a>
+                            </li>
+                    <li class="c-list_item" style="--index: 4">
+                                    <a class="c-list_item_inner u-hover-underline" href=https://billyclub.com target="_blank" data-module-hover-shuffle data-hover-shuffle="children">
+                        <span class="c-list_title || c-text -body-regular" data-hover-shuffle-child>Billyclub</span>
+                        <span class="c-list_description || c-text -body-regular" data-hover-shuffle-child>P-L & Deven</span>
+                        <span class="c-list-anchor">↗</span>
+                    </a>
+                            </li>
+                    <li class="c-list_item" style="--index: 5">
+                                    <a class="c-list_item_inner u-hover-underline" href=https://mission.dev target="_blank" data-module-hover-shuffle data-hover-shuffle="children">
+                        <span class="c-list_title || c-text -body-regular" data-hover-shuffle-child>Mission.dev</span>
+                        <span class="c-list_description || c-text -body-regular" data-hover-shuffle-child>Locomotive</span>
+                        <span class="c-list-anchor">↗</span>
+                    </a>
+                            </li>
+                    <li class="c-list_item" style="--index: 6">
+                                    <a class="c-list_item_inner u-hover-underline" href=https://tympanus.net/codrops target="_blank" data-module-hover-shuffle data-hover-shuffle="children">
+                        <span class="c-list_title || c-text -body-regular" data-hover-shuffle-child>Scroll Animation Ideas</span>
+                        <span class="c-list_description || c-text -body-regular" data-hover-shuffle-child>Codrops</span>
+                        <span class="c-list-anchor">↗</span>
+                    </a>
+                            </li>
+                    <li class="c-list_item" style="--index: 7">
+                                    <a class="c-list_item_inner u-hover-underline" href=https://locomotive.ca target="_blank" data-module-hover-shuffle data-hover-shuffle="children">
+                        <span class="c-list_title || c-text -body-regular" data-hover-shuffle-child>Locomotive</span>
+                        <span class="c-list_description || c-text -body-regular" data-hover-shuffle-child>Locomotive</span>
+                        <span class="c-list-anchor">↗</span>
+                    </a>
+                            </li>
+                    <li class="c-list_item" style="--index: 8">
+                                    <a class="c-list_item_inner u-hover-underline" href=https://cira.design target="_blank" data-module-hover-shuffle data-hover-shuffle="children">
+                        <span class="c-list_title || c-text -body-regular" data-hover-shuffle-child>Cira</span>
+                        <span class="c-list_description || c-text -body-regular" data-hover-shuffle-child>Locomotive</span>
+                        <span class="c-list-anchor">↗</span>
+                    </a>
+                            </li>
+            </div>
+</ul>    </div>
+</section>
+
+
+                                                            <footer class="u-relative || c-footer || o-container || u-padding-top-sm" data-theme="blue">
+
+    <div
+        class="c-header-theme-toggler"
+        data-scroll
+        data-scroll-repeat
+        data-scroll-call="changeHeaderTheme"
+        data-scroll-offset="100%"
+    ></div>
+
+    <div aria-hidden data-module-randomize class="c-footer_attributes || o-grid -cols">
+        <div data-scroll data-scroll-position="end" data-scroll-call="randomize">
+            <p>npm</p>
+            <p>npm install</p>
+            <p>npm install locomotive</p>
+            <p>npm install locomotive-scroll</p>
+            <p>npm</p>
+        </div>
+        <div data-scroll data-scroll-position="end" data-scroll-call="randomize">
+            <p>locomotive</p>
+            <p>locomotive-scroll</p>
+            <p>locomotive-scroll v5.x</p>
+            <p>locomotive-scroll v5.x</p>
+            <p>locomotive-scroll</p>
+            <p>locomotive</p>
+        </div>
+        <div data-scroll data-scroll-position="end" data-scroll-call="randomize">
+            <p>data</p>
+            <p>data-scroll</p>
+            <p>data-scroll-speed</p>
+            <p>data-scroll-class</p>
+            <p>data-scroll-repeat</p>
+        </div>
+        <div data-scroll data-scroll-position="end" data-scroll-call="randomize">
+            <p>data</p>
+            <p>data-scroll</p>
+            <p>data-scroll-position</p>
+            <p>data-scroll-call</p>
+            <p>data-scroll-event-progress</p>
+        </div>
+    </div>
+
+    <div class="o-grid -cols u-padding-top-lg">
+        <h5 
+            data-module-mask-lines 
+            data-scroll
+            data-scroll-event-progress="progressEvent"
+            data-scroll-position="start, end" 
+            data-scroll-offset="100px, 75%"
+            class="c-footer_thanks || c-hero_title || c-heading -h1">
+            We hope that you enjoy our library.
+        </h5>
+    </div>
+
+
+    <div class="c-hero_main || -footer || u-padding-bottom-lg">
+        <div class="c-hero_heading">
+            <h1 class="c-hero_title || c-heading -h1" data-scroll data-scroll-position="end" data-scroll-repeat>
+                <span class="c-hero_line" style="--index: 0">
+                    <span class="u-glyph || c-hero_word || -footer">🟦🔁</span>
+                </span>
+                <span class="c-hero_line" style="--index: 1">
+                    <span class="c-hero_word || -footer">Locomotive®</span>
+                </span>
+                <span class="c-hero_line" style="--index: 2">
+                    <span class="c-hero_word || -footer">Scroll</span>
+                </span>
+            </h1>
+        </div>
+        <nav class="c-hero_nav">
+            <ul class="c-hero_links">
+                <li class="c-hero_links_item">
+                    
+
+
+
+
+    
+
+
+
+
+
+
+<a
+    class="c-button"
+    href="https://github.com/locomotivemtl/locomotive-scroll"            >
+                    <span
+                class="c-button_wrap"
+                            >
+                <span class="c-button_inner">
+                                            
+
+
+
+
+    <span class="o-icon  c-button_icon">
+        <svg class="svg-github" focusable="false" aria-hidden="true">
+            <use xlink:href="assets/images/sprite.svg?v=1767993722287#github"></use>
+        </svg>
+    </span>
+                    
+                                            <span class="c-button_label">
+                            View on Github
+                        </span>
+                                    </span>
+            </span>
+                    <span
+                class="c-button_wrap"
+                                    aria-hidden="true"
+                            >
+                <span class="c-button_inner">
+                                            
+
+
+
+
+    <span class="o-icon  c-button_icon">
+        <svg class="svg-github" focusable="false" aria-hidden="true">
+            <use xlink:href="assets/images/sprite.svg?v=1767993722287#github"></use>
+        </svg>
+    </span>
+                    
+                                            <span class="c-button_label">
+                            View on Github
+                        </span>
+                                    </span>
+            </span>
+        </a>
+                </li>
+                <li class="c-hero_links_item">
+                    
+
+
+
+
+    
+
+    
+
+
+
+
+<a
+    class="c-button -stroke"
+    href="https://scroll.locomotive.ca/docs/#/"            >
+                    <span
+                class="c-button_wrap"
+                            >
+                <span class="c-button_inner">
+                                            
+
+
+
+
+    <span class="o-icon  c-button_icon">
+        <svg class="svg-doc" focusable="false" aria-hidden="true">
+            <use xlink:href="assets/images/sprite.svg?v=1767993722287#doc"></use>
+        </svg>
+    </span>
+                    
+                                            <span class="c-button_label">
+                            Read documentation
+                        </span>
+                                    </span>
+            </span>
+                    <span
+                class="c-button_wrap"
+                                    aria-hidden="true"
+                            >
+                <span class="c-button_inner">
+                                            
+
+
+
+
+    <span class="o-icon  c-button_icon">
+        <svg class="svg-doc" focusable="false" aria-hidden="true">
+            <use xlink:href="assets/images/sprite.svg?v=1767993722287#doc"></use>
+        </svg>
+    </span>
+                    
+                                            <span class="c-button_label">
+                            Read documentation
+                        </span>
+                                    </span>
+            </span>
+        </a>
+                </li>
+            </ul>
+        </nav>
+    </div>
+
+</footer>
+                                                    </main>
+
+                                    </div>
+                    </div>
+
+        <script nomodule src="https://cdnjs.cloudflare.com/ajax/libs/babel-polyfill/7.6.0/polyfill.min.js" crossorigin="anonymous"></script>
+        <script nomodule src="https://polyfill.io/v3/polyfill.min.js?features=Element.prototype.remove%2CElement.prototype.append%2Cfetch%2CCustomEvent%2CElement.prototype.matches%2CNodeList.prototype.forEach%2CAbortController" crossorigin="anonymous"></script>
+
+        <script src="assets/scripts/vendors.js?v=1767993722287" defer></script>
+        <script src="assets/scripts/app.js?v=1767993722287" defer></script>
+    </body>
+</html>

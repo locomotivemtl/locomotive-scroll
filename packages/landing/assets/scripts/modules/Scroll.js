@@ -8,6 +8,7 @@ export default class Scroll extends module {
 
         // Binding
         this.onScrollBind = this.onScroll.bind(this)
+        this.changeHeaderThemeBind = this.changeHeaderTheme.bind(this)
     }
 
     init() {
@@ -21,6 +22,25 @@ export default class Scroll extends module {
             history.scrollRestoration = 'manual'
             window.scrollTo(0, 0)
         }
+
+        // Bind events
+        this.bindEvents();
+    }
+
+    destroy() {
+        this.unbindEvents();
+        this.scroll.destroy();
+    }
+
+     ///////////////
+    // Events
+    ///////////////
+    bindEvents() {
+        window.addEventListener("changeHeaderTheme", this.changeHeaderThemeBind);
+    }
+
+    unbindEvents() {
+        window.removeEventListener("changeHeaderTheme", this.changeHeaderThemeBind);
     }
 
     ///////////////
@@ -65,7 +85,8 @@ export default class Scroll extends module {
     }
 
     changeHeaderTheme(args) {
-        const { target, way, from } = args
+        const { target, way } = args.detail
+        
         if (way == 'enter') {
             const theme = target?.parentNode?.getAttribute('data-theme')
             theme && $html.setAttribute('data-header-theme', theme)
@@ -88,9 +109,5 @@ export default class Scroll extends module {
      */
     removeScrollElements($oldContainer) {
         this.scroll?.removeScrollElements($oldContainer);
-    }
-
-    destroy() {
-        this.scroll.destroy();
     }
 }

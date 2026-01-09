@@ -50,11 +50,16 @@
     margin-left: calc(100vw - 13.75rem - var(--grid-margin) * 2);
     max-width: 13.75rem;
     margin-bottom: spacingClamp('sm');
+
     @media (min-width: $from-medium) {
         max-width: 17.5rem;
-        margin-bottom: calc(-1 * spacingClamp('xl'));
         margin-left: 50vw;
+        font-size: calc(#{math.div(870, 1740)} * 100 * var(--vw, 1vw));
+        margin-bottom: -.075em;
     }
+
+    
+    
 }
 
 .c-sticky_scroll {

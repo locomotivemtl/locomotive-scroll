@@ -101,7 +101,6 @@ export default class extends module {
             // Actually shuffle each "word"
             for(let i=0;i<words.length;i++) {
                 const chars = [...words[i].matchAll(SHUFFLE_PATTERN)].map(item => item[0])
-                // console.log(chars);
                 words[i] = shuffleFn(chars)
             }
             // Output result

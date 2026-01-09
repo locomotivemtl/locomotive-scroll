@@ -5,18 +5,42 @@
 
 @use "../core" as *;
 .c-tool {
-    position: relative;
-    aspect-ratio: var(--container-ratio);
+    position: relative;    
     background-color: color(blue);
-    @media (max-width: $to-medium) {
-        --container-ratio: 1;
-    }
+    overflow: hidden;
 
-    @media (min-width: $from-medium) {
-        --container-ratio: 7/5;
-    }
-    @media (max-aspect-ratio: 1 / 1) {
-        // --container-ratio: 1.33;
+    &.-parallax {
+        padding-bottom: spacingClamp('sm');
+
+        &:before {
+            content: "";
+            position: absolute;
+            bottom: 0;
+            left: 0;
+            width: 100%;
+            height: spacingClamp('xl');
+            background-image: linear-gradient(
+                to bottom,
+                hsla(236, 85%, 53%, 0) 0%,
+                hsla(236, 85%, 53%, 0.013) 8.1%,
+                hsla(236, 85%, 53%, 0.049) 15.5%,
+                hsla(236, 85%, 53%, 0.104) 22.5%,
+                hsla(236, 85%, 53%, 0.175) 29%,
+                hsla(236, 85%, 53%, 0.259) 35.3%,
+                hsla(236, 85%, 53%, 0.352) 41.2%,
+                hsla(236, 85%, 53%, 0.45) 47.1%,
+                hsla(236, 85%, 53%, 0.55) 52.9%,
+                hsla(236, 85%, 53%, 0.648) 58.8%,
+                hsla(236, 85%, 53%, 0.741) 64.7%,
+                hsla(236, 85%, 53%, 0.825) 71%,
+                hsla(236, 85%, 53%, 0.896) 77.5%,
+                hsla(236, 85%, 53%, 0.951) 84.5%,
+                hsla(236, 85%, 53%, 0.987) 91.9%,
+                hsla(236, 85%, 53%, 1.00) 100%
+            );
+
+            z-index: 1;
+        }
     }
 }
 
@@ -102,7 +126,7 @@
 }
 
 .c-tool_playground {
-    position: absolute;
+    /* position: absolute;
     top: 0;
     left: calc(-1 * var(--grid-margin));
     width: calc(100% + 2 * var(--grid-margin));
@@ -115,7 +139,11 @@
     
     @media (max-width: $to-small) {
         margin-top: 25%;
-    }
+    } */
+
+    position: relative;
+    aspect-ratio: var(--container-ratio);   
+    width: 100%;
 }
 
 .c-tool_shape {
@@ -181,29 +209,29 @@
     // Parallax
     // ========================================
     .c-tool.-parallax & {
-        left: calc(var(--left, 0) / 1440 * 100%);
-        top: calc(var(--top, 0) / (1 / (var(--container-ratio)) * 1440) * 100%);
+        left: calc(var(--left, 0));
+        top: calc(var(--top, 0));
         transform: translateX(-50%) translateY(-50%);
 
         &.-first {
-            --top: 550;
-            --left: 240;
+            --top: 40%;
+            --left: 16%;
         }
         &.-second {
-            --top: 705;
-            --left: 480;
+            --top: 55%;
+            --left: 34%;
         }
         &.-third {
-            --top: 480;
-            --left: 715;
+            --top: 30%;
+            --left: 53%;
         }
         &.-fourth {
-            --top: 790;
-            --left: 950;
+            --top: 65%;
+            --left: 68%;
         }
         &.-fifth {
-            --top: 600;
-            --left: 1190;
+            --top: 40%;
+            --left: 86%;
         }
     }
 }

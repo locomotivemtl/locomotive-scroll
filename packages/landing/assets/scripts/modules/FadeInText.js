@@ -17,9 +17,7 @@ export default class extends module {
         this.progress = 0;
         this.metrics = [];
         this.baseColor = getComputedStyle(this.el).getPropertyValue('--color-cta-fadein');
-        this.targetColor = getComputedStyle(this.el).getPropertyValue('--color');
-        console.log(this);
-        
+        this.targetColor = getComputedStyle(this.el).getPropertyValue('--color');        
     }
 
     ///////////////
