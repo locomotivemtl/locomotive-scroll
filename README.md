@@ -7,19 +7,18 @@
 [![npm version](https://img.shields.io/npm/v/locomotive-scroll.svg)](https://www.npmjs.com/package/locomotive-scroll)
 [![npm downloads](https://img.shields.io/npm/dm/locomotive-scroll.svg)](https://www.npmjs.com/package/locomotive-scroll)
 [![bundle size](https://img.shields.io/bundlephobia/minzip/locomotive-scroll)](https://bundlephobia.com/package/locomotive-scroll@beta)
-[![license](https://img.shields.io/npm/l/locomotive-scroll.svg)](https://github.com/locomotivemtl/locomotive-scroll/blob/master/LICENSE)
 
 A lightweight scroll library for modern web experiences. Detection, animation, and smooth scrolling — all in **9.6kB**.
 
 Built on top of [Lenis](https://github.com/darkroomengineering/lenis).
 
-[Documentation](https://scroll.locomotive.ca/docs) · [Examples](https://scroll.locomotive.ca/docs/#/playground)
+[Documentation](https://scroll.locomotive.ca/docs) · [Examples](https://scroll.locomotive.ca/docs/playground)
 
 ---
 
 ## Features
 
-- **Lightweight** — Only 9.6kB gzipped
+- **Lightweight** — Only 9.4kB gzipped
 - **TypeScript First** — Fully typed
 - **Built on Lenis 1.3.17** — Latest stable release with improved performance
 - **Dual Intersection Observers** — Optimized detection for simple triggers vs. continuous animations
@@ -32,7 +31,7 @@ Built on top of [Lenis](https://github.com/darkroomengineering/lenis).
 ## Installation
 
 ```bash
-npm install locomotive-scroll@beta
+npm install locomotive-scroll@5.0.0-rc.1
 ```
 
 ---
@@ -207,7 +206,7 @@ const scroll = new LocomotiveScroll({
 
 **Note:** Resize detection is automatically synchronized with Lenis's internal ResizeObservers, ensuring perfect timing for dimension updates.
 
-[See all options →](https://scroll.locomotive.ca/docs/#/options)
+[See all options →](https://scroll.locomotive.ca/docsoptions)
 
 ### Data Attributes
 
@@ -225,7 +224,7 @@ const scroll = new LocomotiveScroll({
 | `data-scroll-enable-touch-speed` | Enable parallax on mobile |
 | `data-scroll-to` | Click to scroll to target |
 
-[See all attributes →](https://scroll.locomotive.ca/docs/#/attributes)
+[See all attributes →](https://scroll.locomotive.ca/docsattributes)
 
 ---
 
@@ -256,7 +255,7 @@ scroll.resize();
 scroll.destroy();
 ```
 
-[See all methods →](https://scroll.locomotive.ca/docs/#/methods)
+[See all methods →](https://scroll.locomotive.ca/docs/methods)
 
 ---
 
@@ -328,7 +327,6 @@ No more greedy CSS transforms breaking your layouts. Works perfectly with `posit
 
 Locomotive Scroll works on all modern browsers that support:
 - [Intersection Observer API](https://caniuse.com/intersectionobserver)
-- [Resize Observer API](https://caniuse.com/resizeobserver)
 - ES6+
 
 ---
@@ -345,10 +343,13 @@ Locomotive Scroll works on all modern browsers that support:
 
 Projects built with Locomotive Scroll:
 
-- [Mission.dev](https://mission.dev)
-- [Locomotive.ca](https://locomotive.ca)
-
-[More examples →](https://github.com/locomotivemtl/locomotive-scroll#showcase)
+- [Locomotive](https://locomotive.ca/)
+- [Destigmatize](https://2024.destigmatize.ca/)
+- [Scout Motors](https://www.scoutmotors.com/)
+- [Lightship](https://lightshiprv.com/)
+- [Vooban](https://vooban.com/)
+- [Construction Desourdy](https://www.constructiondesourdy.com/)
+- [GKC](https://gkc.ca/)
 
 ---
 

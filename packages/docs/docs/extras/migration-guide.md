@@ -15,7 +15,7 @@ Locomotive Scroll v5 is simpler and more performant than v4, but it requires som
 ### What's New
 
 - **Built on Lenis** — Modern smooth scroll engine instead of Virtual Scroll
-- **Smaller Bundle** — 9.55kB (v5) vs ~12.1kB (v4) gzipped
+- **Smaller Bundle** — 9.4kB (v5) vs ~12.1kB (v4) gzipped
 - **TypeScript First** — Fully typed with better autocomplete
 - **Simplified API** — Fewer options, clearer patterns
 - **Better Performance** — Dual Intersection Observer strategy
@@ -44,7 +44,7 @@ npm install locomotive-scroll@4.1.4
 
 ### v5
 ```bash
-npm install locomotive-scroll
+npm install locomotive-scroll@5.0.0-rc.1
 ```
 
 ---

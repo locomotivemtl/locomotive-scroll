@@ -3,49 +3,39 @@
     "description": "Real projects built with Locomotive Scroll by leading studios and developers.",
     "items": [
         {
-            "title": "Mission.dev",
-            "description": "Locomotive",
-            "url": "https://mission.dev"
-        },
-        {
-            "title": "Scroll Animation Ideas",
-            "description": "Codrops",
-            "url": "https://tympanus.net/codrops"
-        },
-        {
             "title": "Locomotive",
             "description": "Locomotive",
             "url": "https://locomotive.ca"
         },
         {
-            "title": "Cira",
-            "description": "Locomotive",
-            "url": "https://cira.ca"
+            "title": "Destigmatize",
+            "description": "Destigmatize",
+            "url": "https://2024.destigmatize.ca/"
         },
         {
-            "title": "Billyclub",
-            "description": "P-L & Deven",
-            "url": "https://billyclub.com"
+            "title": "Scout Motors",
+            "description": "Scout Motors",
+            "url": "https://scoutmotors.com/"
         },
         {
-            "title": "Mission.dev",
-            "description": "Locomotive",
-            "url": "https://mission.dev"
+            "title": "Lightship",
+            "description": "Lightship",
+            "url": "https://lightshiprv.com/"
         },
         {
-            "title": "Scroll Animation Ideas",
-            "description": "Codrops",
-            "url": "https://tympanus.net/codrops"
+            "title": "Vooban",
+            "description": "Vooban",
+            "url": "https://vooban.com/"
         },
         {
-            "title": "Locomotive",
-            "description": "Locomotive",
-            "url": "https://locomotive.ca"
+            "title": "Construction Desourdy",
+            "description": "Construction Desourdy",
+            "url": "https://constructiondesourdy.com/"
         },
         {
-            "title": "Cira",
-            "description": "Locomotive",
-            "url": "https://cira.design"
+            "title": "GKC",
+            "description": "GKC",
+            "url": "https://gkc.ca/"
         }
     ]
 }

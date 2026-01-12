@@ -139,28 +139,16 @@ $color-grid: 282828;
     pointer-events: auto;
 
     .c-features-grid_cell.-sticky & {
-        position: sticky;
-        top: calc(var(--header-height) + 1px);
-        z-index: 1;
+        @media (min-width: $from-small) {
+            position: sticky;
+            top: calc(var(--header-height) + 1px);
+            z-index: 1;
 
-        &::before {
-            content: "";
-            position: absolute;
-            background-color: var(--color-background);
-            z-index: -1;
-
-            @media (max-width: $to-small) {
-                top: 0;
-                left: 1px;
-                width: calc(100% + 1px);
-                height: calc(100% + 1px);
-                border-top: 1px solid #{'#' + $color-grid};
-                border-right: 1px solid #{'#' + $color-grid};
-                border-bottom: 1px solid #{'#' + $color-grid};
-                border-radius: 0 calc(var(--vw, 1vw) * 2) calc(var(--vw, 1vw) * 2) 0;
-            }
-
-            @media (min-width: $from-small) {
+            &::before {
+                content: "";
+                position: absolute;
+                background-color: var(--color-background);
+                z-index: -1;
                 top: -1px;
                 left: 0px;
                 width: calc(100% + 1px);

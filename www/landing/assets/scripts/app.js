@@ -8044,6 +8044,7 @@
     changeHeaderTheme(args) {
       var _a;
       const { target, way } = args.detail;
+      console.log(target, way);
       if (way == "enter") {
         const theme = (_a = target == null ? void 0 : target.parentNode) == null ? void 0 : _a.getAttribute("data-theme");
         theme && $html.setAttribute("data-header-theme", theme);

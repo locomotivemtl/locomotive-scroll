@@ -2,7 +2,7 @@
     "title": "Features",
     "description": "Locomotive Scroll is a thin, opinionated wrapper around Lenis. You get all of Lenis's power plus our detection and animation layer.",
     "scrollbar": {
-        "title": "Native dddscrollbar",
+        "title": "Native scrollbar",
         "description": "Real browser scrollbar. No fake alternatives. Accessible, performant, and familiar to users."
     },
     "normalized": {
@@ -10,7 +10,7 @@
         "description": "Configurable lerp, duration, and custom easing functions thanks to Lenis options."
     },
     "sticky": {
-        "title": "CSS Sticky",
+        "title": "CSS sticky",
         "description": "Works perfectly with position: sticky. No conflicts, no workarounds."
     },
     "intersectionObserver": {

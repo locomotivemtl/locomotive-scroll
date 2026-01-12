@@ -1072,12 +1072,16 @@ input:focus-visible, select:focus-visible, textarea:focus-visible {
   color: var(--color-header-text);
   background-color: var(--color-header-background);
   padding: var(--grid-margin);
-  height: var(--header-height);
   z-index: 200;
 }
 @media (max-width: 699px) {
   .c-header {
     align-items: flex-start;
+  }
+}
+@media (min-width: 700px) {
+  .c-header {
+    height: var(--header-height);
   }
 }
 html.is-first-loaded .c-header {
@@ -1111,18 +1115,6 @@ html.is-first-loaded .c-header {
   left: 0;
   width: 100%;
   pointer-events: none;
-}
-.c-header-theme-toggler.-hero {
-  bottom: calc(var(--header-height) + var(--vh) * 100);
-}
-
-.c-hero {
-  margin-bottom: -100vh;
-}
-.c-hero::before {
-  content: "";
-  display: block;
-  height: 200vh;
 }
 
 .c-hero_sticky {
@@ -1222,7 +1214,7 @@ html.is-first-loaded .c-header {
 }
 .c-hero_version span:nth-child(1) {
   position: relative;
-  top: 0.2em;
+  top: 0.1em;
 }
 .c-hero_version.is-inview span {
   transform: translate3d(0, 0, 0);
@@ -1780,31 +1772,17 @@ html.is-first-loaded .c-tool.-inview .c-tool_shape_svg {
   padding: 1rem;
   pointer-events: auto;
 }
-.c-features-grid_cell.-sticky .c-features-grid_cell_ratio {
-  position: sticky;
-  top: calc(var(--header-height) + 1px);
-  z-index: 1;
-}
-.c-features-grid_cell.-sticky .c-features-grid_cell_ratio::before {
-  content: "";
-  position: absolute;
-  background-color: var(--color-background);
-  z-index: -1;
-}
-@media (max-width: 699px) {
-  .c-features-grid_cell.-sticky .c-features-grid_cell_ratio::before {
-    top: 0;
-    left: 1px;
-    width: calc(100% + 1px);
-    height: calc(100% + 1px);
-    border-top: 1px solid #282828;
-    border-right: 1px solid #282828;
-    border-bottom: 1px solid #282828;
-    border-radius: 0 calc(var(--vw, 1vw) * 2) calc(var(--vw, 1vw) * 2) 0;
-  }
-}
 @media (min-width: 700px) {
+  .c-features-grid_cell.-sticky .c-features-grid_cell_ratio {
+    position: sticky;
+    top: calc(var(--header-height) + 1px);
+    z-index: 1;
+  }
   .c-features-grid_cell.-sticky .c-features-grid_cell_ratio::before {
+    content: "";
+    position: absolute;
+    background-color: var(--color-background);
+    z-index: -1;
     top: -1px;
     left: 0px;
     width: calc(100% + 1px);

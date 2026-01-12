@@ -86,6 +86,7 @@ export default class Scroll extends module {
 
     changeHeaderTheme(args) {
         const { target, way } = args.detail
+        console.log(target, way)        
         
         if (way == 'enter') {
             const theme = target?.parentNode?.getAttribute('data-theme')

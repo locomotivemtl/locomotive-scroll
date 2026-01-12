@@ -82,7 +82,7 @@ const config = {
             position: 'right',
           },
           {
-            href: 'https://github.com/locomotivemtl/locomotive-scroll',
+            href: 'https://github.com/locomotivemtl/locomotive-scroll/tree/v5-beta',
             label: 'GitHub',
             position: 'right',
           },

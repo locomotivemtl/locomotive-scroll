@@ -11,7 +11,7 @@ To install Locomotive Scroll, you have two options:
 You can install it via NPM by running the following command:
 
 ```bash
-npm install locomotive-scroll
+npm install locomotive-scroll@5.0.0-rc.1
 ```
 
 This will install the latest version.
@@ -21,7 +21,7 @@ This will install the latest version.
 Alternatively, you can use a CDN to include Locomotive Scroll directly in your HTML:
 
 ```html
-<script src="https://cdn.jsdelivr.net/npm/locomotive-scroll/bundled/locomotive-scroll.min.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/locomotive-scroll@5.0.0-rc.1/bundled/locomotive-scroll.min.js"></script>
 <script>
     const locomotiveScroll = new LocomotiveScroll();
 </script>

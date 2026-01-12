@@ -6,16 +6,6 @@
 @use "sass:math";
 @use "heading" as *;
 
-.c-hero {
-    margin-bottom: -100vh;
-
-    &::before {
-        content: '';
-        display: block;
-        height: 200vh;
-    }
-}
-
 .c-hero_sticky {
     position: sticky;
     bottom: 0;
@@ -108,7 +98,7 @@
 
         &:nth-child(1) {
             position: relative;
-            top: .2em;
+            top: .1em;
         }
     }
     

@@ -6,8 +6,13 @@ sidebar_position: 2
 
 Here is a curated list of websites that utilize Locomotive Scroll:
 
-- [locomotive.ca](https://locomotive.ca/)
-- [lightshiprv.com](https://lightshiprv.com/)
+- [Locomotive](https://locomotive.ca/)
+- [Destigmatize](https://2024.destigmatize.ca/)
+- [Scout Motors](https://www.scoutmotors.com/)
+- [Lightship](https://lightshiprv.com/)
+- [Vooban](https://vooban.com/)
+- [Construction Desourdy](https://www.constructiondesourdy.com/)
+- [GKC](https://gkc.ca/)
 
 Please note that these websites are provided as examples to showcase the potential of Locomotive Scroll. Each website may have its own unique design, features, and implementation of Locomotive Scroll.
 
