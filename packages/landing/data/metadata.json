@@ -1,6 +1,6 @@
 {
-    "title": "Locomotive Scroll V5",
-    "description": "A lightweight scroll library for modern web experiences. Detection, animation, and smooth scrolling — all in 9.4kB.",
+    "title": "Locomotive Scroll — Detection of elements in viewport & smooth scrolling with parallax effects",
+    "description": "Locomotive Scroll is a lightweight JavaScript library that provides smooth scrolling animations and advanced scroll interactions for web applications.",
     "ogImage": "https://scroll.locomotive.ca/assets/images/og-image.png",
     "ogImageWidth": "1200",
     "ogImageHeight": "630",
