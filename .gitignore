@@ -41,5 +41,3 @@ pnpm-debug.log*
 /www/demo/*
 !/www/docs
 /www/docs/*
-!/www/landing
-/www/landing/*

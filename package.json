@@ -19,7 +19,8 @@
     },
     "scripts": {
         "build": "turbo run build",
-        "build:vercel": "turbo run build --filter=./packages/lib --filter=./packages/demo --filter=./packages/docs --filter=./packages/landing",
+        "build:vercel": "turbo run build --filter=./packages/lib --filter=./packages/demo --filter=./packages/docs",
+        "build:landing": "npm run build --workspace=packages/landing",
         "dev": "npm run dev --workspace=packages/demo --if-present",
         "publish": "npm run publish:beta --workspace=packages/lib --if-present"
     },
