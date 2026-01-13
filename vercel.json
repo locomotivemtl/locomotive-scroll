@@ -1,5 +1,6 @@
 {
     "buildCommand": "npm run build:vercel",
+    "ignoreCommand": "node scripts/ignore-build-step.js",
     "outputDirectory": "www",
     "rewrites": [
         {
