@@ -30,6 +30,7 @@
         "@astrojs/tailwind": "^5.1.0",
         "astro": "^4.13.4",
         "astro-seo": "^0.8.4",
+        "locomotive-scroll": "*",
         "nanostores": "^0.10.3",
         "sass": "^1.77.4",
         "swup": "^4.7.0",

@@ -14,11 +14,13 @@
         "homepage": "https://locomotive.ca"
     },
     "devDependencies": {
+        "turbo": "^2.7.4",
         "typescript": "^4.8.3"
     },
     "scripts": {
-        "build": "npm run build --workspace=packages/lib && npm run build --workspace=packages/demo && npm run build --workspace=packages/landing && npm run build --workspace=packages/docs",
-        "build:vercel": "npm run build --workspace=packages/lib && npm run build --workspace=packages/demo && npm run build --workspace=packages/docs",
+        "build": "turbo run build",
+        "build:vercel": "turbo run build --filter=./packages/lib --filter=./packages/demo --filter=./packages/docs",
+        "build:landing": "npm run build --workspace=packages/landing",
         "dev": "npm run dev --workspace=packages/demo --if-present",
         "publish": "npm run publish:beta --workspace=packages/lib --if-present"
     },
@@ -28,5 +30,6 @@
         "packages/landing",
         "packages/docs"
     ],
-    "version": "5.0.0-rc.1"
+    "version": "5.0.0-rc.1",
+    "packageManager": "npm@10.9.4"
 }

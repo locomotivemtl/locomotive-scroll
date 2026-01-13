@@ -2,6 +2,9 @@ node_modules
 .DS_Store
 Thumbs.db
 
+# Turborepo
+.turbo
+
 # Ignore nested folders: https://stackoverflow.com/questions/3203228/git-ignore-exception/72380673#72380673
 /tmp/*
 !/tmp/cjs
