@@ -68,6 +68,17 @@ const config = {
   themeConfig:
     /** @type {import('@docusaurus/preset-classic').ThemeConfig} */
     ({
+      image: 'img/og-image.png',
+      metadata: [
+        {name: 'og:title', content: 'Locomotive Scroll Documentation'},
+        {name: 'og:description', content: 'Detection of elements in viewport & smooth scrolling with parallax effects.'},
+        {name: 'og:image', content: 'https://scroll.locomotive.ca/docs/img/og-image.png'},
+        {name: 'og:type', content: 'website'},
+        {name: 'twitter:card', content: 'summary_large_image'},
+        {name: 'twitter:title', content: 'Locomotive Scroll Documentation'},
+        {name: 'twitter:description', content: 'Detection of elements in viewport & smooth scrolling with parallax effects.'},
+        {name: 'twitter:image', content: 'https://scroll.locomotive.ca/docs/img/og-image.png'},
+      ],
       colorMode: {
         // defaultMode: 'light',
         // disableSwitch: true,
