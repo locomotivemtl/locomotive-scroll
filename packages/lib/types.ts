@@ -196,3 +196,9 @@ export interface CoreOptions {
 export type scrollOrientation = 'vertical' | 'horizontal';
 
 export type gestureOrientation = 'vertical' | 'horizontal' | 'both';
+
+declare global {
+    interface Window {
+        locomotiveScrollVersion: string;
+    }
+}
