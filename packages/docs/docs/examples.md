@@ -12,5 +12,6 @@ Below are several CodeSandbox examples showcasing different usage scenarios:
 4. [GSAP Timeline](https://codesandbox.io/s/gsap-timeline-4kk8dc): Demonstrates how to synchronize a GSAP animation with the scroll progress of an element.
 5. [Dynamic Content](https://codesandbox.io/p/sandbox/dynamic-content-5m30r6): Shows how to handle dynamic content and layout changes with Locomotive Scroll.
 6. [Next.js Integration](https://codesandbox.io/p/devbox/cocky-star-5vcklc?file=%2Fapp%2Fpage.tsx): Shows how to integrate Locomotive Scroll with Next.js.
+7. [Third Party Injected Popups](https://codesandbox.io/p/sandbox/third-party-injected-popups-xch5tq): Shows how to handle third party injected popups with Locomotive Scroll.
 
 Feel free to explore these examples to gain a better understanding of different use cases and how Locomotive Scroll can be utilized in your projects.
