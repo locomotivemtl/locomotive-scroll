@@ -41,7 +41,7 @@ const scroll = new LocomotiveScroll();
 
 ## Demo
 
-Check out the [examples and playground](https://scroll.locomotive.ca/docs/playground)
+Check out the [examples and playground](https://scroll.locomotive.ca/docs/examples)
 
 ## Support
 
