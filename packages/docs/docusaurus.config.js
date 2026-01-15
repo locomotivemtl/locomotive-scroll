@@ -88,8 +88,8 @@ const config = {
         title: 'Locomotive Scroll',
         items: [
           {
-            href: 'https://scroll.locomotive.ca/demo/',
-            label: 'Demo',
+            href: 'https://scroll.locomotive.ca/',
+            label: 'Landing',
             position: 'right',
           },
           {
