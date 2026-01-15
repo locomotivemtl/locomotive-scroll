@@ -17,7 +17,6 @@
         "@11ty/eleventy-img": "^4.0.2",
         "@vercel/analytics": "^1.6.1",
         "gsap": "^3.14.2",
-        "locomotive-scroll": "^5.0.0-beta.11",
         "modujs": "^1.4.2",
         "modularload": "^1.2.6",
         "normalize.css": "^8.0.1",
