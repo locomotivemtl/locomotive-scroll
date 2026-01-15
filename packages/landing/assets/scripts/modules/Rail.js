@@ -1,7 +1,7 @@
-import { module as Module } from "modujs";
-import { whenReady } from "../utils/fonts";
-import gsap from "gsap";
-import { CUSTOM_EVENT, FONT } from "../config";
+import { module as Module } from 'modujs';
+import { whenReady } from '../utils/fonts';
+import gsap from 'gsap';
+import { CUSTOM_EVENT, FONT, ENV } from '../config';
 
 export default class extends Module {
     constructor(m) {
@@ -13,8 +13,8 @@ export default class extends Module {
         this.onToggleBind = this.onToggle.bind(this);
 
         // UI
-        this.$container = this.$("container")[0];
-        this.$pattern = this.$("pattern")[0];
+        this.$container = this.$('container')[0];
+        this.$pattern = this.$('pattern')[0];
         this.prevCount = null;
 
         // Data
@@ -24,13 +24,13 @@ export default class extends Module {
         this.scrollVelocity = 0.1;
         this.scrollLerp = 0.8;
         this.scrollDirection = 1;
-        this.railDirection = this.getData("direction");
-        this.showFrom = parseInt(this.getData("from")) || false;
-        this.showTo = parseInt(this.getData("to")) || false;
+        this.railDirection = this.getData('direction');
+        this.showFrom = parseInt(this.getData('from')) || false;
+        this.showTo = parseInt(this.getData('to')) || false;
 
         this.data = [];
         this.$items = [];
-        this.glyphs = ["🛑", "🔝", "🍸", "⛺", "😖"]
+        this.glyphs = ['🛑', '🔝', '🍸', '⛺', '😖'];
     }
 
     ///////////////
@@ -54,12 +54,12 @@ export default class extends Module {
     ///////////////
     bindEvents() {
         window.addEventListener(CUSTOM_EVENT.RESIZE_END, this.onResizeBind);
-        window.addEventListener("toggleRail", this.onToggleBind);
+        window.addEventListener('toggleRail', this.onToggleBind);
     }
 
     unbindEvents() {
         window.removeEventListener(CUSTOM_EVENT.RESIZE_END, this.onResizeBind);
-        window.removeEventListener("toggleRail", this.onToggleBind);
+        window.removeEventListener('toggleRail', this.onToggleBind);
     }
 
     ///////////////
@@ -103,15 +103,20 @@ export default class extends Module {
 
     onScroll(scrollData) {
         const { velocity, direction } = scrollData;
+
+        if (ENV.IS_MOBILE) {
+            return;
+        }
+
         this.scrollDirection =
             direction != 0 ? direction : this.scrollDirection;
-        this.scrollDirection = this.scrollDirection * -1
+        this.scrollDirection = this.scrollDirection * -1;
         this.scrollVelocity = Math.round(Math.abs(velocity)) * this.scrollLerp;
     }
 
     onToggle(e) {
         const { way } = e.detail;
-        way === "enter" ? this.start() : this.stop();
+        way === 'enter' ? this.start() : this.stop();
     }
 
     ///////////////
@@ -131,7 +136,7 @@ export default class extends Module {
 
     computeMetrics(reset = false) {
         if (reset) {
-            this.$items = this.el.querySelectorAll("[data-rail-item]");
+            this.$items = this.el.querySelectorAll('[data-rail-item]');
             this.data = [];
             this.currentTranslate = 0;
             for (const [index, $items] of this.$items.entries()) {
@@ -169,7 +174,7 @@ export default class extends Module {
 
         this.prevCount = repeatCount;
 
-        const $currentClones = this.$container.querySelectorAll("[data-clone]");
+        const $currentClones = this.$container.querySelectorAll('[data-clone]');
 
         for (const $currentClone of $currentClones) {
             $currentClone.remove();
@@ -178,9 +183,10 @@ export default class extends Module {
         for (let index = 0; index < repeatCount - 1; index++) {
             const $clone = this.$pattern.cloneNode(true);
             // $clone.querySelector("p").appendChild(this.createGlyph(0))
-            $clone.querySelector(".c-rail_glyph").innerHTML = this.glyphs[index]
-            $clone.setAttribute("data-clone", "");
-            $clone.setAttribute("aria-hidden", "true");
+            $clone.querySelector('.c-rail_glyph').innerHTML =
+                this.glyphs[index];
+            $clone.setAttribute('data-clone', '');
+            $clone.setAttribute('aria-hidden', 'true');
             this.$container.appendChild($clone);
         }
 
