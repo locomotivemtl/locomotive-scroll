@@ -35,9 +35,25 @@
         grid-template-columns: repeat(4, 1fr);
         column-gap: var(--grid-gutter);
     }
+
+    *:focus-visible:not(input):not(textarea):not(select) {
+        [data-theme="dark"] & {
+            @include u-focus-visible($color: #FFFFFF, $offset: -4px);
+        }
+        [data-theme="white"] & {
+            @include u-focus-visible($color: #202ded, $offset: -4px);
+        }
+        [data-theme="blue"] & {
+            @include u-focus-visible($color: #FFFFFF, $offset: -4px);
+        }
+        @include u-focus-visible();
+        padding-inline: rem(8px);
+    }
 }
 
 .c-list_inner {
+    font-size: 0;
+    
     @media (min-width: $from-medium) {
         grid-column: 2/-1;
     }
@@ -49,13 +65,8 @@
 
 .c-list_item_inner {
     position: relative;
-    margin: rem(8px) 0 rem(10px);
     clip-path: inset(0);
-    padding-top: rem(10px);
-    @media (min-width: $from-small) {
-        margin: 0px;
-        padding: rem(8px) 0 rem(10px);
-    }
+    padding-block: rem(12px);
 
     &::before {
         content: "";
@@ -88,11 +99,15 @@
             gap: rem(15px);
             padding-right: rem(30px);
         }
+
+        .-perks & {
+            padding-block: rem(20px);
+        }
     }
 
     @media (min-width: $from-small) {
         display: grid;
-        align-items: flex-start;
+        align-items: center;
     }
 
     @media (min-width: $from-small) and (max-width: $to-medium) {
@@ -138,8 +153,7 @@
 
 .c-list_description {
     @media (max-width: $to-small) {
-        margin-top: rem(5px);
-        margin-bottom: rem(25px);
+        margin-top: rem(8px);
 
         .-showcase & {
             display: none;

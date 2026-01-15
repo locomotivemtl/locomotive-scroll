@@ -69,6 +69,15 @@ a {
 }
 
 *:focus-visible:not(input):not(textarea):not(select) {
+    [data-theme="dark"] & {
+        @include u-focus-visible($color: #FFFFFF, $offset: 2px);
+    }
+    [data-theme="white"] & {
+        @include u-focus-visible($color: #202ded, $offset: 2px);
+    }
+    [data-theme="blue"] & {
+        @include u-focus-visible($color: #FFFFFF, $offset: 2px);
+    }
     @include u-focus-visible();
 }
 

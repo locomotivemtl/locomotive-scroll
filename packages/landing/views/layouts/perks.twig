@@ -17,6 +17,7 @@
 
         {% include "@partials/list.twig" with {
             items: perks.items,
+            modifiers: "-perks"
         } %}
 
         {# Big text #}
@@ -31,7 +32,7 @@
         {# Cascade #}
         <div class="c-cascade || u-margin-3xl-top" aria-hidden="true">
             <div class="c-cascade_text || || fadeInText -white">
-                <span class="u-glyph">⛵</span>
+                <span class="u-glyph" aria-hidden="true">⛵</span>
                 <div class="c-text -body-medium || u-margin-top-2xs" role="group" data-module-fade-in-text data-scroll data-scroll-offset="0, 25%" data-scroll-event-progress="fadeinTextProgress">{{ perks.smallText }}</div>
             </div>
             <div class="c-cascade_container" data-scroll data-scroll-css-progress data-scroll-offset="10%, 60%">

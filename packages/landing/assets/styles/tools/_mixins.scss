@@ -229,9 +229,9 @@
 // Add focus state to focused element
 @mixin u-focus-visible (
     $color: currentColor,
-    $style: auto,
-    $width: 10px,
-    $offset: 5px,
+    $style: solid,
+    $width: 2px,
+    $offset: 2px,
     ) {
     outline-color: $color;
     outline-style: $style;
