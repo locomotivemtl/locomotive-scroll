@@ -2,10 +2,9 @@
 // Components / Tool
 // ==========================================================================
 
-
-@use "../core" as *;
+@use '../core' as *;
 .c-tool {
-    position: relative;    
+    position: relative;
     background-color: color(blue);
     overflow: hidden;
 
@@ -13,7 +12,7 @@
         padding-bottom: spacingClamp('sm');
 
         &:before {
-            content: "";
+            content: '';
             position: absolute;
             bottom: 0;
             left: 0;
@@ -36,7 +35,7 @@
                 hsla(236, 85%, 53%, 0.896) 77.5%,
                 hsla(236, 85%, 53%, 0.951) 84.5%,
                 hsla(236, 85%, 53%, 0.987) 91.9%,
-                hsla(236, 85%, 53%, 1.00) 100%
+                hsla(236, 85%, 53%, 1) 100%
             );
 
             z-index: 1;
@@ -59,7 +58,7 @@
     }
 
     &::before {
-        content: "";
+        content: '';
         position: absolute;
         top: 0;
         left: 0;
@@ -67,14 +66,14 @@
         height: 1px;
         background-color: currentColor;
         transform-origin: top right;
-        transform: scale3d(0,1,1);
+        transform: scale3d(0, 1, 1);
 
         html.is-first-loaded & {
             transition: transform t(slow) ease('power3.inOut');
         }
 
         html.is-first-loaded .c-tool.is-inview & {
-            transform: scale3d(1,1,1);
+            transform: scale3d(1, 1, 1);
         }
     }
 
@@ -120,8 +119,8 @@
 
     @media (max-width: $to-small) {
         grid-row: 2/3;
-        margin-top: .8em;
-        margin-bottom: .4em;
+        margin-top: 0.8em;
+        margin-bottom: 0.4em;
     }
 }
 
@@ -132,17 +131,23 @@
     width: calc(100% + 2 * var(--grid-margin));
     height: 100%;
     overflow: hidden;
-    
+
     @media (max-width: $to-medium) {
         margin-top: 15%;
     }
-    
+
     @media (max-width: $to-small) {
         margin-top: 25%;
     } */
 
+    .c-tool.-parallax & {
+        @media (max-width: $to-small) {
+            margin-top: spacingClamp('md');
+        }
+    }
+
     position: relative;
-    aspect-ratio: var(--container-ratio);   
+    aspect-ratio: var(--container-ratio);
     width: 100%;
 }
 
@@ -237,11 +242,10 @@
 }
 
 .c-tool_shape_svg {
-
     // Inview
     // ========================================
     .c-tool.-inview & {
-        transform: scale3d(0,0,1);
+        transform: scale3d(0, 0, 1);
 
         html.is-first-loaded & {
             transition: transform t(normal) ease('power3.out');
@@ -249,19 +253,27 @@
     }
 
     .c-tool.-inview .c-tool_shape.is-inview & {
-        transform: scale3d(1,1,1);
+        transform: scale3d(1, 1, 1);
     }
 
     // Progress
     // ========================================
     .c-tool.-progress & {
         display: block;
-        transform: translate3d(calc((0.5 + 0.5 * var(--progress)) * var(--index) * 100%), 0, 0);
+        transform: translate3d(
+            calc((0.5 + 0.5 * var(--progress)) * var(--index) * 100%),
+            0,
+            0
+        );
     }
 }
 
 // Keyframes
 @keyframes rotation {
-    from { transform: rotate(0deg) }
-    to { transform: rotate(180deg) }
+    from {
+        transform: rotate(0deg);
+    }
+    to {
+        transform: rotate(180deg);
+    }
 }
