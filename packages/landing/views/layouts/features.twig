@@ -7,7 +7,7 @@
         data-scroll-call="changeHeaderTheme"
         data-scroll-offset="100%"
     ></div>
-    
+
     {% include "@partials/section-heading.twig" with {
         "title": [
             'Features'
@@ -26,7 +26,7 @@
             </div>
         </div>
     </div>
-    
+
     <div class="c-features-grid">
         <div class="c-features-grid_container">
             <div class="c-features-grid_inner">
@@ -127,7 +127,7 @@
                     </div>
                 </div>
 
-                <button type="button" data-scroll data-scroll-to data-scroll-to-href="#features" data-scroll-to-offset="-40" data-scroll-to-duration="1" class="c-features-grid_cell -scroll-to || u-hover" data-module-hover-shuffle data-hover-shuffle="children">
+                <div data-scroll class="c-features-grid_cell -scroll-to || u-hover" data-module-hover-shuffle data-hover-shuffle="children">
                     <span class="c-features-grid_cell_ratio">
                         <span class="c-features-grid_cell_inner">
                             <span class="c-features-grid_index || c-text -label-small">05</span>
@@ -135,7 +135,7 @@
                             <span class="c-features-grid_desc || c-text -body-regular">{{ features.scrollTo.description }}</span>
                         </span>
                     </span>
-                </button>
+                </div>
 
                 <div class="c-features-grid_cell -direction">
                     <div class="c-features-grid_cell_ratio">
