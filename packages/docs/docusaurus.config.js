@@ -166,8 +166,8 @@ const config = {
                         title: 'More',
                         items: [
                             {
-                                href: 'https://scroll.locomotive.ca/demo/',
-                                label: 'Demo',
+                                href: 'https://scroll.locomotive.ca',
+                                label: 'Landing',
                             },
                             {
                                 href: 'https://github.com/locomotivemtl/locomotive-scroll',
