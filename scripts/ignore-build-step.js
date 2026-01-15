@@ -66,7 +66,6 @@ function shouldSkipBuild(changedFiles) {
     /^\.editorconfig$/,           // Editor config
     /^\.gitignore$/,              // Git ignore
     /^\.gitattributes$/,          // Git attributes
-    /^packages\/landing\//,       // Landing page (deployed separately with committed builds)
   ];
 
   // Check if ALL changed files match skip patterns
