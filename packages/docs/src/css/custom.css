@@ -32,14 +32,20 @@
 
   --ifm-font-family-base: "HelveticaNowDisplay", sans-serif;
   --ifm-font-weight-base: var(--ifm-font-weight-semibold);
+
+  --ifm-navbar-background-color: #202ded;
+  --ifm-navbar-link-color: white;
+  --ifm-navbar-search-input-background-color: #ffffff;
+  --ifm-navbar-search-input-placeholder-color: #29292dff;
+  --ifm-navbar-search-input-color: #29292dff;
 }
 
 /* For readability concerns, you should choose a lighter palette in dark mode. */
 [data-theme='dark'] {
-  --ifm-color-primary: #ffb3b3;
-  --ifm-color-primary-dark: #ff8888;
-  --ifm-color-primary-darker: #ff7272;
-  --ifm-color-primary-darkest: #ff3131;
+  --ifm-color-primary: #7299ff;
+  --ifm-color-primary-dark: #5b7bf9;
+  --ifm-color-primary-darker: #3d54ee;
+  --ifm-color-primary-darkest: #2f40d3;
   --ifm-color-primary-light: #ffdede;
   --ifm-color-primary-lighter: #fff4f4;
   --ifm-color-primary-lightest: #ffffff;
@@ -51,4 +57,16 @@
   content: '🟠🔁';
   font-family: "LocomotiveNew", sans-serif;
   padding-right: .5rem;
+}
+
+.navbar__inner {
+  --ifm-color-emphasis-200: #ffffff;
+}
+
+.navbar__inner .clean-btn svg {
+  color: #ffffff;
+}
+
+.navbar__inner .clean-btn:hover svg {
+  color: #202ded;
 }

@@ -153,7 +153,7 @@ const config = {
             ],
           },
         ],
-        copyright: `Copyright © ${new Date().getFullYear()} Locomotive Scroll`,
+        copyright: `Copyright © ${new Date().getFullYear()} - <a href="https://locomotive.ca">Locomotive</a>`,
       },
       prism: {
         theme: prismThemes.github,
