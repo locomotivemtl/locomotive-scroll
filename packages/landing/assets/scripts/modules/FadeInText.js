@@ -69,7 +69,6 @@ export default class extends module {
         // Use SplitText.create with autoSplit for automatic resize handling
         this.split = SplitText.create(this.$texts, {
             type: "lines",
-            tag: "span",
             linesClass: "c-fadein-text_line",
             autoSplit: true,
             onSplit: (self) => {
