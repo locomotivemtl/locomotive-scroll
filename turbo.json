@@ -10,7 +10,8 @@
         "!.next/cache/**",
         ".docusaurus/**",
         "build/**",
-        "../../www/**"
+        "../../www/demo/**",
+        "../../www/docs/**"
       ],
       "cache": true
     },
