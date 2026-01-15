@@ -4,38 +4,63 @@
     "items": [
         {
             "title": "Locomotive",
-            "description": "Locomotive",
+            "description": "https://locomotive.ca",
             "url": "https://locomotive.ca"
         },
         {
             "title": "Destigmatize",
-            "description": "Locomotive",
+            "description": "https://2024.destigmatize.ca/",
             "url": "https://2024.destigmatize.ca/"
         },
         {
             "title": "Scout Motors",
-            "description": "Locomotive",
+            "description": "https://scoutmotors.com/",
             "url": "https://scoutmotors.com/"
         },
         {
             "title": "Lightship",
-            "description": "Locomotive",
+            "description": "https://lightshiprv.com/",
             "url": "https://lightshiprv.com/"
         },
         {
             "title": "Vooban",
-            "description": "Locomotive",
+            "description": "https://vooban.com/",
             "url": "https://vooban.com/"
         },
         {
             "title": "Construction Desourdy",
-            "description": "Locomotive",
+            "description": "https://constructiondesourdy.com/",
             "url": "https://constructiondesourdy.com/"
         },
         {
             "title": "GKC",
-            "description": "Locomotive",
+            "description": "https://gkc.ca/",
             "url": "https://gkc.ca/"
+        },
+        {
+            "title": "Troa",
+            "description": "https://www.troa.fr/",
+            "url": "https://www.troa.fr/"
+        },
+        {
+            "title": "Vazzi",
+            "description": "https://vazzi.fun/",
+            "url": "https://vazzi.fun/"
+        },
+        {
+            "title": "21TSI",
+            "description": "https://21tsi.com/",
+            "url": "https://21tsi.com/"
+        },
+        {
+            "title": "Eduard Bodak",
+            "description": "https://www.eduardbodak.com/",
+            "url": "https://www.eduardbodak.com/"
+        },
+        {
+            "title": "Mindmarket",
+            "description": "https://mindmarket.com/",
+            "url": "https://mindmarket.com/"
         }
     ]
 }

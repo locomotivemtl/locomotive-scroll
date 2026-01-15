@@ -48,7 +48,7 @@
 }
 
 .c-list_item_inner {
-position: relative;
+    position: relative;
     margin: rem(8px) 0 rem(10px);
     clip-path: inset(0);
     padding-top: rem(10px);
@@ -84,8 +84,9 @@ position: relative;
 
         .-showcase & {
             display: grid;
-            grid-template-columns: 1fr 1fr;
+            grid-template-columns: 1fr;
             gap: rem(15px);
+            padding-right: rem(30px);
         }
     }
 
@@ -139,8 +140,9 @@ position: relative;
     @media (max-width: $to-small) {
         margin-top: rem(5px);
         margin-bottom: rem(25px);
+
         .-showcase & {
-            margin-top: 0px;
+            display: none;
         }
     }
     @media (min-width: $from-medium) {
