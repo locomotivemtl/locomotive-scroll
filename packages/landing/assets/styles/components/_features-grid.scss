@@ -133,7 +133,7 @@ $color-grid: 282828;
 }
 
 .c-features-grid_cell_ratio {
-    display: block;
+    display: flex;
     aspect-ratio: var(--cell-ratio);
     padding: rem(16px);
     pointer-events: auto;
@@ -199,8 +199,12 @@ $color-grid: 282828;
     flex-direction: column;
     justify-content: space-between;
     align-items: flex-start;
-    height: 100%;
+    width: 100%;
     padding-right: rem(30px);
+
+    &.-logo {
+        padding-right: 0;
+    }
 }
 
 // Link
