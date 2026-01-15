@@ -4,8 +4,8 @@
 {% set _modifiers = modifiers | default(null) %}
 {% set _link      = link | default(null) %}
 
-<ul class="c-list {{ _modifiers }} {{ _classes }}" data-scroll>
-    <div class="c-list_inner">
+<div class="c-list {{ _modifiers }} {{ _classes }}" data-scroll>
+    <ul class="c-list_inner">
         {% for item in _items %}
             <li class="c-list_item" style="--index: {{ loop.index0}}">
                 {% if _link %}
@@ -22,5 +22,5 @@
                 {% endif %}
             </li>
         {% endfor %}
-    </div>
-</ul>
+    </ul>
+</div>
