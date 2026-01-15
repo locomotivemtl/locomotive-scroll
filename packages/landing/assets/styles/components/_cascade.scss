@@ -1,0 +1,71 @@
+// ==========================================================================
+// Components / Cascade
+// ==========================================================================
+
+
+@use "../core" as *;
+.c-cascade {
+    position: relative;
+}
+
+.c-cascade_text {
+    display: flex;
+    flex-direction: column;
+    max-width: rem(220px);
+
+    @media (max-width: $to-large) {
+        margin-left: 50%;
+        margin-bottom: spacingClamp('xl');
+    }
+
+    @media (min-width: $from-large) {
+        position: absolute;
+        top: 0;
+        left: calc((100% + var(--grid-gutter)) / 4 * 3);
+    }
+}
+
+.c-cascade_container {
+    display: flex;
+    justify-content: center;
+    margin-left: calc(-1 * var(--grid-margin));
+    margin-right: calc(-1 * var(--grid-margin));
+    overflow: hidden;
+}
+
+.c-cascade_inner {
+    width: auto;
+}
+
+.c-cascade_item {
+    .c-cascade_item + & {
+        margin-left: calc(var(--item-index) * 2.35em);
+        margin-top: calc(-1em);
+    }
+
+    &:nth-child(odd) {
+        opacity: 0.35;
+    }
+}
+
+.c-cascade_line {
+    display: block;
+    perspective: 100vw;
+    transform-style: preserve-3d;
+}
+
+.c-cascade_word {
+    display: inline-block;
+    white-space: nowrap;
+    transform: rotate3d(1, 0, 0, mapRangeClamp(var(--progress), calc(var(--item-index) / 8), calc(calc(var(--item-index) + 1) / 8), 90deg, 0deg, 0deg, 90deg));
+    opacity: mapRangeClamp(var(--progress), calc(var(--item-index) / 8), calc(calc(var(--item-index) + 1) / 8), 0, 1, 0, 1);
+    transform-origin: top;
+    clip-path: inset(0);
+}
+
+.c-cascade_glyph {
+    position: absolute;
+    bottom: 0;
+    left: 0;
+    font-size: var(--font-size-serif-medium);
+}

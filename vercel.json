@@ -1,0 +1,16 @@
+{
+    "buildCommand": "npm run build:vercel",
+    "ignoreCommand": "node scripts/ignore-build-step.js",
+    "outputDirectory": "www",
+    "rewrites": [
+        {
+            "source": "/",
+            "destination": "/landing"
+        },
+        {
+            "source": "/assets/:path*",
+            "destination": "/landing/assets/:path*"
+        }
+    ],
+    "cleanUrls": true
+}

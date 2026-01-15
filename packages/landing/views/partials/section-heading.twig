@@ -1,0 +1,25 @@
+<h2 class="c-heading-serif -large || c-section-heading || u-padding-bottom-3xl u-padding-top-md">
+    <span class="c-section-heading_line">
+        <span class="c-section-heading_word">
+            {{ title[0] }}
+        </span>
+    </span>
+    <span class="c-section-heading_line">
+        <span class="c-section-heading_word">
+            {{ title[1] }}
+        </span>
+
+        {% if labelLeft %}
+            <span class="c-text -body-medium || c-section-heading_label -left">
+                {{ labelLeft|raw }}
+            </span>
+        {% endif %}
+
+        {% if labelRight %}
+            <span class="c-text -body-medium || c-section-heading_label -right">
+                {{ labelRight|raw }}
+            </span>
+        {% endif %}
+
+    </span>
+</h2>

@@ -1,0 +1,32 @@
+{
+    "title": "Features",
+    "description": "Locomotive Scroll is a thin, opinionated wrapper around Lenis. You get all of Lenis's power plus our detection and animation layer.",
+    "scrollbar": {
+        "title": "Native scrollbar",
+        "description": "Real browser scrollbar. No fake alternatives. Accessible, performant, and familiar to users."
+    },
+    "normalized": {
+        "title": "Smooth easing",
+        "description": "Configurable lerp, duration, and custom easing functions thanks to Lenis options."
+    },
+    "sticky": {
+        "title": "CSS sticky",
+        "description": "Works perfectly with position: sticky. No conflicts, no workarounds."
+    },
+    "intersectionObserver": {
+        "title": "Intersection Observer API",
+        "description": "Browser-native detection. No polling, no performance hits, just efficient viewport tracking."
+    },
+    "scrollTo": {
+        "title": "Scroll to",
+        "description": "Programmatic scrolling to any element, selector, or pixel value via Lenis. Supports offset, duration, and custom easing."
+    },
+    "direction": {
+        "title": "Scroll direction",
+        "description": "Track direction changes in real-time thanks to Lenis. Perfect for hiding/showing headers or reversing animations."
+    },
+    "layoutShifts": {
+        "title": "No layout shifts",
+        "description": "No more greedy CSS transforms breaking your layouts. Plays nice with position: sticky, fixed headers, and existing CSS."
+    }
+}

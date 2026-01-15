@@ -1,0 +1,46 @@
+// ==========================================================================
+// Components / Headings
+// ==========================================================================
+
+// Font sizes
+// ==========================================================================
+
+@use "../core" as *;
+:root {
+    --font-size-body-regular: #{rem(16px)};
+    --font-size-body-medium:  #{rem(21px)};
+    --font-size-label:        #{rem(16px)};
+    --font-size-label-small:  #{rem(12px)};
+}
+
+// Mixins
+// ==========================================================================
+@mixin text {
+    font-family: ff('display');
+    font-weight: $font-weight-medium;
+    line-height: 1.2;
+    letter-spacing: -0.01em;
+}
+
+// Styles
+// ==========================================================================
+
+.c-text {
+    @include text;
+
+    &.-body-regular {
+        font-size: var(--font-size-body-regular);
+    }
+
+    &.-body-medium {
+        font-size: var(--font-size-body-medium);
+    }
+
+    &.-label {
+        font-size: var(--font-size-label);
+    }
+
+    &.-label-small {
+        font-size: var(--font-size-label-small);
+    }
+}

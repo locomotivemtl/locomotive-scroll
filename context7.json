@@ -1,0 +1,18 @@
+{
+  "url": "https://context7.com/locomotivemtl/locomotive-scroll",
+  "public_key": "pk_fFYCHZCsmlAjABaNmHyFM",
+  "foldersInclude": ["packages/lib"],
+  "foldersExclude": ["packages/docs", "packages/demo", "packages/landing", "node_modules"],
+  "customRules": [
+    "locomotive-scroll v5 wraps Lenis for smooth scrolling - use lenisOptions for scroll physics (lerp, duration, easing)",
+    "Elements with data-scroll-speed, data-scroll-css-progress, or data-scroll-offset trigger RAF updates every frame - minimize these for performance",
+    "data-scroll-speed is relative to container size, not absolute pixels - speed: 0.5 means 50% of container height displacement",
+    "Parallax is auto-disabled on touch devices - add data-scroll-enable-touch-speed to force it on mobile",
+    "scrollPosition defines WHERE in viewport to trigger (start/middle/end), scrollOffset defines WHEN with a px/% offset - they are different",
+    "Elements visible at page load (in fold) have different progress mapping (0→1 vs -1→1) - use data-scroll-ignore-fold to disable",
+    "Dynamically added elements need locomotiveScroll.addScrollElements($container) - just adding HTML to DOM won't register them",
+    "Custom scroll containers need fixed height + overflow hidden/auto on wrapper, with content as direct child",
+    "Use data-scroll-repeat for elements that should re-trigger on each scroll in/out - default is fire once",
+    "Access Lenis instance via locomotiveScroll.lenisInstance for programmatic scrollTo, stop(), start()"
+  ]
+}

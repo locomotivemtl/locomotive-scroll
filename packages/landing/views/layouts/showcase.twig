@@ -1,0 +1,36 @@
+<section class="u-relative || u-padding-bottom-2xl" data-theme="white" id="showcase">
+
+    <div
+        class="c-header-theme-toggler"
+        data-scroll
+        data-scroll-repeat
+        data-scroll-call="changeHeaderTheme"
+        data-scroll-offset="100%"
+    ></div>
+
+    <div class="c-sticky-heading" data-scroll data-scroll-offset="100%, 100%" data-scroll-css-progress>
+        <div class="c-sticky-heading_inner || o-container">
+            <div class="c-sticky-heading_text">
+                <div class="c-sticky-heading_description || fadeInText -white">
+                    <div class="c-text -body-medium">
+                        <span class="u-glyph" aria-hidden="true">⛵</span>
+                        <div class="u-margin-top-2xs" role="group" data-module-fade-in-text data-scroll data-scroll-offset="0, 25%"  data-scroll-event-progress="fadeinTextProgress">
+                            {{showcase.description}}
+                        </div>
+                    </div>
+                </div>
+                <h2 class="c-sticky-heading_title">
+                    {{showcase.title}}
+                </h2>
+            </div>
+        </div>
+    </div>
+
+    <div class="o-container || u-margin-top-sm">
+        {% include "@partials/list.twig" with {
+            items: showcase.items,
+            modifiers: "-showcase",
+            link: true
+        } %}
+    </div>
+</section>

@@ -1,0 +1,381 @@
+import { version } from './package.json'
+import Lenis from 'lenis';
+import Core from './core/Core';
+import type {
+    ILenisScrollToOptions,
+    ILenisScrollValues,
+    ILocomotiveScrollOptions,
+    lenisTargetScrollTo,
+} from './types';
+import type { LenisOptions } from 'lenis';
+
+/**
+ * Locomotive Scroll
+ *
+ * Detection of elements in viewport & smooth scrolling with parallax.
+ *
+ * Inspired by
+ * {@link https://github.com/locomotivemtl/locomotive-scroll locomotive-scroll.js}
+ * and built around
+ * {@link https://github.com/darkroomengineering/lenis lenis.js}.
+ */
+
+export default class LocomotiveScroll {
+    public rafPlaying: boolean;
+    public lenisInstance: Lenis | null = null;
+
+    private coreInstance: Core | null = null;
+
+    private lenisOptions?: LenisOptions;
+    private triggerRootMargin?: string;
+    private rafRootMargin?: string;
+    private rafInstance?: number;
+    private autoStart?: boolean;
+    private isTouchDevice: boolean;
+    private scrollCallback?(scrollValues: ILenisScrollValues): void;
+    private initCustomTicker?: (render: () => void) => void;
+    private destroyCustomTicker?: (render: () => void) => void;
+    private _onRenderBind: () => void;
+    private _onResizeBind: () => void;
+    private _onScrollToBind: (event: MouseEvent) => void;
+    private _originalOnContentResize?: () => void;
+    private _originalOnWrapperResize?: () => void;
+
+    constructor({
+        lenisOptions = {},
+        triggerRootMargin,
+        rafRootMargin,
+        autoStart = true,
+        scrollCallback = () => {},
+        initCustomTicker,
+        destroyCustomTicker,
+    }: ILocomotiveScrollOptions = {}) {
+
+        // Set version
+        window.locomotiveScrollVersion = version;
+
+        // Get arguments
+        Object.assign(this, {
+            lenisOptions,
+            triggerRootMargin,
+            rafRootMargin,
+            autoStart,
+            scrollCallback,
+            initCustomTicker,
+            destroyCustomTicker,
+        });
+
+
+        // Binding
+        this._onRenderBind = this._onRender.bind(this);
+        this._onScrollToBind = this._onScrollTo.bind(this);
+        this._onResizeBind = this._onResize.bind(this);
+
+        // Data
+        this.rafPlaying = false;
+
+        // Detect if device has touch capability
+        this.isTouchDevice = 'ontouchstart' in window || navigator.maxTouchPoints > 0;
+
+        // Init
+        this._init();
+    }
+
+    /**
+     * Lifecyle - Initialize instance.
+     *
+     * @private
+     */
+    private _init(): void {
+        
+        // Create Lenis instance
+        this.lenisInstance = new Lenis({
+            ...this.lenisOptions
+        });
+
+        // Subscribe to scroll callback if provided
+        if (this.scrollCallback) {
+            this.lenisInstance.on('scroll', this.scrollCallback);
+        }
+
+        // Add scroll direction attribute on body
+        document.documentElement.setAttribute(
+            'data-scroll-orientation',
+            this.lenisInstance.options.orientation
+        );
+
+        requestAnimationFrame(() => {
+            // Create Core Instance
+            // lenisInstance is guaranteed to exist at this point (created above)
+            this.coreInstance = new Core({
+                $el: this.lenisInstance!.rootElement,
+                triggerRootMargin: this.triggerRootMargin,
+                rafRootMargin: this.rafRootMargin,
+                scrollOrientation: this.lenisInstance!.options.orientation,
+                lenisInstance: this.lenisInstance!,
+            });
+
+            // Bind Events
+            this._bindEvents();
+
+            // RAF warning
+            if (this.initCustomTicker && !this.destroyCustomTicker) {
+                console.warn(
+                    'initCustomTicker callback is declared, but destroyCustomTicker is not. Please pay attention. It could cause trouble.'
+                );
+            } else if (!this.initCustomTicker && this.destroyCustomTicker) {
+                console.warn(
+                    'destroyCustomTicker callback is declared, but initCustomTicker is not. Please pay attention. It could cause trouble.'
+                );
+            }
+
+            // Start RAF
+            this.autoStart && this.start();
+        });
+    }
+
+    /**
+     * Lifecyle - Destroy instance.
+     */
+    public destroy(): void {
+        // Stop raf
+        this.stop();
+        // Unbind Events
+        this._unbindEvents();
+        // Destroy Lenis
+        this.lenisInstance?.destroy();
+
+        // Destroy Core after RAF to ensure any pending Intersection Observer callbacks complete
+        // This prevents race conditions when destroy() is called while IO callbacks are queued
+        requestAnimationFrame(() => {
+            this.coreInstance?.destroy();
+        });
+    }
+
+    /**
+     * Events - Subscribe events to listen.
+     */
+    private _bindEvents() {
+        this._bindScrollToEvents();
+
+        // Hook into Lenis dimensions resize callbacks
+        // onContentResize: called when content size changes (images load, dynamic content)
+        // onWrapperResize: called when wrapper size changes (window resize, layout changes)
+        if (this.lenisInstance) {
+            this._originalOnContentResize = this.lenisInstance.dimensions.onContentResize.bind(
+                this.lenisInstance.dimensions
+            );
+            this._originalOnWrapperResize = this.lenisInstance.dimensions.onWrapperResize.bind(
+                this.lenisInstance.dimensions
+            );
+
+            this.lenisInstance.dimensions.onContentResize = () => {
+                this._originalOnContentResize?.();
+                this._onResizeBind();
+            };
+
+            this.lenisInstance.dimensions.onWrapperResize = () => {
+                this._originalOnWrapperResize?.();
+                this._onResizeBind();
+            };
+        }
+    }
+
+    /**
+     * Events - Unsubscribe listened events.
+     */
+    private _unbindEvents() {
+        this._unbindScrollToEvents();
+
+        // Restore original Lenis dimensions resize callbacks
+        if (this.lenisInstance) {
+            if (this._originalOnContentResize) {
+                this.lenisInstance.dimensions.onContentResize = this._originalOnContentResize;
+            }
+            if (this._originalOnWrapperResize) {
+                this.lenisInstance.dimensions.onWrapperResize = this._originalOnWrapperResize;
+            }
+        }
+    }
+
+    /**
+     * Events - Subscribe scrollTo events to listen.
+     */
+    private _bindScrollToEvents($container?: HTMLElement) {
+        const $rootContainer = $container
+            ? $container
+            : this.lenisInstance?.rootElement;
+        const $scrollToElements =
+            $rootContainer?.querySelectorAll('[data-scroll-to]');
+
+        $scrollToElements?.length &&
+            $scrollToElements.forEach(($el): void => {
+                ($el as HTMLElement).addEventListener('click', this._onScrollToBind, false);
+            });
+    }
+
+    /**
+     * Events - Unsubscribe scrollTo listened events.
+     */
+    private _unbindScrollToEvents($container?: HTMLElement) {
+        const $rootContainer = $container
+            ? $container
+            : this.lenisInstance?.rootElement;
+        const $scrollToElements =
+            $rootContainer?.querySelectorAll('[data-scroll-to]');
+        $scrollToElements?.length &&
+            $scrollToElements.forEach(($el) => {
+                ($el as HTMLElement).removeEventListener('click', this._onScrollToBind, false);
+            });
+    }
+
+    /**
+     * Callback - Resize callback.
+     *
+     * Called synchronously after Lenis updates its dimensions via onContentResize/onWrapperResize.
+     * All dimension values are already up-to-date when this executes.
+     */
+    private _onResize() {
+        this.coreInstance?.onResize({
+            currentScroll: this.lenisInstance?.scroll ?? 0,
+            smooth: !this.isTouchDevice,
+        });
+    }
+
+    /**
+     * Callback - Render callback.
+     */
+    private _onRender() {
+        this.lenisInstance?.raf(Date.now());
+
+        this.coreInstance?.onRender({
+            currentScroll: this.lenisInstance?.scroll ?? 0,
+            smooth: !this.isTouchDevice,
+        });
+    }
+
+    /**
+     * Callback - Scroll To callback.
+     */
+    private _onScrollTo(event: MouseEvent) {
+        event.preventDefault();
+        const $target = (event.currentTarget as HTMLElement) ?? null;
+        if (!$target) return;
+        const target =
+            $target.getAttribute('data-scroll-to-href') ||
+            $target.getAttribute('href');
+        const offset = $target.getAttribute('data-scroll-to-offset') || 0;
+        const duration =
+            $target.getAttribute('data-scroll-to-duration') ||
+            this.lenisInstance?.options.duration
+        target &&
+            this.scrollTo(target, {
+                offset: typeof offset === 'string' ? parseInt(offset) : offset,
+                duration:
+                    typeof duration === 'string'
+                        ? parseInt(duration)
+                        : duration,
+            });
+    }
+
+    /**
+     * Start RequestAnimationFrame that active Lenis smooth and scroll progress.
+     */
+    public start(): void {
+        if (this.rafPlaying) {
+            return;
+        }
+
+        // Call lenis start method
+        this.lenisInstance?.start();
+
+        this.rafPlaying = true;
+        this.initCustomTicker
+            ? this.initCustomTicker(this._onRenderBind)
+            : this._raf();
+    }
+
+    /**
+     * Stop RequestAnimationFrame that active Lenis smooth and scroll progress.
+     */
+    public stop(): void {
+        if (!this.rafPlaying) {
+            return;
+        }
+
+        // Call lenis stop method
+        this.lenisInstance?.stop();
+
+        this.rafPlaying = false;
+        this.destroyCustomTicker
+            ? this.destroyCustomTicker(this._onRenderBind)
+            : this.rafInstance && cancelAnimationFrame(this.rafInstance);
+    }
+
+    /**
+     * Remove old scroll elements items and rebuild ScrollElements instances.
+     */
+    public removeScrollElements($oldContainer: HTMLElement): void {
+        if (!$oldContainer) {
+            console.error('Please provide a DOM Element as $oldContainer');
+            return;
+        }
+
+        this._unbindScrollToEvents($oldContainer);
+        this.coreInstance?.removeScrollElements($oldContainer);
+    }
+
+    /**
+     * Add new scroll elements items and rebuild ScrollElements instances.
+     */
+    public addScrollElements($newContainer: HTMLElement): void {
+        if (!$newContainer) {
+            console.error('Please provide a DOM Element as $newContainer');
+            return;
+        }
+
+        this.coreInstance?.addScrollElements($newContainer);
+        requestAnimationFrame(() => {
+            this._bindScrollToEvents($newContainer);
+        });
+    }
+
+    /**
+     * Trigger resize callback.
+     */
+    public resize(): void {
+        this._onResizeBind();
+    }
+
+    /**
+     * Trigger scroll to callback.
+     */
+    public scrollTo(
+        target: lenisTargetScrollTo,
+        options?: ILenisScrollToOptions
+    ): void {
+        this.lenisInstance?.scrollTo(target, {
+            offset: options?.offset,
+            lerp: options?.lerp,
+            duration: options?.duration,
+            immediate: options?.immediate,
+            lock: options?.lock,
+            force: options?.force,
+            easing: options?.easing,
+            onComplete: options?.onComplete,
+        });
+    }
+
+    /**
+     * RequestAnimationFrame that active Lenis smooth and scroll progress.
+     *
+     * @private
+     *
+     */
+    private _raf() {
+        this._onRenderBind();
+        this.rafInstance = requestAnimationFrame(() => this._raf());
+    }
+}
+
+export * from './types';

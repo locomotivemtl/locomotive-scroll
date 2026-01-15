@@ -1,0 +1,76 @@
+// ==========================================================================
+// Components / Header
+// ==========================================================================
+
+
+@use "../core" as *;
+.c-header {
+    [data-header-theme="blue"] & {
+        --color-header-text: #{color(white)};
+        --color-header-background: #{color(blue)};
+    }
+
+    [data-header-theme="black"] & {
+        --color-header-text: #{color(white)};
+        --color-header-background: #{color(black)};
+    }
+
+    [data-header-theme="white"] & {
+        --color-header-text: #{color(blue)};
+        --color-header-background: #{color(white)};
+    }
+
+    position: fixed;
+    top: 0;
+    width: 100%;
+    display: grid;
+    align-items: center;
+    grid-template-columns: repeat(3, 1fr);
+    column-gap: var(--grid-gutter);
+    color: var(--color-header-text);
+    background-color: var(--color-header-background);
+    padding: var(--grid-margin);    
+    z-index: z('header');
+
+    @media (max-width: $to-small) {
+        align-items: flex-start;
+    }
+
+    @media (min-width: $from-small) {
+        height: var(--header-height);
+    }
+
+    html.is-first-loaded & {
+        transition: color t(faster), background-color t(faster);
+    }
+}
+
+.c-header_col {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+
+    &.-center {
+        justify-content: center;
+        align-items: center;
+    }
+
+    @media (max-width: $to-small) {
+        flex-direction: column;
+        align-items: flex-start;
+        gap: var(--grid-margin);
+
+        &:last-of-type {
+            align-items: flex-end;
+        }
+    }
+}
+
+.c-header-theme-toggler {
+    position: absolute;
+    top: calc(-1 * var(--header-height));
+    bottom: var(--header-height);
+    left: 0;
+    width: 100%;
+    pointer-events: none;
+}

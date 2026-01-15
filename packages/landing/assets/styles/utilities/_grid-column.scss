@@ -1,0 +1,45 @@
+// ==========================================================================
+// Tools / Grid Columns
+// ==========================================================================
+
+
+@use "../core" as *;
+//
+// Grid layout system.
+//
+// This tool generates columns for all needed media queries.
+// Unused classes will be purge by the css post-processor.
+//
+
+$colsMax: $base-column-nb + 1;
+
+@each $breakpoint, $mediaquery in $breakpoints {
+    @for $fromIndex from 1 through $colsMax {
+        @for $toIndex from 1 through $colsMax {
+
+            // Columns without media query
+            @if $breakpoint == "tiny" {
+                .u-gc-#{$fromIndex}\/#{$toIndex} {
+                    --gc-start: #{$fromIndex};
+                    --gc-end: #{$toIndex};
+                }
+            }
+
+            // Columns min-width breakpoints `@from-*`
+            .u-gc-#{$fromIndex}\/#{$toIndex}\@from-#{$breakpoint} {
+                @media #{mq-min($breakpoint)} {
+                    --gc-start: #{$fromIndex};
+                    --gc-end: #{$toIndex};
+                }
+            }
+
+            // Columns max-width breakpoints @to-*`
+            .u-gc-#{$fromIndex}\/#{$toIndex}\@to-#{$breakpoint} {
+                @media #{mq-max($breakpoint)} {
+                    --gc-start: #{$fromIndex};
+                    --gc-end: #{$toIndex};
+                }
+            }
+        }
+    }
+}

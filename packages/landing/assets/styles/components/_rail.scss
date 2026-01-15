@@ -1,0 +1,42 @@
+// ==========================================================================
+// Components / Rail
+// ==========================================================================
+
+
+@use "../core" as *;
+@use "heading" as *;
+.c-rail {
+    position: relative;
+    overflow: hidden;
+    padding: spacingClamp('md') 0;
+}
+
+.c-rail_inner {
+    display: inline-flex;
+    align-items: center;
+    white-space: nowrap;
+}
+
+.c-rail_item {
+    @include heading-serif;
+    font-size: var(--font-size-serif-medium);
+    padding-right: 0.5em;
+
+    .c-icon {
+        transform: translateY(-0.075em);
+    }
+}
+
+.c-rail_glyph {
+    display: inline-block;
+    padding-left: 0.5em;
+    width: 100px;
+    text-align: center;
+
+    @media (min-width: $from-medium) {
+        width: 140px;
+    }
+    @media (min-width: $from-large) {
+        width: 170px;
+    }
+}

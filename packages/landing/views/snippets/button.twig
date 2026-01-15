@@ -1,0 +1,62 @@
+{# --- Parameters ------------------------- #}
+
+{% set _tag             = tag | default('button') %}
+{% set _href            = href | default(null) %}
+{% set _external        = external ?? false %}
+{% set _classes         = classes | default(null) %}
+{% set _modifiers       = modifiers | default(null) %}
+{% set _label           = label | default(null) %}
+{% set _icon            = icon | default(null) %}
+{% set _attr            = attr | default('') %}
+
+{# --- Computed --------------------------- #}
+
+{% if _href != null %}
+    {% set _tag = 'a' %}
+{% elseif _tag == 'a' %}
+    {% set _tag = 'span' %}
+{% endif %}
+
+{% set _button_classes = 'c-button' %}
+
+{% if _modifiers %}
+    {% set _button_classes = _button_classes ~ ' ' ~ _modifiers %}
+{% endif %}
+
+{% if _classes %}
+    {% set _button_classes = _button_classes ~ ' ' ~ _classes %}
+{% endif %}
+
+
+{# ---------------------------------------- #}
+
+<{{ _tag }}
+    class="{{ _button_classes }}"
+    {% if _href %}href="{{ _href }}"{% endif %}
+    {% if _external %}target="_blank" rel="noopener noreferrer"{% endif %}
+    {% if _attr %}{{ _attr|raw }}{% endif %}
+    >
+        {% for index in 1..2 %}
+            <span
+                class="c-button_wrap"
+                {% if loop.index == 2 %}
+                    aria-hidden="true"
+                {% endif %}
+            >
+                <span class="c-button_inner">
+                    {% if _icon %}
+                        {% include "@snippets/icon.twig" with {
+                            icon: _icon,
+                            classes: 'c-button_icon',
+                        } only %}
+                    {% endif %}
+
+                    {% if _label %}
+                        <span class="c-button_label">
+                            {{ _label }}
+                        </span>
+                    {% endif %}
+                </span>
+            </span>
+        {% endfor %}
+</{{ _tag }}>

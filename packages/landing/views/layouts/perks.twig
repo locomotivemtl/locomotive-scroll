@@ -1,0 +1,58 @@
+<section class="u-relative" data-theme="white">
+
+    <div
+        class="c-header-theme-toggler"
+        data-scroll
+        data-scroll-repeat
+        data-scroll-call="changeHeaderTheme"
+        data-scroll-offset="100%,0"
+        data-scroll-ignore-fold
+    ></div>
+
+    {% include "@partials/rail.twig" %}
+
+
+    <div class="o-container">
+        {# List #}
+
+        {% include "@partials/list.twig" with {
+            items: perks.items,
+            modifiers: "-perks"
+        } %}
+
+        {# Big text #}
+        <div class="o-grid -gutters -col-4@from-medium || u-margin-top-xl u-margin-bottom-3xl">
+            <div class="o-grid_item u-gc-2/5@from-medium">
+                <p class="c-heading -h2">
+                    {{ perks.bigText }}
+                </p>
+            </div>
+        </div>
+
+        {# Cascade #}
+        <div class="c-cascade || u-margin-3xl-top" aria-hidden="true">
+            <div class="c-cascade_text || || fadeInText -white">
+                <span class="u-glyph" aria-hidden="true">⛵</span>
+                <div class="c-text -body-medium || u-margin-top-2xs" role="group" data-module-fade-in-text data-scroll data-scroll-offset="0, 25%" data-scroll-event-progress="fadeinTextProgress">{{ perks.smallText }}</div>
+            </div>
+            <div class="c-cascade_container" data-scroll data-scroll-css-progress data-scroll-offset="10%, 60%">
+                <div class="c-cascade_inner">
+                    {% for index in 1..8 %}
+                        <div class="c-cascade_item || c-heading -h2" style="--item-index: {{ loop.index0 }}">
+                            <span class="c-cascade_line">
+                                <span class="c-cascade_word">Locomotive®</span>
+                            </span>
+                            <span class="c-cascade_line">
+                                <span class="c-cascade_word">Scroll</span>
+                            </span>
+                        </div>
+                    {% endfor %}
+                </div>
+            </div>
+            <p class="c-cascade_glyph || u-glyph" aria-hidden="true">👀</p>
+        </div>
+    </div>
+
+
+
+</section>

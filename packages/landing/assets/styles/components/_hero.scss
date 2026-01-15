@@ -1,0 +1,136 @@
+@use "../core" as *;
+
+// Components / Hero
+// ==========================================================================
+
+@use "sass:math";
+@use "heading" as *;
+
+.c-hero_sticky {
+    position: sticky;
+    bottom: 0;
+}
+
+.c-hero_main {
+    display: grid;
+    gap: var(--grid-gutter);
+    align-items: flex-end;
+    min-height: 100svh;
+    padding-bottom: var(--grid-margin);
+    position: relative;
+    z-index: 10;
+    
+    &.-footer{
+        min-height: 100svh;
+    }
+
+    @media (max-width: $to-small) {
+        grid-template-rows: 1fr auto 1fr;
+    }
+
+    @media (min-width: $from-small) {
+        grid-template-columns: 1fr 1fr;
+    }
+}
+
+.c-hero_heading {
+    display: flex;
+    flex-direction: column;
+    row-gap: spacingClamp('md');
+    height: 100%;
+
+    @media (max-width: $to-small) {
+        grid-row: 2/3;
+    }
+
+    @media (min-width: $from-small) {
+        grid-column: 2/3;
+        grid-row: 1/2;
+    }
+}
+
+.c-hero_nav {
+    @media (max-width: $to-small) {
+        grid-row: 3/4;
+    }
+    @media (min-width: $from-small) {
+        grid-column: 1/2;
+        grid-row: 1/2;
+    }
+}
+
+.c-hero_title {
+    margin-block: auto;
+
+    .c-footer & {
+        margin-top: auto;
+        margin-bottom: 0;
+    }
+}
+
+.c-hero_links_item {
+    .c-hero_links_item + & {
+        margin-top: rem(8px);
+    }
+}
+
+.c-hero_description_container {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    column-gap: var(--grid-gutter);
+    align-items: flex-end;
+}
+
+.c-hero_version {
+    display: flex;
+    justify-content: flex-end;
+    column-gap: .5em;
+
+    @media (max-width: $to-small) {
+        position: absolute;
+        bottom: var(--grid-margin);
+        right: 0;
+    }
+    
+    span {
+        transition: transform t('slow') ease('power3.out');
+        transform: translate3d(0,100%,0);
+
+        &:nth-child(1) {
+            position: relative;
+            top: .1em;
+        }
+    }
+    
+    &.is-inview {
+        span {
+            transform: translate3d(0,0,0);
+        }
+    }
+}
+
+.c-hero_line {
+    display: block;
+    clip-path: inset(-5% 0);
+}
+
+.c-hero_word {
+    display: inline-block;
+    transform: translate3d(0,-110%,0);
+
+    html.is-first-loaded & {
+        transition: transform t(medium) ease('power3.out');
+        transition-delay: calc(var(--index) * 0.1s);
+    }
+
+    &.-hero{
+        html.is-ready & {
+            transform: translate3d(0,0,0);
+        }
+    }
+    &.-footer{
+        .is-inview & {
+            transform: translate3d(0,0,0);
+        }
+    }
+}

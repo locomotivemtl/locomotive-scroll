@@ -1,0 +1,24 @@
+// ==========================================================================
+// Settings / Config / CSS VARS
+// ==========================================================================
+@use '../tools/functions' as *;
+@use 'config.breakpoints' as *;
+:root {
+    // Grid
+    --grid-columns: 4;
+    --grid-gutter: #{rem(10px)};
+    --grid-margin: #{rem(10px)};
+
+    // Container
+    --container-width: calc(100% - 2 * var(--grid-margin));
+
+    @media (max-width: $to-small) {
+        --header-height: #{rem(34px)};
+    }
+
+    @media (min-width: $from-small) {
+        --grid-gutter: #{rem(16px)};
+        --grid-margin: #{rem(20px)};
+        --header-height: #{rem(60px)};
+    }
+}

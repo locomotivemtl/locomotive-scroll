@@ -1,0 +1,67 @@
+<!doctype html>
+<html class="is-loading" lang="en" data-header-theme="blue">
+    <head>
+        <meta charset="utf-8">
+
+
+
+        <title>{% if title %}{{ title }} | {% endif %}{{ metadata.title }}</title>
+        <meta name="description" content="{% if description %}{{ description }}{% else %}{{ metadata.description }}{% endif %}">
+        <meta name="viewport" content="width=device-width, initial-scale=1">
+
+        {# Open Graph meta tags #}
+        <meta property="og:title" content="{% if title %}{{ title }} | {% endif %}{{ metadata.title }}">
+        <meta property="og:description" content="{% if description %}{{ description }}{% else %}{{ metadata.description }}{% endif %}">
+        <meta property="og:type" content="website">
+        <meta property="og:url" content="{{ metadata.url }}{% if ogUrl %}{{ ogUrl }}{% endif %}">
+        <meta property="og:image" content="{% if ogImage %}{{ ogImage }}{% else %}{{ metadata.ogImage }}{% endif %}">
+        <meta property="og:image:width" content="{{ metadata.ogImageWidth }}">
+        <meta property="og:image:height" content="{{ metadata.ogImageHeight }}">
+        <meta property="og:image:alt" content="{% if ogImageAlt %}{{ ogImageAlt }}{% else %}{{ metadata.title }}{% endif %}">
+
+        {# Twitter Card meta tags #}
+        <meta name="twitter:card" content="summary_large_image">
+        <meta name="twitter:title" content="{% if title %}{{ title }} | {% endif %}{{ metadata.title }}">
+        <meta name="twitter:description" content="{% if description %}{{ description }}{% else %}{{ metadata.description }}{% endif %}">
+        <meta name="twitter:image" content="{% if ogImage %}{{ ogImage }}{% else %}{{ metadata.ogImage }}{% endif %}">
+        <meta name="twitter:image:alt" content="{% if ogImageAlt %}{{ ogImageAlt }}{% else %}{{ metadata.title }}{% endif %}">
+
+        <meta name="theme-color" content="#ffffff">
+        <meta name="msapplication-TileColor" content="#ffffff">
+        <link rel="manifest" href="assets/site.webmanifest">
+        <link rel="apple-touch-icon" sizes="180x180" href="assets/images/favicons/apple-touch-icon.png">
+        <link rel="icon" type="image/png" sizes="32x32" href="assets/images/favicons/favicon-32x32.png">
+        <link rel="icon" type="image/png" sizes="16x16" href="assets/images/favicons/favicon-16x16.png">
+        <link rel="mask-icon" href="assets/images/favicons/safari-pinned-tab.svg" color="#000000">
+        <link id="main-css" rel="stylesheet" href="{{ 'assets/styles/main.css' | asset }}">
+    </head>
+    <body data-module-load>
+        <!-- Preloader -->
+        <div class="c-preloader"></div>
+
+        <div data-load-container>
+            {% block beforeMain %}
+                <div data-module-scroll="main">
+                    {% include "@partials/header.twig" %}
+                    {% endblock %}
+
+                        <main>
+                            {% block content %}{% endblock %}
+
+                            {% block afterContent %}
+                                {% include "@partials/footer.twig" %}
+                            {% endblock %}
+                        </main>
+
+                    {% block afterMain %}
+                </div>
+            {% endblock %}
+        </div>
+
+        <script nomodule src="https://cdnjs.cloudflare.com/ajax/libs/babel-polyfill/7.6.0/polyfill.min.js" crossorigin="anonymous"></script>
+        <script nomodule src="https://polyfill.io/v3/polyfill.min.js?features=Element.prototype.remove%2CElement.prototype.append%2Cfetch%2CCustomEvent%2CElement.prototype.matches%2CNodeList.prototype.forEach%2CAbortController" crossorigin="anonymous"></script>
+
+        <script src="{{ 'assets/scripts/vendors.js' | asset }}" defer></script>
+        <script src="{{ 'assets/scripts/app.js' | asset }}" defer></script>
+    </body>
+</html>

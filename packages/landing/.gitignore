@@ -1,0 +1,7 @@
+node_modules
+.DS_Store
+Thumbs.db
+loconfig.*.json
+!loconfig.example.json
+.prettierrc
+www/**/*.html

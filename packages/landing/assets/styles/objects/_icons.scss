@@ -1,0 +1,89 @@
+// ==========================================================================
+// Objects / SVG Icons
+// ==========================================================================
+
+// Markup
+//
+// 1. If icon is accessible and has a title
+// 2. If icon is decorative
+//
+// <i class="o-icon ${modifier}">
+//     <svg
+//         class="svg-${icon-name}"
+//         xmlns="http://www.w3.org/2000/svg"
+//         role="img" [1]
+//         aria-hidden="true" [2]
+//         focusable="false" [2]
+//         aria-labelledby="${id}" [1]
+//     >
+//         <title id="${id}"> [1]
+//             Locomotive
+//         </title>
+//         <use xlink:href="assets/images/sprite.svg#${icon-name}" xmlns:xlink="http://www.w3.org/1999/xlink"/>
+//     </svg>
+// </i>
+
+// Global styles for icones
+// ==========================================================================
+
+
+@use "../core" as *;
+// Default metrics
+:root {
+    --icon-width: #{rem(24px)};
+    --icon-ratio: 1;
+}
+
+.o-icon {
+    display: inline-block;
+    vertical-align: middle;
+
+    svg {
+        display: block;
+        width: var(--icon-width);
+        height: calc(var(--icon-width) * (1 / (var(--icon-ratio))));
+    }
+}
+
+// SVG sizes
+// ==========================================================================
+
+.svg-logo-lenis {
+    --icon-width: #{rem(67px)};
+    --icon-ratio: 67/72;
+}
+
+.svg-logo-locomotive {
+    --icon-width: #{rem(79px)};
+    --icon-ratio: 79/35;
+}
+
+.svg-arrow-external {
+    --icon-width: #{rem(12px)};
+}
+
+.svg-inview-01,
+.svg-inview-02,
+.svg-inview-03,
+.svg-inview-04,
+.svg-inview-05,
+.svg-inview-06 {
+    --icon-width: #{vw(24)};
+}
+
+.svg-progress-01,
+.svg-progress-02,
+.svg-progress-03,
+.svg-progress-04,
+.svg-progress-05 {
+    --icon-width: #{vw(24)};
+    --icon-ratio: 224/350;
+}
+
+.svg-parallax-01,
+.svg-parallax-02,
+.svg-parallax-03,
+.svg-parallax-04,
+.svg-parallax-05 {
+    --icon-width: #{vw(24)};
+}

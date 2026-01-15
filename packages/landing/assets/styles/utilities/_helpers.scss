@@ -1,0 +1,92 @@
+// ==========================================================================
+// Utilities / Helpers
+// ==========================================================================
+
+// Layout
+// ==========================================================================
+
+@use '../core' as *;
+.u-relative {
+    position: relative;
+}
+
+.u-clipped {
+    clip-path: polygon(0% 0, 100% 00%, 100% 100%, 0 100%);
+}
+
+.u-max {
+    &-w300 {
+        max-width: rem(300px);
+    }
+    &-w440 {
+        max-width: rem(440px);
+    }
+}
+
+.u-glyph {
+    font-family: ff('serif');
+    font-feature-settings: 'dlig' on, 'ss01' on, 'salt' on;
+    font-weight: $font-weight-regular;
+}
+
+.u-hover-underline {
+    position: relative;
+
+    @media (hover: hover) {
+        &::before {
+            content: '';
+            position: absolute;
+            bottom: -0.1em;
+            left: 0;
+            width: 100%;
+            height: 1px;
+            background-color: currentColor;
+            transform: scale3d(0, 1, 1);
+            transition: transform t(fast) ease('power3.out');
+            transform-origin: top right;
+        }
+
+        &:hover,
+        .u-hover:hover & {
+            &::before {
+                transform: scale3d(1, 1, 1);
+                transform-origin: top left;
+            }
+        }
+    }
+}
+
+// Completely remove from the flow but leave available to screen readers.
+.u-screen-reader-text {
+    @include u-accessibly-hidden;
+}
+
+@media not print {
+    .u-screen-reader-text\@screen {
+        @include u-accessibly-hidden;
+    }
+}
+
+// Extends the `.screen-reader-text` class to allow the element
+// to be focusable when navigated to via the keyboard.
+//
+// @link https://www.drupal.org/node/897638
+// @todo Define styles when focused.
+
+.u-screen-reader-text.-focusable {
+    @include u-accessibly-focusable;
+}
+
+.u-external-icon {
+    font-size: 0.85em;
+}
+
+.u-text-balance {
+    text-wrap: balance;
+}
+
+.u-hidden-md {
+    @media (max-width: $to-medium) {
+        display: none;
+    }
+}

@@ -1,0 +1,533 @@
+/**
+ * Scroll Element
+ *
+ * Give tools to compute element progress in the viewport and triggers callbacks to animate it.
+ *
+ * Features functions to:
+ *
+ * - scrollClass - Add a custom class when the element is intersected by the offset
+ * - scrollOffset - Determine offsets to intersect the element
+ * - scrollPosition - Determine the element positions to consider an element as intersected.
+ * - scrollCssProgress - Add a specific css variable (PROGRESS_CSS_VAR) that store the scroll progress
+ * - scrollEventProgress - Send scroll progress to custom event listeners.
+ * - scrollSpeed - Add a scroll multiplicator to create a parallax effect
+ * - scrollRepeat - Repeat the option to trigger animation each time the element is intersected
+ * - scrollCall - Call a custom event when the element is intersected
+ */
+
+import type {
+    IScrollElementOptions,
+    IScrollElementAttributes,
+    IScrollElementIntersection,
+    IScrollElementMetrics,
+    IScrollElementCallbacksValues,
+    scrollOrientation,
+} from '../types';
+import { clamp, closestNumber, normalize, mapRange } from '../utils/maths';
+
+/** Constants */
+const INVIEW_CLASS = 'is-inview';
+const PROGRESS_CSS_VAR = '--progress';
+
+export default class ScrollElement {
+    public $el: HTMLElement;
+    public id: number;
+    public needRaf: boolean;
+    public attributes: IScrollElementAttributes;
+    public scrollOrientation: scrollOrientation;
+    public isAlreadyIntersected: boolean;
+
+    private intersection: IScrollElementIntersection;
+    private metrics: IScrollElementMetrics;
+    private currentScroll: number;
+    private translateValue: number;
+    private progress: number;
+    private lastProgress: number | null;
+    private isInview: boolean;
+    private isInteractive: boolean;
+    private isInFold: boolean;
+    private isFirstResize: boolean;
+
+    private subscribeElementUpdateFn: (scrollElement: ScrollElement) => void;
+    private unsubscribeElementUpdateFn: (scrollElement: ScrollElement) => void;
+    private lenisInstance: any;
+
+    // Cached functions to avoid orientation checks every frame
+    private getWindowSize: () => number;
+    private getMetricsStart: (bcr: DOMRect) => number;
+    private getMetricsSize: (bcr: DOMRect) => number;
+
+    // Position handlers for intersection.start (includes wSize)
+    private readonly startPositionHandlers: Record<string, (offsetStart: number, wSize: number, viewport: number, size: number) => number> = {
+        'start': (offsetStart, wSize, viewport) => offsetStart - wSize + viewport,
+        'middle': (offsetStart, wSize, viewport, size) => offsetStart - wSize + viewport + size * 0.5,
+        'end': (offsetStart, wSize, viewport, size) => offsetStart - wSize + viewport + size,
+        'fold': () => 0,
+    };
+
+    // Position handlers for intersection.end (DOES NOT include wSize - critical difference)
+    private readonly endPositionHandlers: Record<string, (offsetStart: number, viewport: number, size: number) => number> = {
+        'start': (offsetStart, viewport) => offsetStart - viewport,
+        'middle': (offsetStart, viewport, size) => offsetStart - viewport + size * 0.5,
+        'end': (offsetStart, viewport, size) => offsetStart - viewport + size,
+    };
+
+    constructor({
+        $el,
+        id,
+        subscribeElementUpdateFn,
+        unsubscribeElementUpdateFn,
+        needRaf,
+        scrollOrientation,
+        lenisInstance,
+    }: IScrollElementOptions) {
+        // Scroll DOM element
+        this.$el = $el;
+        // Unique ID
+        this.id = id;
+        // RAF option
+        this.needRaf = needRaf;
+        // Scroll Direction
+        this.scrollOrientation = scrollOrientation;
+        // Lenis instance
+        this.lenisInstance = lenisInstance;
+        // Parent's callbacks
+        this.subscribeElementUpdateFn = subscribeElementUpdateFn;
+        this.unsubscribeElementUpdateFn = unsubscribeElementUpdateFn;
+
+        // Attributes
+        this.attributes = {
+            scrollClass: this.$el.dataset['scrollClass'] ?? INVIEW_CLASS,
+            scrollOffset: this.$el.dataset['scrollOffset'] ?? '0,0',
+            scrollPosition: this.$el.dataset['scrollPosition'] ?? 'start,end',
+            scrollCssProgress: this.$el.dataset['scrollCssProgress'] !== undefined,
+            scrollEventProgress:
+                this.$el.dataset['scrollEventProgress'] ?? null,
+            scrollSpeed:
+                this.$el.dataset['scrollSpeed'] !== undefined
+                    ? parseFloat(this.$el.dataset['scrollSpeed'])
+                    : null,
+            scrollRepeat: this.$el.dataset['scrollRepeat'] !== undefined,
+            scrollCall: this.$el.dataset['scrollCall'] ?? null,
+            scrollIgnoreFold: this.$el.dataset['scrollIgnoreFold'] !== undefined,
+            scrollEnableTouchSpeed:
+                this.$el.dataset['scrollEnableTouchSpeed'] !== undefined,
+        };
+
+        // Limits
+        this.intersection = {
+            start: 0,
+            end: 0,
+        };
+
+        // Metrics
+        this.metrics = {
+            offsetStart: 0,
+            offsetEnd: 0,
+            bcr: {} as DOMRect,
+        };
+
+        // Scroll Values
+        this.currentScroll = this.lenisInstance.scroll;
+
+        // Parallax
+        this.translateValue = 0;
+
+        // Progress
+        this.progress = 0;
+        this.lastProgress = null;
+
+        // Inview
+        this.isInview = false;
+        this.isInteractive = false;
+        this.isAlreadyIntersected = false;
+        this.isInFold = false;
+        this.isFirstResize = true;
+
+        // Cache orientation-dependent functions to avoid repeated conditionals
+        this.getWindowSize = this.scrollOrientation === 'vertical'
+            ? () => this.lenisInstance.dimensions.height
+            : () => this.lenisInstance.dimensions.width;
+
+        this.getMetricsStart = this.scrollOrientation === 'vertical'
+            ? (bcr: DOMRect) => bcr.top
+            : (bcr: DOMRect) => bcr.left;
+
+        this.getMetricsSize = this.scrollOrientation === 'vertical'
+            ? (bcr: DOMRect) => bcr.height
+            : (bcr: DOMRect) => bcr.width;
+
+        // Init
+        this._init();
+    }
+
+    /**
+     * Lifecyle - Initialize progress tracking.
+     *
+     * @private
+     */
+    private _init() {
+        if (!this.needRaf) {
+            return;
+        }
+
+        // First resize to compute all values
+        this._resize();
+    }
+
+    /**
+     * Callback - Resize callback
+     */
+    public onResize({ currentScroll }: IScrollElementCallbacksValues) {
+        this.currentScroll = currentScroll;
+        this._resize();
+    }
+
+    /**
+     * Callback - RAF callback
+     */
+    public onRender({ currentScroll, smooth }: IScrollElementCallbacksValues) {
+        const wSize = this.getWindowSize();
+        this.currentScroll = currentScroll;
+        this._computeProgress();
+
+        // Parallax
+        if (
+            this.attributes.scrollSpeed &&
+            !isNaN(this.attributes.scrollSpeed)
+        ) {
+            // if touch detected or smooth disabled
+            if (!this.attributes.scrollEnableTouchSpeed && !smooth) {
+                if (this.translateValue) {
+                    this.$el.style.transform = `translate3d(0, 0, 0)`;
+                }
+                this.translateValue = 0;
+
+            // if mousewheel or smooth enabled
+            } else {
+                // Check fold condition
+                if (this.isInFold) {
+                    const progress = Math.max(0, this.progress);
+                    this.translateValue =
+                        progress * wSize * this.attributes.scrollSpeed * -1;
+                } else {
+                    const progress = mapRange(0, 1, -1, 1, this.progress);
+                    this.translateValue =
+                        progress * wSize * this.attributes.scrollSpeed * -1;
+                }
+
+                this.$el.style.transform =
+                    this.scrollOrientation === 'vertical'
+                        ? `translate3d(0, ${this.translateValue}px, 0)`
+                        : `translate3d(${this.translateValue}px, 0, 0)`;
+            }
+        }
+    }
+
+    /**
+     * Inview callback
+     */
+    public setInview() {
+        if (this.isInview) {
+            return;
+        }
+
+        this.isInview = true;
+        this.$el.classList.add(this.attributes.scrollClass);
+
+        const way = 'enter';
+        const from = this._getScrollCallFrom();
+        this.attributes.scrollCall && this._dispatchCall(way, from);
+    }
+
+    /**
+     * Out of view callback
+     */
+    public setOutOfView() {
+        if (!(this.isInview && this.attributes.scrollRepeat)) {
+            return;
+        }
+
+        this.isInview = false;
+        this.$el.classList.remove(this.attributes.scrollClass);
+
+        const way = 'leave';
+        const from = this._getScrollCallFrom();
+        this.attributes.scrollCall && this._dispatchCall(way, from);
+    }
+
+    /**
+     * Switch interactivity on to subscribe the instance to the RAF
+     * and start calculations.
+     */
+    public setInteractivityOn() {
+        if (this.isInteractive) {
+            return;
+        }
+
+        this.isInteractive = true;
+        this.subscribeElementUpdateFn(this);
+    }
+
+    /**
+     * Switch interactivity off to unsubscribe the instance to the RAF
+     * and stop calculations.
+     */
+    public setInteractivityOff() {
+        if (!this.isInteractive) {
+            return;
+        }
+
+        this.isInteractive = false;
+        this.unsubscribeElementUpdateFn(this);
+
+        // Force progress to progress limit when the element is out
+        this.lastProgress !== null &&
+            this._computeProgress(closestNumber([0, 1], this.lastProgress));
+    }
+
+    /**
+     * Resize method that compute the element's values.
+     *
+     * @private
+     */
+    private _resize() {
+        this.metrics.bcr = this.$el.getBoundingClientRect();
+        this._computeMetrics();
+        this._computeIntersection();
+
+        // First resize logic
+        if (this.isFirstResize) {
+            this.isFirstResize = false;
+            // Dispatch default call if the element is in fold.
+            if (this.isInFold) {
+                this.setInview();
+            }
+        }
+    }
+
+    /**
+     * Compute element's offsets and determine if the element is in fold.
+     *
+     * @private
+     */
+    private _computeMetrics() {
+        const wSize = this.getWindowSize();
+        const metricsStart = this.getMetricsStart(this.metrics.bcr);
+        const metricsSize = this.getMetricsSize(this.metrics.bcr);
+
+        this.metrics.offsetStart =
+            this.currentScroll + metricsStart - this.translateValue;
+        this.metrics.offsetEnd = this.metrics.offsetStart + metricsSize;
+
+        if (
+            this.metrics.offsetStart < wSize &&
+            !this.attributes.scrollIgnoreFold
+        ) {
+            this.isInFold = true;
+        } else {
+            this.isInFold = false;
+        }
+    }
+
+    /**
+     * Compute intersection values depending on the context.
+     * Uses handler-based approach for cleaner, more maintainable code.
+     *
+     * @private
+     */
+    private _computeIntersection() {
+        const wSize = this.getWindowSize();
+        const metricsSize = this.getMetricsSize(this.metrics.bcr);
+
+        // Parse offset
+        const offset = this.attributes.scrollOffset.split(',');
+        const offsetStart = offset[0]?.trim() ?? '0';
+        const offsetEnd = offset[1]?.trim() ?? '0';
+
+        // Parse positions
+        const scrollPosition = this.attributes.scrollPosition.split(',');
+        let scrollPositionStart = scrollPosition[0]?.trim() ?? 'start';
+        const scrollPositionEnd = scrollPosition[1]?.trim() ?? 'end';
+
+        // Calculate viewport offsets
+        const viewportStart = offsetStart.includes('%')
+            ? wSize * parseInt(offsetStart.replace('%', '').trim()) * 0.01
+            : parseInt(offsetStart);
+        const viewportEnd = offsetEnd.includes('%')
+            ? wSize * parseInt(offsetEnd.replace('%', '').trim()) * 0.01
+            : parseInt(offsetEnd);
+
+        // Fold exception
+        if (this.isInFold) {
+            scrollPositionStart = 'fold';
+        }
+
+        // Calculate intersection.start using handlers
+        const startHandler = this.startPositionHandlers[scrollPositionStart];
+        this.intersection.start = startHandler
+            ? startHandler(this.metrics.offsetStart, wSize, viewportStart, metricsSize)
+            : this.metrics.offsetStart - wSize + viewportStart; // default fallback
+
+        // Calculate intersection.end using handlers
+        const endHandler = this.endPositionHandlers[scrollPositionEnd];
+        this.intersection.end = endHandler
+            ? endHandler(this.metrics.offsetStart, viewportEnd, metricsSize)
+            : this.metrics.offsetStart - viewportEnd + metricsSize; // default fallback
+
+        // Ensure end > start
+        if (this.intersection.end <= this.intersection.start) {
+            switch (scrollPositionEnd) {
+                case 'start':
+                    this.intersection.end = this.intersection.start + 1;
+                    break;
+                case 'middle':
+                    this.intersection.end = this.intersection.start + metricsSize * 0.5;
+                    break;
+                case 'end':
+                    this.intersection.end = this.intersection.start + metricsSize;
+                    break;
+                default:
+                    this.intersection.end = this.intersection.start + 1;
+                    break;
+            }
+        }
+    }
+
+    /**
+     * Compute the scroll progress of the element depending
+     * on its intersection values.
+     *
+     * @private
+     *
+     * @param {number} [forcedProgress] - Value to force progress.
+     */
+    private _computeProgress(forcedProgress?: number) {
+        // Progress
+        const progress =
+            forcedProgress ??
+            clamp(
+                0,
+                1,
+                normalize(
+                    this.intersection.start,
+                    this.intersection.end,
+                    this.currentScroll
+                )
+            );
+
+        this.progress = progress;
+
+        if (progress !== this.lastProgress) {
+            this.lastProgress = progress;
+
+            // Set the element's progress to the css variable
+            this.attributes.scrollCssProgress && this._setCssProgress(progress);
+
+            // Set the element's progress to the custom event listeners
+            this.attributes.scrollEventProgress &&
+                this._setCustomEventProgress(progress);
+
+            // Logic to trigger the inview/out of view callbacks
+            progress > 0 && progress < 1 && this.setInview();
+            progress === 0 && this.setOutOfView();
+            progress === 1 && this.setOutOfView();
+        }
+    }
+
+    /**
+     * Set the element's progress to a specific css variable.
+     *
+     * @private
+     *
+     * @param {number} [currentProgress] - Progress value.
+     */
+    _setCssProgress(currentProgress = 0) {
+        this.$el.style.setProperty(
+            PROGRESS_CSS_VAR,
+            currentProgress.toString()
+        );
+    }
+
+    /**
+     * Set the element's progress to the custom event listeners.
+     *
+     * @private
+     *
+     * @param {number} [currentProgress] - Progress value.
+     */
+    _setCustomEventProgress(currentProgress = 0) {
+        const customEventName = this.attributes.scrollEventProgress;
+
+        if (!customEventName) return;
+
+        const customEvent = new CustomEvent(customEventName, {
+            detail: {
+                target: this.$el,
+                progress: currentProgress,
+            },
+        });
+        window.dispatchEvent(customEvent);
+    }
+
+    /**
+     * Function to get scroll call from.
+     *
+     * @private
+     */
+    _getScrollCallFrom() {
+        const closestIntersectionValue = closestNumber(
+            [this.intersection.start, this.intersection.end],
+            this.currentScroll
+        );
+        return this.intersection.start === closestIntersectionValue
+            ? 'start'
+            : 'end';
+    }
+
+    /**
+     * Lifecyle - Destroy and cleanup the scroll element.
+     *
+     * Removes all CSS modifications and clears references to prevent memory leaks.
+     */
+    public destroy(): void {
+        // Remove CSS variables
+        if (this.attributes.scrollCssProgress) {
+            this.$el.style.removeProperty(PROGRESS_CSS_VAR);
+        }
+
+        // Remove transform if parallax was applied
+        if (this.attributes.scrollSpeed) {
+            this.$el.style.removeProperty('transform');
+        }
+
+        // Remove class if added
+        if (this.isInview && this.attributes.scrollClass) {
+            this.$el.classList.remove(this.attributes.scrollClass);
+        }
+    }
+
+    /**
+     * Function to dispatch a custom event.
+     *
+     * @private
+     *
+     * @param {string} way - Enter or leave.
+     * @param {string} from - Start or end.
+     */
+    _dispatchCall(way: string, from: string) {
+        const customEventName = this.attributes.scrollCall;
+
+        if (!customEventName) return;
+
+        // Using CustomEvent API (https://developer.mozilla.org/en-US/docs/Web/API/CustomEvent)
+        const customEvent = new CustomEvent(customEventName, {
+            detail: {
+                target: this.$el,
+                way,
+                from,
+            },
+        });
+        window.dispatchEvent(customEvent);
+    }
+}

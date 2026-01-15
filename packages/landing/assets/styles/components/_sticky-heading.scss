@@ -1,0 +1,71 @@
+@use "../core" as *;
+@use "heading" as *;
+
+// Components / Sticky heading
+// ==========================================================================
+
+@use "sass:math";
+
+.c-sticky-heading {
+    height: 300vh;
+    @media (max-aspect-ratio: 1.25 / 1) {
+        height: auto;
+        padding-top: spacingClamp('2xl');
+    }
+}
+
+.c-sticky-heading_inner {
+    position: sticky;
+    top: 0;
+    display: flex;
+    align-items: flex-end;
+    width: 100%;
+    height: calc(var(--vh, 1vh) * 100);
+    overflow: hidden;
+
+    @media (max-aspect-ratio: 1.25 / 1) {
+        align-items: start;
+        height: auto;
+        position: relative;
+        padding-top: spacingClamp('xs');
+    }
+}
+
+.c-sticky-heading_title {
+    @include heading-serif;
+    font-size: calc(#{math.div(870, 1740)} * 100 * var(--vw, 1vw));
+    width: auto;
+    padding-right: calc(var(--grid-margin) * 2);
+    transform: translate3d(calc(-1 * (var(--progress) * (100% - (var(--vw, 1vw) * 100)))), 0, 0);
+    // @media (max-width: $to-small) {
+    //     font-size: calc(#{math.div(870, 1440)} * 125 * var(--vw, 1vw));
+    // }
+    @media (max-aspect-ratio: 1.25 / 1) {
+        font-size: calc(#{math.div(870, 1440)} * 49 * var(--vw, 1vw));
+        transform: none;
+    }
+}
+
+.c-sticky-heading_description {
+    margin-left: calc(100vw - 13.75rem - var(--grid-margin) * 2);
+    max-width: 13.75rem;
+    margin-bottom: spacingClamp('sm');
+
+    @media (min-width: $from-medium) {
+        max-width: 17.5rem;
+        margin-left: 50vw;
+        font-size: calc(#{math.div(870, 1740)} * 100 * var(--vw, 1vw));
+        margin-bottom: -.075em;
+    }
+
+    
+    
+}
+
+.c-sticky_scroll {
+    display: block;
+    position: absolute;
+    top: 0;
+    height: 100%;
+    width: 100%;
+}
