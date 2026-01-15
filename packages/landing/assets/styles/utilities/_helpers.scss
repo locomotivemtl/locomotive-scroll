@@ -80,3 +80,13 @@
 .u-external-icon {
     font-size: 0.85em;
 }
+
+.u-text-balance {
+    text-wrap: balance;
+}
+
+.u-hidden-md {
+    @media (max-width: $to-medium) {
+        display: none;
+    }
+}

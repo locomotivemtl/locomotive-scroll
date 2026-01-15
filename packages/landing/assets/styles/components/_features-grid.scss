@@ -2,8 +2,7 @@
 // Components / Features grid
 // ==========================================================================
 
-
-@use "../core" as *;
+@use '../core' as *;
 $color-grid: 282828;
 
 .c-features-grid {
@@ -23,15 +22,18 @@ $color-grid: 282828;
     position: relative;
 
     &:before {
-        content: "";
+        content: '';
         display: block;
         width: 100%;
-        padding-top: calc((var(--rows) + 2) / var(--columns) * (1 / (var(--cell-ratio))) * 100%);
+        padding-top: calc(
+            (var(--rows) + 2) / var(--columns) * (1 / (var(--cell-ratio))) *
+                100%
+        );
         pointer-events: none;
     }
 
     &:after {
-        content: "";
+        content: '';
         position: absolute;
         top: 0;
         left: 0;
@@ -54,23 +56,33 @@ $color-grid: 282828;
 
     &::before,
     &::after {
-        content: "";
+        content: '';
         position: absolute;
         left: 0;
         width: 100%;
-        padding-top: calc(1 / var(--columns) * (1 / (var(--cell-ratio))) * 100%);
+        padding-top: calc(
+            1 / var(--columns) * (1 / (var(--cell-ratio))) * 100%
+        );
         background-color: var(--color-background);
         z-index: 1;
     }
 
     &::before {
         top: 0;
-        -webkit-mask-image: -webkit-linear-gradient(bottom, rgba(0,0,0,0), rgba(0,0,0,1));
+        -webkit-mask-image: -webkit-linear-gradient(
+            bottom,
+            rgba(0, 0, 0, 0),
+            rgba(0, 0, 0, 1)
+        );
     }
 
     &::after {
         bottom: 0;
-        -webkit-mask-image: -webkit-linear-gradient(top, rgba(0,0,0,0), rgba(0,0,0,1));
+        -webkit-mask-image: -webkit-linear-gradient(
+            top,
+            rgba(0, 0, 0, 0),
+            rgba(0, 0, 0, 1)
+        );
     }
 }
 
@@ -87,23 +99,22 @@ $color-grid: 282828;
 
     @media (max-width: $to-small) {
         grid-template-areas:
-                            ". lenis"
-                            "scrollbar locomotive"
-                            "sticky ."
-                            "sticky normalized"
-                            "io scroll-to"
-                            "direction ."
-                            ". custom-easing";
+            'locomotive lenis'
+            '. scrollbar'
+            'normalized sticky'
+            'io sticky'
+            'direction scroll-to'
+            '. custom-easing';
     }
 
     @media (min-width: $from-small) {
         grid-template-areas:
-                            "scrollbar  . lenis locomotive"
-                            ". normalized  . ."
-                            ". . sticky ."
-                            "io . sticky ."
-                            ". scroll-to sticky direction"
-                            ". custom-easing sticky direction";
+            'scrollbar  . lenis locomotive'
+            '. normalized  . .'
+            '. . sticky .'
+            'io . sticky .'
+            '. scroll-to sticky direction'
+            '. custom-easing sticky direction';
     }
 }
 
@@ -111,15 +122,33 @@ $color-grid: 282828;
     position: relative;
     text-align: left;
 
-    &.-lenis         { grid-area: lenis }
-    &.-locomotive    { grid-area: locomotive }
-    &.-scrollbar     { grid-area: scrollbar }
-    &.-normalized    { grid-area: normalized }
-    &.-sticky        { grid-area: sticky }
-    &.-io            { grid-area: io }
-    &.-scroll-to     { grid-area: scroll-to }
-    &.-direction     { grid-area: direction }
-    &.-custom-easing { grid-area: custom-easing }
+    &.-lenis {
+        grid-area: lenis;
+    }
+    &.-locomotive {
+        grid-area: locomotive;
+    }
+    &.-scrollbar {
+        grid-area: scrollbar;
+    }
+    &.-normalized {
+        grid-area: normalized;
+    }
+    &.-sticky {
+        grid-area: sticky;
+    }
+    &.-io {
+        grid-area: io;
+    }
+    &.-scroll-to {
+        grid-area: scroll-to;
+    }
+    &.-direction {
+        grid-area: direction;
+    }
+    &.-custom-easing {
+        grid-area: custom-easing;
+    }
 
     @media (min-width: $from-small) {
         &.-io {
@@ -143,9 +172,8 @@ $color-grid: 282828;
             position: sticky;
             top: calc(var(--header-height) + 1px);
             z-index: 1;
-
             &::before {
-                content: "";
+                content: '';
                 position: absolute;
                 background-color: var(--color-background);
                 z-index: -1;
@@ -154,7 +182,7 @@ $color-grid: 282828;
                 width: calc(100% + 1px);
                 height: calc(100% + 1px);
                 border: 1px solid #{'#' + $color-grid};
-                border-radius: calc(var(--vw, 1vw) * .6);
+                border-radius: calc(var(--vw, 1vw) * 0.6);
             }
         }
     }
@@ -168,7 +196,7 @@ $color-grid: 282828;
             z-index: 1;
 
             &::before {
-                content: "";
+                content: '';
                 position: absolute;
                 top: -1px;
                 left: 0px;
@@ -178,19 +206,18 @@ $color-grid: 282828;
                 border-top: 1px solid #{'#' + $color-grid};
                 border-right: 1px solid #{'#' + $color-grid};
                 border-bottom: 1px solid #{'#' + $color-grid};
-                border-top-right-radius: calc(var(--vw, 1vw) * .6);
-                border-bottom-right-radius: calc(var(--vw, 1vw) * .6);
+                border-top-right-radius: calc(var(--vw, 1vw) * 0.6);
+                border-bottom-right-radius: calc(var(--vw, 1vw) * 0.6);
                 z-index: -1;
             }
         }
         .c-features-grid_cell.-io.is-inview & {
             &::before {
                 border-left: 1px solid #{'#' + $color-grid};
-                border-radius: calc(var(--vw, 1vw) * .6);
+                border-radius: calc(var(--vw, 1vw) * 0.6);
             }
         }
     }
-
 }
 
 .c-features-grid_cell_inner {
@@ -217,24 +244,42 @@ $color-grid: 282828;
     height: 100%;
     z-index: 2;
 
-    @media(hover:hover) {
+    @media (hover: hover) {
         &::before {
-            content: "";
+            content: '';
             position: absolute;
             top: 0;
             left: 0;
             width: 100%;
             height: 100%;
-            opacity: .07;
+            opacity: 0.07;
             background-color: currentColor;
-            clip-path: polygon(80% 20%, 80% 20%, 80% 20%, 20% 80%, 20% 80%, 20% 80%, 20% 80%, 80% 20%);
+            clip-path: polygon(
+                80% 20%,
+                80% 20%,
+                80% 20%,
+                20% 80%,
+                20% 80%,
+                20% 80%,
+                20% 80%,
+                80% 20%
+            );
             transition: clip-path t(fast) ease('power3.out');
         }
 
         &:hover {
             &::before {
                 animation-play-state: running;
-                clip-path: polygon(15% 5%, 85% 5%, 95% 15%, 95% 85%, 85% 95%, 15% 95%, 5% 85%, 5% 15%);
+                clip-path: polygon(
+                    15% 5%,
+                    85% 5%,
+                    95% 15%,
+                    95% 85%,
+                    85% 95%,
+                    15% 95%,
+                    5% 85%,
+                    5% 15%
+                );
             }
         }
     }
@@ -270,8 +315,6 @@ $color-grid: 282828;
 .c-features_direction_arrows {
     position: relative;
     clip-path: inset(0);
-
-    
 
     span {
         --translate: 0%;
@@ -317,7 +360,7 @@ $color-grid: 282828;
                 transform: translate3d(#{rem(16px)}, 100%, 0);
             }
             &:nth-child(2) {
-                transform: translate3d(0,0,0);
+                transform: translate3d(0, 0, 0);
             }
         }
     }
@@ -327,7 +370,7 @@ $color-grid: 282828;
     max-width: rem(220px);
 
     @media (max-width: $to-small) {
-        opacity: .6;
+        opacity: 0.6;
     }
 }
 
@@ -349,7 +392,7 @@ $color-grid: 282828;
             transition: transform t(normal) ease('power4.out');
 
             .c-features-grid_cell:hover & {
-                transform: scale3d(.95, .95, 1);
+                transform: scale3d(0.95, 0.95, 1);
                 animation: blink 100ms step-start 3;
             }
         }
