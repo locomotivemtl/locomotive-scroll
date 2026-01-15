@@ -17,7 +17,7 @@ export default class extends module {
         this.progress = 0;
         this.metrics = [];
         this.baseColor = getComputedStyle(this.el).getPropertyValue('--color-cta-fadein');
-        this.targetColor = getComputedStyle(this.el).getPropertyValue('--color');        
+        this.targetColor = getComputedStyle(this.el).getPropertyValue('--color');
     }
 
     ///////////////
@@ -69,6 +69,7 @@ export default class extends module {
         // Use SplitText.create with autoSplit for automatic resize handling
         this.split = SplitText.create(this.$texts, {
             type: "lines",
+            tag: "span",
             linesClass: "c-fadein-text_line",
             autoSplit: true,
             onSplit: (self) => {
@@ -105,10 +106,10 @@ export default class extends module {
         }
     }
 
-    computeProgress() {        
+    computeProgress() {
         for (let index = 0; index < this.split.lines.length; index++) {
             const $line = this.split.lines[index];
-            const { from, to } =  this.metrics[index];            
+            const { from, to } =  this.metrics[index];
             const clampedProgress = gsap.utils.clamp(0, 1, gsap.utils.mapRange(from, to, 0, 1, this.progress))
             $line.style.setProperty('--progress', `${clampedProgress}`)
 
@@ -116,18 +117,18 @@ export default class extends module {
         }
     }
 
-    updateGradient($item, progress) {    
-        const offset = 100; 
+    updateGradient($item, progress) {
+        const offset = 100;
         const x = progress;
         const g1 = 0
         const g5 = 100
-    
+
         const g3 = gsap.utils.mapRange(0, 1, -offset, 100 + offset, x)
-    
+
         const g2 = Math.max(g3 - offset, 0)
         const g4 = Math.min(g3 + offset, 100)
 
         const background = `linear-gradient(to right, ${this.targetColor} ${g1}%, ${this.targetColor} ${g2}%, ${this.targetColor} ${g3}%, ${this.baseColor} ${g4}%, ${this.baseColor} ${g5}%)`
-        $item.style.setProperty('--background', `${background}`)    
+        $item.style.setProperty('--background', `${background}`)
     }
 }
