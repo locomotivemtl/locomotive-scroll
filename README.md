@@ -1,8 +1,8 @@
 # Locomotive Scroll
 
-[![npm version](https://img.shields.io/npm/v/locomotive-scroll.svg)](https://www.npmjs.com/package/locomotive-scroll@5.0.0-rc.1)
-[![npm downloads](https://img.shields.io/npm/dm/locomotive-scroll.svg)](https://www.npmjs.com/package/locomotive-scroll@5.0.0-rc.1)
-[![bundle size](https://img.shields.io/bundlephobia/minzip/locomotive-scroll@5.0.0-rc.1)](https://bundlephobia.com/package/locomotive-scroll@5.0.0-rc.1)
+[![npm version](https://img.shields.io/npm/v/locomotive-scroll.svg)](https://www.npmjs.com/package/locomotive-scroll)
+[![npm downloads](https://img.shields.io/npm/dm/locomotive-scroll.svg)](https://www.npmjs.com/package/locomotive-scroll)
+[![bundle size](https://img.shields.io/bundlephobia/minzip/locomotive-scroll)](https://bundlephobia.com/package/locomotive-scroll)
 
 A **lightweight** & **modern** scroll library for detection, animation, and smooth scrolling. Built on top of [Lenis](https://github.com/darkroomengineering/lenis).
 
@@ -13,7 +13,7 @@ Full documentation available at [scroll.locomotive.ca/docs](https://scroll.locom
 ## Quick Start
 
 ```bash
-npm install locomotive-scroll@5.0.0-rc.1
+npm install locomotive-scroll
 ```
 
 ```js

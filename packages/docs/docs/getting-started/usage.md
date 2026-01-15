@@ -17,7 +17,7 @@ const locomotiveScroll = new LocomotiveScroll();
 ### Without a bundler
 
 ```html
-<script src="https://cdn.jsdelivr.net/npm/locomotive-scroll@5.0.0-rc.1/bundled/locomotive-scroll.min.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/locomotive-scroll/bundled/locomotive-scroll.min.js"></script>
 <script>
     const locomotiveScroll = new LocomotiveScroll();
 </script>
@@ -36,7 +36,10 @@ Add the base styles to your CSS file:
 Or link directly to the bundled CSS:
 
 ```html
-<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/locomotive-scroll@5.0.0-rc.1/bundled/locomotive-scroll.css">
+<link
+    rel="stylesheet"
+    href="https://cdn.jsdelivr.net/npm/locomotive-scroll/bundled/locomotive-scroll.css"
+/>
 ```
 
 Learn more about styling considerations on [Lenis documentation](https://github.com/darkroomengineering/lenis#considerations).
@@ -54,7 +57,7 @@ If you are utilizing the horizontal feature, we recommend applying the following
 
 ```css
 /* Only necessary with horizontal scrolling */
-html[data-scroll-orientation="horizontal"] {
+html[data-scroll-orientation='horizontal'] {
     body {
         width: fit-content;
     }
