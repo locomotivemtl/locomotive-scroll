@@ -42,6 +42,8 @@
     }
   }
 
+  var version$1 = "5.0.0-rc.1";
+
   // package.json
   var version = "1.3.17";
 
@@ -2152,6 +2154,8 @@
       this._onScrollToBind = void 0;
       this._originalOnContentResize = void 0;
       this._originalOnWrapperResize = void 0;
+      // Set version
+      window.locomotiveScrollVersion = version$1;
       // Get arguments
       Object.assign(this, {
         lenisOptions: lenisOptions,

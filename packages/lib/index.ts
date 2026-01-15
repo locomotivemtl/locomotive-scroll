@@ -1,3 +1,4 @@
+import { version } from './package.json'
 import Lenis from 'lenis';
 import Core from './core/Core';
 import type {
@@ -49,6 +50,9 @@ export default class LocomotiveScroll {
         initCustomTicker,
         destroyCustomTicker,
     }: ILocomotiveScrollOptions = {}) {
+
+        // Set version
+        window.locomotiveScrollVersion = version;
 
         // Get arguments
         Object.assign(this, {
