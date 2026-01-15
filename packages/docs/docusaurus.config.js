@@ -147,7 +147,7 @@ const config = {
                 label: 'Demo',
               },
               {
-                href: 'https://github.com/facebook/docusaurus',
+                href: 'https://github.com/locomotivemtl/locomotive-scroll/tree/v5-beta',
                 label: 'GitHub',
               },
             ],
