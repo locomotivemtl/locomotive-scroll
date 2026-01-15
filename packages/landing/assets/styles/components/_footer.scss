@@ -69,3 +69,14 @@
         margin-top: spacingClamp('3xl');
     }
 }
+
+.c-footer_website {
+    opacity: 0;
+    transform: translate3d(0,100%,0);
+    transition: transform t('slow') ease('power3.out'), opacity t('slow') ease('power3.out');
+
+    &.is-inview {
+        opacity: 1;
+        transform: translate3d(0,0,0);
+    }
+}
