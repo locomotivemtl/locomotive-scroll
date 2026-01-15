@@ -39,7 +39,7 @@
             bottom: -0.1em;
             left: 0;
             width: 100%;
-            height: clamp(1px, 0.07em, 3px);
+            height: 1px;
             background-color: currentColor;
             transform: scale3d(0, 1, 1);
             transition: transform t(fast) ease('power3.out');
