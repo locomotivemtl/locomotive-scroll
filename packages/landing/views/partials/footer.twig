@@ -12,8 +12,8 @@
         <div data-scroll data-scroll-position="end" data-scroll-call="randomize">
             <p>npm</p>
             <p>npm install</p>
-            <p>npm install locomotive</p>
-            <p>npm install locomotive-scroll@5.0.0-rc.1</p>
+            <p>npm install locomotive-scroll</p>
+            <p>npm install</p>
             <p>npm</p>
         </div>
         <div data-scroll data-scroll-position="end" data-scroll-call="randomize">
@@ -41,11 +41,11 @@
     </div>
 
     <div class="o-grid -cols u-padding-top-lg">
-        <h2 
-            data-module-mask-lines 
+        <h2
+            data-module-mask-lines
             data-scroll
             data-scroll-event-progress="progressEvent"
-            data-scroll-position="start, end" 
+            data-scroll-position="start, end"
             data-scroll-offset="100px, 75%"
             class="c-footer_thanks || c-hero_title || c-heading -h1">
             We hope that you enjoy our library.
@@ -77,7 +77,8 @@
                     {% include "@snippets/button.twig" with {
                         label: "View on Github",
                         icon: "github",
-                        href: general.github
+                        href: general.github,
+                        attr: 'data-load="false"'
                     } %}
                 </li>
                 <li class="c-hero_links_item">
@@ -85,7 +86,8 @@
                         label: "Read documentation",
                         icon: "doc",
                         href: general.documentation,
-                        modifiers: '-stroke'
+                        modifiers: '-stroke',
+                        attr: 'data-load="false"'
                     } %}
                 </li>
             </ul>

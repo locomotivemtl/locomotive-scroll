@@ -41,7 +41,8 @@
                             {% include "@snippets/button.twig" with {
                                 label: "View on Github",
                                 icon: "github",
-                                href: general.github
+                                href: general.github,
+                                attr: 'data-load="false"'
                             } %}
                         </li>
                         <li class="c-hero_links_item">
@@ -49,7 +50,8 @@
                                 label: "Read documentation",
                                 icon: "doc",
                                 href: general.documentation,
-                                modifiers: '-stroke'
+                                modifiers: '-stroke',
+                                attr: 'data-load="false"'
                             } %}
                         </li>
                     </ul>
