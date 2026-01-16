@@ -183,6 +183,16 @@ const config = {
                 darkTheme: prismThemes.vsDark,
             },
         }),
+
+    plugins: [
+        [
+            'vercel-analytics',
+            {
+                debug: false,
+                mode: 'auto',
+            },
+        ],
+    ],
 };
 
 export default config;
