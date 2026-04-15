@@ -57,7 +57,7 @@
         "bundled"
     ],
     "dependencies": {
-        "lenis": "1.3.17"
+        "lenis": "^1.3.23"
     },
     "devDependencies": {
         "cssnano": "^6.0.1",
