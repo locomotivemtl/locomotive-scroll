@@ -28,7 +28,7 @@
     "dependencies": {
         "@astrojs/check": "^0.9.2",
         "@astrojs/tailwind": "^5.1.0",
-        "astro": "^5.18.1",
+        "astro": "^6.1.6",
         "astro-seo": "^0.8.4",
         "locomotive-scroll": "*",
         "nanostores": "^0.10.3",
