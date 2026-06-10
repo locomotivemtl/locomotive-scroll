@@ -28,7 +28,7 @@
     "@docusaurus/module-type-aliases": "^3.9.2",
     "@docusaurus/types": "^3.9.2",
     "cssnano": "^7.0.2",
-    "postcss": "^8.4.38"
+    "postcss": "^8.5.10"
   },
   "browserslist": {
     "production": [
