@@ -23,7 +23,7 @@
         "svg4everybody": "^2.1.9"
     },
     "devDependencies": {
-        "@11ty/eleventy": "^2.0.1",
+        "@11ty/eleventy": "^3.1.6",
         "@factorial/eleventy-plugin-twig": "^0.1.2",
         "autoprefixer": "^10.4.13",
         "browser-sync": "^3.0.2",
