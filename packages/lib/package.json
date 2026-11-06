@@ -21,7 +21,7 @@
         "scroll"
     ],
     "engines": {
-        "node": ">=20"
+        "node": ">=24"
     },
     "type": "module",
     "source": "src/index.ts",

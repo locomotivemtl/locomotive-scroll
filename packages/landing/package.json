@@ -6,7 +6,7 @@
     "author": "Locomotive <info@locomotive.ca>",
     "type": "module",
     "engines": {
-        "node": ">=20.1",
+        "node": ">=24",
         "npm": ">=8.0"
     },
     "scripts": {

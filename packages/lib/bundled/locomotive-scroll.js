@@ -42,7 +42,7 @@
     }
   }
 
-  var version$1 = "5.0.0";
+  var version$1 = "5.0.1";
 
   // package.json
   var version = "1.3.17";
