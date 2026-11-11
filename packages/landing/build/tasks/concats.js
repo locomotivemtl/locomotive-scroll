@@ -5,8 +5,10 @@ import notification from '../helpers/notification.js';
 import resolve from '../helpers/template.js';
 import { merge } from '../utils/index.js';
 import concat from 'concat';
+import { mkdir } from 'node:fs/promises';
 import {
     basename,
+    dirname,
     normalize,
 } from 'node:path';
 
@@ -95,7 +97,7 @@ export default async function concatFiles(globOptions = null, concatOptions = nu
      *     Defaults to the outfile name.
      * @return {Promise}
      */
-    loconfig.tasks.concats?.forEach(async ({
+    await Promise.all((loconfig.tasks.concats ?? []).map(async ({
         includes,
         outfile,
         label = null
@@ -124,6 +126,7 @@ export default async function concatFiles(globOptions = null, concatOptions = nu
                 includes = [ ...new Set(includes) ];
             }
 
+            await mkdir(dirname(outfile), { recursive: true });
             await concat(includes, outfile);
 
             if (includes.length) {
@@ -140,5 +143,5 @@ export default async function concatFiles(globOptions = null, concatOptions = nu
                 message: `${err.name}: ${err.message}`
             });
         }
-    });
+    }));
 };

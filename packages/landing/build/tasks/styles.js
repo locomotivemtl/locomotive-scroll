@@ -8,8 +8,8 @@ import {
 } from '../helpers/postcss.js';
 import resolve from '../helpers/template.js';
 import { merge } from '../utils/index.js';
-import { writeFile } from 'node:fs/promises';
-import { basename } from 'node:path';
+import { mkdir, writeFile } from 'node:fs/promises';
+import { basename, dirname } from 'node:path';
 import { promisify } from 'node:util';
 import * as sass from 'sass';
 import { PurgeCSS } from 'purgecss';
@@ -113,7 +113,7 @@ export default async function compileStyles(sassOptions = null, postcssOptions =
      *     Defaults to the outfile name.
      * @return {Promise}
      */
-    loconfig.tasks.styles?.forEach(async ({
+    await Promise.all((loconfig.tasks.styles ?? []).map(async ({
         infile,
         outfile,
         label = null
@@ -160,12 +160,13 @@ export default async function compileStyles(sassOptions = null, postcssOptions =
             }
 
             try {
-                await writeFile(outfile, result.css).then(() => {
-                    // Purge CSS once file exists.
-                    if (outfile && purge) {
-                        purgeUnusedCSS(outfile, `${label || `${filestem}.css`}`);
-                    }
-                });
+                await mkdir(dirname(outfile), { recursive: true });
+                await writeFile(outfile, result.css);
+
+                // Purge CSS once file exists.
+                if (outfile && purge) {
+                    await purgeUnusedCSS(outfile, `${label || `${filestem}.css`}`);
+                }
 
                 if (result.css) {
                     message(`${label || `${filestem}.css`} compiled`, 'success', timeLabel);
@@ -204,7 +205,7 @@ export default async function compileStyles(sassOptions = null, postcssOptions =
                 message: (err.formatted || `${err.name}: ${err.message}`)
             });
         }
-    });
+    }));
 };
 
 /**
