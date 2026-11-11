@@ -25,6 +25,22 @@ jobs:
             echo "::error::Tag $GITHUB_REF_NAME does not match package version $expected"
             exit 1
           fi
+      - name: Extract release notes from CHANGELOG
+        run: |
+          version="${GITHUB_REF_NAME#v}"
+          if grep -qF "## [$version] - Unreleased" CHANGELOG.md; then
+            echo "::error::CHANGELOG.md section $version is not dated"
+            exit 1
+          fi
+          awk -v heading="## [$version]" '
+            index($0, heading) == 1 { found = 1; next }
+            found && /^## \[/ { exit }
+            found
+          ' CHANGELOG.md > "$RUNNER_TEMP/release-notes.md"
+          if ! grep -q '[^[:space:]]' "$RUNNER_TEMP/release-notes.md"; then
+            echo "::error::CHANGELOG.md has no section for $version"
+            exit 1
+          fi
       - run: npm ci
       - run: npm test
       - run: npm run build -w packages/lib
@@ -40,4 +56,4 @@ jobs:
         run: |
           prerelease=()
           case "$GITHUB_REF_NAME" in *-*) prerelease=(--prerelease) ;; esac
-          gh release create "$GITHUB_REF_NAME" --generate-notes --draft "${prerelease[@]}"
+          gh release create "$GITHUB_REF_NAME" --notes-file "$RUNNER_TEMP/release-notes.md" --draft "${prerelease[@]}"
