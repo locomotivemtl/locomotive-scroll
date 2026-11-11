@@ -1,6 +1,6 @@
 # Releasing
 
-Pushing a `vX.Y.Z` tag publishes the package: `.github/workflows/release.yml` tests, builds and checks it, publishes it to npm with provenance, then creates the GitHub release.
+Pushing a `vX.Y.Z` tag stages the package: `.github/workflows/release.yml` tests, builds and checks it, stages it on npm with provenance, then creates a draft GitHub release. Nothing is public until a maintainer approves the staged version with 2FA.
 
 ## One-time setup
 
@@ -8,6 +8,7 @@ An owner of the npm package declares the Trusted Publisher on npmjs.com, in the 
 
 - Repository: `locomotivemtl/locomotive-scroll`
 - Workflow: `release.yml`
+- Allow `npm publish`: leave unchecked, so every version requires approval
 
 No npm token is stored in the repository.
 
@@ -40,16 +41,25 @@ No npm token is stored in the repository.
     git push origin vX.Y.Z
     ```
 
-6. Check the [Release workflow](https://github.com/locomotivemtl/locomotive-scroll/actions/workflows/release.yml), then:
+6. Once the [Release workflow](https://github.com/locomotivemtl/locomotive-scroll/actions/workflows/release.yml) succeeds, review and approve the staged version:
 
     ```bash
+    npm stage list locomotive-scroll
+    npm stage view <stage-id>
+    npm stage approve <stage-id>
+    ```
+
+7. Publish the draft GitHub release and check the result:
+
+    ```bash
+    gh release edit vX.Y.Z --draft=false
     npm view locomotive-scroll dist-tags
     ```
 
 ## Prereleases
 
-A tag containing `-`, such as `v5.1.0-beta.1`, is published on the npm `next` dist-tag and marked as a prerelease on GitHub. Any other tag is published on `latest`.
+A tag containing `-`, such as `v5.1.0-beta.1`, goes to the npm `next` dist-tag once approved and is marked as a prerelease on GitHub. Any other tag goes to `latest`.
 
 ## Tag format
 
-Always `vX.Y.Z`. The workflow fails before publishing if the tag differs from `v` + the version in `packages/lib/package.json`.
+Always `vX.Y.Z`. The workflow fails before staging if the tag differs from `v` + the version in `packages/lib/package.json`.
