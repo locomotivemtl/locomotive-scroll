@@ -95,6 +95,7 @@ export default class ScrollElement {
         needRaf,
         scrollOrientation,
         lenisInstance,
+        enableTouchSpeed,
     }: IScrollElementOptions) {
         // Scroll DOM element
         this.$el = $el;
@@ -128,6 +129,7 @@ export default class ScrollElement {
             scrollIgnoreFold:
                 this.$el.dataset['scrollIgnoreFold'] !== undefined,
             scrollEnableTouchSpeed:
+                enableTouchSpeed ||
                 this.$el.dataset['scrollEnableTouchSpeed'] !== undefined,
         };
 

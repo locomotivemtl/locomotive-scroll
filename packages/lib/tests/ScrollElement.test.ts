@@ -2,7 +2,10 @@ import { describe, expect, it, vi } from 'vitest';
 import ScrollElement from '../core/ScrollElement';
 import { createLenisStub } from './createLenisStub';
 
-function createScrollElement(dataset: Record<string, string>): ScrollElement {
+function createScrollElement(
+    dataset: Record<string, string>,
+    enableTouchSpeed = false
+): ScrollElement {
     const $el = document.createElement('div');
     Object.assign($el.dataset, dataset);
 
@@ -12,6 +15,7 @@ function createScrollElement(dataset: Record<string, string>): ScrollElement {
         needRaf: false,
         scrollOrientation: 'vertical',
         lenisInstance: createLenisStub(),
+        enableTouchSpeed,
         subscribeElementUpdateFn: vi.fn(),
         unsubscribeElementUpdateFn: vi.fn(),
     });
@@ -59,6 +63,40 @@ describe('ScrollElement attributes', () => {
             scrollIgnoreFold: true,
             scrollEnableTouchSpeed: true,
         });
+    });
+});
+
+describe('ScrollElement enableTouchSpeed', () => {
+    it('is off with neither the option nor the attribute', () => {
+        expect(createScrollElement({}).attributes.scrollEnableTouchSpeed).toBe(
+            false
+        );
+    });
+
+    it('is on with the option alone', () => {
+        expect(
+            createScrollElement({}, true).attributes.scrollEnableTouchSpeed
+        ).toBe(true);
+    });
+
+    it('is on with the attribute alone', () => {
+        expect(
+            createScrollElement({ scrollEnableTouchSpeed: '' }).attributes
+                .scrollEnableTouchSpeed
+        ).toBe(true);
+    });
+
+    it('keeps parallax on touch devices with the option', () => {
+        const scrollElement = createScrollElement({ scrollSpeed: '0.5' }, true);
+        scrollElement.onRender({
+            currentScroll: 100,
+            smooth: false,
+            reducedMotion: false,
+        });
+
+        expect(scrollElement.$el.style.transform).toBe(
+            'translate3d(0, -384px, 0)'
+        );
     });
 });
 

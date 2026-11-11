@@ -40,6 +40,7 @@ export default class Core {
     private IORafInstance!: IO;
     private scrollOrientation!: scrollOrientation;
     private lenisInstance!: Lenis;
+    private enableTouchSpeed!: boolean;
 
     constructor({
         $el,
@@ -47,6 +48,7 @@ export default class Core {
         rafRootMargin,
         scrollOrientation,
         lenisInstance,
+        enableTouchSpeed,
     }: CoreOptions) {
         if (!$el) {
             console.error('Please provide a DOM Element as scrollContainer');
@@ -61,6 +63,9 @@ export default class Core {
 
         // Scroll Direction
         this.scrollOrientation = scrollOrientation;
+
+        // Touch parallax for every element
+        this.enableTouchSpeed = enableTouchSpeed;
 
         // IO Margins
         this.triggerRootMargin = triggerRootMargin ?? TRIGGER_ROOT_MARGIN;
@@ -250,6 +255,7 @@ export default class Core {
                 id: fromIndex + index,
                 scrollOrientation: this.scrollOrientation,
                 lenisInstance: this.lenisInstance,
+                enableTouchSpeed: this.enableTouchSpeed,
                 subscribeElementUpdateFn:
                     this._subscribeElementUpdate.bind(this),
                 unsubscribeElementUpdateFn:

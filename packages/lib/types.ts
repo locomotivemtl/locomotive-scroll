@@ -49,12 +49,14 @@ export type ILenisScrollToOptions = ScrollToOptions;
  * @property {string}        [rafRootMargin]     - Root margin for RAF Intersection Observer.
  * @property {boolean}       [autoStart]         - Enable/Disable RAF auto start.
  * @property {function}      [scrollCallback]    - Scroll callback binded on the Lenis scroll event.
+ * @property {boolean}       [enableTouchSpeed]  - Enable parallax on touch devices for every element.
  */
 export interface ILocomotiveScrollOptions {
     lenisOptions?: LenisOptions;
     triggerRootMargin?: string;
     rafRootMargin?: string;
     autoStart?: boolean;
+    enableTouchSpeed?: boolean;
     scrollCallback?: ScrollCallback;
     initCustomTicker?(render: () => void): void;
     destroyCustomTicker?(render: () => void): void;
@@ -67,6 +69,7 @@ export interface ILocomotiveScrollOptions {
  * @property {number}      id                         - Instance UID.
  * @property {boolean}     needRaf                    - RequestAnimationFrame status.
  * @property {Lenis}       lenisInstance              - Lenis instance for scroll data.
+ * @property {boolean}     enableTouchSpeed           - Enable parallax on touch devices, even without data-scroll-enable-touch-speed.
  * @property {function}    subscribeElementUpdateFn   - Callback to subscribe instance to the main RAF.
  * @property {function}    unsubscribeElementUpdateFn - Callback to unsubscribe instance to the main RAF.
  */
@@ -76,6 +79,7 @@ export interface IScrollElementOptions {
     needRaf: boolean;
     scrollOrientation: scrollOrientation;
     lenisInstance: Lenis;
+    enableTouchSpeed: boolean;
     subscribeElementUpdateFn(scrollElement: ScrollElement): void;
     unsubscribeElementUpdateFn(scrollElement: ScrollElement): void;
 }
@@ -166,6 +170,7 @@ export interface IIOOptions {
  * @property {string}      [triggerRootMargin=TRIGGER_ROOT_MARGIN] - Root margin for trigger Intersection Observer.
  * @property {string}      [rafRootMargin=RAF_ROOT_MARGIN]         - Root margin for raf Intersection Observer.
  * @property {Lenis}       lenisInstance                          - Lenis instance for scroll data.
+ * @property {boolean}     enableTouchSpeed                       - Enable parallax on touch devices for every element.
  */
 export interface CoreOptions {
     $el: HTMLElement;
@@ -173,6 +178,7 @@ export interface CoreOptions {
     rafRootMargin?: string;
     scrollOrientation: scrollOrientation;
     lenisInstance: Lenis;
+    enableTouchSpeed: boolean;
 }
 
 export type scrollOrientation = 'vertical' | 'horizontal';
