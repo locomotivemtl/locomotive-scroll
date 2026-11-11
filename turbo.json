@@ -8,10 +8,18 @@
         "bundled/**",
         ".next/**",
         "!.next/cache/**",
-        ".docusaurus/**",
-        "../../www/demo/**",
-        "../../www/docs/**"
+        ".docusaurus/**"
       ],
+      "cache": true
+    },
+    "@locomotivemtl/astro-boilerplate#build": {
+      "dependsOn": ["^build"],
+      "outputs": ["../../www/demo/**"],
+      "cache": true
+    },
+    "docs-v-2#build": {
+      "dependsOn": ["^build"],
+      "outputs": [".docusaurus/**", "../../www/docs/**"],
       "cache": true
     },
     "@locomotivemtl/boilerplate#build": {
