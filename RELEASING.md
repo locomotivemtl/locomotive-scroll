@@ -28,7 +28,7 @@ No npm token is stored in the repository.
     npm version X.Y.Z -w packages/lib --no-git-tag-version
     ```
 
-3. Update `CHANGELOG.md`: give the release its date.
+3. Update `CHANGELOG.md`: give the release its date. The `## [X.Y.Z]` section becomes the GitHub release notes, and the workflow fails before staging if it is missing or still `Unreleased`.
 
 4. Open a pull request and merge it once reviewed.
 
@@ -49,6 +49,8 @@ No npm token is stored in the repository.
     npm stage approve <stage-id>
     ```
 
+    Approval asks for 2FA, so run it in an interactive terminal. Elsewhere it fails with `EOTP`: pass `--otp=<code>` from your authenticator app, or approve the version on npmjs.com.
+
 7. Publish the draft GitHub release and check the result:
 
     ```bash
@@ -58,7 +60,7 @@ No npm token is stored in the repository.
 
 ## Prereleases
 
-A tag containing `-`, such as `v5.1.0-beta.1`, goes to the npm `next` dist-tag once approved and is marked as a prerelease on GitHub. Any other tag goes to `latest`.
+A tag containing `-`, such as `v5.1.0-beta.1`, goes to the npm `next` dist-tag once approved and is marked as a prerelease on GitHub. Any other tag goes to `latest`. A prerelease needs its own dated `CHANGELOG.md` section, such as `## [5.1.0-beta.1] - YYYY-MM-DD`.
 
 ## Tag format
 
