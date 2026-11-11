@@ -15,15 +15,16 @@
  * - scrollCall - Call a custom event when the element is intersected
  */
 
+import type Lenis from 'lenis';
 import type {
-    IScrollElementOptions,
     IScrollElementAttributes,
+    IScrollElementCallbacksValues,
     IScrollElementIntersection,
     IScrollElementMetrics,
-    IScrollElementCallbacksValues,
+    IScrollElementOptions,
     scrollOrientation,
 } from '../types';
-import { clamp, closestNumber, normalize, mapRange } from '../utils/maths';
+import { clamp, closestNumber, mapRange, normalize } from '../utils/maths';
 
 /** Constants */
 const INVIEW_CLASS = 'is-inview';
@@ -50,7 +51,7 @@ export default class ScrollElement {
 
     private subscribeElementUpdateFn: (scrollElement: ScrollElement) => void;
     private unsubscribeElementUpdateFn: (scrollElement: ScrollElement) => void;
-    private lenisInstance: any;
+    private lenisInstance: Lenis;
 
     // Cached functions to avoid orientation checks every frame
     private getWindowSize: () => number;
@@ -58,18 +59,32 @@ export default class ScrollElement {
     private getMetricsSize: (bcr: DOMRect) => number;
 
     // Position handlers for intersection.start (includes wSize)
-    private readonly startPositionHandlers: Record<string, (offsetStart: number, wSize: number, viewport: number, size: number) => number> = {
-        'start': (offsetStart, wSize, viewport) => offsetStart - wSize + viewport,
-        'middle': (offsetStart, wSize, viewport, size) => offsetStart - wSize + viewport + size * 0.5,
-        'end': (offsetStart, wSize, viewport, size) => offsetStart - wSize + viewport + size,
-        'fold': () => 0,
+    private readonly startPositionHandlers: Record<
+        string,
+        (
+            offsetStart: number,
+            wSize: number,
+            viewport: number,
+            size: number
+        ) => number
+    > = {
+        start: (offsetStart, wSize, viewport) => offsetStart - wSize + viewport,
+        middle: (offsetStart, wSize, viewport, size) =>
+            offsetStart - wSize + viewport + size * 0.5,
+        end: (offsetStart, wSize, viewport, size) =>
+            offsetStart - wSize + viewport + size,
+        fold: () => 0,
     };
 
     // Position handlers for intersection.end (DOES NOT include wSize - critical difference)
-    private readonly endPositionHandlers: Record<string, (offsetStart: number, viewport: number, size: number) => number> = {
-        'start': (offsetStart, viewport) => offsetStart - viewport,
-        'middle': (offsetStart, viewport, size) => offsetStart - viewport + size * 0.5,
-        'end': (offsetStart, viewport, size) => offsetStart - viewport + size,
+    private readonly endPositionHandlers: Record<
+        string,
+        (offsetStart: number, viewport: number, size: number) => number
+    > = {
+        start: (offsetStart, viewport) => offsetStart - viewport,
+        middle: (offsetStart, viewport, size) =>
+            offsetStart - viewport + size * 0.5,
+        end: (offsetStart, viewport, size) => offsetStart - viewport + size,
     };
 
     constructor({
@@ -100,7 +115,8 @@ export default class ScrollElement {
             scrollClass: this.$el.dataset['scrollClass'] ?? INVIEW_CLASS,
             scrollOffset: this.$el.dataset['scrollOffset'] ?? '0,0',
             scrollPosition: this.$el.dataset['scrollPosition'] ?? 'start,end',
-            scrollCssProgress: this.$el.dataset['scrollCssProgress'] !== undefined,
+            scrollCssProgress:
+                this.$el.dataset['scrollCssProgress'] !== undefined,
             scrollEventProgress:
                 this.$el.dataset['scrollEventProgress'] ?? null,
             scrollSpeed:
@@ -109,7 +125,8 @@ export default class ScrollElement {
                     : null,
             scrollRepeat: this.$el.dataset['scrollRepeat'] !== undefined,
             scrollCall: this.$el.dataset['scrollCall'] ?? null,
-            scrollIgnoreFold: this.$el.dataset['scrollIgnoreFold'] !== undefined,
+            scrollIgnoreFold:
+                this.$el.dataset['scrollIgnoreFold'] !== undefined,
             scrollEnableTouchSpeed:
                 this.$el.dataset['scrollEnableTouchSpeed'] !== undefined,
         };
@@ -145,17 +162,20 @@ export default class ScrollElement {
         this.isFirstResize = true;
 
         // Cache orientation-dependent functions to avoid repeated conditionals
-        this.getWindowSize = this.scrollOrientation === 'vertical'
-            ? () => this.lenisInstance.dimensions.height
-            : () => this.lenisInstance.dimensions.width;
+        this.getWindowSize =
+            this.scrollOrientation === 'vertical'
+                ? () => this.lenisInstance.dimensions.height
+                : () => this.lenisInstance.dimensions.width;
 
-        this.getMetricsStart = this.scrollOrientation === 'vertical'
-            ? (bcr: DOMRect) => bcr.top
-            : (bcr: DOMRect) => bcr.left;
+        this.getMetricsStart =
+            this.scrollOrientation === 'vertical'
+                ? (bcr: DOMRect) => bcr.top
+                : (bcr: DOMRect) => bcr.left;
 
-        this.getMetricsSize = this.scrollOrientation === 'vertical'
-            ? (bcr: DOMRect) => bcr.height
-            : (bcr: DOMRect) => bcr.width;
+        this.getMetricsSize =
+            this.scrollOrientation === 'vertical'
+                ? (bcr: DOMRect) => bcr.height
+                : (bcr: DOMRect) => bcr.width;
 
         // Init
         this._init();
@@ -203,7 +223,7 @@ export default class ScrollElement {
                 }
                 this.translateValue = 0;
 
-            // if mousewheel or smooth enabled
+                // if mousewheel or smooth enabled
             } else {
                 // Check fold condition
                 if (this.isInFold) {
@@ -366,7 +386,12 @@ export default class ScrollElement {
         // Calculate intersection.start using handlers
         const startHandler = this.startPositionHandlers[scrollPositionStart];
         this.intersection.start = startHandler
-            ? startHandler(this.metrics.offsetStart, wSize, viewportStart, metricsSize)
+            ? startHandler(
+                  this.metrics.offsetStart,
+                  wSize,
+                  viewportStart,
+                  metricsSize
+              )
             : this.metrics.offsetStart - wSize + viewportStart; // default fallback
 
         // Calculate intersection.end using handlers
@@ -382,10 +407,12 @@ export default class ScrollElement {
                     this.intersection.end = this.intersection.start + 1;
                     break;
                 case 'middle':
-                    this.intersection.end = this.intersection.start + metricsSize * 0.5;
+                    this.intersection.end =
+                        this.intersection.start + metricsSize * 0.5;
                     break;
                 case 'end':
-                    this.intersection.end = this.intersection.start + metricsSize;
+                    this.intersection.end =
+                        this.intersection.start + metricsSize;
                     break;
                 default:
                     this.intersection.end = this.intersection.start + 1;

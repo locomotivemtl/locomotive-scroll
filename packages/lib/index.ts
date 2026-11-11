@@ -1,13 +1,12 @@
-import { version } from './package.json'
+import type { LenisOptions, ScrollCallback } from 'lenis';
 import Lenis from 'lenis';
 import Core from './core/Core';
+import { version } from './package.json';
 import type {
     ILenisScrollToOptions,
-    ILenisScrollValues,
     ILocomotiveScrollOptions,
     lenisTargetScrollTo,
 } from './types';
-import type { LenisOptions } from 'lenis';
 
 /**
  * Locomotive Scroll
@@ -32,7 +31,7 @@ export default class LocomotiveScroll {
     private rafInstance?: number;
     private autoStart?: boolean;
     private isTouchDevice: boolean;
-    private scrollCallback?(scrollValues: ILenisScrollValues): void;
+    private scrollCallback?: ScrollCallback;
     private initCustomTicker?: (render: () => void) => void;
     private destroyCustomTicker?: (render: () => void) => void;
     private _onRenderBind: () => void;
@@ -50,7 +49,6 @@ export default class LocomotiveScroll {
         initCustomTicker,
         destroyCustomTicker,
     }: ILocomotiveScrollOptions = {}) {
-
         // Set version
         window.locomotiveScrollVersion = version;
 
@@ -65,7 +63,6 @@ export default class LocomotiveScroll {
             destroyCustomTicker,
         });
 
-
         // Binding
         this._onRenderBind = this._onRender.bind(this);
         this._onScrollToBind = this._onScrollTo.bind(this);
@@ -75,7 +72,8 @@ export default class LocomotiveScroll {
         this.rafPlaying = false;
 
         // Detect if device has touch capability
-        this.isTouchDevice = 'ontouchstart' in window || navigator.maxTouchPoints > 0;
+        this.isTouchDevice =
+            'ontouchstart' in window || navigator.maxTouchPoints > 0;
 
         // Init
         this._init();
@@ -87,10 +85,9 @@ export default class LocomotiveScroll {
      * @private
      */
     private _init(): void {
-        
         // Create Lenis instance
         this.lenisInstance = new Lenis({
-            ...this.lenisOptions
+            ...this.lenisOptions,
         });
 
         // Subscribe to scroll callback if provided
@@ -162,12 +159,14 @@ export default class LocomotiveScroll {
         // onContentResize: called when content size changes (images load, dynamic content)
         // onWrapperResize: called when wrapper size changes (window resize, layout changes)
         if (this.lenisInstance) {
-            this._originalOnContentResize = this.lenisInstance.dimensions.onContentResize.bind(
-                this.lenisInstance.dimensions
-            );
-            this._originalOnWrapperResize = this.lenisInstance.dimensions.onWrapperResize.bind(
-                this.lenisInstance.dimensions
-            );
+            this._originalOnContentResize =
+                this.lenisInstance.dimensions.onContentResize.bind(
+                    this.lenisInstance.dimensions
+                );
+            this._originalOnWrapperResize =
+                this.lenisInstance.dimensions.onWrapperResize.bind(
+                    this.lenisInstance.dimensions
+                );
 
             this.lenisInstance.dimensions.onContentResize = () => {
                 this._originalOnContentResize?.();
@@ -190,10 +189,12 @@ export default class LocomotiveScroll {
         // Restore original Lenis dimensions resize callbacks
         if (this.lenisInstance) {
             if (this._originalOnContentResize) {
-                this.lenisInstance.dimensions.onContentResize = this._originalOnContentResize;
+                this.lenisInstance.dimensions.onContentResize =
+                    this._originalOnContentResize;
             }
             if (this._originalOnWrapperResize) {
-                this.lenisInstance.dimensions.onWrapperResize = this._originalOnWrapperResize;
+                this.lenisInstance.dimensions.onWrapperResize =
+                    this._originalOnWrapperResize;
             }
         }
     }
@@ -210,7 +211,11 @@ export default class LocomotiveScroll {
 
         $scrollToElements?.length &&
             $scrollToElements.forEach(($el): void => {
-                ($el as HTMLElement).addEventListener('click', this._onScrollToBind, false);
+                ($el as HTMLElement).addEventListener(
+                    'click',
+                    this._onScrollToBind,
+                    false
+                );
             });
     }
 
@@ -225,7 +230,11 @@ export default class LocomotiveScroll {
             $rootContainer?.querySelectorAll('[data-scroll-to]');
         $scrollToElements?.length &&
             $scrollToElements.forEach(($el) => {
-                ($el as HTMLElement).removeEventListener('click', this._onScrollToBind, false);
+                ($el as HTMLElement).removeEventListener(
+                    'click',
+                    this._onScrollToBind,
+                    false
+                );
             });
     }
 
@@ -267,7 +276,7 @@ export default class LocomotiveScroll {
         const offset = $target.getAttribute('data-scroll-to-offset') || 0;
         const duration =
             $target.getAttribute('data-scroll-to-duration') ||
-            this.lenisInstance?.options.duration
+            this.lenisInstance?.options.duration;
         target &&
             this.scrollTo(target, {
                 offset: typeof offset === 'string' ? parseInt(offset) : offset,
@@ -354,16 +363,7 @@ export default class LocomotiveScroll {
         target: lenisTargetScrollTo,
         options?: ILenisScrollToOptions
     ): void {
-        this.lenisInstance?.scrollTo(target, {
-            offset: options?.offset,
-            lerp: options?.lerp,
-            duration: options?.duration,
-            immediate: options?.immediate,
-            lock: options?.lock,
-            force: options?.force,
-            easing: options?.easing,
-            onComplete: options?.onComplete,
-        });
+        this.lenisInstance?.scrollTo(target, options);
     }
 
     /**

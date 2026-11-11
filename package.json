@@ -14,16 +14,18 @@
         "homepage": "https://locomotive.ca"
     },
     "devDependencies": {
+        "@biomejs/biome": "^2.6.6",
         "turbo": "^2.7.4",
-        "typescript": "^4.8.3"
+        "typescript": "^5.9.3"
     },
     "scripts": {
         "build": "turbo run build",
+        "typecheck": "turbo run typecheck",
+        "lint": "biome check packages/lib scripts",
+        "test": "turbo run test",
         "build:vercel": "turbo run build --filter=./packages/lib --filter=./packages/demo --filter=./packages/docs",
         "build:landing": "npm run build --workspace=packages/landing",
-        "dev": "npm run dev --workspace=packages/demo --if-present",
-        "publish": "npm run publish --workspace=packages/lib --if-present",
-        "publish:next": "npm run publish:next --workspace=packages/lib --if-present"
+        "dev": "npm run dev --workspace=packages/demo --if-present"
     },
     "workspaces": [
         "packages/lib",
@@ -31,6 +33,5 @@
         "packages/landing",
         "packages/docs"
     ],
-    "version": "5.0.0-rc.1",
-    "packageManager": "npm@10.9.4"
+    "packageManager": "npm@11.19.1"
 }

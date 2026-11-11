@@ -20,37 +20,35 @@
         "parallax",
         "scroll"
     ],
-    "engines": {
-        "node": ">=24"
-    },
     "type": "module",
-    "source": "src/index.ts",
-    "main": "dist/locomotive-scroll.js",
-    "umd:main": "dist/locomotive-scroll.umd.js",
-    "module": "dist/locomotive-scroll.mjs",
-    "types": "dist/types/index.d.ts",
+    "main": "./dist/locomotive-scroll.cjs",
+    "module": "./dist/locomotive-scroll.mjs",
+    "types": "./dist/locomotive-scroll.d.mts",
     "exports": {
         ".": {
-            "types": "./dist/types/index.d.ts",
-            "require": "./dist/locomotive-scroll.js",
-            "default": "./dist/locomotive-scroll.modern.mjs"
+            "import": {
+                "types": "./dist/locomotive-scroll.d.mts",
+                "default": "./dist/locomotive-scroll.mjs"
+            },
+            "require": {
+                "types": "./dist/locomotive-scroll.d.cts",
+                "default": "./dist/locomotive-scroll.cjs"
+            }
         },
         "./locomotive-scroll.css": "./dist/locomotive-scroll.css",
-        "./dist/*": "./dist/*"
+        "./dist/*": "./dist/*",
+        "./bundled/*": "./bundled/*",
+        "./package.json": "./package.json"
     },
     "scripts": {
         "clean": "rimraf dist bundled",
-        "build": "npm run clean && npm-run-all --parallel build:dist build:css build:bundle build:types",
-        "build:types": "tsc --allowJs -d --emitDeclarationOnly --declarationDir ./dist/types --removeComments --skipLibCheck --resolveJsonModule ./index.ts",
-        "build:dist": "microbundle build -i index.ts --o ./dist",
-        "build:bundle": "npm-run-all build:bundle-full build:bundle-min build:bundle-css",
-        "build:bundle-full": "microbundle build -i index.ts --o ./bundled/locomotive-scroll.js --no-sourcemap --no-pkg-main --external none --name LocomotiveScroll --format umd --no-compress",
-        "build:bundle-min": "microbundle build -i index.ts --o ./bundled/locomotive-scroll.min.js --no-sourcemap --no-pkg-main --external none --name LocomotiveScroll --format umd",
-        "build:css": "postcss styles/main.css --o ./dist/locomotive-scroll.css --no-map",
-        "build:bundle-css": "postcss styles/main.css --o ./bundled/locomotive-scroll.css --no-map",
-        "watch": "microbundle watch -i index.ts --o ./dist --no-compress",
-        "publish": "npm publish",
-        "publish:next": "npm publish --tag next"
+        "typecheck": "tsc --noEmit",
+        "test": "vitest run",
+        "build": "tsdown && npm run build:css",
+        "build:css": "postcss styles/main.css --o ./dist/locomotive-scroll.css --no-map && postcss styles/main.css --o ./bundled/locomotive-scroll.css --no-map",
+        "watch": "tsdown --watch",
+        "prepublishOnly": "npm run build",
+        "check:package": "publint && attw --pack . --exclude-entrypoints ./locomotive-scroll.css --ignore-rules missing-export-equals"
     },
     "files": [
         "dist",
@@ -60,13 +58,16 @@
         "lenis": "1.3.17"
     },
     "devDependencies": {
+        "@arethetypeswrong/cli": "^0.18.5",
         "cssnano": "^6.0.1",
-        "microbundle": "^0.15.1",
-        "npm-run-all": "^4.1.5",
+        "happy-dom": "^21.0.4",
         "postcss": "^8.4.23",
         "postcss-cli": "^10.1.0",
         "postcss-import": "^15.1.0",
+        "publint": "^0.3.25",
         "rimraf": "^5.0.0",
-        "typescript": "^5.5.4"
+        "tsdown": "^0.23.7",
+        "typescript": "^5.5.4",
+        "vitest": "^5.1.0"
     }
 }
