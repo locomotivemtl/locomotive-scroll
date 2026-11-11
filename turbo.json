@@ -16,6 +16,7 @@
       "cache": true
     },
     "typecheck": {},
+    "test": {},
     "dev": {
       "cache": false,
       "persistent": true

@@ -43,6 +43,7 @@
     "scripts": {
         "clean": "rimraf dist bundled",
         "typecheck": "tsc --noEmit",
+        "test": "vitest run",
         "build": "tsdown && npm run build:css",
         "build:css": "postcss styles/main.css --o ./dist/locomotive-scroll.css --no-map && postcss styles/main.css --o ./bundled/locomotive-scroll.css --no-map",
         "watch": "tsdown --watch",
@@ -59,12 +60,14 @@
     "devDependencies": {
         "@arethetypeswrong/cli": "^0.18.5",
         "cssnano": "^6.0.1",
+        "happy-dom": "^21.0.4",
         "postcss": "^8.4.23",
         "postcss-cli": "^10.1.0",
         "postcss-import": "^15.1.0",
         "publint": "^0.3.25",
         "rimraf": "^5.0.0",
         "tsdown": "^0.23.7",
-        "typescript": "^5.5.4"
+        "typescript": "^5.5.4",
+        "vitest": "^5.1.0"
     }
 }

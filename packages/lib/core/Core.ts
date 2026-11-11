@@ -159,25 +159,25 @@ export default class Core {
         );
 
         // 1. Remove from IO
-        for (
-            let index = 0;
-            index < this.triggeredScrollElements.length;
-            index++
-        ) {
-            const scrollElement = this.triggeredScrollElements[index];
-            if ($scrollElementsToRemoveSet.has(scrollElement.$el)) {
+        this.triggeredScrollElements = this.triggeredScrollElements.filter(
+            (scrollElement) => {
+                if (!$scrollElementsToRemoveSet.has(scrollElement.$el)) {
+                    return true;
+                }
                 this.IOTriggerInstance.unobserve(scrollElement.$el);
-                this.triggeredScrollElements.splice(index, 1);
+                return false;
             }
-        }
+        );
 
-        for (let index = 0; index < this.RAFScrollElements.length; index++) {
-            const scrollElement = this.RAFScrollElements[index];
-            if ($scrollElementsToRemoveSet.has(scrollElement.$el)) {
+        this.RAFScrollElements = this.RAFScrollElements.filter(
+            (scrollElement) => {
+                if (!$scrollElementsToRemoveSet.has(scrollElement.$el)) {
+                    return true;
+                }
                 this.IORafInstance.unobserve(scrollElement.$el);
-                this.RAFScrollElements.splice(index, 1);
+                return false;
             }
-        }
+        );
 
         // 2. Remove from scrollElementsToUpdate[] and scrollElements[]
         $scrollElementsToRemove.forEach(($scrollElement) => {

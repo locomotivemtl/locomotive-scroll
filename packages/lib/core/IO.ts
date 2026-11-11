@@ -111,6 +111,9 @@ export default class IO {
         }
 
         this.observer.unobserve($scrollElement);
+        this.scrollElements = this.scrollElements.filter(
+            (scrollElement) => scrollElement.$el !== $scrollElement
+        );
     }
 
     /**
