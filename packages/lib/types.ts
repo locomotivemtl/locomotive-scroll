@@ -1,6 +1,6 @@
-import ScrollElement from './core/ScrollElement';
-import type { LenisOptions, ScrollCallback, ScrollToOptions } from 'lenis';
 import type Lenis from 'lenis';
+import type { LenisOptions, ScrollCallback, ScrollToOptions } from 'lenis';
+import type ScrollElement from './core/ScrollElement';
 
 /**
  * @typedef {Object} ILenisScrollValues

@@ -1,0 +1,26 @@
+{
+    "$schema": "https://biomejs.dev/schemas/2.6.6/schema.json",
+    "files": {
+        "includes": ["**", "!**/dist", "!**/bundled", "!**/*.md"]
+    },
+    "formatter": {
+        "indentStyle": "space",
+        "indentWidth": 4,
+        "lineWidth": 80
+    },
+    "javascript": {
+        "formatter": {
+            "quoteStyle": "single",
+            "trailingCommas": "es5",
+            "semicolons": "always"
+        }
+    },
+    "linter": {
+        "rules": {
+            "preset": "recommended",
+            "suspicious": {
+                "noExplicitAny": "error"
+            }
+        }
+    }
+}

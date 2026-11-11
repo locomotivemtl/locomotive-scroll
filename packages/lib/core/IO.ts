@@ -14,7 +14,7 @@
  */
 
 import type { IIOOptions } from '../types';
-import ScrollElement from './ScrollElement';
+import type ScrollElement from './ScrollElement';
 
 export default class IO {
     public scrollElements: ScrollElement[];
@@ -60,7 +60,9 @@ export default class IO {
                     );
 
                 if (entry.isIntersecting) {
-                    $targetItem && ($targetItem.isAlreadyIntersected = true);
+                    if ($targetItem) {
+                        $targetItem.isAlreadyIntersected = true;
+                    }
                     this._setInview(entry);
                 } else if ($targetItem && $targetItem.isAlreadyIntersected) {
                     this._setOutOfView(entry);

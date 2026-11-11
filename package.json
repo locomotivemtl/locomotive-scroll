@@ -14,12 +14,14 @@
         "homepage": "https://locomotive.ca"
     },
     "devDependencies": {
+        "@biomejs/biome": "^2.6.6",
         "turbo": "^2.7.4",
         "typescript": "^5.9.3"
     },
     "scripts": {
         "build": "turbo run build",
         "typecheck": "turbo run typecheck",
+        "lint": "biome check packages/lib scripts",
         "build:vercel": "turbo run build --filter=./packages/lib --filter=./packages/demo --filter=./packages/docs",
         "build:landing": "npm run build --workspace=packages/landing",
         "dev": "npm run dev --workspace=packages/demo --if-present"

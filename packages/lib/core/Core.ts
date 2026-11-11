@@ -72,7 +72,6 @@ export default class Core {
         this.RAFScrollElements = [];
         this.scrollElementsToUpdate = [];
 
-
         // Init
         this._init();
     }
@@ -90,9 +89,10 @@ export default class Core {
         this._subscribeScrollElements($scrollElementsArr);
 
         // Determine IO root (null for window, wrapper element for custom container)
-        const ioRoot = this.lenisInstance.options.wrapper === window
-            ? null
-            : this.lenisInstance.options.wrapper as HTMLElement;
+        const ioRoot =
+            this.lenisInstance.options.wrapper === window
+                ? null
+                : (this.lenisInstance.options.wrapper as HTMLElement);
 
         // Trigger IO
         this.IOTriggerInstance = new IO({
@@ -154,10 +154,16 @@ export default class Core {
 
         if (!$scrollElementsToRemove.length) return;
 
-        const $scrollElementsToRemoveSet = new Set(Array.from($scrollElementsToRemove));
+        const $scrollElementsToRemoveSet = new Set(
+            Array.from($scrollElementsToRemove)
+        );
 
         // 1. Remove from IO
-        for (let index = 0; index < this.triggeredScrollElements.length; index++) {
+        for (
+            let index = 0;
+            index < this.triggeredScrollElements.length;
+            index++
+        ) {
             const scrollElement = this.triggeredScrollElements[index];
             if ($scrollElementsToRemoveSet.has(scrollElement.$el)) {
                 this.IOTriggerInstance.unobserve(scrollElement.$el);
@@ -189,7 +195,7 @@ export default class Core {
             if (targetScrollElement) {
                 this.scrollElements = this.scrollElements.filter(
                     (scrollElementItem) =>
-                        scrollElementItem.id != targetScrollElement.id
+                        scrollElementItem.id !== targetScrollElement.id
                 );
             }
         });
@@ -212,11 +218,7 @@ export default class Core {
         const maxID = Math.max(...ids, 0);
         const fromIndex = maxID + 1;
         const $scrollElementsArr = this.toElementArray($scrollElements);
-        this._subscribeScrollElements(
-            $scrollElementsArr,
-            fromIndex,
-            true
-        );
+        this._subscribeScrollElements($scrollElementsArr, fromIndex, true);
     }
 
     /**
@@ -318,7 +320,7 @@ export default class Core {
     _unsubscribeElementUpdate(scrollElement: ScrollElement) {
         this.scrollElementsToUpdate = this.scrollElementsToUpdate.filter(
             (scrollElementToUpdate) =>
-                scrollElementToUpdate.id != scrollElement.id
+                scrollElementToUpdate.id !== scrollElement.id
         );
     }
 
