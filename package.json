@@ -19,6 +19,7 @@
     },
     "scripts": {
         "build": "turbo run build",
+        "typecheck": "turbo run typecheck",
         "build:vercel": "turbo run build --filter=./packages/lib --filter=./packages/demo --filter=./packages/docs",
         "build:landing": "npm run build --workspace=packages/landing",
         "dev": "npm run dev --workspace=packages/demo --if-present",

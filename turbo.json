@@ -15,6 +15,7 @@
       ],
       "cache": true
     },
+    "typecheck": {},
     "dev": {
       "cache": false,
       "persistent": true
@@ -22,8 +23,5 @@
     "clean": {
       "cache": false
     }
-  },
-  "globalDependencies": [
-    "tsconfig.json"
-  ]
+  }
 }

@@ -40,6 +40,7 @@
     },
     "scripts": {
         "clean": "rimraf dist bundled",
+        "typecheck": "tsc --noEmit",
         "build": "npm run clean && npm-run-all --parallel build:dist build:css build:bundle build:types",
         "build:types": "tsc --allowJs -d --emitDeclarationOnly --declarationDir ./dist/types --removeComments --skipLibCheck --resolveJsonModule ./index.ts",
         "build:dist": "microbundle build -i index.ts --o ./dist",
