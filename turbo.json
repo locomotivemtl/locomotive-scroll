@@ -9,10 +9,14 @@
         ".next/**",
         "!.next/cache/**",
         ".docusaurus/**",
-        "build/**",
         "../../www/demo/**",
         "../../www/docs/**"
       ],
+      "cache": true
+    },
+    "@locomotivemtl/boilerplate#build": {
+      "dependsOn": ["^build"],
+      "outputs": ["../../www/landing/**"],
       "cache": true
     },
     "typecheck": {},
