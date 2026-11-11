@@ -1,2 +1,877 @@
-import t from"lenis";function e(t,e){(null==e||e>t.length)&&(e=t.length);for(var s=0,i=Array(e);s<e;s++)i[s]=t[s];return i}function s(t,s){var i="undefined"!=typeof Symbol&&t[Symbol.iterator]||t["@@iterator"];if(i)return(i=i.call(t)).next.bind(i);if(Array.isArray(t)||(i=function(t,s){if(t){if("string"==typeof t)return e(t,s);var i={}.toString.call(t).slice(8,-1);return"Object"===i&&t.constructor&&(i=t.constructor.name),"Map"===i||"Set"===i?Array.from(t):"Arguments"===i||/^(?:Ui|I)nt(?:8|16|32)(?:Clamped)?Array$/.test(i)?e(t,s):void 0}}(t))||s&&t&&"number"==typeof t.length){i&&(t=i);var n=0;return function(){return n>=t.length?{done:!0}:{done:!1,value:t[n++]}}}throw new TypeError("Invalid attempt to iterate non-iterable instance.\nIn order to be iterable, non-array objects must have a [Symbol.iterator]() method.")}function i(){return i=Object.assign?Object.assign.bind():function(t){for(var e=1;e<arguments.length;e++){var s=arguments[e];for(var i in s)({}).hasOwnProperty.call(s,i)&&(t[i]=s[i])}return t},i.apply(null,arguments)}var n=/*#__PURE__*/function(){function t(t){var e=t.scrollElements,s=t.rootMargin,i=void 0===s?"-1px -1px -1px -1px":s,n=t.root,r=void 0===n?null:n,o=t.IORaf;this.scrollElements=void 0,this.rootMargin=void 0,this.root=void 0,this.IORaf=void 0,this.observer=void 0,this.scrollElements=e,this.rootMargin=i,this.root=r,this.IORaf=o,this._init()}var e=t.prototype;return e._init=function(){var t=this;this.observer=new IntersectionObserver(function(e){e.forEach(function(e){var s=t.scrollElements.find(function(t){return t.$el===e.target});e.isIntersecting?(s&&(s.isAlreadyIntersected=!0),t._setInview(e)):s&&s.isAlreadyIntersected&&t._setOutOfView(e)})},{root:this.root,rootMargin:this.rootMargin});for(var e,i=s(this.scrollElements);!(e=i()).done;)this.observe(e.value.$el)},e.destroy=function(){this.observer.disconnect()},e.observe=function(t){t&&this.observer.observe(t)},e.unobserve=function(t){t&&this.observer.unobserve(t)},e._setInview=function(t){var e=this.scrollElements.find(function(e){return e.$el===t.target});this.IORaf&&(null==e||e.setInteractivityOn()),!this.IORaf&&(null==e||e.setInview())},e._setOutOfView=function(t){var e=this.scrollElements.find(function(e){return e.$el===t.target});this.IORaf&&(null==e||e.setInteractivityOff()),!this.IORaf&&(null==e||e.setOutOfView()),null!=e&&e.attributes.scrollRepeat||this.IORaf||this.unobserve(t.target)},t}();function r(t,e,s,i,n){return s+((n-t)/(e-t)*(i-s)||0)}function o(t,e){return t.reduce(function(t,s){return Math.abs(s-e)<Math.abs(t-e)?s:t})}var l="--progress",a=/*#__PURE__*/function(){function t(t){var e,s,i,n,r,o=this,l=t.$el,a=t.id,c=t.subscribeElementUpdateFn,h=t.unsubscribeElementUpdateFn,u=t.needRaf,d=t.scrollOrientation,f=t.lenisInstance;this.$el=void 0,this.id=void 0,this.needRaf=void 0,this.attributes=void 0,this.scrollOrientation=void 0,this.isAlreadyIntersected=void 0,this.intersection=void 0,this.metrics=void 0,this.currentScroll=void 0,this.translateValue=void 0,this.progress=void 0,this.lastProgress=void 0,this.isInview=void 0,this.isInteractive=void 0,this.isInFold=void 0,this.isFirstResize=void 0,this.subscribeElementUpdateFn=void 0,this.unsubscribeElementUpdateFn=void 0,this.lenisInstance=void 0,this.getWindowSize=void 0,this.getMetricsStart=void 0,this.getMetricsSize=void 0,this.startPositionHandlers={start:function(t,e,s){return t-e+s},middle:function(t,e,s,i){return t-e+s+.5*i},end:function(t,e,s,i){return t-e+s+i},fold:function(){return 0}},this.endPositionHandlers={start:function(t,e){return t-e},middle:function(t,e,s){return t-e+.5*s},end:function(t,e,s){return t-e+s}},this.$el=l,this.id=a,this.needRaf=u,this.scrollOrientation=d,this.lenisInstance=f,this.subscribeElementUpdateFn=c,this.unsubscribeElementUpdateFn=h,this.attributes={scrollClass:null!=(e=this.$el.dataset.scrollClass)?e:"is-inview",scrollOffset:null!=(s=this.$el.dataset.scrollOffset)?s:"0,0",scrollPosition:null!=(i=this.$el.dataset.scrollPosition)?i:"start,end",scrollCssProgress:void 0!==this.$el.dataset.scrollCssProgress,scrollEventProgress:null!=(n=this.$el.dataset.scrollEventProgress)?n:null,scrollSpeed:void 0!==this.$el.dataset.scrollSpeed?parseFloat(this.$el.dataset.scrollSpeed):null,scrollRepeat:void 0!==this.$el.dataset.scrollRepeat,scrollCall:null!=(r=this.$el.dataset.scrollCall)?r:null,scrollIgnoreFold:void 0!==this.$el.dataset.scrollIgnoreFold,scrollEnableTouchSpeed:void 0!==this.$el.dataset.scrollEnableTouchSpeed},this.intersection={start:0,end:0},this.metrics={offsetStart:0,offsetEnd:0,bcr:{}},this.currentScroll=this.lenisInstance.scroll,this.translateValue=0,this.progress=0,this.lastProgress=null,this.isInview=!1,this.isInteractive=!1,this.isAlreadyIntersected=!1,this.isInFold=!1,this.isFirstResize=!0,this.getWindowSize="vertical"===this.scrollOrientation?function(){return o.lenisInstance.dimensions.height}:function(){return o.lenisInstance.dimensions.width},this.getMetricsStart="vertical"===this.scrollOrientation?function(t){return t.top}:function(t){return t.left},this.getMetricsSize="vertical"===this.scrollOrientation?function(t){return t.height}:function(t){return t.width},this._init()}var e=t.prototype;return e._init=function(){this.needRaf&&this._resize()},e.onResize=function(t){this.currentScroll=t.currentScroll,this._resize()},e.onRender=function(t){var e=t.currentScroll,s=t.smooth,i=this.getWindowSize();if(this.currentScroll=e,this._computeProgress(),this.attributes.scrollSpeed&&!isNaN(this.attributes.scrollSpeed))if(this.attributes.scrollEnableTouchSpeed||s){if(this.isInFold){var n=Math.max(0,this.progress);this.translateValue=n*i*this.attributes.scrollSpeed*-1}else{var o=r(0,1,-1,1,this.progress);this.translateValue=o*i*this.attributes.scrollSpeed*-1}this.$el.style.transform="vertical"===this.scrollOrientation?"translate3d(0, "+this.translateValue+"px, 0)":"translate3d("+this.translateValue+"px, 0, 0)"}else this.translateValue&&(this.$el.style.transform="translate3d(0, 0, 0)"),this.translateValue=0},e.setInview=function(){if(!this.isInview){this.isInview=!0,this.$el.classList.add(this.attributes.scrollClass);var t=this._getScrollCallFrom();this.attributes.scrollCall&&this._dispatchCall("enter",t)}},e.setOutOfView=function(){if(this.isInview&&this.attributes.scrollRepeat){this.isInview=!1,this.$el.classList.remove(this.attributes.scrollClass);var t=this._getScrollCallFrom();this.attributes.scrollCall&&this._dispatchCall("leave",t)}},e.setInteractivityOn=function(){this.isInteractive||(this.isInteractive=!0,this.subscribeElementUpdateFn(this))},e.setInteractivityOff=function(){this.isInteractive&&(this.isInteractive=!1,this.unsubscribeElementUpdateFn(this),null!==this.lastProgress&&this._computeProgress(o([0,1],this.lastProgress)))},e._resize=function(){this.metrics.bcr=this.$el.getBoundingClientRect(),this._computeMetrics(),this._computeIntersection(),this.isFirstResize&&(this.isFirstResize=!1,this.isInFold&&this.setInview())},e._computeMetrics=function(){var t=this.getWindowSize(),e=this.getMetricsStart(this.metrics.bcr),s=this.getMetricsSize(this.metrics.bcr);this.metrics.offsetStart=this.currentScroll+e-this.translateValue,this.metrics.offsetEnd=this.metrics.offsetStart+s,this.isInFold=this.metrics.offsetStart<t&&!this.attributes.scrollIgnoreFold},e._computeIntersection=function(){var t,e,s,i,n,r,o,l,a=this.getWindowSize(),c=this.getMetricsSize(this.metrics.bcr),h=this.attributes.scrollOffset.split(","),u=null!=(t=null==(e=h[0])?void 0:e.trim())?t:"0",d=null!=(s=null==(i=h[1])?void 0:i.trim())?s:"0",f=this.attributes.scrollPosition.split(","),v=null!=(n=null==(r=f[0])?void 0:r.trim())?n:"start",m=null!=(o=null==(l=f[1])?void 0:l.trim())?o:"end",g=u.includes("%")?a*parseInt(u.replace("%","").trim())*.01:parseInt(u),p=d.includes("%")?a*parseInt(d.replace("%","").trim())*.01:parseInt(d);this.isInFold&&(v="fold");var b=this.startPositionHandlers[v];this.intersection.start=b?b(this.metrics.offsetStart,a,g,c):this.metrics.offsetStart-a+g;var I=this.endPositionHandlers[m];if(this.intersection.end=I?I(this.metrics.offsetStart,p,c):this.metrics.offsetStart-p+c,this.intersection.end<=this.intersection.start)switch(m){case"start":default:this.intersection.end=this.intersection.start+1;break;case"middle":this.intersection.end=this.intersection.start+.5*c;break;case"end":this.intersection.end=this.intersection.start+c}},e._computeProgress=function(t){var e,s=null!=t?t:(e=r(this.intersection.start,this.intersection.end,0,1,this.currentScroll))<0?0:e>1?1:e;this.progress=s,s!==this.lastProgress&&(this.lastProgress=s,this.attributes.scrollCssProgress&&this._setCssProgress(s),this.attributes.scrollEventProgress&&this._setCustomEventProgress(s),s>0&&s<1&&this.setInview(),0===s&&this.setOutOfView(),1===s&&this.setOutOfView())},e._setCssProgress=function(t){void 0===t&&(t=0),this.$el.style.setProperty(l,t.toString())},e._setCustomEventProgress=function(t){void 0===t&&(t=0);var e=this.attributes.scrollEventProgress;if(e){var s=new CustomEvent(e,{detail:{target:this.$el,progress:t}});window.dispatchEvent(s)}},e._getScrollCallFrom=function(){var t=o([this.intersection.start,this.intersection.end],this.currentScroll);return this.intersection.start===t?"start":"end"},e.destroy=function(){this.attributes.scrollCssProgress&&this.$el.style.removeProperty(l),this.attributes.scrollSpeed&&this.$el.style.removeProperty("transform"),this.isInview&&this.attributes.scrollClass&&this.$el.classList.remove(this.attributes.scrollClass)},e._dispatchCall=function(t,e){var s=this.attributes.scrollCall;if(s){var i=new CustomEvent(s,{detail:{target:this.$el,way:t,from:e}});window.dispatchEvent(i)}},t}(),c=["scrollOffset","scrollPosition","scrollCssProgress","scrollEventProgress","scrollSpeed"],h=/*#__PURE__*/function(){function t(t){var e=t.$el,s=t.triggerRootMargin,i=t.rafRootMargin,n=t.scrollOrientation,r=t.lenisInstance;this.$scrollContainer=void 0,this.triggerRootMargin=void 0,this.rafRootMargin=void 0,this.scrollElements=void 0,this.triggeredScrollElements=void 0,this.RAFScrollElements=void 0,this.scrollElementsToUpdate=void 0,this.IOTriggerInstance=void 0,this.IORafInstance=void 0,this.scrollOrientation=void 0,this.lenisInstance=void 0,e?(this.$scrollContainer=e,this.lenisInstance=r,this.scrollOrientation=n,this.triggerRootMargin=null!=s?s:"-1px -1px -1px -1px",this.rafRootMargin=null!=i?i:"100% 100% 100% 100%",this.scrollElements=[],this.triggeredScrollElements=[],this.RAFScrollElements=[],this.scrollElementsToUpdate=[],this._init()):console.error("Please provide a DOM Element as scrollContainer")}var e=t.prototype;return e._init=function(){var t=this.$scrollContainer.querySelectorAll("[data-scroll]"),e=this.toElementArray(t);this._subscribeScrollElements(e);var s=this.lenisInstance.options.wrapper===window?null:this.lenisInstance.options.wrapper;this.IOTriggerInstance=new n({scrollElements:[].concat(this.triggeredScrollElements),root:s,rootMargin:this.triggerRootMargin,IORaf:!1}),this.IORafInstance=new n({scrollElements:[].concat(this.RAFScrollElements),root:s,rootMargin:this.rafRootMargin,IORaf:!0})},e.destroy=function(){this.IOTriggerInstance.destroy(),this.IORafInstance.destroy(),this._unsubscribeAllScrollElements()},e.onResize=function(t){for(var e,i=t.currentScroll,n=s(this.RAFScrollElements);!(e=n()).done;)e.value.onResize({currentScroll:i})},e.onRender=function(t){for(var e,i=t.currentScroll,n=t.smooth,r=s(this.scrollElementsToUpdate);!(e=r()).done;)e.value.onRender({currentScroll:i,smooth:n})},e.removeScrollElements=function(t){var e=this,s=t.querySelectorAll("[data-scroll]");if(s.length){for(var i=new Set(Array.from(s)),n=0;n<this.triggeredScrollElements.length;n++){var r=this.triggeredScrollElements[n];i.has(r.$el)&&(this.IOTriggerInstance.unobserve(r.$el),this.triggeredScrollElements.splice(n,1))}for(var o=0;o<this.RAFScrollElements.length;o++){var l=this.RAFScrollElements[o];i.has(l.$el)&&(this.IORafInstance.unobserve(l.$el),this.RAFScrollElements.splice(o,1))}s.forEach(function(t){var s=e.scrollElementsToUpdate.find(function(e){return e.$el===t}),i=e.scrollElements.find(function(e){return e.$el===t});s&&e._unsubscribeElementUpdate(s),i&&(e.scrollElements=e.scrollElements.filter(function(t){return t.id!=i.id}))})}},e.addScrollElements=function(t){var e=t.querySelectorAll("[data-scroll]"),s=[];this.scrollElements.forEach(function(t){s.push(t.id)});var i=Math.max.apply(Math,s.concat([0]))+1,n=this.toElementArray(e);this._subscribeScrollElements(n,i,!0)},e._subscribeScrollElements=function(t,e,s){void 0===e&&(e=0),void 0===s&&(s=!1);for(var i=0;i<t.length;i++){var n=t[i],r=this._checkRafNeeded(n),o=new a({$el:n,id:e+i,scrollOrientation:this.scrollOrientation,lenisInstance:this.lenisInstance,subscribeElementUpdateFn:this._subscribeElementUpdate.bind(this),unsubscribeElementUpdateFn:this._unsubscribeElementUpdate.bind(this),needRaf:r});this.scrollElements.push(o),r?(this.RAFScrollElements.push(o),s&&(this.IORafInstance.scrollElements.push(o),this.IORafInstance.observe(o.$el))):(this.triggeredScrollElements.push(o),s&&(this.IOTriggerInstance.scrollElements.push(o),this.IOTriggerInstance.observe(o.$el)))}},e._unsubscribeAllScrollElements=function(){for(var t,e=s(this.scrollElements);!(t=e()).done;)t.value.destroy();this.scrollElements=[],this.RAFScrollElements=[],this.triggeredScrollElements=[],this.scrollElementsToUpdate=[]},e._subscribeElementUpdate=function(t){this.scrollElementsToUpdate.push(t)},e._unsubscribeElementUpdate=function(t){this.scrollElementsToUpdate=this.scrollElementsToUpdate.filter(function(e){return e.id!=t.id})},e.toElementArray=function(t){return Array.from(t)},e._checkRafNeeded=function(t){var e=[].concat(c),i=function(t){e=e.filter(function(e){return e!==t})};if(t.dataset.scrollOffset){if("0,0"!==t.dataset.scrollOffset.split(",").map(function(t){return t.replace("%","").trim()}).join(","))return!0;i("scrollOffset")}else i("scrollOffset");if(t.dataset.scrollPosition){if("top,bottom"!==t.dataset.scrollPosition.trim())return!0;i("scrollPosition")}else i("scrollPosition");if(t.dataset.scrollSpeed&&!isNaN(parseFloat(t.dataset.scrollSpeed)))return!0;i("scrollSpeed");for(var n,r=s(e);!(n=r()).done;)if(n.value in t.dataset)return!0;return!1},t}(),u=/*#__PURE__*/function(){function e(t){var e=void 0===t?{}:t,s=e.lenisOptions,i=void 0===s?{}:s,n=e.triggerRootMargin,r=e.rafRootMargin,o=e.autoStart,l=void 0===o||o,a=e.scrollCallback,c=void 0===a?function(){}:a,h=e.initCustomTicker,u=e.destroyCustomTicker;this.rafPlaying=void 0,this.lenisInstance=null,this.coreInstance=null,this.lenisOptions=void 0,this.triggerRootMargin=void 0,this.rafRootMargin=void 0,this.rafInstance=void 0,this.autoStart=void 0,this.isTouchDevice=void 0,this.initCustomTicker=void 0,this.destroyCustomTicker=void 0,this._onRenderBind=void 0,this._onResizeBind=void 0,this._onScrollToBind=void 0,this._originalOnContentResize=void 0,this._originalOnWrapperResize=void 0,window.locomotiveScrollVersion="5.0.1",Object.assign(this,{lenisOptions:i,triggerRootMargin:n,rafRootMargin:r,autoStart:l,scrollCallback:c,initCustomTicker:h,destroyCustomTicker:u}),this._onRenderBind=this._onRender.bind(this),this._onScrollToBind=this._onScrollTo.bind(this),this._onResizeBind=this._onResize.bind(this),this.rafPlaying=!1,this.isTouchDevice="ontouchstart"in window||navigator.maxTouchPoints>0,this._init()}var s=e.prototype;return s._init=function(){var e=this;this.lenisInstance=new t(i({},this.lenisOptions)),this.scrollCallback&&this.lenisInstance.on("scroll",this.scrollCallback),document.documentElement.setAttribute("data-scroll-orientation",this.lenisInstance.options.orientation),requestAnimationFrame(function(){e.coreInstance=new h({$el:e.lenisInstance.rootElement,triggerRootMargin:e.triggerRootMargin,rafRootMargin:e.rafRootMargin,scrollOrientation:e.lenisInstance.options.orientation,lenisInstance:e.lenisInstance}),e._bindEvents(),e.initCustomTicker&&!e.destroyCustomTicker?console.warn("initCustomTicker callback is declared, but destroyCustomTicker is not. Please pay attention. It could cause trouble."):!e.initCustomTicker&&e.destroyCustomTicker&&console.warn("destroyCustomTicker callback is declared, but initCustomTicker is not. Please pay attention. It could cause trouble."),e.autoStart&&e.start()})},s.destroy=function(){var t,e=this;this.stop(),this._unbindEvents(),null==(t=this.lenisInstance)||t.destroy(),requestAnimationFrame(function(){var t;null==(t=e.coreInstance)||t.destroy()})},s._bindEvents=function(){var t=this;this._bindScrollToEvents(),this.lenisInstance&&(this._originalOnContentResize=this.lenisInstance.dimensions.onContentResize.bind(this.lenisInstance.dimensions),this._originalOnWrapperResize=this.lenisInstance.dimensions.onWrapperResize.bind(this.lenisInstance.dimensions),this.lenisInstance.dimensions.onContentResize=function(){null==t._originalOnContentResize||t._originalOnContentResize(),t._onResizeBind()},this.lenisInstance.dimensions.onWrapperResize=function(){null==t._originalOnWrapperResize||t._originalOnWrapperResize(),t._onResizeBind()})},s._unbindEvents=function(){this._unbindScrollToEvents(),this.lenisInstance&&(this._originalOnContentResize&&(this.lenisInstance.dimensions.onContentResize=this._originalOnContentResize),this._originalOnWrapperResize&&(this.lenisInstance.dimensions.onWrapperResize=this._originalOnWrapperResize))},s._bindScrollToEvents=function(t){var e,s=this,i=t||(null==(e=this.lenisInstance)?void 0:e.rootElement),n=null==i?void 0:i.querySelectorAll("[data-scroll-to]");(null==n?void 0:n.length)&&n.forEach(function(t){t.addEventListener("click",s._onScrollToBind,!1)})},s._unbindScrollToEvents=function(t){var e,s=this,i=t||(null==(e=this.lenisInstance)?void 0:e.rootElement),n=null==i?void 0:i.querySelectorAll("[data-scroll-to]");(null==n?void 0:n.length)&&n.forEach(function(t){t.removeEventListener("click",s._onScrollToBind,!1)})},s._onResize=function(){var t,e,s;null==(t=this.coreInstance)||t.onResize({currentScroll:null!=(e=null==(s=this.lenisInstance)?void 0:s.scroll)?e:0,smooth:!this.isTouchDevice})},s._onRender=function(){var t,e,s,i;null==(t=this.lenisInstance)||t.raf(Date.now()),null==(e=this.coreInstance)||e.onRender({currentScroll:null!=(s=null==(i=this.lenisInstance)?void 0:i.scroll)?s:0,smooth:!this.isTouchDevice})},s._onScrollTo=function(t){var e,s;t.preventDefault();var i=null!=(e=t.currentTarget)?e:null;if(i){var n=i.getAttribute("data-scroll-to-href")||i.getAttribute("href"),r=i.getAttribute("data-scroll-to-offset")||0,o=i.getAttribute("data-scroll-to-duration")||(null==(s=this.lenisInstance)?void 0:s.options.duration);n&&this.scrollTo(n,{offset:"string"==typeof r?parseInt(r):r,duration:"string"==typeof o?parseInt(o):o})}},s.start=function(){var t;this.rafPlaying||(null==(t=this.lenisInstance)||t.start(),this.rafPlaying=!0,this.initCustomTicker?this.initCustomTicker(this._onRenderBind):this._raf())},s.stop=function(){var t;this.rafPlaying&&(null==(t=this.lenisInstance)||t.stop(),this.rafPlaying=!1,this.destroyCustomTicker?this.destroyCustomTicker(this._onRenderBind):this.rafInstance&&cancelAnimationFrame(this.rafInstance))},s.removeScrollElements=function(t){var e;t?(this._unbindScrollToEvents(t),null==(e=this.coreInstance)||e.removeScrollElements(t)):console.error("Please provide a DOM Element as $oldContainer")},s.addScrollElements=function(t){var e,s=this;t?(null==(e=this.coreInstance)||e.addScrollElements(t),requestAnimationFrame(function(){s._bindScrollToEvents(t)})):console.error("Please provide a DOM Element as $newContainer")},s.resize=function(){this._onResizeBind()},s.scrollTo=function(t,e){var s;null==(s=this.lenisInstance)||s.scrollTo(t,{offset:null==e?void 0:e.offset,lerp:null==e?void 0:e.lerp,duration:null==e?void 0:e.duration,immediate:null==e?void 0:e.immediate,lock:null==e?void 0:e.lock,force:null==e?void 0:e.force,easing:null==e?void 0:e.easing,onComplete:null==e?void 0:e.onComplete})},s._raf=function(){var t=this;this._onRenderBind(),this.rafInstance=requestAnimationFrame(function(){return t._raf()})},e}();export{u as default};
+import Lenis from "lenis";
+// core/IO.ts
+var IO = class {
+	constructor({ scrollElements, rootMargin = "-1px -1px -1px -1px", root = null, IORaf }) {
+		this.scrollElements = scrollElements;
+		this.rootMargin = rootMargin;
+		this.root = root;
+		this.IORaf = IORaf;
+		this._init();
+	}
+	/**
+	* Lifecyle - Initialize Intersection Observer.
+	*
+	* @private
+	*/
+	_init() {
+		const observerOptions = {
+			root: this.root,
+			rootMargin: this.rootMargin
+		};
+		const onIntersect = (entries) => {
+			entries.forEach((entry) => {
+				const $targetItem = this.scrollElements.find((item) => item.$el === entry.target);
+				if (entry.isIntersecting) {
+					if ($targetItem) $targetItem.isAlreadyIntersected = true;
+					this._setInview(entry);
+				} else if ($targetItem && $targetItem.isAlreadyIntersected) this._setOutOfView(entry);
+			});
+		};
+		this.observer = new IntersectionObserver(onIntersect, observerOptions);
+		for (const scrollElement of this.scrollElements) {
+			const $scrollElement = scrollElement.$el;
+			this.observe($scrollElement);
+		}
+	}
+	/**
+	* Lifecyle - Destroy Intersection Observer.
+	*/
+	destroy() {
+		this.observer.disconnect();
+	}
+	/**
+	* Subscribe element to the Intersection Observer.
+	*
+	* @param {HTMLElement} $scrollElement - DOM Element to observe.
+	*/
+	observe($scrollElement) {
+		if (!$scrollElement) return;
+		this.observer.observe($scrollElement);
+	}
+	/**
+	* Unsubscribe element to the Intersection Observer.
+	*
+	* @param {HTMLElement} $scrollElement - DOM Element to unobserve.
+	*/
+	unobserve($scrollElement) {
+		if (!$scrollElement) return;
+		this.observer.unobserve($scrollElement);
+		this.scrollElements = this.scrollElements.filter((scrollElement) => scrollElement.$el !== $scrollElement);
+	}
+	/**
+	* Find ScrollElementReference instance and trigger inview callbacks.
+	*
+	* @private
+	*
+	* @param {IntersectionObserverEntry} entry - DOM Element to observe.
+	*/
+	_setInview(entry) {
+		const scrollElement = this.scrollElements.find((scrollElement) => scrollElement.$el === entry.target);
+		this.IORaf && scrollElement?.setInteractivityOn();
+		!this.IORaf && scrollElement?.setInview();
+	}
+	/**
+	* Find ScrollElementReference instance and trigger out of view callbacks.
+	*
+	* @private
+	*
+	* @param {IntersectionObserverEntry} entry - DOM Element to observe.
+	*/
+	_setOutOfView(entry) {
+		const scrollElement = this.scrollElements.find((scrollElement) => scrollElement.$el === entry.target);
+		this.IORaf && scrollElement?.setInteractivityOff();
+		!this.IORaf && scrollElement?.setOutOfView();
+		if (!scrollElement?.attributes.scrollRepeat && !this.IORaf) this.unobserve(entry.target);
+	}
+};
+// utils/maths.ts
+/**
+* Clamp a value to fit within a specific range (ex: clamp(0, 100, -12) --> 0).
+*
+* @param {number} min   - Minimum value expected.
+* @param {number} max   - Maximum value expected.
+* @param {number} value - Current value.
+*
+* @returns {number} - Clamped value.
+*/
+function clamp(min, max, value) {
+	return value < min ? min : value > max ? max : value;
+}
+/**
+* Map one range to another (ex: mapRange(-10, 10, 0, 100, 5) --> 75).
+*
+* @param {number} inMin  - Current minimum value.
+* @param {number} inMax  - Current maximum value.
+* @param {number} outMin - Maximum value expected.
+* @param {number} outMax - Maximum value expected.
+* @param {number} value  - Current value.
+*
+* @returns {number} - New value that should be between minimum value expected and maximum value.
+*/
+function mapRange(inMin, inMax, outMin, outMax, value) {
+	const inRange = inMax - inMin;
+	const outRange = outMax - outMin;
+	return outMin + ((value - inMin) / inRange * outRange || 0);
+}
+/**
+* Map a number within a range to a progress between 0 to 1 (ex: normalize(100, 200, 150) --> 0.5).
+*
+* @param {number} min   - Current minimum value.
+* @param {number} max   - Current maximum value.
+* @param {number} value - Current value.
+*
+* @returns {number} - New value that should be between 0 and 1.
+*/
+function normalize(min, max, value) {
+	return mapRange(min, max, 0, 1, value);
+}
+/**
+* Get closest number from an array.
+*
+* @param {number[]} array  - Numbers array.
+* @param {number}   target - Reference value.
+*
+* @returns {number} - Closest number.
+*/
+function closestNumber(array, target) {
+	return array.reduce((prev, curr) => {
+		return Math.abs(curr - target) < Math.abs(prev - target) ? curr : prev;
+	});
+}
+// core/ScrollElement.ts
+/** Constants */
+const INVIEW_CLASS = "is-inview";
+const PROGRESS_CSS_VAR = "--progress";
+var ScrollElement = class {
+	constructor({ $el, id, subscribeElementUpdateFn, unsubscribeElementUpdateFn, needRaf, scrollOrientation, lenisInstance }) {
+		this.startPositionHandlers = {
+			start: (offsetStart, wSize, viewport) => offsetStart - wSize + viewport,
+			middle: (offsetStart, wSize, viewport, size) => offsetStart - wSize + viewport + size * .5,
+			end: (offsetStart, wSize, viewport, size) => offsetStart - wSize + viewport + size,
+			fold: () => 0
+		};
+		this.endPositionHandlers = {
+			start: (offsetStart, viewport) => offsetStart - viewport,
+			middle: (offsetStart, viewport, size) => offsetStart - viewport + size * .5,
+			end: (offsetStart, viewport, size) => offsetStart - viewport + size
+		};
+		this.$el = $el;
+		this.id = id;
+		this.needRaf = needRaf;
+		this.scrollOrientation = scrollOrientation;
+		this.lenisInstance = lenisInstance;
+		this.subscribeElementUpdateFn = subscribeElementUpdateFn;
+		this.unsubscribeElementUpdateFn = unsubscribeElementUpdateFn;
+		this.attributes = {
+			scrollClass: this.$el.dataset["scrollClass"] ?? INVIEW_CLASS,
+			scrollOffset: this.$el.dataset["scrollOffset"] ?? "0,0",
+			scrollPosition: this.$el.dataset["scrollPosition"] ?? "start,end",
+			scrollCssProgress: this.$el.dataset["scrollCssProgress"] !== void 0,
+			scrollEventProgress: this.$el.dataset["scrollEventProgress"] ?? null,
+			scrollSpeed: this.$el.dataset["scrollSpeed"] !== void 0 ? parseFloat(this.$el.dataset["scrollSpeed"]) : null,
+			scrollRepeat: this.$el.dataset["scrollRepeat"] !== void 0,
+			scrollCall: this.$el.dataset["scrollCall"] ?? null,
+			scrollIgnoreFold: this.$el.dataset["scrollIgnoreFold"] !== void 0,
+			scrollEnableTouchSpeed: this.$el.dataset["scrollEnableTouchSpeed"] !== void 0
+		};
+		this.intersection = {
+			start: 0,
+			end: 0
+		};
+		this.metrics = {
+			offsetStart: 0,
+			offsetEnd: 0,
+			bcr: {}
+		};
+		this.currentScroll = this.lenisInstance.scroll;
+		this.translateValue = 0;
+		this.progress = 0;
+		this.lastProgress = null;
+		this.isInview = false;
+		this.isInteractive = false;
+		this.isAlreadyIntersected = false;
+		this.isInFold = false;
+		this.isFirstResize = true;
+		this.getWindowSize = this.scrollOrientation === "vertical" ? () => this.lenisInstance.dimensions.height : () => this.lenisInstance.dimensions.width;
+		this.getMetricsStart = this.scrollOrientation === "vertical" ? (bcr) => bcr.top : (bcr) => bcr.left;
+		this.getMetricsSize = this.scrollOrientation === "vertical" ? (bcr) => bcr.height : (bcr) => bcr.width;
+		this._init();
+	}
+	/**
+	* Lifecyle - Initialize progress tracking.
+	*
+	* @private
+	*/
+	_init() {
+		if (!this.needRaf) return;
+		this._resize();
+	}
+	/**
+	* Callback - Resize callback
+	*/
+	onResize({ currentScroll }) {
+		this.currentScroll = currentScroll;
+		this._resize();
+	}
+	/**
+	* Callback - RAF callback
+	*/
+	onRender({ currentScroll, smooth }) {
+		const wSize = this.getWindowSize();
+		this.currentScroll = currentScroll;
+		this._computeProgress();
+		if (this.attributes.scrollSpeed && !isNaN(this.attributes.scrollSpeed)) {
+			if (!this.attributes.scrollEnableTouchSpeed && !smooth) {
+				if (this.translateValue) this.$el.style.transform = `translate3d(0, 0, 0)`;
+				this.translateValue = 0;
+			} else {
+				if (this.isInFold) {
+					const progress = Math.max(0, this.progress);
+					this.translateValue = progress * wSize * this.attributes.scrollSpeed * -1;
+				} else {
+					const progress = mapRange(0, 1, -1, 1, this.progress);
+					this.translateValue = progress * wSize * this.attributes.scrollSpeed * -1;
+				}
+				this.$el.style.transform = this.scrollOrientation === "vertical" ? `translate3d(0, ${this.translateValue}px, 0)` : `translate3d(${this.translateValue}px, 0, 0)`;
+			}
+		}
+	}
+	/**
+	* Inview callback
+	*/
+	setInview() {
+		if (this.isInview) return;
+		this.isInview = true;
+		this.$el.classList.add(this.attributes.scrollClass);
+		const way = "enter";
+		const from = this._getScrollCallFrom();
+		this.attributes.scrollCall && this._dispatchCall(way, from);
+	}
+	/**
+	* Out of view callback
+	*/
+	setOutOfView() {
+		if (!(this.isInview && this.attributes.scrollRepeat)) return;
+		this.isInview = false;
+		this.$el.classList.remove(this.attributes.scrollClass);
+		const way = "leave";
+		const from = this._getScrollCallFrom();
+		this.attributes.scrollCall && this._dispatchCall(way, from);
+	}
+	/**
+	* Switch interactivity on to subscribe the instance to the RAF
+	* and start calculations.
+	*/
+	setInteractivityOn() {
+		if (this.isInteractive) return;
+		this.isInteractive = true;
+		this.subscribeElementUpdateFn(this);
+	}
+	/**
+	* Switch interactivity off to unsubscribe the instance to the RAF
+	* and stop calculations.
+	*/
+	setInteractivityOff() {
+		if (!this.isInteractive) return;
+		this.isInteractive = false;
+		this.unsubscribeElementUpdateFn(this);
+		this.lastProgress !== null && this._computeProgress(closestNumber([0, 1], this.lastProgress));
+	}
+	/**
+	* Resize method that compute the element's values.
+	*
+	* @private
+	*/
+	_resize() {
+		this.metrics.bcr = this.$el.getBoundingClientRect();
+		this._computeMetrics();
+		this._computeIntersection();
+		if (this.isFirstResize) {
+			this.isFirstResize = false;
+			if (this.isInFold) this.setInview();
+		}
+	}
+	/**
+	* Compute element's offsets and determine if the element is in fold.
+	*
+	* @private
+	*/
+	_computeMetrics() {
+		const wSize = this.getWindowSize();
+		const metricsStart = this.getMetricsStart(this.metrics.bcr);
+		const metricsSize = this.getMetricsSize(this.metrics.bcr);
+		this.metrics.offsetStart = this.currentScroll + metricsStart - this.translateValue;
+		this.metrics.offsetEnd = this.metrics.offsetStart + metricsSize;
+		if (this.metrics.offsetStart < wSize && !this.attributes.scrollIgnoreFold) this.isInFold = true;
+		else this.isInFold = false;
+	}
+	/**
+	* Compute intersection values depending on the context.
+	* Uses handler-based approach for cleaner, more maintainable code.
+	*
+	* @private
+	*/
+	_computeIntersection() {
+		const wSize = this.getWindowSize();
+		const metricsSize = this.getMetricsSize(this.metrics.bcr);
+		const offset = this.attributes.scrollOffset.split(",");
+		const offsetStart = offset[0]?.trim() ?? "0";
+		const offsetEnd = offset[1]?.trim() ?? "0";
+		const scrollPosition = this.attributes.scrollPosition.split(",");
+		let scrollPositionStart = scrollPosition[0]?.trim() ?? "start";
+		const scrollPositionEnd = scrollPosition[1]?.trim() ?? "end";
+		const viewportStart = offsetStart.includes("%") ? wSize * parseInt(offsetStart.replace("%", "").trim()) * .01 : parseInt(offsetStart);
+		const viewportEnd = offsetEnd.includes("%") ? wSize * parseInt(offsetEnd.replace("%", "").trim()) * .01 : parseInt(offsetEnd);
+		if (this.isInFold) scrollPositionStart = "fold";
+		const startHandler = this.startPositionHandlers[scrollPositionStart];
+		this.intersection.start = startHandler ? startHandler(this.metrics.offsetStart, wSize, viewportStart, metricsSize) : this.metrics.offsetStart - wSize + viewportStart;
+		const endHandler = this.endPositionHandlers[scrollPositionEnd];
+		this.intersection.end = endHandler ? endHandler(this.metrics.offsetStart, viewportEnd, metricsSize) : this.metrics.offsetStart - viewportEnd + metricsSize;
+		if (this.intersection.end <= this.intersection.start) switch (scrollPositionEnd) {
+			case "start":
+				this.intersection.end = this.intersection.start + 1;
+				break;
+			case "middle":
+				this.intersection.end = this.intersection.start + metricsSize * .5;
+				break;
+			case "end":
+				this.intersection.end = this.intersection.start + metricsSize;
+				break;
+			default: this.intersection.end = this.intersection.start + 1;
+		}
+	}
+	/**
+	* Compute the scroll progress of the element depending
+	* on its intersection values.
+	*
+	* @private
+	*
+	* @param {number} [forcedProgress] - Value to force progress.
+	*/
+	_computeProgress(forcedProgress) {
+		const progress = forcedProgress ?? clamp(0, 1, normalize(this.intersection.start, this.intersection.end, this.currentScroll));
+		this.progress = progress;
+		if (progress !== this.lastProgress) {
+			this.lastProgress = progress;
+			this.attributes.scrollCssProgress && this._setCssProgress(progress);
+			this.attributes.scrollEventProgress && this._setCustomEventProgress(progress);
+			progress > 0 && progress < 1 && this.setInview();
+			progress === 0 && this.setOutOfView();
+			progress === 1 && this.setOutOfView();
+		}
+	}
+	/**
+	* Set the element's progress to a specific css variable.
+	*
+	* @private
+	*
+	* @param {number} [currentProgress] - Progress value.
+	*/
+	_setCssProgress(currentProgress = 0) {
+		this.$el.style.setProperty(PROGRESS_CSS_VAR, currentProgress.toString());
+	}
+	/**
+	* Set the element's progress to the custom event listeners.
+	*
+	* @private
+	*
+	* @param {number} [currentProgress] - Progress value.
+	*/
+	_setCustomEventProgress(currentProgress = 0) {
+		const customEventName = this.attributes.scrollEventProgress;
+		if (!customEventName) return;
+		const customEvent = new CustomEvent(customEventName, { detail: {
+			target: this.$el,
+			progress: currentProgress
+		} });
+		window.dispatchEvent(customEvent);
+	}
+	/**
+	* Function to get scroll call from.
+	*
+	* @private
+	*/
+	_getScrollCallFrom() {
+		const closestIntersectionValue = closestNumber([this.intersection.start, this.intersection.end], this.currentScroll);
+		return this.intersection.start === closestIntersectionValue ? "start" : "end";
+	}
+	/**
+	* Lifecyle - Destroy and cleanup the scroll element.
+	*
+	* Removes all CSS modifications and clears references to prevent memory leaks.
+	*/
+	destroy() {
+		if (this.attributes.scrollCssProgress) this.$el.style.removeProperty(PROGRESS_CSS_VAR);
+		if (this.attributes.scrollSpeed) this.$el.style.removeProperty("transform");
+		if (this.isInview && this.attributes.scrollClass) this.$el.classList.remove(this.attributes.scrollClass);
+	}
+	/**
+	* Function to dispatch a custom event.
+	*
+	* @private
+	*
+	* @param {string} way - Enter or leave.
+	* @param {string} from - Start or end.
+	*/
+	_dispatchCall(way, from) {
+		const customEventName = this.attributes.scrollCall;
+		if (!customEventName) return;
+		const customEvent = new CustomEvent(customEventName, { detail: {
+			target: this.$el,
+			way,
+			from
+		} });
+		window.dispatchEvent(customEvent);
+	}
+};
+// core/Core.ts
+/** Defined attributes that need a requestAnimationFrame */
+const ATTRIBUTES_THAT_NEED_RAF = [
+	"scrollOffset",
+	"scrollPosition",
+	"scrollCssProgress",
+	"scrollEventProgress",
+	"scrollSpeed"
+];
+/** Default root margins */
+const TRIGGER_ROOT_MARGIN = "-1px -1px -1px -1px";
+const RAF_ROOT_MARGIN = "100% 100% 100% 100%";
+/** Default scroll attribute values */
+const DEFAULT_SCROLL_OFFSET = "0,0";
+const DEFAULT_SCROLL_POSITION = "top,bottom";
+var Core = class {
+	constructor({ $el, triggerRootMargin, rafRootMargin, scrollOrientation, lenisInstance }) {
+		if (!$el) {
+			console.error("Please provide a DOM Element as scrollContainer");
+			return;
+		}
+		this.$scrollContainer = $el;
+		this.lenisInstance = lenisInstance;
+		this.scrollOrientation = scrollOrientation;
+		this.triggerRootMargin = triggerRootMargin ?? TRIGGER_ROOT_MARGIN;
+		this.rafRootMargin = rafRootMargin ?? RAF_ROOT_MARGIN;
+		this.scrollElements = [];
+		this.triggeredScrollElements = [];
+		this.RAFScrollElements = [];
+		this.scrollElementsToUpdate = [];
+		this._init();
+	}
+	/**
+	* Lifecyle - Initialize the core.
+	*
+	* @private
+	*/
+	_init() {
+		const $scrollElements = this.$scrollContainer.querySelectorAll("[data-scroll]");
+		const $scrollElementsArr = this.toElementArray($scrollElements);
+		this._subscribeScrollElements($scrollElementsArr);
+		const ioRoot = this.lenisInstance.options.wrapper === window ? null : this.lenisInstance.options.wrapper;
+		this.IOTriggerInstance = new IO({
+			scrollElements: [...this.triggeredScrollElements],
+			root: ioRoot,
+			rootMargin: this.triggerRootMargin,
+			IORaf: false
+		});
+		this.IORafInstance = new IO({
+			scrollElements: [...this.RAFScrollElements],
+			root: ioRoot,
+			rootMargin: this.rafRootMargin,
+			IORaf: true
+		});
+	}
+	/**
+	* Lifecyle - Destroy core.
+	*/
+	destroy() {
+		this.IOTriggerInstance.destroy();
+		this.IORafInstance.destroy();
+		this._unsubscribeAllScrollElements();
+	}
+	/**
+	* Callback - Resize callback.
+	*/
+	onResize({ currentScroll }) {
+		for (const scrollElement of this.RAFScrollElements) scrollElement.onResize({ currentScroll });
+	}
+	/**
+	* Callback - RAF callback.
+	*/
+	onRender({ currentScroll, smooth }) {
+		for (const scrollElement of this.scrollElementsToUpdate) scrollElement.onRender({
+			currentScroll,
+			smooth
+		});
+	}
+	/**
+	* Remove items from lists of scroll elements and compute all new values.
+	*
+	* @param {HTMLElement} $oldContainer - HTMLElement that contains data-scroll elements to unsubscribe
+	*/
+	removeScrollElements($oldContainer) {
+		const $scrollElementsToRemove = $oldContainer.querySelectorAll("[data-scroll]");
+		if (!$scrollElementsToRemove.length) return;
+		const $scrollElementsToRemoveSet = new Set(Array.from($scrollElementsToRemove));
+		this.triggeredScrollElements = this.triggeredScrollElements.filter((scrollElement) => {
+			if (!$scrollElementsToRemoveSet.has(scrollElement.$el)) return true;
+			this.IOTriggerInstance.unobserve(scrollElement.$el);
+			return false;
+		});
+		this.RAFScrollElements = this.RAFScrollElements.filter((scrollElement) => {
+			if (!$scrollElementsToRemoveSet.has(scrollElement.$el)) return true;
+			this.IORafInstance.unobserve(scrollElement.$el);
+			return false;
+		});
+		$scrollElementsToRemove.forEach(($scrollElement) => {
+			const targetScrollElementToUpdate = this.scrollElementsToUpdate.find((scrollElement) => scrollElement.$el === $scrollElement);
+			const targetScrollElement = this.scrollElements.find((scrollElement) => scrollElement.$el === $scrollElement);
+			if (targetScrollElementToUpdate) this._unsubscribeElementUpdate(targetScrollElementToUpdate);
+			if (targetScrollElement) this.scrollElements = this.scrollElements.filter((scrollElementItem) => scrollElementItem.id !== targetScrollElement.id);
+		});
+	}
+	/**
+	* Add items to lists of scroll elements and compute all new values.
+	*
+	* @param {HTMLElement} $newContainer - HTMLElement that contains data-scroll elements to subscribe
+	*/
+	addScrollElements($newContainer) {
+		const $scrollElements = $newContainer.querySelectorAll("[data-scroll]");
+		const ids = [];
+		this.scrollElements.forEach((scrollElement) => {
+			ids.push(scrollElement.id);
+		});
+		const fromIndex = Math.max(...ids, 0) + 1;
+		const $scrollElementsArr = this.toElementArray($scrollElements);
+		this._subscribeScrollElements($scrollElementsArr, fromIndex, true);
+	}
+	/**
+	* Create a ScrollElement instance for each elements with
+	* `data-scroll` attribute.
+	*
+	* @private
+	*
+	* @param {HTMLElement[]} $scrollElements - List of elements that need
+	*     to be regarded.
+	*/
+	_subscribeScrollElements($scrollElements, fromIndex = 0, toObserve = false) {
+		for (let index = 0; index < $scrollElements.length; index++) {
+			const $scrollElement = $scrollElements[index];
+			const needRaf = this._checkRafNeeded($scrollElement);
+			const scrollElementInstance = new ScrollElement({
+				$el: $scrollElement,
+				id: fromIndex + index,
+				scrollOrientation: this.scrollOrientation,
+				lenisInstance: this.lenisInstance,
+				subscribeElementUpdateFn: this._subscribeElementUpdate.bind(this),
+				unsubscribeElementUpdateFn: this._unsubscribeElementUpdate.bind(this),
+				needRaf
+			});
+			this.scrollElements.push(scrollElementInstance);
+			if (needRaf) {
+				this.RAFScrollElements.push(scrollElementInstance);
+				if (toObserve) {
+					this.IORafInstance.scrollElements.push(scrollElementInstance);
+					this.IORafInstance.observe(scrollElementInstance.$el);
+				}
+			} else {
+				this.triggeredScrollElements.push(scrollElementInstance);
+				if (toObserve) {
+					this.IOTriggerInstance.scrollElements.push(scrollElementInstance);
+					this.IOTriggerInstance.observe(scrollElementInstance.$el);
+				}
+			}
+		}
+	}
+	/**
+	* Clear all ScrollElement arrays.
+	*
+	* @private
+	*/
+	_unsubscribeAllScrollElements() {
+		for (const scrollElement of this.scrollElements) scrollElement.destroy();
+		this.scrollElements = [];
+		this.RAFScrollElements = [];
+		this.triggeredScrollElements = [];
+		this.scrollElementsToUpdate = [];
+	}
+	/**
+	* Subscribe ScrollElement instance that needs to be updated.
+	*
+	* @private
+	*
+	* @param {ScrollElement} scrollElement - ScrollElement instance inview
+	*     that needs to be updated.
+	*/
+	_subscribeElementUpdate(scrollElement) {
+		this.scrollElementsToUpdate.push(scrollElement);
+	}
+	/**
+	* Unscribe ScrollElement instance that doesn't need to be updated.
+	*
+	* @private
+	*
+	* @param {ScrollElement} scrollElement - The updated ScrollElement instance
+	*     out of view now.
+	*/
+	_unsubscribeElementUpdate(scrollElement) {
+		this.scrollElementsToUpdate = this.scrollElementsToUpdate.filter((scrollElementToUpdate) => scrollElementToUpdate.id !== scrollElement.id);
+	}
+	/**
+	* Convert NodeListOf<Element> to HTMLElement array.
+	*
+	* @private
+	*
+	* @param {NodeListOf<Element>} elements - The NodeList to convert.
+	*
+	* @returns {HTMLElement[]}
+	*/
+	toElementArray(elements) {
+		return Array.from(elements);
+	}
+	/**
+	* Check if a DOM Element need a requestAnimationFrame to be used.
+	*
+	* @private
+	*
+	* @param {HTMLElement} $scrollElement - The element that needs to be checked.
+	*
+	* @returns {boolean}
+	*/
+	_checkRafNeeded($scrollElement) {
+		let attributesThatNeedRaf = [...ATTRIBUTES_THAT_NEED_RAF];
+		const removeAttribute = (attributeToRemove) => {
+			attributesThatNeedRaf = attributesThatNeedRaf.filter((attribute) => attribute !== attributeToRemove);
+		};
+		if ($scrollElement.dataset.scrollOffset) {
+			if ($scrollElement.dataset.scrollOffset.split(",").map((test) => test.replace("%", "").trim()).join(",") !== DEFAULT_SCROLL_OFFSET) return true;
+			else removeAttribute("scrollOffset");
+		} else removeAttribute("scrollOffset");
+		if ($scrollElement.dataset.scrollPosition) {
+			if ($scrollElement.dataset.scrollPosition.trim() !== DEFAULT_SCROLL_POSITION) return true;
+			else removeAttribute("scrollPosition");
+		} else removeAttribute("scrollPosition");
+		if ($scrollElement.dataset.scrollSpeed && !isNaN(parseFloat($scrollElement.dataset.scrollSpeed))) return true;
+		else removeAttribute("scrollSpeed");
+		for (const attribute of attributesThatNeedRaf) if (attribute in $scrollElement.dataset) return true;
+		return false;
+	}
+};
+// package.json
+var version = "5.0.1";
+// index.ts
+/**
+* Locomotive Scroll
+*
+* Detection of elements in viewport & smooth scrolling with parallax.
+*
+* Inspired by
+* {@link https://github.com/locomotivemtl/locomotive-scroll locomotive-scroll.js}
+* and built around
+* {@link https://github.com/darkroomengineering/lenis lenis.js}.
+*/
+var LocomotiveScroll = class {
+	constructor({ lenisOptions = {}, triggerRootMargin, rafRootMargin, autoStart = true, scrollCallback = () => {}, initCustomTicker, destroyCustomTicker } = {}) {
+		this.lenisInstance = null;
+		this.coreInstance = null;
+		window.locomotiveScrollVersion = version;
+		Object.assign(this, {
+			lenisOptions,
+			triggerRootMargin,
+			rafRootMargin,
+			autoStart,
+			scrollCallback,
+			initCustomTicker,
+			destroyCustomTicker
+		});
+		this._onRenderBind = this._onRender.bind(this);
+		this._onScrollToBind = this._onScrollTo.bind(this);
+		this._onResizeBind = this._onResize.bind(this);
+		this.rafPlaying = false;
+		this.isTouchDevice = "ontouchstart" in window || navigator.maxTouchPoints > 0;
+		this._init();
+	}
+	/**
+	* Lifecyle - Initialize instance.
+	*
+	* @private
+	*/
+	_init() {
+		this.lenisInstance = new Lenis({ ...this.lenisOptions });
+		if (this.scrollCallback) this.lenisInstance.on("scroll", this.scrollCallback);
+		document.documentElement.setAttribute("data-scroll-orientation", this.lenisInstance.options.orientation);
+		requestAnimationFrame(() => {
+			this.coreInstance = new Core({
+				$el: this.lenisInstance.rootElement,
+				triggerRootMargin: this.triggerRootMargin,
+				rafRootMargin: this.rafRootMargin,
+				scrollOrientation: this.lenisInstance.options.orientation,
+				lenisInstance: this.lenisInstance
+			});
+			this._bindEvents();
+			if (this.initCustomTicker && !this.destroyCustomTicker) console.warn("initCustomTicker callback is declared, but destroyCustomTicker is not. Please pay attention. It could cause trouble.");
+			else if (!this.initCustomTicker && this.destroyCustomTicker) console.warn("destroyCustomTicker callback is declared, but initCustomTicker is not. Please pay attention. It could cause trouble.");
+			this.autoStart && this.start();
+		});
+	}
+	/**
+	* Lifecyle - Destroy instance.
+	*/
+	destroy() {
+		this.stop();
+		this._unbindEvents();
+		this.lenisInstance?.destroy();
+		requestAnimationFrame(() => {
+			this.coreInstance?.destroy();
+		});
+	}
+	/**
+	* Events - Subscribe events to listen.
+	*/
+	_bindEvents() {
+		this._bindScrollToEvents();
+		if (this.lenisInstance) {
+			this._originalOnContentResize = this.lenisInstance.dimensions.onContentResize.bind(this.lenisInstance.dimensions);
+			this._originalOnWrapperResize = this.lenisInstance.dimensions.onWrapperResize.bind(this.lenisInstance.dimensions);
+			this.lenisInstance.dimensions.onContentResize = () => {
+				this._originalOnContentResize?.();
+				this._onResizeBind();
+			};
+			this.lenisInstance.dimensions.onWrapperResize = () => {
+				this._originalOnWrapperResize?.();
+				this._onResizeBind();
+			};
+		}
+	}
+	/**
+	* Events - Unsubscribe listened events.
+	*/
+	_unbindEvents() {
+		this._unbindScrollToEvents();
+		if (this.lenisInstance) {
+			if (this._originalOnContentResize) this.lenisInstance.dimensions.onContentResize = this._originalOnContentResize;
+			if (this._originalOnWrapperResize) this.lenisInstance.dimensions.onWrapperResize = this._originalOnWrapperResize;
+		}
+	}
+	/**
+	* Events - Subscribe scrollTo events to listen.
+	*/
+	_bindScrollToEvents($container) {
+		const $scrollToElements = ($container ? $container : this.lenisInstance?.rootElement)?.querySelectorAll("[data-scroll-to]");
+		$scrollToElements?.length && $scrollToElements.forEach(($el) => {
+			$el.addEventListener("click", this._onScrollToBind, false);
+		});
+	}
+	/**
+	* Events - Unsubscribe scrollTo listened events.
+	*/
+	_unbindScrollToEvents($container) {
+		const $scrollToElements = ($container ? $container : this.lenisInstance?.rootElement)?.querySelectorAll("[data-scroll-to]");
+		$scrollToElements?.length && $scrollToElements.forEach(($el) => {
+			$el.removeEventListener("click", this._onScrollToBind, false);
+		});
+	}
+	/**
+	* Callback - Resize callback.
+	*
+	* Called synchronously after Lenis updates its dimensions via onContentResize/onWrapperResize.
+	* All dimension values are already up-to-date when this executes.
+	*/
+	_onResize() {
+		this.coreInstance?.onResize({
+			currentScroll: this.lenisInstance?.scroll ?? 0,
+			smooth: !this.isTouchDevice
+		});
+	}
+	/**
+	* Callback - Render callback.
+	*/
+	_onRender() {
+		this.lenisInstance?.raf(Date.now());
+		this.coreInstance?.onRender({
+			currentScroll: this.lenisInstance?.scroll ?? 0,
+			smooth: !this.isTouchDevice
+		});
+	}
+	/**
+	* Callback - Scroll To callback.
+	*/
+	_onScrollTo(event) {
+		event.preventDefault();
+		const $target = event.currentTarget ?? null;
+		if (!$target) return;
+		const target = $target.getAttribute("data-scroll-to-href") || $target.getAttribute("href");
+		const offset = $target.getAttribute("data-scroll-to-offset") || 0;
+		const duration = $target.getAttribute("data-scroll-to-duration") || this.lenisInstance?.options.duration;
+		target && this.scrollTo(target, {
+			offset: typeof offset === "string" ? parseInt(offset) : offset,
+			duration: typeof duration === "string" ? parseInt(duration) : duration
+		});
+	}
+	/**
+	* Start RequestAnimationFrame that active Lenis smooth and scroll progress.
+	*/
+	start() {
+		if (this.rafPlaying) return;
+		this.lenisInstance?.start();
+		this.rafPlaying = true;
+		this.initCustomTicker ? this.initCustomTicker(this._onRenderBind) : this._raf();
+	}
+	/**
+	* Stop RequestAnimationFrame that active Lenis smooth and scroll progress.
+	*/
+	stop() {
+		if (!this.rafPlaying) return;
+		this.lenisInstance?.stop();
+		this.rafPlaying = false;
+		this.destroyCustomTicker ? this.destroyCustomTicker(this._onRenderBind) : this.rafInstance && cancelAnimationFrame(this.rafInstance);
+	}
+	/**
+	* Remove old scroll elements items and rebuild ScrollElements instances.
+	*/
+	removeScrollElements($oldContainer) {
+		if (!$oldContainer) {
+			console.error("Please provide a DOM Element as $oldContainer");
+			return;
+		}
+		this._unbindScrollToEvents($oldContainer);
+		this.coreInstance?.removeScrollElements($oldContainer);
+	}
+	/**
+	* Add new scroll elements items and rebuild ScrollElements instances.
+	*/
+	addScrollElements($newContainer) {
+		if (!$newContainer) {
+			console.error("Please provide a DOM Element as $newContainer");
+			return;
+		}
+		this.coreInstance?.addScrollElements($newContainer);
+		requestAnimationFrame(() => {
+			this._bindScrollToEvents($newContainer);
+		});
+	}
+	/**
+	* Trigger resize callback.
+	*/
+	resize() {
+		this._onResizeBind();
+	}
+	/**
+	* Trigger scroll to callback.
+	*/
+	scrollTo(target, options) {
+		this.lenisInstance?.scrollTo(target, options);
+	}
+	/**
+	* RequestAnimationFrame that active Lenis smooth and scroll progress.
+	*
+	* @private
+	*
+	*/
+	_raf() {
+		this._onRenderBind();
+		this.rafInstance = requestAnimationFrame(() => this._raf());
+	}
+};
+export { LocomotiveScroll as default };
+
+
 //# sourceMappingURL=locomotive-scroll.mjs.map
