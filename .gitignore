@@ -5,17 +5,6 @@ Thumbs.db
 # Turborepo
 .turbo
 
-# Ignore nested folders: https://stackoverflow.com/questions/3203228/git-ignore-exception/72380673#72380673
-/tmp/*
-!/tmp/cjs
-/tmp/cjs/*
-!/tmp/dts
-/tmp/dts/*
-!/tmp/esm
-/tmp/esm/*
-!tmp/**/package.json
-!tmp/**/tsconfig.json
-
 # generated types
 .astro
 .docusaurus
@@ -37,7 +26,11 @@ pnpm-debug.log*
 .idea
 
 # packages build output
+packages/lib/dist
+packages/lib/bundled
 !/www/demo
 /www/demo/*
 !/www/docs
 /www/docs/*
+!/www/landing
+/www/landing/*

@@ -1,0 +1,43 @@
+name: Release
+
+on:
+  push:
+    tags: ['v*']
+
+permissions:
+  id-token: write
+  contents: write
+
+jobs:
+  release:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v7
+      - uses: actions/setup-node@v7
+        with:
+          node-version-file: .nvmrc
+          cache: npm
+          registry-url: https://registry.npmjs.org
+      - name: Check tag matches package version
+        run: |
+          expected="v$(node -p "require('./packages/lib/package.json').version")"
+          if [ "$GITHUB_REF_NAME" != "$expected" ]; then
+            echo "::error::Tag $GITHUB_REF_NAME does not match package version $expected"
+            exit 1
+          fi
+      - run: npm ci
+      - run: npm test
+      - run: npm run build -w packages/lib
+      - run: npm run check:package -w packages/lib
+      - name: Stage on npm
+        run: |
+          dist_tag=latest
+          case "$GITHUB_REF_NAME" in *-*) dist_tag=next ;; esac
+          npm stage publish -w packages/lib --provenance --tag "$dist_tag"
+      - name: Create draft GitHub release
+        env:
+          GH_TOKEN: ${{ github.token }}
+        run: |
+          prerelease=()
+          case "$GITHUB_REF_NAME" in *-*) prerelease=(--prerelease) ;; esac
+          gh release create "$GITHUB_REF_NAME" --generate-notes --draft "${prerelease[@]}"

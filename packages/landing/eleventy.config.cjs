@@ -29,6 +29,8 @@ module.exports = function(eleventyConfig) {
 
     eleventyConfig.addWatchTarget("views/**/*");
 
+    eleventyConfig.addPassthroughCopy({ 'assets/static': 'assets' });
+
     // Use twig
     eleventyConfig.addPlugin(eleventyPluginTwig, {
         twig: {
@@ -66,6 +68,12 @@ module.exports = function(eleventyConfig) {
     // Add global data for assets version
     eleventyConfig.addGlobalData('assetsVersion', function() {
         return getAssetsVersion();
+    });
+
+    eleventyConfig.addGlobalData('libVersion', function() {
+        const libPackagePath = path.resolve(__dirname, '../lib/package.json');
+        const { version } = JSON.parse(fs.readFileSync(libPackagePath, 'utf-8'));
+        return version.split('.').slice(0, 2).join('.');
     });
 
     twig.extendFunction("critical_css", function() {

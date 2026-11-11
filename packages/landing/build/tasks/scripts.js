@@ -65,7 +65,7 @@ export default async function compileScripts(esBuildOptions = null) {
      * @throws {TypeError} If outdir and outfile are missing.
      * @return {Promise}
      */
-    loconfig.tasks.scripts?.forEach(async ({
+    await Promise.all((loconfig.tasks.scripts ?? []).map(async ({
         includes,
         outdir = '',
         outfile = '',
@@ -104,10 +104,12 @@ export default async function compileScripts(esBuildOptions = null) {
             message(`${label} compiled`, 'success', timeLabel);
         } catch (err) {
             // errors managments (already done in esbuild)
+            message(`Error compiling ${label}`, 'error');
+
             notification({
                 title:   `${label} compilation failed 🚨`,
                 message: `${err.errors[0].text} in ${err.errors[0].location.file} line ${err.errors[0].location.line}`
             });
         }
-    });
+    }));
 };

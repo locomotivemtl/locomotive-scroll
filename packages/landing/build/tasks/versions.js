@@ -127,11 +127,13 @@ export default async function bumpVersions(versionOptions = null) {
         options.key    = (options.key ?? versionOptions.versionKey);
 
         if (queue.has(outfile)) {
-            queue.get(outfile).then(() => handleBumpVersion(outfile, label, options));
+            queue.set(outfile, queue.get(outfile).then(() => handleBumpVersion(outfile, label, options)));
         } else {
             queue.set(outfile, handleBumpVersion(outfile, label, options));
         }
     });
+
+    await Promise.all(queue.values());
 };
 
 /**

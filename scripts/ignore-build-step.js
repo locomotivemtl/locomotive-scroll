@@ -8,10 +8,9 @@
  *
  * Build is skipped ONLY when:
  * - Only non-code files changed (README, .github, IDE config)
- * - Changes are only in landing package (deployed separately via committed builds)
  *
  * Build proceeds for ANY changes in:
- * - packages/lib, packages/demo, packages/docs (including all files)
+ * - packages/lib, packages/demo, packages/docs, packages/landing (including all files)
  * - Config files (vercel.json, turbo.json, package.json, etc.)
  *
  * Note: Turbo handles caching - we only skip truly irrelevant changes.

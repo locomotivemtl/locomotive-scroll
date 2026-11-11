@@ -57,7 +57,7 @@ export default async function compileSVGs(mixerOptions = null) {
      *     Defaults to the outfile name.
      * @return {Promise}
      */
-    loconfig.tasks.svgs?.forEach(async ({
+    await Promise.all((loconfig.tasks.svgs ?? []).map(async ({
         includes,
         outfile,
         label = null
@@ -91,5 +91,5 @@ export default async function compileSVGs(mixerOptions = null) {
                 message: `${err.name}: ${err.message}`
             });
         }
-    });
+    }));
 };

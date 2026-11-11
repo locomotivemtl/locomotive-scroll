@@ -3,6 +3,5 @@
     "description": "A lightweight scroll library for modern web experiences. Detection, animation, and smooth scrolling — all in 9.4kB. Built on top of Lenis.",
     "github": "https://github.com/locomotivemtl/locomotive-scroll",
     "documentation": "https://scroll.locomotive.ca/docs",
-    "website": "https://locomotive.ca",
-    "version": "5.0"
+    "website": "https://locomotive.ca"
 }

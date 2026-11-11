@@ -27,6 +27,7 @@ function message(text, type, timerID) {
 
         case 'error':
             console.log('❌ ', kleur.bgRed().black(text));
+            process.exitCode = 1;
             break;
 
         case 'warning':
