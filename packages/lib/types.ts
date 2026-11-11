@@ -136,10 +136,12 @@ export interface IScrollElementMetrics {
  *
  *  @property {number}  currentScroll - Scroll value returned by Lenis.
  *  @property {boolean} smooth        - Whether parallax should be enabled (false on touch devices).
+ *  @property {boolean} reducedMotion - Whether Lenis honors `prefers-reduced-motion: reduce`. Disables parallax.
  */
 export interface IScrollElementCallbacksValues {
     currentScroll: number;
     smooth: boolean;
+    reducedMotion: boolean;
 }
 
 /**

@@ -14,6 +14,7 @@ The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.1.0/),
 
 - Lenis is updated from 1.3.17 to 1.3.27.
 - Scrolling honors `prefers-reduced-motion: reduce` by default, through Lenis's new `respectReducedMotion` option: smoothing is turned off, so scroll follows the input 1:1, and programmatic scrolls, including `scrollTo`, jump instantly. To keep the previous behavior, pass `lenisOptions: { respectReducedMotion: false }`.
+- Under reduced motion, `data-scroll-speed` parallax is turned off, including on elements with `data-scroll-enable-touch-speed`. It follows `respectReducedMotion`.
 - `scrollTo` and `data-scroll-to` now account for the target's `scroll-margin` and the scroll container's `scroll-padding`. A page that already sets them and compensates with `data-scroll-to-offset` now gets both offsets.
 - `scrollTo` options type `userData` as `Record<string, unknown>` instead of `Record<string, any>`, following Lenis.
 

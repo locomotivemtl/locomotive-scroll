@@ -206,7 +206,11 @@ export default class ScrollElement {
     /**
      * Callback - RAF callback
      */
-    public onRender({ currentScroll, smooth }: IScrollElementCallbacksValues) {
+    public onRender({
+        currentScroll,
+        smooth,
+        reducedMotion,
+    }: IScrollElementCallbacksValues) {
         const wSize = this.getWindowSize();
         this.currentScroll = currentScroll;
         this._computeProgress();
@@ -214,10 +218,13 @@ export default class ScrollElement {
         // Parallax
         if (
             this.attributes.scrollSpeed &&
-            !isNaN(this.attributes.scrollSpeed)
+            !Number.isNaN(this.attributes.scrollSpeed)
         ) {
-            // if touch detected or smooth disabled
-            if (!this.attributes.scrollEnableTouchSpeed && !smooth) {
+            // Reduced motion wins over data-scroll-enable-touch-speed
+            if (
+                reducedMotion ||
+                (!this.attributes.scrollEnableTouchSpeed && !smooth)
+            ) {
                 if (this.translateValue) {
                     this.$el.style.transform = `translate3d(0, 0, 0)`;
                 }

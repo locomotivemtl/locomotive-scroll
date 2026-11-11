@@ -248,6 +248,7 @@ export default class LocomotiveScroll {
         this.coreInstance?.onResize({
             currentScroll: this.lenisInstance?.scroll ?? 0,
             smooth: !this.isTouchDevice,
+            reducedMotion: this.lenisInstance?.prefersReducedMotion ?? false,
         });
     }
 
@@ -260,6 +261,7 @@ export default class LocomotiveScroll {
         this.coreInstance?.onRender({
             currentScroll: this.lenisInstance?.scroll ?? 0,
             smooth: !this.isTouchDevice,
+            reducedMotion: this.lenisInstance?.prefersReducedMotion ?? false,
         });
     }
 

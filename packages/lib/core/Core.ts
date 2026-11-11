@@ -134,11 +134,16 @@ export default class Core {
     /**
      * Callback - RAF callback.
      */
-    onRender({ currentScroll, smooth }: IScrollElementCallbacksValues) {
+    onRender({
+        currentScroll,
+        smooth,
+        reducedMotion,
+    }: IScrollElementCallbacksValues) {
         for (const scrollElement of this.scrollElementsToUpdate) {
             scrollElement.onRender({
                 currentScroll,
                 smooth,
+                reducedMotion,
             } as IScrollElementCallbacksValues);
         }
     }
