@@ -2,6 +2,7 @@
  * Integrates Lenis with Locomotive's built-in animation system
  */
 
+import type Lenis from 'lenis';
 import type {
     CoreOptions,
     IScrollElementCallbacksValues,
@@ -38,7 +39,7 @@ export default class Core {
     private IOTriggerInstance!: IO;
     private IORafInstance!: IO;
     private scrollOrientation!: scrollOrientation;
-    private lenisInstance: any;
+    private lenisInstance!: Lenis;
 
     constructor({
         $el,

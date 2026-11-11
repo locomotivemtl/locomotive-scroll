@@ -3,11 +3,10 @@ import Lenis from 'lenis';
 import Core from './core/Core';
 import type {
     ILenisScrollToOptions,
-    ILenisScrollValues,
     ILocomotiveScrollOptions,
     lenisTargetScrollTo,
 } from './types';
-import type { LenisOptions } from 'lenis';
+import type { LenisOptions, ScrollCallback } from 'lenis';
 
 /**
  * Locomotive Scroll
@@ -32,7 +31,7 @@ export default class LocomotiveScroll {
     private rafInstance?: number;
     private autoStart?: boolean;
     private isTouchDevice: boolean;
-    private scrollCallback?(scrollValues: ILenisScrollValues): void;
+    private scrollCallback?: ScrollCallback;
     private initCustomTicker?: (render: () => void) => void;
     private destroyCustomTicker?: (render: () => void) => void;
     private _onRenderBind: () => void;
@@ -354,16 +353,7 @@ export default class LocomotiveScroll {
         target: lenisTargetScrollTo,
         options?: ILenisScrollToOptions
     ): void {
-        this.lenisInstance?.scrollTo(target, {
-            offset: options?.offset,
-            lerp: options?.lerp,
-            duration: options?.duration,
-            immediate: options?.immediate,
-            lock: options?.lock,
-            force: options?.force,
-            easing: options?.easing,
-            onComplete: options?.onComplete,
-        });
+        this.lenisInstance?.scrollTo(target, options);
     }
 
     /**

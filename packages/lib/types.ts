@@ -1,5 +1,5 @@
 import ScrollElement from './core/ScrollElement';
-import type { LenisOptions } from 'lenis';
+import type { LenisOptions, ScrollCallback, ScrollToOptions } from 'lenis';
 import type Lenis from 'lenis';
 
 /**
@@ -22,7 +22,7 @@ export interface ILenisScrollValues {
 /**
  * @typedef {(number|HTMLElement|string)} LenisTargetScrollTo
  */
-export type lenisTargetScrollTo = number | HTMLElement | string;
+export type lenisTargetScrollTo = Parameters<Lenis['scrollTo']>[0];
 
 /**
  *
@@ -32,32 +32,14 @@ export type lenisTargetScrollTo = number | HTMLElement | string;
  * @property {ILenisScrollToOptions} [options] - Scroll to options.
  */
 export interface ILenisScrollTo {
-    target: number | HTMLElement | string;
+    target: lenisTargetScrollTo;
     options?: ILenisScrollToOptions;
 }
 
 /**
- * @typedef {Object} ILenisScrollToOptions
- *
- * @property {number} [offset]       - Number equivalent to scroll-padding-top.
- * @property {number} [lerp]         - Animation lerp intensity.
- * @property {number} [duration]     - Number scroll duration in seconds.
- * @property {boolean} [immediate]   - Ignore duration and easing.
- * @property {boolean} [lock]        - Whether or not to prevent the user from scrolling until the target is reached.
- * @property {boolean} [force]       - Reach target even if instance is stopped.
- * @property {function} [easing]     - Smooth scroll easing function.
- * @property {function} [onComplete] - Called when the target is reached.
+ * @typedef {ScrollToOptions} ILenisScrollToOptions
  */
-export interface ILenisScrollToOptions {
-    offset?: number;
-    lerp?: number;
-    duration?: number;
-    immediate?: boolean;
-    lock?: boolean;
-    force?: boolean;
-    easing?(t: number): number;
-    onComplete?(): void;
-}
+export type ILenisScrollToOptions = ScrollToOptions;
 
 /**
  * @typedef {Object} ILocomotiveScrollOptions
@@ -73,7 +55,7 @@ export interface ILocomotiveScrollOptions {
     triggerRootMargin?: string;
     rafRootMargin?: string;
     autoStart?: boolean;
-    scrollCallback?(scrollValues: ILenisScrollValues): void;
+    scrollCallback?: ScrollCallback;
     initCustomTicker?(render: () => void): void;
     destroyCustomTicker?(render: () => void): void;
 }
@@ -87,7 +69,6 @@ export interface ILocomotiveScrollOptions {
  * @property {Lenis}       lenisInstance              - Lenis instance for scroll data.
  * @property {function}    subscribeElementUpdateFn   - Callback to subscribe instance to the main RAF.
  * @property {function}    unsubscribeElementUpdateFn - Callback to unsubscribe instance to the main RAF.
- * @property {function}    [scrollCallback]           - Scroll callback binded on the Lenis scroll event.
  */
 export interface IScrollElementOptions {
     $el: HTMLElement;
@@ -97,7 +78,6 @@ export interface IScrollElementOptions {
     lenisInstance: Lenis;
     subscribeElementUpdateFn(scrollElement: ScrollElement): void;
     unsubscribeElementUpdateFn(scrollElement: ScrollElement): void;
-    scrollCallback?(scrollValues: ILenisScrollValues): void;
 }
 
 /**

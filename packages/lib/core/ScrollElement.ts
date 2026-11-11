@@ -15,6 +15,7 @@
  * - scrollCall - Call a custom event when the element is intersected
  */
 
+import type Lenis from 'lenis';
 import type {
     IScrollElementOptions,
     IScrollElementAttributes,
@@ -50,7 +51,7 @@ export default class ScrollElement {
 
     private subscribeElementUpdateFn: (scrollElement: ScrollElement) => void;
     private unsubscribeElementUpdateFn: (scrollElement: ScrollElement) => void;
-    private lenisInstance: any;
+    private lenisInstance: Lenis;
 
     // Cached functions to avoid orientation checks every frame
     private getWindowSize: () => number;
