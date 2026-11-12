@@ -35,6 +35,7 @@ export default class LocomotiveScroll {
     private rafInstance?: number;
     private autoStart?: boolean;
     private enableTouchSpeed!: boolean;
+    private legacyTriggers!: boolean;
     private isTouchDevice: boolean;
     private callbacksValues: IScrollElementCallbacksValues;
     private lastRenderTime: number | null = null;
@@ -53,6 +54,7 @@ export default class LocomotiveScroll {
         rafRootMargin,
         autoStart = true,
         enableTouchSpeed = false,
+        legacyTriggers = false,
         scrollCallback = () => {},
         initCustomTicker,
         destroyCustomTicker,
@@ -67,6 +69,7 @@ export default class LocomotiveScroll {
             rafRootMargin,
             autoStart,
             enableTouchSpeed,
+            legacyTriggers,
             scrollCallback,
             initCustomTicker,
             destroyCustomTicker,
@@ -128,6 +131,7 @@ export default class LocomotiveScroll {
                 scrollOrientation: this.lenisInstance!.options.orientation,
                 lenisInstance: this.lenisInstance!,
                 enableTouchSpeed: this.enableTouchSpeed,
+                legacyTriggers: this.legacyTriggers,
             });
 
             // Bind Events
