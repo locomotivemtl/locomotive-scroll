@@ -31,6 +31,7 @@ The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.1.0/),
 - The `lenis` class no longer comes back on the root element after `destroy()`.
 - `syncTouch` is more accurate and no longer jitters on slow scrolls.
 - Anchor links with special characters, with the `anchors` Lenis option.
+- An element in the fold with `data-scroll-repeat` and a RAF attribute (`data-scroll-speed`, a custom offset, progress) no longer loses `is-inview` at the top of the page.
 
 ## [5.0.2] - 2026-11-11
 

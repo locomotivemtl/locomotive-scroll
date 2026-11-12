@@ -679,8 +679,19 @@ describe('ScrollElement visual triggers', () => {
         );
 
         expect(scrollElement.$el.classList.contains('is-inview')).toBe(true);
-        // From 1: at scroll 0, progress 0 leaves the fold, as in 5.0
-        expectExit(scrollUntil(scrollElement, 1, false, displayedEnd(300)), 0);
+        expectExit(scrollUntil(scrollElement, 0, false, displayedEnd(300)), 0);
+    });
+
+    it('stays in view at the top of the page in the fold with data-scroll-repeat', () => {
+        const scrollElement = createTriggerElement(
+            { scrollSpeed: '0.5', scrollRepeat: '' },
+            { top: 300 }
+        );
+        render(scrollElement, 0);
+        render(scrollElement, 100);
+        render(scrollElement, 0);
+
+        expect(scrollElement.$el.classList.contains('is-inview')).toBe(true);
     });
 
     it('calls from the end when it comes back into the fold from below', () => {

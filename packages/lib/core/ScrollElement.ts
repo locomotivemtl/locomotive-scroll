@@ -740,7 +740,8 @@ export default class ScrollElement {
 
             // Logic to trigger the inview/out of view callbacks
             progress > 0 && progress < 1 && this.setInview();
-            progress === 0 && this.setOutOfView();
+            // In the fold, progress 0 is the top of the page, not an exit
+            progress === 0 && !this.isInFold && this.setOutOfView();
             progress === 1 && this.setOutOfView();
         }
     }
