@@ -18,6 +18,7 @@ const ATTRIBUTES_THAT_NEED_RAF = [
     'scrollCssProgress',
     'scrollEventProgress',
     'scrollSpeed',
+    'scrollDelay',
 ];
 
 /** Default root margins */
@@ -128,28 +129,18 @@ export default class Core {
     /**
      * Callback - Resize callback.
      */
-    onResize({ currentScroll }: IScrollElementCallbacksValues) {
+    onResize(values: IScrollElementCallbacksValues) {
         for (const scrollElement of this.RAFScrollElements) {
-            scrollElement.onResize({
-                currentScroll,
-            } as IScrollElementCallbacksValues);
+            scrollElement.onResize(values);
         }
     }
 
     /**
      * Callback - RAF callback.
      */
-    onRender({
-        currentScroll,
-        smooth,
-        reducedMotion,
-    }: IScrollElementCallbacksValues) {
+    onRender(values: IScrollElementCallbacksValues) {
         for (const scrollElement of this.scrollElementsToUpdate) {
-            scrollElement.onRender({
-                currentScroll,
-                smooth,
-                reducedMotion,
-            } as IScrollElementCallbacksValues);
+            scrollElement.onRender(values);
         }
     }
 

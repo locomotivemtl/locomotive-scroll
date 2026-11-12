@@ -9,6 +9,7 @@ The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.1.0/),
 ### Added
 
 - The `enableTouchSpeed` option (default `false`) enables parallax on touch devices for every element, as `data-scroll-enable-touch-speed` does for one element ([#594](https://github.com/locomotivemtl/locomotive-scroll/issues/594)).
+- The `data-scroll-delay` attribute is back ([#539](https://github.com/locomotivemtl/locomotive-scroll/issues/539)). It takes the v4 lerp factor, between 0 and 1 excluded (for example `0.1`), and makes the element trail behind the scroll, then land where it would be without delay. With `data-scroll-speed`, it delays the parallax as in v4, now at any frame rate. Without `data-scroll-speed`, or with a low or negative speed, the element still trails by a minimum amount. The trail is capped relative to the viewport. Triggers, `is-inview`, `--progress` and events stay on the element's natural position. It is turned off under reduced motion and on touch devices, like the parallax.
 - The `data-lenis-prevent-vertical` and `data-lenis-prevent-horizontal` attributes from Lenis, to stop scroll smoothing on one axis inside an element.
 
 ### Changed
