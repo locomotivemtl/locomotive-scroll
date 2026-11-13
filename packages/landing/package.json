@@ -14,7 +14,6 @@
         "build": "node --experimental-json-modules --no-warnings build/build.js"
     },
     "dependencies": {
-        "@11ty/eleventy-img": "^4.0.2",
         "@vercel/analytics": "^1.6.1",
         "gsap": "^3.15.1",
         "locomotive-scroll": "*",
