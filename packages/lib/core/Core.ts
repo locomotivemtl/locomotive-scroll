@@ -42,6 +42,7 @@ export default class Core {
     private scrollOrientation!: scrollOrientation;
     private lenisInstance!: Lenis;
     private enableTouchSpeed!: boolean;
+    private legacyTriggers!: boolean;
 
     constructor({
         $el,
@@ -50,6 +51,7 @@ export default class Core {
         scrollOrientation,
         lenisInstance,
         enableTouchSpeed,
+        legacyTriggers,
     }: CoreOptions) {
         if (!$el) {
             console.error('Please provide a DOM Element as scrollContainer');
@@ -67,6 +69,9 @@ export default class Core {
 
         // Touch parallax for every element
         this.enableTouchSpeed = enableTouchSpeed;
+
+        // Triggers on the natural position, as 5.0
+        this.legacyTriggers = legacyTriggers;
 
         // IO Margins
         this.triggerRootMargin = triggerRootMargin ?? TRIGGER_ROOT_MARGIN;
@@ -247,6 +252,7 @@ export default class Core {
                 scrollOrientation: this.scrollOrientation,
                 lenisInstance: this.lenisInstance,
                 enableTouchSpeed: this.enableTouchSpeed,
+                legacyTriggers: this.legacyTriggers,
                 subscribeElementUpdateFn:
                     this._subscribeElementUpdate.bind(this),
                 unsubscribeElementUpdateFn:

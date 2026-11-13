@@ -46,6 +46,7 @@ function createCore($root: HTMLElement): Core {
         scrollOrientation: 'vertical',
         lenisInstance: createLenisStub(),
         enableTouchSpeed: false,
+        legacyTriggers: false,
     });
 }
 

@@ -64,11 +64,11 @@ export default class ScrollElement {
     public isAlreadyIntersected: boolean;
 
     private intersection: IScrollElementIntersection;
+    private triggerIntersection: IScrollElementIntersection;
     private metrics: IScrollElementMetrics;
     private currentScroll: number;
     private translateValue: number;
     private targetTranslateValue: number;
-    private progress: number;
     private lastProgress: number | null;
     private isInview: boolean;
     private isInteractive: boolean;
@@ -77,6 +77,8 @@ export default class ScrollElement {
     private isFirstRender: boolean;
     private isSettling: boolean;
     private delayedScroll: number;
+    private legacyTriggers: boolean;
+    private isTranslated: boolean;
 
     private subscribeElementUpdateFn: (scrollElement: ScrollElement) => void;
     private unsubscribeElementUpdateFn: (scrollElement: ScrollElement) => void;
@@ -125,6 +127,7 @@ export default class ScrollElement {
         scrollOrientation,
         lenisInstance,
         enableTouchSpeed,
+        legacyTriggers,
     }: IScrollElementOptions) {
         // Scroll DOM element
         this.$el = $el;
@@ -136,6 +139,8 @@ export default class ScrollElement {
         this.scrollOrientation = scrollOrientation;
         // Lenis instance
         this.lenisInstance = lenisInstance;
+        // Triggers on the natural position, as 5.0
+        this.legacyTriggers = legacyTriggers;
         // Parent's callbacks
         this.subscribeElementUpdateFn = subscribeElementUpdateFn;
         this.unsubscribeElementUpdateFn = unsubscribeElementUpdateFn;
@@ -163,8 +168,12 @@ export default class ScrollElement {
             scrollDelay: parseScrollDelay(this.$el.dataset['scrollDelay']),
         };
 
-        // Limits
+        // Limits: intersection drives the parallax, triggerIntersection the progress and triggers
         this.intersection = {
+            start: 0,
+            end: 0,
+        };
+        this.triggerIntersection = {
             start: 0,
             end: 0,
         };
@@ -184,7 +193,6 @@ export default class ScrollElement {
         this.targetTranslateValue = 0;
 
         // Progress
-        this.progress = 0;
         this.lastProgress = null;
 
         // Inview
@@ -199,6 +207,8 @@ export default class ScrollElement {
         this.isSettling = false;
         // Scroll value the element follows with scrollDelay
         this.delayedScroll = this.currentScroll;
+        // Parallax applied on the last render, so triggers follow the displayed position
+        this.isTranslated = false;
 
         // Cache orientation-dependent functions to avoid repeated conditionals
         this.getWindowSize =
@@ -253,17 +263,17 @@ export default class ScrollElement {
     }: IScrollElementCallbacksValues) {
         const wSize = this.getWindowSize();
         this.currentScroll = currentScroll;
+        // Reduced motion wins over data-scroll-enable-touch-speed
+        this.isTranslated =
+            !reducedMotion &&
+            (this.attributes.scrollEnableTouchSpeed || smooth);
         this._computeProgress();
 
         if (!this._getParallaxSpeed() && !this.attributes.scrollDelay) {
             return;
         }
 
-        // Reduced motion wins over data-scroll-enable-touch-speed
-        if (
-            reducedMotion ||
-            (!this.attributes.scrollEnableTouchSpeed && !smooth)
-        ) {
+        if (!this.isTranslated) {
             if (this.translateValue) {
                 this.$el.style.transform = `translate3d(0, 0, 0)`;
             }
@@ -275,7 +285,7 @@ export default class ScrollElement {
         }
 
         this.targetTranslateValue = this._getParallaxTranslate(
-            this.progress,
+            this._getParallaxProgress(this.currentScroll),
             wSize
         );
 
@@ -424,18 +434,12 @@ export default class ScrollElement {
         }
 
         const trail = trailShare * (this.currentScroll - this.delayedScroll);
-        const delayedProgress = clamp(
-            0,
-            1,
-            normalize(
-                this.intersection.start,
-                this.intersection.end,
-                this.delayedScroll
-            )
-        );
         this.translateValue =
             (trailLimit ? trailLimit * Math.tanh(trail / trailLimit) : trail) +
-            this._getParallaxTranslate(delayedProgress, wSize);
+            this._getParallaxTranslate(
+                this._getParallaxProgress(this.delayedScroll),
+                wSize
+            );
     }
 
     /**
@@ -446,6 +450,21 @@ export default class ScrollElement {
     private _getParallaxSpeed(): number | null {
         const { scrollSpeed } = this.attributes;
         return scrollSpeed && !Number.isNaN(scrollSpeed) ? scrollSpeed : null;
+    }
+
+    /**
+     * Parallax progress for a scroll, on the element's natural position.
+     *
+     * @private
+     *
+     * @param {number} scroll - Scroll value.
+     */
+    private _getParallaxProgress(scroll: number): number {
+        return clamp(
+            0,
+            1,
+            normalize(this.intersection.start, this.intersection.end, scroll)
+        );
     }
 
     /**
@@ -613,6 +632,85 @@ export default class ScrollElement {
                     break;
             }
         }
+
+        this._computeTriggerIntersection(wSize);
+    }
+
+    /**
+     * Compute the scroll values where the displayed element meets the intersection.
+     *
+     * @private
+     *
+     * @param {number} wSize - Viewport size on the scroll axis.
+     */
+    private _computeTriggerIntersection(wSize: number) {
+        if (this.legacyTriggers || !this._getParallaxSpeed()) {
+            this.triggerIntersection.start = this.intersection.start;
+            this.triggerIntersection.end = this.intersection.end;
+            return;
+        }
+
+        this.triggerIntersection.start = this._getDisplayedTriggerScroll(
+            this.intersection.start,
+            wSize,
+            true
+        );
+        this.triggerIntersection.end = this._getDisplayedTriggerScroll(
+            this.intersection.end,
+            wSize,
+            false
+        );
+    }
+
+    /**
+     * Scroll where the displayed element reaches a natural trigger scroll.
+     *
+     * Solves scroll - translate(scroll) = naturalScroll. The parallax is linear
+     * inside the intersection and constant outside, so each piece solves directly.
+     * When the element stops or moves backward on screen, several scrolls match:
+     * an entry keeps the first one, an exit the last one.
+     *
+     * @private
+     *
+     * @param {number}  naturalScroll - Trigger scroll on the natural position.
+     * @param {number}  wSize         - Viewport size on the scroll axis.
+     * @param {boolean} isEntry       - Whether the trigger starts the intersection.
+     */
+    private _getDisplayedTriggerScroll(
+        naturalScroll: number,
+        wSize: number,
+        isEntry: boolean
+    ): number {
+        const { start, end } = this.intersection;
+        const startTranslate = this._getParallaxTranslate(0, wSize);
+        const endTranslate = this._getParallaxTranslate(1, wSize);
+        // Displayed px per scroll px inside the intersection, 0 or less when the element stops or moves backward
+        const insideSlope = 1 - (endTranslate - startTranslate) / (end - start);
+
+        const beforeScroll = naturalScroll + startTranslate;
+        const insideScroll =
+            start + (naturalScroll - start + startTranslate) / insideSlope;
+        const afterScroll = naturalScroll + endTranslate;
+
+        const isBefore = beforeScroll <= start;
+        const isInside = insideScroll >= start && insideScroll <= end;
+        const isAfter = afterScroll >= end;
+
+        if (isEntry) {
+            if (isBefore) return beforeScroll;
+            return isInside ? insideScroll : afterScroll;
+        }
+        if (isAfter) return afterScroll;
+        return isInside ? insideScroll : beforeScroll;
+    }
+
+    /**
+     * Intersection that drives the progress and triggers, on the displayed position.
+     *
+     * @private
+     */
+    private _getTriggerIntersection(): IScrollElementIntersection {
+        return this.isTranslated ? this.triggerIntersection : this.intersection;
     }
 
     /**
@@ -624,20 +722,10 @@ export default class ScrollElement {
      * @param {number} [forcedProgress] - Value to force progress.
      */
     private _computeProgress(forcedProgress?: number) {
-        // Progress
+        const { start, end } = this._getTriggerIntersection();
         const progress =
             forcedProgress ??
-            clamp(
-                0,
-                1,
-                normalize(
-                    this.intersection.start,
-                    this.intersection.end,
-                    this.currentScroll
-                )
-            );
-
-        this.progress = progress;
+            clamp(0, 1, normalize(start, end, this.currentScroll));
 
         if (progress !== this.lastProgress) {
             this.lastProgress = progress;
@@ -651,7 +739,8 @@ export default class ScrollElement {
 
             // Logic to trigger the inview/out of view callbacks
             progress > 0 && progress < 1 && this.setInview();
-            progress === 0 && this.setOutOfView();
+            // In the fold, progress 0 is the top of the page, not an exit
+            progress === 0 && !this.isInFold && this.setOutOfView();
             progress === 1 && this.setOutOfView();
         }
     }
@@ -697,13 +786,12 @@ export default class ScrollElement {
      * @private
      */
     _getScrollCallFrom() {
+        const { start, end } = this._getTriggerIntersection();
         const closestIntersectionValue = closestNumber(
-            [this.intersection.start, this.intersection.end],
+            [start, end],
             this.currentScroll
         );
-        return this.intersection.start === closestIntersectionValue
-            ? 'start'
-            : 'end';
+        return start === closestIntersectionValue ? 'start' : 'end';
     }
 
     /**
