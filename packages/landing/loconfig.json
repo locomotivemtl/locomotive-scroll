@@ -1,6 +1,5 @@
 {
     "paths": {
-        "url": "locomotive-scroll-website.test",
         "src": "./assets",
         "dest": "../../www/landing",
         "images": {
@@ -26,14 +25,6 @@
         }
     },
     "tasks": {
-        "concats": [
-            {
-                "includes": [
-                    "{% paths.scripts.src %}/vendors/*.js"
-                ],
-                "outfile": "{% paths.scripts.dest %}/vendors.js"
-            }
-        ],
         "scripts": [
             {
                 "includes": [
@@ -43,10 +34,6 @@
             }
         ],
         "styles": [
-            {
-                "infile": "{% paths.styles.src %}/critical.scss",
-                "outfile": "{% paths.styles.dest %}/critical.css"
-            },
             {
                 "infile": "{% paths.styles.src %}/main.scss",
                 "outfile": "{% paths.styles.dest %}/main.css"

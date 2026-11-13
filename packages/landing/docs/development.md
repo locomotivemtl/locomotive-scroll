@@ -11,7 +11,6 @@
     * [`tasks` option](#tasks-option)
     * [`server` option](#server-option)
 * [Tasks](#tasks)
-  * [`concats`](#concats)
   * [`scripts`](#scripts)
   * [`styles`](#styles)
   * [`svgs`](#svgs)
@@ -66,20 +65,19 @@ If any configuration options vary depending on whether your project is
 running on your computer, a collaborator's computer, or on a web server,
 these values should be stored in a `loconfig.local.json` file.
 
-In fresh copy of the boilerplate, the root directory of your project
-will contain a [`loconfig.example.json`](../loconfig.example.json) file.
+It is merged over `loconfig.json`. For example, to proxy an existing
+local server instead of serving `paths.dest`:
 
-> 💡 The boilerplate's default example customizes the development server
-> to use a custom SSL certificate.
-
-That file can be copied to `loconfig.local.json` and customized to suit
-your local environment.
+```json
+{
+    "paths": {
+        "url": "localhost:8080"
+    }
+}
+```
 
 Your `loconfig.local.json` _should not_ be committed to your project's
 source control.
-
-> 💡 If you are developing with a team, you may wish to continue
-> including a `loconfig.example.json` file with your project.
 
 ### Development Configuration
 
@@ -119,13 +117,13 @@ automatically expanded when tasks process paths.
 
 The `paths.url` option defines the base URI of the project.
 
-By default, it is used by the development server as a proxy
-for an existing virtual host.
+It is not set by default. When set, the development server proxies it
+instead of serving [`paths.dest`](#pathsdest-option).
 
 ```json
 {
     "paths": {
-        "url": "locomotive-boilerplate.test"
+        "url": "localhost:8080"
     }
 }
 ```
@@ -182,10 +180,7 @@ the `server` option:
 {
     "server": {
         "open": true,
-        "https": {
-            "key": "~/.config/valet/Certificates/{% paths.url %}.key",
-            "cert": "~/.config/valet/Certificates/{% paths.url %}.crt"
-        }
+        "port": 3000
     }
 }
 ```
@@ -197,42 +192,6 @@ for all options.
 
 The boilerplate provides a handful of tasks for handling
 the most commonly processed assets.
-
-### `concats`
-
-A wrapper around [concat] (with optional support for globbing) for concatenating multiple files.
-
-By default, [tiny-glob] is installed with the boilerplate.
-
-Example:
-
-```json
-{
-    "concats": [
-        {
-            "label": "Application Vendors",
-            "includes": [
-                "{% paths.scripts.src %}/vendors/*.js",
-                "node_modules/focus-visible/dist/focus-visible.min.js",
-                "node_modules/vue/dist/vue.min.js",
-                "node_modules/vuelidate/dist/vuelidate.min.js",
-                "node_modules/vuelidate/dist/validators.min.js"
-            ],
-            "outfile": "{% paths.scripts.dest %}/app/vendors.js"
-        },
-        {
-            "label": "Public Site Vendors",
-            "includes": [
-                "{% paths.scripts.src %}/vendors/*.js",
-                "node_modules/focus-visible/dist/focus-visible.min.js"
-            ],
-            "outfile": "{% paths.scripts.dest %}/site/vendors.js"
-        }
-    ]
-}
-```
-
-See [`concats.js`](../build/tasks/concats.js) for details.
 
 ### `scripts`
 
@@ -416,11 +375,7 @@ See [`versions.js`](../build/tasks/versions.js) for details.
 
 [Autoprefixer]: https://npmjs.com/package/autoprefixer
 [BrowserSync]:  https://npmjs.com/package/browser-sync
-[concat]:       https://npmjs.com/package/concat
 [esbuild]:      https://npmjs.com/package/esbuild
-[fast-glob]:    https://npmjs.com/package/fast-glob
-[glob]:         https://npmjs.com/package/glob
-[globby]:       https://npmjs.com/package/globby
 [Node]:         https://nodejs.org/
 [sass]:         https://npmjs.com/package/sass
 [NPM]:          https://npmjs.com/
@@ -429,4 +384,3 @@ See [`versions.js`](../build/tasks/versions.js) for details.
 [PurgeCSS]:     https://purgecss.com/
 [RegExp]:       https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/RegExp
 [SVG Mixer]:    https://npmjs.com/package/svg-mixer
-[tiny-glob]:    https://npmjs.com/package/tiny-glob
