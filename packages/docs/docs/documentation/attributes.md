@@ -241,7 +241,7 @@ Please note that by using the `data-scroll-ignore-fold` attribute, the element's
 
 ## data-scroll-enable-touch-speed
 
-By default, the parallax effect (`data-scroll-speed`) is **automatically disabled on touch devices** to ensure smooth scrolling performance. Touch devices are detected using `'ontouchstart' in window || navigator.maxTouchPoints > 0`.
+By default, the parallax effect (`data-scroll-speed`) is **automatically disabled on touch devices** to ensure smooth scrolling performance. Touch devices are detected by their primary pointer, with the `(pointer: coarse)` media query: a laptop with a touchscreen used with a mouse or a trackpad keeps the parallax. The detection follows a change of the primary pointer, such as a tablet attached to a keyboard.
 
 If you want to enable the parallax effect on touch devices, add the `data-scroll-enable-touch-speed` attribute to the element. It also enables [`data-scroll-delay`](#data-scroll-delay). To enable it for every element, use the [`enableTouchSpeed`](options.md#enabletouchspeed) option instead.
 
