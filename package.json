@@ -33,5 +33,13 @@
         "packages/landing",
         "packages/docs"
     ],
-    "packageManager": "npm@11.19.1"
+    "packageManager": "npm@11.19.1",
+    "allowScripts": {
+        "core-js": false,
+        "core-js-pure": false,
+        "esbuild": false,
+        "sharp": false,
+        "@parcel/watcher": false,
+        "swup": false
+    }
 }
