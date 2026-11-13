@@ -1,13 +1,24 @@
 import { afterEach, beforeEach, describe, expect, it, vi } from 'vitest';
 import LocomotiveScroll from '../index';
 
-const { LenisMock } = vi.hoisted(() => {
+const { LenisMock, CoreMock } = vi.hoisted(() => {
+    class DimensionsMock {
+        onWrapperResize() {}
+        onContentResize() {}
+
+        // Same sequence as Lenis Dimensions.resize
+        resize() {
+            this.onWrapperResize();
+            this.onContentResize();
+        }
+    }
+
     class LenisMock {
         static instances: LenisMock[] = [];
 
         rootElement = document.documentElement;
         options: { orientation: string; duration?: number };
-        dimensions = { onContentResize() {}, onWrapperResize() {} };
+        dimensions = new DimensionsMock();
         scrollTo = vi.fn();
 
         constructor(options: { duration?: number } = {}) {
@@ -20,15 +31,23 @@ const { LenisMock } = vi.hoisted(() => {
         destroy() {}
     }
 
-    return { LenisMock };
+    class CoreMock {
+        static instances: CoreMock[] = [];
+
+        onResize = vi.fn();
+
+        constructor() {
+            CoreMock.instances.push(this);
+        }
+
+        destroy() {}
+    }
+
+    return { LenisMock, CoreMock };
 });
 
 vi.mock('lenis', () => ({ default: LenisMock }));
-vi.mock('../core/Core', () => ({
-    default: class {
-        destroy() {}
-    },
-}));
+vi.mock('../core/Core', () => ({ default: CoreMock }));
 
 function createScrollTo(dataset: Record<string, string>): HTMLAnchorElement {
     const $link = document.createElement('a');
@@ -81,5 +100,31 @@ describe('data-scroll-to', () => {
             '#target',
             expect.objectContaining({ duration: 0.8 })
         );
+    });
+});
+
+describe('resize', () => {
+    beforeEach(() => {
+        LenisMock.instances = [];
+        CoreMock.instances = [];
+        vi.stubGlobal(
+            'requestAnimationFrame',
+            (callback: FrameRequestCallback) => {
+                callback(0);
+                return 0;
+            }
+        );
+    });
+
+    afterEach(() => {
+        vi.unstubAllGlobals();
+    });
+
+    it('resizes the core once per Lenis resize', () => {
+        new LocomotiveScroll({ autoStart: false });
+
+        LenisMock.instances[0].dimensions.resize();
+
+        expect(CoreMock.instances[0].onResize).toHaveBeenCalledTimes(1);
     });
 });

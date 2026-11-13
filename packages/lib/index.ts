@@ -46,7 +46,6 @@ export default class LocomotiveScroll {
     private _onResizeBind: () => void;
     private _onScrollToBind: (event: MouseEvent) => void;
     private _originalOnContentResize?: () => void;
-    private _originalOnWrapperResize?: () => void;
 
     constructor({
         lenisOptions = {},
@@ -177,26 +176,15 @@ export default class LocomotiveScroll {
     private _bindEvents() {
         this._bindScrollToEvents();
 
-        // Hook into Lenis dimensions resize callbacks
-        // onContentResize: called when content size changes (images load, dynamic content)
-        // onWrapperResize: called when wrapper size changes (window resize, layout changes)
+        // Lenis resize() always calls onWrapperResize then onContentResize: hooking the last one runs once with both sizes up to date
         if (this.lenisInstance) {
             this._originalOnContentResize =
                 this.lenisInstance.dimensions.onContentResize.bind(
                     this.lenisInstance.dimensions
                 );
-            this._originalOnWrapperResize =
-                this.lenisInstance.dimensions.onWrapperResize.bind(
-                    this.lenisInstance.dimensions
-                );
 
             this.lenisInstance.dimensions.onContentResize = () => {
                 this._originalOnContentResize?.();
-                this._onResizeBind();
-            };
-
-            this.lenisInstance.dimensions.onWrapperResize = () => {
-                this._originalOnWrapperResize?.();
                 this._onResizeBind();
             };
         }
@@ -213,10 +201,6 @@ export default class LocomotiveScroll {
             if (this._originalOnContentResize) {
                 this.lenisInstance.dimensions.onContentResize =
                     this._originalOnContentResize;
-            }
-            if (this._originalOnWrapperResize) {
-                this.lenisInstance.dimensions.onWrapperResize =
-                    this._originalOnWrapperResize;
             }
         }
     }
@@ -263,7 +247,7 @@ export default class LocomotiveScroll {
     /**
      * Callback - Resize callback.
      *
-     * Called synchronously after Lenis updates its dimensions via onContentResize/onWrapperResize.
+     * Called synchronously after Lenis updates its dimensions via onContentResize.
      * All dimension values are already up-to-date when this executes.
      */
     private _onResize() {

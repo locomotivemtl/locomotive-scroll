@@ -10,6 +10,7 @@ The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.1.0/),
 
 - An element with `data-scroll-delay` stops rendering once it is out of the viewport. It used to update its `transform` on every frame while scrolling and for about 1.5 seconds after. It now jumps to its final position out of sight, and resumes from there when it comes back.
 - `data-scroll-position="start,end"`, the documented default, no longer puts the element in the per-frame loop. The library compared it to `top,bottom` instead. An explicit `top,bottom` now gets the per-frame loop, with the same result as before.
+- Scroll elements are measured once per resize instead of twice. The library listened to both Lenis resize callbacks, which Lenis always calls together.
 
 ## [5.1.0] - 2026-11-13
 
