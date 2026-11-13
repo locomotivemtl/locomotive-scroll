@@ -10,7 +10,7 @@
 
 * Uses a custom [task runner](docs/development.md) for handling assets.
 * Uses [BrowserSync] for fast development and testing in browsers.
-* Uses [Sass] for a feature rich superset of CSS.
+* Uses [PostCSS] to bundle native CSS, with nesting and custom media queries.
 * Uses [ESBuild] for extremely fast processing of JS/ES modules.
 * Uses [SVG Mixer] for processing SVG files and generating spritesheets.
 * Uses [ITCSS] for a sane and scalable CSS architecture.
@@ -93,7 +93,7 @@ Learn more about [development and building](docs/development.md).
 [Locomotive Scroll]: https://npmjs.com/package/locomotive-scroll
 [modularJS]:         https://npmjs.com/package/modujs
 [modularLoad]:       https://npmjs.com/package/modularload
-[Sass]:              https://sass-lang.com/
+[PostCSS]:           https://postcss.org/
 [SVG Mixer]:         https://npmjs.com/package/svg-mixer
 [Node]:              https://nodejs.org/
 [NPM]:               https://npmjs.com/

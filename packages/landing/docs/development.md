@@ -105,7 +105,7 @@ automatically expanded when tasks process paths.
     "tasks": {
         "styles": [
             {
-                "infile": "{% paths.styles.src %}/main.scss", // → ./assets/styles/main.scss
+                "infile": "{% paths.styles.src %}/main.css", // → ./assets/styles/main.css
                 "outfile": "{% paths.styles.dest %}/main.css" // → ./www/assets/styles/main.css
             }
         ]
@@ -161,7 +161,7 @@ the `tasks` option:
         ],
         "styles": [
             {
-                "infile": "./assets/styles/main.scss",
+                "infile": "./assets/styles/main.css",
                 "outfile": "./www/assets/styles/main.css"
             }
         ]
@@ -224,10 +224,13 @@ See [`scripts.js`](../build/tasks/scripts.js) for details.
 
 ### `styles`
 
-A wrapper around [sass] (with optional support for [Autoprefixer]
-via [PostCSS]) for compiling and minifying Sass into CSS.
+A wrapper around [PostCSS] for compiling native CSS. In order, it inlines
+`@import` rules ([postcss-import]), resolves `@custom-media` queries
+([postcss-custom-media]), flattens nesting ([postcss-nesting]) and adds
+vendor prefixes ([Autoprefixer]).
 
-By default, [PostCSS] and [Autoprefixer] are installed with the boilerplate.
+For production builds, unused styles are removed with [PurgeCSS], then the
+result is minified with [cssnano].
 
 Example:
 
@@ -236,22 +239,22 @@ Example:
     "styles": [
         {
             "label": "Text Editor CSS",
-            "infile": "{% paths.styles.src %}/app/editor.scss",
+            "infile": "{% paths.styles.src %}/app/editor.css",
             "outfile": "{% paths.styles.dest %}/app/editor.css"
         },
         {
             "label": "Application Dashboard CSS",
-            "infile": "{% paths.styles.src %}/app/dashboard.scss",
+            "infile": "{% paths.styles.src %}/app/dashboard.css",
             "outfile": "{% paths.styles.dest %}/app/dashboard.css"
         },
         {
             "label": "Public Site Critical CSS",
-            "infile": "{% paths.styles.src %}/site/critical.scss",
+            "infile": "{% paths.styles.src %}/site/critical.css",
             "outfile": "{% paths.styles.dest %}/site/critical.css"
         },
         {
             "label": "Public Site CSS",
-            "infile": "{% paths.styles.src %}/site/main.scss",
+            "infile": "{% paths.styles.src %}/site/main.css",
             "outfile": "{% paths.styles.dest %}/site/main.css"
         }
     ]
@@ -375,12 +378,15 @@ See [`versions.js`](../build/tasks/versions.js) for details.
 
 [Autoprefixer]: https://npmjs.com/package/autoprefixer
 [BrowserSync]:  https://npmjs.com/package/browser-sync
+[cssnano]:      https://npmjs.com/package/cssnano
 [esbuild]:      https://npmjs.com/package/esbuild
 [Node]:         https://nodejs.org/
-[sass]:         https://npmjs.com/package/sass
 [NPM]:          https://npmjs.com/
 [NVM]:          https://github.com/nvm-sh/nvm
 [PostCSS]:      https://npmjs.com/package/postcss
+[postcss-custom-media]: https://npmjs.com/package/postcss-custom-media
+[postcss-import]: https://npmjs.com/package/postcss-import
+[postcss-nesting]: https://npmjs.com/package/postcss-nesting
 [PurgeCSS]:     https://purgecss.com/
 [RegExp]:       https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/RegExp
 [SVG Mixer]:    https://npmjs.com/package/svg-mixer
