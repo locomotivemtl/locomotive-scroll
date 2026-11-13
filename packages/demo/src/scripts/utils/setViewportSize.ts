@@ -1,10 +1,3 @@
-const SUPPORTS_VH: boolean =
-    'CSS' in window &&
-    'supports' in window.CSS &&
-    window.CSS.supports('height: 100svh') &&
-    window.CSS.supports('height: 100dvh') &&
-    window.CSS.supports('height: 100lvh');
-
 export const setViewportSize = () => {
     // Document styles
     const documentStyles = document.documentElement.style;
@@ -12,11 +5,6 @@ export const setViewportSize = () => {
     // Viewport width
     const vw: number = document.body.clientWidth * 0.01;
     documentStyles.setProperty('--vw', `${vw}px`);
-
-    // Return if browser supports vh, svh, dvh, & lvh
-    // if (SUPPORTS_VH) {
-    //     return;
-    // }
 
     // Viewport height
     const svh: number = document.documentElement.clientHeight * 0.01;
