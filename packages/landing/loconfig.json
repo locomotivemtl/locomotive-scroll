@@ -35,7 +35,7 @@
         ],
         "styles": [
             {
-                "infile": "{% paths.styles.src %}/main.scss",
+                "infile": "{% paths.styles.src %}/main.css",
                 "outfile": "{% paths.styles.dest %}/main.css"
             }
         ],

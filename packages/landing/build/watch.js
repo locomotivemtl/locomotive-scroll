@@ -68,7 +68,7 @@ function configureServer(server, { paths }) {
     // Watch source styles
     server.watch(
         [
-            join(paths.styles.src, '**/*.scss'),
+            join(paths.styles.src, '**/*.css'),
         ]
     ).on('change', () => {
         compileStyles(...developmentStylesArgs);
