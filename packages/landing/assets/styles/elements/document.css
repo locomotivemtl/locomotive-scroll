@@ -1,0 +1,76 @@
+/* ==========================================================================
+   Elements / Document
+   ========================================================================== */
+
+html {
+    /* The page always fills at least the entire height of the viewport. */
+    min-height: 100%;
+    line-height: 1.5;
+    font-family: var(--font-display);
+    color: var(--color-black);
+    -webkit-font-smoothing: antialiased;
+    -moz-osx-font-smoothing: grayscale;
+
+    @media (--to-small) {
+        font-size: 14px;
+    }
+
+    @media (--from-small) and (--to-medium) {
+        font-size: 14px;
+    }
+
+    @media (--from-medium) and (--to-large) {
+        font-size: 15px;
+    }
+
+    @media (--from-large) and (--to-huge) {
+        font-size: 16px;
+    }
+
+    @media (--from-huge) and (--to-gigantic) {
+        font-size: 17px;
+    }
+
+    @media (--from-gigantic) and (--to-colossal) {
+        font-size: 18px;
+    }
+
+    @media (--from-colossal) {
+        font-size: 20px;
+    }
+
+    &.is-loading {
+        cursor: wait;
+    }
+}
+
+::selection {
+    background-color: var(--color-selection-background);
+    color: var(--color-selection-text);
+    text-shadow: none;
+}
+
+a {
+    color: inherit;
+}
+
+*:focus-visible:not(input):not(textarea):not(select) {
+    outline: 2px solid currentColor;
+    outline-offset: 2px;
+
+    [data-theme="dark"] &,
+    [data-theme="blue"] & {
+        outline-color: #FFFFFF;
+    }
+
+    [data-theme="white"] & {
+        outline-color: #202ded;
+    }
+}
+
+input, select, textarea {
+    &:focus-visible {
+        outline: 2px solid var(--color-theme-dark);
+        outline-offset: 0px;
+    }
+}
