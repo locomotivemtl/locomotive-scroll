@@ -32,7 +32,7 @@ const scroll = new LocomotiveScroll();
 
 ## Features
 
--   **Lightweight** — Only 9.8kB gzipped
+-   **Lightweight** — Only 9.9kB gzipped
 -   **TypeScript First** — Fully typed
 -   **Built on Lenis** — Latest stable release with improved performance
 -   **Dual Intersection Observers** — Optimized detection for triggers vs. animations

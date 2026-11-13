@@ -8,13 +8,13 @@ title: Introduction
 
 > Detection of elements in viewport & smooth scrolling with parallax effects.
 
-Locomotive Scroll is a lightweight JavaScript library (9.8kB gzipped, Lenis included) that provides smooth scrolling animations and advanced scroll interactions for web applications. Built on top of [Lenis](https://github.com/darkroomengineering/lenis), it offers features such as smooth scrolling, parallax effects, and scroll-based animations with a focus on performance and accessibility.
+Locomotive Scroll is a lightweight JavaScript library (9.9kB gzipped, Lenis included) that provides smooth scrolling animations and advanced scroll interactions for web applications. Built on top of [Lenis](https://github.com/darkroomengineering/lenis), it offers features such as smooth scrolling, parallax effects, and scroll-based animations with a focus on performance and accessibility.
 
 ## What's New in V5
 
 Version 5 is a complete rewrite with major improvements:
 
--   **Lighter & Faster** — Built on Lenis 1.3.27, 9.8kB gzipped with Lenis included
+-   **Lighter & Faster** — Built on Lenis 1.3.27, 9.9kB gzipped with Lenis included
 -   **TypeScript First** — Fully typed for better developer experience
 -   **Dual Intersection Observer Strategy** — Optimized detection for simple triggers vs. continuous animations
 -   **Smart Touch Detection** — Parallax automatically disabled on mobile for native scrolling.
