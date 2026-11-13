@@ -383,7 +383,6 @@ export default class ScrollElement {
      * @param {number} deltaTime - Time elapsed since the last frame, in seconds.
      */
     private _applyDelay(factor: number, wSize: number, deltaTime: number) {
-        // Start on the target, as v4 forced it on init, instead of sliding in
         if (this.isFirstRender) {
             this.isFirstRender = false;
             this.delayedScroll = this.currentScroll;
@@ -478,11 +477,11 @@ export default class ScrollElement {
      */
     private _getParallaxShare(wSize: number): number {
         const scrollSpeed = this._getParallaxSpeed();
-        const range = this.intersection.end - this.intersection.start;
-        if (!scrollSpeed || range <= 0) {
+        if (!scrollSpeed) {
             return 0;
         }
 
+        const range = this.intersection.end - this.intersection.start;
         const progressScale = this.isInFold ? 1 : 2;
         return (progressScale * wSize * scrollSpeed) / range;
     }
