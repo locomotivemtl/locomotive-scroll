@@ -407,6 +407,85 @@ describe('ScrollElement delay', () => {
         expect(unsubscribeElementUpdateFn).not.toHaveBeenCalled();
     });
 
+    it('lands on the target and stops settling once out of the viewport', () => {
+        const unsubscribeElementUpdateFn = vi.fn();
+        const scrollElement = createMeasuredScrollElement(
+            { scrollSpeed: '0.5', scrollDelay: '0.1' },
+            { unsubscribeElementUpdateFn }
+        );
+        startTrailing(scrollElement);
+        // Displayed and target positions are both above the viewport
+        render(scrollElement, 2500);
+        scrollElement.setInteractivityOff();
+        render(scrollElement, 2500);
+
+        expect(unsubscribeElementUpdateFn).toHaveBeenCalledOnce();
+        expect(getTranslateY(scrollElement.$el)).toBe(parallaxAt(2500, 0.5));
+    });
+
+    it('lands out of the viewport without data-scroll-speed', () => {
+        const unsubscribeElementUpdateFn = vi.fn();
+        const scrollElement = createMeasuredScrollElement(
+            { scrollDelay: '0.1' },
+            { unsubscribeElementUpdateFn }
+        );
+        startTrailing(scrollElement);
+        render(scrollElement, 2500);
+        scrollElement.setInteractivityOff();
+        render(scrollElement, 2500);
+
+        expect(unsubscribeElementUpdateFn).toHaveBeenCalledOnce();
+        expect(getTranslateY(scrollElement.$el)).toBe(0);
+    });
+
+    it('keeps settling while the displayed element is visible', () => {
+        const unsubscribeElementUpdateFn = vi.fn();
+        const scrollElement = createMeasuredScrollElement(
+            { scrollSpeed: '0.5', scrollDelay: '0.1' },
+            { unsubscribeElementUpdateFn }
+        );
+        startTrailing(scrollElement);
+        scrollElement.setInteractivityOff();
+        render(scrollElement, 1000);
+
+        expect(unsubscribeElementUpdateFn).not.toHaveBeenCalled();
+    });
+
+    it('keeps settling while its target is visible', () => {
+        const unsubscribeElementUpdateFn = vi.fn();
+        const scrollElement = createMeasuredScrollElement(
+            { scrollDelay: '0.1' },
+            { unsubscribeElementUpdateFn }
+        );
+        // Displayed top trails below the viewport, the target top is at 700px
+        scrollElement.setInteractivityOn();
+        render(scrollElement, 400);
+        render(scrollElement, 800);
+        scrollElement.setInteractivityOff();
+        render(scrollElement, 800);
+
+        expect(getTranslateY(scrollElement.$el)).toBeGreaterThan(768 - 700);
+        expect(unsubscribeElementUpdateFn).not.toHaveBeenCalled();
+    });
+
+    it('comes back from where it landed', () => {
+        const scrollElement = createMeasuredScrollElement({
+            scrollSpeed: '0.5',
+            scrollDelay: '0.1',
+        });
+        startTrailing(scrollElement);
+        render(scrollElement, 2500);
+        scrollElement.setInteractivityOff();
+        render(scrollElement, 2500);
+        scrollElement.setInteractivityOn();
+        render(scrollElement, 1000);
+
+        // The delayed scroll is still past the intersection, so the parallax holds its end value
+        expect(getTranslateY(scrollElement.$el)).toBeCloseTo(
+            parallaxAt(2500, 0.5)
+        );
+    });
+
     it('resets and stops settling under reduced motion', () => {
         const unsubscribeElementUpdateFn = vi.fn();
         const scrollElement = createMeasuredScrollElement(

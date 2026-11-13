@@ -440,6 +440,34 @@ export default class ScrollElement {
                 this._getParallaxProgress(this.delayedScroll),
                 wSize
             );
+
+        if (this.isSettling && this._canLandUnseen(wSize)) {
+            this.delayedScroll = this.currentScroll;
+            this.translateValue = this.targetTranslateValue;
+            this._stopSettling();
+        }
+    }
+
+    /**
+     * Whether the element can jump to its target without being seen.
+     *
+     * Checks the displayed position rather than the RAF margin, which can be
+     * smaller than the trail. The target must be out of the viewport too, on the
+     * same side, so the jump never crosses it.
+     *
+     * @private
+     *
+     * @param {number} wSize - Viewport size on the scroll axis.
+     */
+    private _canLandUnseen(wSize: number): boolean {
+        const start = this.metrics.offsetStart - this.currentScroll;
+        const end = start + this.getMetricsSize(this.metrics.bcr);
+
+        return (
+            start + Math.min(this.translateValue, this.targetTranslateValue) >=
+                wSize ||
+            end + Math.max(this.translateValue, this.targetTranslateValue) <= 0
+        );
     }
 
     /**
