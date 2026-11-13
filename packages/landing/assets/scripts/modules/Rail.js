@@ -1,5 +1,5 @@
 import { module as Module } from 'modujs';
-import { whenReady } from '../utils/fonts';
+import { loadFonts } from '../utils/fonts';
 import gsap from 'gsap';
 import { CUSTOM_EVENT, FONT, ENV } from '../config';
 
@@ -38,7 +38,7 @@ export default class extends Module {
     ///////////////
     init() {
         this.bindEvents();
-        whenReady(FONT.EAGER).then((fonts) => {
+        loadFonts(FONT.EAGER).then((fonts) => {
             this.onFontsLoaded(fonts);
         });
     }

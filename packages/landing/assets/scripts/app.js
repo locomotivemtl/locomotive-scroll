@@ -4,7 +4,7 @@ import globals from './globals';
 import { debounce } from './utils/tickers';
 import { $html } from './utils/dom';
 import { ENV, FONT, CUSTOM_EVENT, CSS_CLASS } from './config';
-import { isFontLoadingAPIAvailable, loadFonts } from './utils/fonts';
+import { loadFonts } from './utils/fonts';
 import { inject } from '@vercel/analytics';
 
 // Modules
@@ -44,40 +44,38 @@ function init() {
     /**
      * Eagerly load the following fonts.
      */
-    if (isFontLoadingAPIAvailable) {
-        loadFonts(FONT.EAGER, ENV.IS_DEV).then((eagerFonts) => {
-            $html.classList.add(CSS_CLASS.FONTS_LOADED);
+    loadFonts(FONT.EAGER).then((eagerFonts) => {
+        $html.classList.add(CSS_CLASS.FONTS_LOADED);
 
-            if (ENV.IS_DEV) {
-                console.group(
-                    'Eager fonts loaded!',
-                    eagerFonts.length,
-                    '/',
-                    document.fonts.size
-                );
-                console.group('State of eager fonts:');
-                eagerFonts.forEach((font) =>
-                    console.log(
-                        font.family,
-                        font.style,
-                        font.weight,
-                        font.status /*, font*/
-                    )
-                );
-                console.groupEnd();
-                console.group('State of all fonts:');
-                document.fonts.forEach((font) =>
-                    console.log(
-                        font.family,
-                        font.style,
-                        font.weight,
-                        font.status /*, font*/
-                    )
-                );
-                console.groupEnd();
-            }
-        });
-    }
+        if (ENV.IS_DEV) {
+            console.group(
+                'Eager fonts loaded!',
+                eagerFonts.length,
+                '/',
+                document.fonts.size
+            );
+            console.group('State of eager fonts:');
+            eagerFonts.forEach((font) =>
+                console.log(
+                    font.family,
+                    font.style,
+                    font.weight,
+                    font.status /*, font*/
+                )
+            );
+            console.groupEnd();
+            console.group('State of all fonts:');
+            document.fonts.forEach((font) =>
+                console.log(
+                    font.family,
+                    font.style,
+                    font.weight,
+                    font.status /*, font*/
+                )
+            );
+            console.groupEnd();
+        }
+    });
 }
 
 ////////////////

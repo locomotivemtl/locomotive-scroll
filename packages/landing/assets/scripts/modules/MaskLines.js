@@ -1,5 +1,5 @@
 import { module } from 'modujs';
-import { whenReady } from "../utils/fonts";
+import { loadFonts } from "../utils/fonts";
 import gsap from 'gsap';
 import { SplitText } from 'gsap/SplitText';
 import { ScrollTrigger } from 'gsap/ScrollTrigger';
@@ -27,7 +27,7 @@ export default class extends module {
     ///////////////
     init() {
         this.bindEvents();
-        whenReady(FONT.EAGER).then((fonts) => {
+        loadFonts(FONT.EAGER).then((fonts) => {
             this.onFontsLoaded(fonts);
         });
     }
