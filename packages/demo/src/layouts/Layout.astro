@@ -1,5 +1,5 @@
 ---
-import '@styles/main.scss';
+import '@styles/main.css';
 
 interface Props {
     title: string;
@@ -7,6 +7,9 @@ interface Props {
 }
 
 const { title, scrollOrientation = 'vertical' } = Astro.props;
+
+// public/ files are served under the base (/demo); BASE_URL may or may not end with a slash
+const base = import.meta.env.BASE_URL.replace(/\/$/, '');
 
 const FONTS: string[] = [
     // 'WebfontRegular.woff2',
@@ -20,14 +23,14 @@ const FONTS: string[] = [
         <meta charset="UTF-8" />
         <meta name="viewport" content="width=device-width" />
         <title>{title}</title>
-        <link rel="icon" type="image/svg+xml" href="/favicon.svg" />
+        <link rel="icon" type="image/svg+xml" href={`${base}/favicon.svg`} />
         <meta name="generator" content={Astro.generator} />
 
         <!-- Fonts -->
         {FONTS.map(font =>
             <link
                 rel="preload"
-                href={`/fonts/${font}`}
+                href={`${base}/fonts/${font}`}
                 as="font"
                 type="font/woff2"
                 crossorigin

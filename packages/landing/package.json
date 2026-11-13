@@ -14,7 +14,6 @@
         "build": "node --experimental-json-modules --no-warnings build/build.js"
     },
     "dependencies": {
-        "@11ty/eleventy-img": "^4.0.2",
         "@vercel/analytics": "^1.6.1",
         "gsap": "^3.15.1",
         "locomotive-scroll": "*",
@@ -24,12 +23,11 @@
         "svg4everybody": "^2.1.9"
     },
     "devDependencies": {
-        "@11ty/eleventy": "^2.0.1",
-        "@factorial/eleventy-plugin-twig": "^0.1.2",
+        "@11ty/eleventy": "^3.1.8",
         "autoprefixer": "^10.4.13",
         "browser-sync": "^3.0.2",
         "cssnano": "^9.9.0",
-        "esbuild": "^0.17.6",
+        "esbuild": "^0.28.2",
         "kleur": "^4.1.5",
         "node-notifier": "^10.0.1",
         "postcss": "^8.4.21",
@@ -38,7 +36,7 @@
         "postcss-nesting": "^14.0.3",
         "purgecss": "^5.0.0",
         "svg-mixer": "~2.3.14",
-        "twig": "^1.16.0"
+        "twig": "^3.0.0"
     },
     "overrides": {
         "browser-sync": {

@@ -23,22 +23,21 @@
         "build": "astro check && astro build",
         "preview": "astro preview",
         "astro": "astro",
-        "format": "prettier --write \"src/**/*.{astro,js,ts,css,scss}\""
+        "format": "prettier --write \"src/**/*.{astro,js,ts,css}\""
     },
     "dependencies": {
-        "@astrojs/tailwind": "^6.0.2",
-        "astro": "^5.18.1",
+        "@tailwindcss/vite": "^4.3.5",
+        "astro": "^7.4.12",
         "locomotive-scroll": "*",
         "nanostores": "^0.10.3",
-        "sass": "^1.77.4",
         "swup": "^4.7.0",
+        "tailwindcss": "^4.3.5",
         "ts-debounce": "^4.0.0"
     },
     "devDependencies": {
         "@astrojs/check": "^0.9.12",
-        "@locomotivemtl/postcss-tailwind-shortcuts": "^1.0.0",
         "prettier": "^3.3.1",
         "prettier-plugin-astro": "^0.14.0",
-        "prettier-plugin-tailwindcss": "^0.6.1"
+        "prettier-plugin-tailwindcss": "^0.8.1"
     }
 }

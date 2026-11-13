@@ -2,7 +2,6 @@
 const twig = require("twig");
 const fs = require('fs');
 const path = require('path');
-const eleventyPluginTwig = require("@factorial/eleventy-plugin-twig");
 
 // Export Eleventy configuration
 module.exports = function(eleventyConfig) {
@@ -32,17 +31,23 @@ module.exports = function(eleventyConfig) {
     eleventyConfig.addPassthroughCopy({ 'assets/static': 'assets' });
 
     // Use twig
-    eleventyConfig.addPlugin(eleventyPluginTwig, {
-        twig: {
-            namespaces: {
-                layouts: "views/layouts",
-                partials: "views/partials",
-                snippets: "views/snippets"
-            }
-        },
-        dir: {
-            input: 'views/templates',
-            output: '../../www/landing'
+    // Without it, watch rebuilds keep serving stale includes
+    twig.cache(false);
+
+    eleventyConfig.addExtension('twig', {
+        outputFileExtension: 'html',
+        compile: (inputContent, inputPath) => {
+            const template = twig.twig({
+                data: inputContent,
+                path: inputPath,
+                namespaces: {
+                    layouts: "views/layouts",
+                    partials: "views/partials",
+                    snippets: "views/snippets"
+                }
+            });
+
+            return (data) => template.render(data);
         }
     });
 

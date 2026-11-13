@@ -65,7 +65,7 @@
         "postcss-cli": "^10.1.0",
         "postcss-import": "^15.1.0",
         "publint": "^0.3.25",
-        "rimraf": "^5.0.0",
+        "rimraf": "^6.1.4",
         "tsdown": "^0.23.7",
         "typescript": "^5.5.4",
         "vitest": "^5.1.0"

@@ -35,6 +35,8 @@ export default async function buildEleventy(eleventyOptions = null) {
             elev = new Eleventy();
 
             if(!production) {
+                // Eleventy 3 only inits itself in write(), and watch() needs it first
+                await elev.init();
                 await elev.watch();
             }
         }
