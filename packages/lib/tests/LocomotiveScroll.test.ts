@@ -168,3 +168,78 @@ describe('render', () => {
         expect(LenisMock.instances[0].raf).toHaveBeenCalledWith(1234);
     });
 });
+
+describe('primary pointer', () => {
+    class MediaQueryListStub extends EventTarget {
+        constructor(public matches: boolean) {
+            super();
+        }
+
+        change(matches: boolean) {
+            this.matches = matches;
+            this.dispatchEvent(new Event('change'));
+        }
+    }
+
+    let query: MediaQueryListStub;
+
+    function createScroll(matches: boolean) {
+        query = new MediaQueryListStub(matches);
+        vi.stubGlobal('matchMedia', (media: string) => {
+            expect(media).toBe('(pointer: coarse)');
+            return query;
+        });
+        return new LocomotiveScroll({ autoStart: false });
+    }
+
+    function smooth() {
+        const calls = CoreMock.instances[0].onResize.mock.calls;
+        return calls[calls.length - 1][0].smooth;
+    }
+
+    beforeEach(() => {
+        CoreMock.instances = [];
+        vi.stubGlobal(
+            'requestAnimationFrame',
+            (callback: FrameRequestCallback) => {
+                callback(0);
+                return 0;
+            }
+        );
+    });
+
+    afterEach(() => {
+        vi.unstubAllGlobals();
+    });
+
+    it('is smooth with a fine pointer', () => {
+        createScroll(false).resize();
+
+        expect(smooth()).toBe(true);
+    });
+
+    it('is not smooth with a coarse pointer', () => {
+        createScroll(true).resize();
+
+        expect(smooth()).toBe(false);
+    });
+
+    it('follows a change of the primary pointer', () => {
+        const scroll = createScroll(false);
+
+        query.change(true);
+        scroll.resize();
+
+        expect(smooth()).toBe(false);
+    });
+
+    it('stops following the pointer once destroyed', () => {
+        const scroll = createScroll(false);
+
+        scroll.destroy();
+        query.change(true);
+        scroll.resize();
+
+        expect(smooth()).toBe(true);
+    });
+});

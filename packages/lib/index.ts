@@ -36,7 +36,7 @@ export default class LocomotiveScroll {
     private autoStart?: boolean;
     private enableTouchSpeed!: boolean;
     private legacyTriggers!: boolean;
-    private isTouchDevice: boolean;
+    private coarsePointerQuery: MediaQueryList;
     private callbacksValues: IScrollElementCallbacksValues;
     private lastRenderTime: number | null = null;
     private scrollCallback?: ScrollCallback;
@@ -45,6 +45,7 @@ export default class LocomotiveScroll {
     private _onRenderBind: () => void;
     private _onResizeBind: () => void;
     private _onScrollToBind: (event: MouseEvent) => void;
+    private _onPointerChangeBind: () => void;
     private _originalOnContentResize?: () => void;
 
     constructor({
@@ -78,18 +79,22 @@ export default class LocomotiveScroll {
         this._onRenderBind = this._onRender.bind(this);
         this._onScrollToBind = this._onScrollTo.bind(this);
         this._onResizeBind = this._onResize.bind(this);
+        this._onPointerChangeBind = this._onPointerChange.bind(this);
 
         // Data
         this.rafPlaying = false;
 
-        // Detect if device has touch capability
-        this.isTouchDevice =
-            'ontouchstart' in window || navigator.maxTouchPoints > 0;
+        // The primary pointer, not touch support: a touchscreen laptop used with a mouse keeps the parallax
+        this.coarsePointerQuery = window.matchMedia('(pointer: coarse)');
+        this.coarsePointerQuery.addEventListener(
+            'change',
+            this._onPointerChangeBind
+        );
 
         // Values passed to every scroll element, reused to avoid an allocation per frame
         this.callbacksValues = {
             currentScroll: 0,
-            smooth: !this.isTouchDevice,
+            smooth: !this.coarsePointerQuery.matches,
             reducedMotion: false,
             deltaTime: 0,
         };
@@ -160,6 +165,10 @@ export default class LocomotiveScroll {
         this.stop();
         // Unbind Events
         this._unbindEvents();
+        this.coarsePointerQuery.removeEventListener(
+            'change',
+            this._onPointerChangeBind
+        );
         // Destroy Lenis
         this.lenisInstance?.destroy();
 
@@ -253,6 +262,13 @@ export default class LocomotiveScroll {
     private _onResize() {
         this._updateCallbacksValues();
         this.coreInstance?.onResize(this.callbacksValues);
+    }
+
+    /**
+     * Callback - Primary pointer change, such as a tablet attached to a keyboard.
+     */
+    private _onPointerChange() {
+        this.callbacksValues.smooth = !this.coarsePointerQuery.matches;
     }
 
     /**
