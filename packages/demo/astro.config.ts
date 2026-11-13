@@ -1,7 +1,19 @@
 import { defineConfig } from 'astro/config';
-import tailwind from '@astrojs/tailwind';
-import tailwindConfig from './tailwind.config';
+import tailwindcss from '@tailwindcss/vite';
 import postcssTailwindShortcuts from '@locomotivemtl/postcss-tailwind-shortcuts';
+
+// prefix(u) in tailwind.css also prefixes the theme variables
+const shortcuts = [
+    ['speed', 'transition-duration'],
+    ['ease', 'ease'],
+    ['z', 'z-index'],
+    ['colorCode', 'color'],
+    ['spacing', 'spacing'],
+    ['radius', 'radius'],
+].map(([functionIdent, namespace]) => ({
+    functionIdent,
+    cssVariablePrefix: `--u-${namespace}`,
+}));
 
 // https://astro.build/config
 export default defineConfig({
@@ -9,6 +21,7 @@ export default defineConfig({
     base: '/demo',
     outDir: '../../www/demo',
     vite: {
+        plugins: [tailwindcss()],
         css: {
             preprocessorOptions: {
                 scss: {
@@ -22,16 +35,11 @@ export default defineConfig({
             },
             postcss: {
                 plugins: [
-                    postcssTailwindShortcuts(tailwindConfig.theme),
+                    postcssTailwindShortcuts({ shortcuts }),
                 ],
             }
         }
     },
-    integrations: [
-        tailwind({
-            applyBaseStyles: false,
-        }),
-    ],
     devToolbar: {
         enabled: false
     },

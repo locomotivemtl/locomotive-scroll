@@ -26,19 +26,20 @@
         "format": "prettier --write \"src/**/*.{astro,js,ts,css,scss}\""
     },
     "dependencies": {
-        "@astrojs/tailwind": "^6.0.2",
+        "@tailwindcss/vite": "^4.3.5",
         "astro": "^5.18.1",
         "locomotive-scroll": "*",
         "nanostores": "^0.10.3",
         "sass": "^1.77.4",
         "swup": "^4.7.0",
+        "tailwindcss": "^4.3.5",
         "ts-debounce": "^4.0.0"
     },
     "devDependencies": {
         "@astrojs/check": "^0.9.12",
-        "@locomotivemtl/postcss-tailwind-shortcuts": "^1.0.0",
+        "@locomotivemtl/postcss-tailwind-shortcuts": "^2.0.1",
         "prettier": "^3.3.1",
         "prettier-plugin-astro": "^0.14.0",
-        "prettier-plugin-tailwindcss": "^0.6.1"
+        "prettier-plugin-tailwindcss": "^0.8.1"
     }
 }

@@ -1,0 +1,53 @@
+@import 'tailwindcss' prefix(u);
+
+/* static: the shortcut functions in main.scss read these variables, Tailwind can't see them in use */
+@theme static {
+    --font-serif: 'Times New Roman', ui-serif, Georgia, Cambria, 'Times New Roman', Times, serif;
+    --font-sans:
+        Arial, ui-sans-serif, system-ui, sans-serif, 'Apple Color Emoji', 'Segoe UI Emoji',
+        'Segoe UI Symbol', 'Noto Color Emoji';
+
+    --color-black: #000000;
+    --color-white: #ffffff;
+    --color-primary: #312dfb;
+
+    --breakpoint-*: initial;
+    --breakpoint-2xs: 340px;
+    --breakpoint-xs: 500px;
+    --breakpoint-sm: 700px;
+    --breakpoint-md: 1000px;
+    --breakpoint-lg: 1200px;
+    --breakpoint-xl: 1400px;
+    --breakpoint-2xl: 1600px;
+    --breakpoint-3xl: 1800px;
+    --breakpoint-4xl: 2000px;
+    --breakpoint-5xl: 2400px;
+
+    --spacing-gutter: 20px;
+    --spacing-gutterMobile: 10px;
+
+    --transition-duration-fast: 0.2s;
+    --transition-duration-default: 0.4s;
+    --transition-duration-slow: 0.6s;
+    --transition-duration-slower: 0.8s;
+    --transition-duration-slowest: 1s;
+
+    --ease-default: cubic-bezier(0.38, 0.005, 0.215, 1);
+
+    --z-index-modal: 200;
+    --z-index-header: 100;
+    --z-index-above: 1;
+    --z-index-default: 0;
+    --z-index-below: -1;
+}
+
+@custom-variant to-2xs (@media (max-width: 339px));
+@custom-variant to-xs (@media (max-width: 499px));
+@custom-variant to-sm (@media (max-width: 699px));
+@custom-variant to-md (@media (max-width: 999px));
+@custom-variant to-lg (@media (max-width: 1199px));
+@custom-variant to-xl (@media (max-width: 1399px));
+@custom-variant to-2xl (@media (max-width: 1599px));
+@custom-variant to-3xl (@media (max-width: 1799px));
+@custom-variant to-4xl (@media (max-width: 1999px));
+@custom-variant to-5xl (@media (max-width: 2399px));

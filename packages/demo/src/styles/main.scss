@@ -5,27 +5,6 @@
 @use 'tools/functions';
 
 // ==========================================================================
-// Tailwind CSS
-// ==========================================================================
-/**
-* This injects Tailwind's base styles and any base styles registered by
-* plugins.
-*/
-@tailwind base;
-
-/**
-* This injects Tailwind's component classes and any component classes
-* registered by plugins.
-*/
-@tailwind components;
-
-/**
-* This injects Tailwind's utility classes and any utility classes registered
-* by plugins.
-*/
-@tailwind utilities;
-
-// ==========================================================================
 // Fonts imports
 // ==========================================================================
 @layer base {
@@ -47,12 +26,12 @@
 // Global styles
 // ==========================================================================
 :root {
-    --color-primary: color('black');
-    --color-secondary: color('white');
+    --color-primary: colorCode('black');
+    --color-secondary: colorCode('white');
 }
 
 html {
-    font-family: theme('fontFamily.sans');
+    font-family: var(--u-font-sans);
 }
 
 body {
@@ -211,12 +190,12 @@ html[data-scroll-orientation='horizontal'] {
 
 .c-scroll-opacity {
     opacity: 1 !important;
-    transition: opacity 0.75s ease();
+    transition: opacity 0.75s ease(default);
 }
 
 .c-scroll-rotate {
     transform: rotate(2turn) !important;
-    transition: transform 0.75s ease();
+    transition: transform 0.75s ease(default);
 }
 
 .c-scroll-direction {
