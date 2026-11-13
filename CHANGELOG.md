@@ -13,6 +13,7 @@ The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.1.0/),
 - Scroll elements are measured once per resize instead of twice. The library listened to both Lenis resize callbacks, which Lenis always calls together.
 - Lenis is driven by `performance.now()` instead of `Date.now()`. A change of the system clock, from a time sync or after sleep, no longer makes a smooth scroll skip ahead or stall.
 - Touch devices are detected by their primary pointer, `(pointer: coarse)`, instead of touch support. A laptop with a touchscreen, used with a mouse or a trackpad, keeps the parallax and the delay. The detection follows a change of the primary pointer, such as a tablet attached to a keyboard.
+- An element with `data-scroll-delay` no longer jumps when it comes back on screen with a small `rafRootMargin`. It starts from the position it was left at, and the gap to its trail fades out at the delay's pace.
 
 ## [5.1.0] - 2026-11-13
 
