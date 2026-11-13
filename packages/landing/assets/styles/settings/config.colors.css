@@ -1,0 +1,13 @@
+/* ==========================================================================
+   Settings / Config / Colors
+   ========================================================================== */
+
+:root {
+    --color-blue: #202ded;
+    --color-white: #ffffff;
+    --color-black: #000000;
+    --color-red: #f4574d;
+
+    --color-selection-text: var(--color-black);
+    --color-selection-background: var(--color-white);
+}

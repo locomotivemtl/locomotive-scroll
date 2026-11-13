@@ -1,0 +1,14 @@
+/* ==========================================================================
+   Settings / Config / Timings
+   ========================================================================== */
+
+:root {
+    --timing-fastest: 0.1s;
+    --timing-faster: 0.15s;
+    --timing-fast: 0.25s;
+    --timing-normal: 0.5s;
+    --timing-medium: 0.6s;
+    --timing-slow: 0.75s;
+    --timing-slower: 1s;
+    --timing-slowest: 2s;
+}
