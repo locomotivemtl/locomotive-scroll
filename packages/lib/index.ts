@@ -318,7 +318,7 @@ export default class LocomotiveScroll {
                 offset: typeof offset === 'string' ? parseInt(offset) : offset,
                 duration:
                     typeof duration === 'string'
-                        ? parseInt(duration)
+                        ? parseFloat(duration)
                         : duration,
             });
     }
