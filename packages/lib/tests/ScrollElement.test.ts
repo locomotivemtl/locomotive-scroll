@@ -760,7 +760,6 @@ describe('ScrollElement visual triggers', () => {
         const scrollElement = createTriggerElement({ scrollSpeed: '0.5' });
         render(scrollElement, 1000);
 
-        // Natural progress at 1000 is (1000 - 732) / 1068
         expect(getTranslate(scrollElement)).toBeCloseTo(
             (((1000 - 732) / 1068) * 2 - 1) * 768 * 0.5 * -1
         );
