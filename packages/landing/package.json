@@ -23,8 +23,7 @@
         "svg4everybody": "^2.1.9"
     },
     "devDependencies": {
-        "@11ty/eleventy": "^2.0.1",
-        "@factorial/eleventy-plugin-twig": "^0.1.2",
+        "@11ty/eleventy": "^3.1.8",
         "autoprefixer": "^10.4.13",
         "browser-sync": "^3.0.2",
         "cssnano": "^9.9.0",
@@ -37,7 +36,7 @@
         "postcss-nesting": "^14.0.3",
         "purgecss": "^5.0.0",
         "svg-mixer": "~2.3.14",
-        "twig": "^1.16.0"
+        "twig": "^3.0.0"
     },
     "overrides": {
         "browser-sync": {
