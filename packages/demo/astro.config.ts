@@ -1,20 +1,5 @@
-import { fileURLToPath } from 'node:url';
 import { defineConfig } from 'astro/config';
 import tailwindcss from '@tailwindcss/vite';
-import postcssTailwindShortcuts from '@locomotivemtl/postcss-tailwind-shortcuts';
-
-// prefix(u) in tailwind.css also prefixes the theme variables
-const shortcuts = [
-    ['speed', 'transition-duration'],
-    ['ease', 'ease'],
-    ['z', 'z-index'],
-    ['colorCode', 'color'],
-    ['spacing', 'spacing'],
-    ['radius', 'radius'],
-].map(([functionIdent, namespace]) => ({
-    functionIdent,
-    cssVariablePrefix: `--u-${namespace}`,
-}));
 
 // https://astro.build/config
 export default defineConfig({
@@ -22,26 +7,7 @@ export default defineConfig({
     base: '/demo',
     outDir: '../../www/demo',
     vite: {
-        plugins: [tailwindcss()],
-        css: {
-            preprocessorOptions: {
-                scss: {
-                    // Sass ignores the tsconfig paths Astro 7 hands to Vite, so @styles can't resolve here
-                    loadPaths: [fileURLToPath(new URL('./src/styles', import.meta.url))],
-                    additionalData: `
-                        @use "sass:math";
-                        @use "sass:list";
-                        @use "tools/maths" as *;
-                        @use "tools/functions" as *;
-                    `
-                }
-            },
-            postcss: {
-                plugins: [
-                    postcssTailwindShortcuts({ shortcuts }),
-                ],
-            }
-        }
+        plugins: [tailwindcss()]
     },
     devToolbar: {
         enabled: false

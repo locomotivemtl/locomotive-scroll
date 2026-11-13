@@ -70,7 +70,7 @@ Inside of your project, you'll see the following folders and files:
 │   ├── pages/
 │   │   └── index.astro
 │   ├── styles/
-│   │   └── main.scss
+│   │   └── main.css
 │   └── scripts/
 │       ├── components/
 │       ├── utils/
@@ -104,7 +104,6 @@ All commands are run from the root of the project, from a terminal:
 [Astro]:             https://docs.astro.build/en/getting-started/
 [Tailwind CSS]:      https://tailwindcss.com/docs/installation
 [Locomotive Scroll]: https://scroll.locomotive.ca/docs
-[Sass]:              https://sass-lang.com/
 [Swup]:              https://swup.js.org/getting-started/
 [Node]:              https://nodejs.org/
 [NPM]:               https://npmjs.com/
