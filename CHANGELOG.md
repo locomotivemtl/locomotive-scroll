@@ -32,6 +32,7 @@ The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.1.0/),
 - `syncTouch` is more accurate and no longer jitters on slow scrolls.
 - Anchor links with special characters, with the `anchors` Lenis option.
 - An element in the fold with `data-scroll-repeat` and a RAF attribute (`data-scroll-speed`, a custom offset, progress) no longer loses `is-inview` at the top of the page.
+- `data-scroll-to-duration` keeps its decimals: `1.5` was read as `1` second.
 
 ## [5.0.2] - 2026-11-11
 
