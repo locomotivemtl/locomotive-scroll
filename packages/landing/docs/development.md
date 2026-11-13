@@ -11,7 +11,6 @@
     * [`tasks` option](#tasks-option)
     * [`server` option](#server-option)
 * [Tasks](#tasks)
-  * [`concats`](#concats)
   * [`scripts`](#scripts)
   * [`styles`](#styles)
   * [`svgs`](#svgs)
@@ -198,42 +197,6 @@ for all options.
 The boilerplate provides a handful of tasks for handling
 the most commonly processed assets.
 
-### `concats`
-
-A wrapper around [concat] (with optional support for globbing) for concatenating multiple files.
-
-By default, [tiny-glob] is installed with the boilerplate.
-
-Example:
-
-```json
-{
-    "concats": [
-        {
-            "label": "Application Vendors",
-            "includes": [
-                "{% paths.scripts.src %}/vendors/*.js",
-                "node_modules/focus-visible/dist/focus-visible.min.js",
-                "node_modules/vue/dist/vue.min.js",
-                "node_modules/vuelidate/dist/vuelidate.min.js",
-                "node_modules/vuelidate/dist/validators.min.js"
-            ],
-            "outfile": "{% paths.scripts.dest %}/app/vendors.js"
-        },
-        {
-            "label": "Public Site Vendors",
-            "includes": [
-                "{% paths.scripts.src %}/vendors/*.js",
-                "node_modules/focus-visible/dist/focus-visible.min.js"
-            ],
-            "outfile": "{% paths.scripts.dest %}/site/vendors.js"
-        }
-    ]
-}
-```
-
-See [`concats.js`](../build/tasks/concats.js) for details.
-
 ### `scripts`
 
 A wrapper around [esbuild] for bundling and minifying modern JS/ES modules.
@@ -416,11 +379,7 @@ See [`versions.js`](../build/tasks/versions.js) for details.
 
 [Autoprefixer]: https://npmjs.com/package/autoprefixer
 [BrowserSync]:  https://npmjs.com/package/browser-sync
-[concat]:       https://npmjs.com/package/concat
 [esbuild]:      https://npmjs.com/package/esbuild
-[fast-glob]:    https://npmjs.com/package/fast-glob
-[glob]:         https://npmjs.com/package/glob
-[globby]:       https://npmjs.com/package/globby
 [Node]:         https://nodejs.org/
 [sass]:         https://npmjs.com/package/sass
 [NPM]:          https://npmjs.com/
@@ -429,4 +388,3 @@ See [`versions.js`](../build/tasks/versions.js) for details.
 [PurgeCSS]:     https://purgecss.com/
 [RegExp]:       https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/RegExp
 [SVG Mixer]:    https://npmjs.com/package/svg-mixer
-[tiny-glob]:    https://npmjs.com/package/tiny-glob

@@ -35,7 +35,6 @@
         "purgecss": "^5.0.0",
         "sass": "^1.69.5",
         "svg-mixer": "~2.3.14",
-        "tiny-glob": "^0.2.9",
         "twig": "^1.16.0"
     },
     "overrides": {
