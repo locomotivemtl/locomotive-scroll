@@ -4,6 +4,12 @@ All notable changes to this project are documented in this file.
 
 The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.1.0/), and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
+## [5.1.1] - Unreleased
+
+### Fixed
+
+- An element with `data-scroll-delay` stops rendering once it is out of the viewport. It used to update its `transform` on every frame while scrolling and for about 1.5 seconds after. It now jumps to its final position out of sight, and resumes from there when it comes back.
+
 ## [5.1.0] - 2026-11-13
 
 ### Added
