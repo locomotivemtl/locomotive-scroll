@@ -26,14 +26,6 @@
         }
     },
     "tasks": {
-        "concats": [
-            {
-                "includes": [
-                    "{% paths.scripts.src %}/vendors/*.js"
-                ],
-                "outfile": "{% paths.scripts.dest %}/vendors.js"
-            }
-        ],
         "scripts": [
             {
                 "includes": [

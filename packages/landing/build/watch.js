@@ -1,4 +1,3 @@
-import concatFiles, { developmentConcatFilesArgs } from './tasks/concats.js';
 import compileScripts, { developmentScriptsArgs } from './tasks/scripts.js';
 import compileStyles, { developmentStylesArgs } from './tasks/styles.js' ;
 import compileSVGs, { developmentSVGsArgs } from './tasks/svgs.js';
@@ -14,9 +13,8 @@ import { join } from 'node:path';
 // Match a URL protocol.
 const regexUrlStartsWithProtocol = /^[a-z0-9\-]:\/\//i;
 
-// Build scripts, compile styles, concat files,
+// Build scripts, compile styles,
 // and generate spritesheets on first hit
-concatFiles(...developmentConcatFilesArgs);
 compileScripts(...developmentScriptsArgs);
 compileStyles(...developmentStylesArgs);
 compileSVGs(...developmentSVGsArgs);
@@ -46,10 +44,9 @@ configureServer(server, loconfig);
  * @param  {BrowserSync} server         - The BrowserSync API.
  * @param  {object}      loconfig       - The project configset.
  * @param  {object}      loconfig.paths - The paths options.
- * @param  {object}      loconfig.tasks - The tasks options.
  * @return {void}
  */
-function configureServer(server, { paths, tasks }) {
+function configureServer(server, { paths }) {
     const views = createViewsArray(paths.views);
 
     // Reload on any changes to views or processed files
@@ -67,20 +64,6 @@ function configureServer(server, { paths, tasks }) {
     ).on('change', () => {
         compileScripts(...developmentScriptsArgs);
     });
-
-    // Watch source concats
-    if (tasks.concats?.length) {
-        server.watch(
-            resolve(
-                tasks.concats.reduce(
-                    (patterns, { includes }) => patterns.concat(includes),
-                    []
-                )
-            )
-        ).on('change', () => {
-            concatFiles(...developmentConcatFilesArgs);
-        });
-    }
 
     // Watch source styles
     server.watch(
