@@ -2,7 +2,7 @@
 
 [![npm version](https://img.shields.io/npm/v/locomotive-scroll.svg)](https://www.npmjs.com/package/locomotive-scroll)
 [![npm downloads](https://img.shields.io/npm/dm/locomotive-scroll.svg)](https://www.npmjs.com/package/locomotive-scroll)
-[![bundle size](https://img.shields.io/bundlephobia/minzip/locomotive-scroll)](https://bundlephobia.com/package/locomotive-scroll)
+[![bundle size](https://img.shields.io/bundlejs/size/locomotive-scroll)](https://bundlejs.com/?q=locomotive-scroll)
 
 A **lightweight** & **modern** scroll library for detection, animation, and smooth scrolling. Built on top of [Lenis](https://github.com/darkroomengineering/lenis).
 
@@ -32,7 +32,7 @@ const scroll = new LocomotiveScroll();
 
 ## Features
 
--   **Lightweight** — Only 9.4kB gzipped
+-   **Lightweight** — Only 9.8kB gzipped
 -   **TypeScript First** — Fully typed
 -   **Built on Lenis** — Latest stable release with improved performance
 -   **Dual Intersection Observers** — Optimized detection for triggers vs. animations
