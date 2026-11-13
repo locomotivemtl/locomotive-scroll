@@ -1,0 +1,34 @@
+/* ==========================================================================
+   Components / Text
+   ========================================================================== */
+
+:root {
+    --font-size-body-regular: 1rem;
+    --font-size-body-medium:  1.3125rem;
+    --font-size-label:        1rem;
+    --font-size-label-small:  0.75rem;
+}
+
+/* The text styles are repeated in `button.css`. */
+.c-text {
+    font-family: var(--font-display);
+    font-weight: var(--font-weight-medium);
+    line-height: 1.2;
+    letter-spacing: -0.01em;
+
+    &.-body-regular {
+        font-size: var(--font-size-body-regular);
+    }
+
+    &.-body-medium {
+        font-size: var(--font-size-body-medium);
+    }
+
+    &.-label {
+        font-size: var(--font-size-label);
+    }
+
+    &.-label-small {
+        font-size: var(--font-size-label-small);
+    }
+}

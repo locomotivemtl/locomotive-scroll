@@ -1,0 +1,26 @@
+/* ==========================================================================
+   Components / Fade in text
+   ========================================================================== */
+
+.c-fadein-text_line {
+    background: var(--background);
+    -webkit-background-clip: text;
+    color: transparent;
+}
+
+.fadeInText {
+    &.-blue {
+        --color-cta-fadein: #898fe9;
+        --color: white;
+    }
+
+    &.-white {
+        --color-cta-fadein: #cacdff;
+        --color: var(--color-blue);
+    }
+
+    &.-black {
+        --color-cta-fadein: #424242;
+        --color: white;
+    }
+}

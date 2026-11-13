@@ -1,0 +1,33 @@
+/* ==========================================================================
+   Generic / Buttons
+   ========================================================================== */
+
+button,
+.c-button {
+    display: inline-block;
+    /* Fixes odd inner spacing in IE7. */
+    overflow: visible;
+    margin: 0;
+    padding: 0;
+    outline: 0;
+    border: 0;
+    background: none transparent;
+    color: inherit;
+    /* Lines different sized buttons up a little nicer. */
+    vertical-align: middle;
+    text-align: center;
+    text-decoration: none;
+    text-transform: none;
+    /* Inherit font styles, often needed when styling `input`s as buttons. */
+    font: inherit;
+    line-height: normal;
+    cursor: pointer;
+    user-select: none;
+}
+
+button:focus,
+button:hover,
+.c-button:focus,
+.c-button:hover {
+    text-decoration: none;
+}

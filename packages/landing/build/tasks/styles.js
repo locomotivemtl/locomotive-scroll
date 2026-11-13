@@ -3,38 +3,17 @@ import message from '../helpers/message.js';
 import notification from '../helpers/notification.js';
 import {
     createProcessor,
-    pluginsMap as postcssPluginsMap,
-    supportsPostCSS
+    minifyPluginsMap,
+    pluginsMap as postcssPluginsMap
 } from '../helpers/postcss.js';
 import resolve from '../helpers/template.js';
 import { merge } from '../utils/index.js';
-import { mkdir, writeFile } from 'node:fs/promises';
+import { mkdir, readFile, writeFile } from 'node:fs/promises';
 import { basename, dirname } from 'node:path';
-import { promisify } from 'node:util';
-import * as sass from 'sass';
 import { PurgeCSS } from 'purgecss';
 
-const sassRender = promisify(sass.render);
-
 let postcssProcessor;
-
-/**
- * @const {object} defaultSassOptions     - The default shared Sass options.
- * @const {object} developmentSassOptions - The predefined Sass options for development.
- * @const {object} productionSassOptions  - The predefined Sass options for production.
- */
-export const defaultSassOptions = {
-    omitSourceMapUrl: true,
-    sourceMap: true,
-    sourceMapContents: true,
-};
-
-export const developmentSassOptions = Object.assign({}, defaultSassOptions, {
-    outputStyle: 'expanded',
-});
-export const productionSassOptions = Object.assign({}, defaultSassOptions, {
-    outputStyle: 'compressed',
-});
+let minifyProcessor;
 
 /**
  * @const {object} defaultPostCSSOptions     - The default shared PostCSS options.
@@ -58,50 +37,37 @@ export const productionPostCSSOptions  = Object.assign({}, defaultPostCSSOptions
  * @const {object|boolean} productionStylesArgs  - The predefined `compileStyles()` options for production.
  */
 export const developmentStylesArgs = [
-    developmentSassOptions,
     developmentPostCSSOptions,
+    false,
     false
 ];
 export const productionStylesArgs  = [
-    productionSassOptions,
     productionPostCSSOptions,
+    true,
     true
 ];
 
 /**
- * Compiles and minifies main Sass files to CSS.
+ * Compiles main CSS files with PostCSS, then purges and minifies them.
  *
  * @todo Add deep merge of `postcssOptions` to better support customization
  *     of default processor options.
  *
  * @async
- * @param  {object}         [sassOptions=null]    - Customize the Sass render API options.
+ * @param  {object}  [postcssOptions=null] - Customize the PostCSS processor API options.
  *     If `null`, default production options are used.
- * @param  {object|boolean} [postcssOptions=null] - Customize the PostCSS processor API options.
- *     If `null`, default production options are used.
- *     If `false`, PostCSS processing will be ignored.
+ * @param  {boolean} [purge=true]          - Whether to purge unused styles.
+ * @param  {boolean} [minify=true]         - Whether to minify the styles, after the purge.
  * @return {Promise}
  */
-export default async function compileStyles(sassOptions = null, postcssOptions = null, purge = true) {
-    if (sassOptions == null) {
-        sassOptions = productionSassOptions;
+export default async function compileStyles(postcssOptions = null, purge = true, minify = true) {
+    if (postcssOptions == null) {
+        postcssOptions = productionPostCSSOptions;
     } else if (
-        sassOptions !== developmentSassOptions &&
-        sassOptions !== productionSassOptions
+        postcssOptions !== developmentPostCSSOptions &&
+        postcssOptions !== productionPostCSSOptions
     ) {
-        sassOptions = merge({}, defaultSassOptions, sassOptions);
-    }
-
-    if (supportsPostCSS) {
-        if (postcssOptions == null) {
-            postcssOptions = productionPostCSSOptions;
-        } else if (
-            postcssOptions !== false &&
-            postcssOptions !== developmentPostCSSOptions &&
-            postcssOptions !== productionPostCSSOptions
-        ) {
-            postcssOptions = merge({}, defaultPostCSSOptions, postcssOptions);
-        }
+        postcssOptions = merge({}, defaultPostCSSOptions, postcssOptions);
     }
 
     /**
@@ -127,48 +93,44 @@ export default async function compileStyles(sassOptions = null, postcssOptions =
             infile  = resolve(infile);
             outfile = resolve(outfile);
 
-            let result = await sassRender(Object.assign({}, sassOptions, {
-                file: infile,
-                outFile: outfile,
-            }));
-
-            if (supportsPostCSS && postcssOptions) {
-                if (typeof postcssProcessor === 'undefined') {
-                    postcssProcessor = createProcessor(
-                        postcssPluginsMap,
-                        postcssOptions
-                    );
-                }
-
-                result = await postcssProcessor.process(
-                    result.css,
-                    Object.assign({}, postcssOptions.processor, {
-                        from: outfile,
-                        to: outfile,
-                    })
+            if (typeof postcssProcessor === 'undefined') {
+                postcssProcessor = createProcessor(
+                    postcssPluginsMap,
+                    postcssOptions
                 );
+            }
 
-                if (result.warnings) {
-                    const warnings = result.warnings();
-                    if (warnings.length) {
-                        message(`Error processing ${label || `${filestem}.css`}`, 'warning');
-                        warnings.forEach((warn) => {
-                            message(warn.toString());
-                        });
-                    }
-                }
+            const result = await postcssProcessor.process(
+                await readFile(infile, 'utf8'),
+                Object.assign({}, postcssOptions.processor, {
+                    from: infile,
+                    to: outfile,
+                })
+            );
+
+            const warnings = result.warnings();
+            if (warnings.length) {
+                message(`Error processing ${label || `${filestem}.css`}`, 'warning');
+                warnings.forEach((warn) => {
+                    message(warn.toString());
+                });
+            }
+
+            let css = result.css;
+
+            if (purge) {
+                css = await purgeUnusedCSS(css, `${label || `${filestem}.css`}`);
+            }
+
+            if (minify) {
+                css = await minifyCSS(css, outfile);
             }
 
             try {
                 await mkdir(dirname(outfile), { recursive: true });
-                await writeFile(outfile, result.css);
+                await writeFile(outfile, css);
 
-                // Purge CSS once file exists.
-                if (outfile && purge) {
-                    await purgeUnusedCSS(outfile, `${label || `${filestem}.css`}`);
-                }
-
-                if (result.css) {
+                if (css) {
                     message(`${label || `${filestem}.css`} compiled`, 'success', timeLabel);
                 } else {
                     message(`${label || `${filestem}.css`} is empty`, 'notice', timeLabel);
@@ -197,41 +159,38 @@ export default async function compileStyles(sassOptions = null, postcssOptions =
                 }
             }
         } catch (err) {
-            message(`Error compiling ${label || `${filestem}.scss`}`, 'error');
-            message(err.formatted || err);
+            message(`Error compiling ${label || `${filestem}.css`}`, 'error');
+            message(err.showSourceCode?.() ?? err);
 
             notification({
-                title:   `${label || `${filestem}.scss`} compilation failed 🚨`,
-                message: (err.formatted || `${err.name}: ${err.message}`)
+                title:   `${label || `${filestem}.css`} compilation failed 🚨`,
+                message: `${err.name}: ${err.message}`
             });
         }
     }));
 };
 
 /**
- * Purge unused styles from CSS files.
+ * Purge unused styles from CSS.
  *
  * @async
  *
- * @param  {string} outfile - The path of a css file
- *      If missing the function stops.
- * @param  {string} label   - The CSS file label or name.
- * @return {Promise}
+ * @param  {string} css   - The CSS to purge.
+ * @param  {string} label - The CSS file label or name.
+ * @return {Promise<string>} The purged CSS, or the CSS as is without content files to scan.
  */
-async function purgeUnusedCSS(outfile, label) {
+async function purgeUnusedCSS(css, label) {
     const contentFiles = loconfig.tasks.purgeCSS?.content;
     if (!Array.isArray(contentFiles) || !contentFiles.length) {
-        return;
+        return css;
     }
-
-    label = label ?? basename(outfile);
 
     const timeLabel = `${label} purged in`;
     console.time(timeLabel);
 
-    const purgeCSSResults = await (new PurgeCSS()).purge({
+    const [ purgeCSSResult ] = await (new PurgeCSS()).purge({
         content: contentFiles,
-        css: [ outfile ],
+        css: [ { raw: css } ],
         defaultExtractor: content => content.match(/[a-z0-9_\-\\\/\@]+/gi) || [],
         fontFaces: true,
         keyframes: true,
@@ -245,9 +204,35 @@ async function purgeUnusedCSS(outfile, label) {
         variables: false,
     })
 
-    for (let result of purgeCSSResults) {
-        await writeFile(outfile, result.css)
+    message(`${label} purged`, 'chore', timeLabel);
 
-        message(`${label} purged`, 'chore', timeLabel);
+    return purgeCSSResult.css;
+}
+
+/**
+ * Minify CSS with cssnano.
+ *
+ * @async
+ *
+ * @param  {string} css     - The CSS to minify.
+ * @param  {string} outfile - The path of the CSS file, for cssnano's warnings.
+ * @return {Promise<string>} The minified CSS.
+ */
+async function minifyCSS(css, outfile) {
+    if (typeof minifyProcessor === 'undefined') {
+        minifyProcessor = createProcessor(minifyPluginsMap, {
+            cssnano: {
+                // Keep `scale3d(0, 1, 1)` → `scale3d(1, 1, 1)` transitions between the same functions.
+                preset: [ 'default', { reduceTransforms: false } ],
+            },
+        });
     }
+
+    const result = await minifyProcessor.process(css, {
+        from: outfile,
+        to: outfile,
+        map: false,
+    });
+
+    return result.css;
 }

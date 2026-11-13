@@ -1,0 +1,387 @@
+/* ==========================================================================
+   Utilities / Grid columns
+   ========================================================================== */
+
+/*
+ * `.u-gc-{start}/{end}` places an `.o-grid_item`, plus `@from-medium` and `@to-medium`
+ * variants. Unused classes are purged.
+ */
+
+.u-gc-1\/1 {
+    --gc-start: 1;
+    --gc-end: 1;
+}
+
+.u-gc-1\/2 {
+    --gc-start: 1;
+    --gc-end: 2;
+}
+
+.u-gc-1\/3 {
+    --gc-start: 1;
+    --gc-end: 3;
+}
+
+.u-gc-1\/4 {
+    --gc-start: 1;
+    --gc-end: 4;
+}
+
+.u-gc-1\/5 {
+    --gc-start: 1;
+    --gc-end: 5;
+}
+
+.u-gc-2\/1 {
+    --gc-start: 2;
+    --gc-end: 1;
+}
+
+.u-gc-2\/2 {
+    --gc-start: 2;
+    --gc-end: 2;
+}
+
+.u-gc-2\/3 {
+    --gc-start: 2;
+    --gc-end: 3;
+}
+
+.u-gc-2\/4 {
+    --gc-start: 2;
+    --gc-end: 4;
+}
+
+.u-gc-2\/5 {
+    --gc-start: 2;
+    --gc-end: 5;
+}
+
+.u-gc-3\/1 {
+    --gc-start: 3;
+    --gc-end: 1;
+}
+
+.u-gc-3\/2 {
+    --gc-start: 3;
+    --gc-end: 2;
+}
+
+.u-gc-3\/3 {
+    --gc-start: 3;
+    --gc-end: 3;
+}
+
+.u-gc-3\/4 {
+    --gc-start: 3;
+    --gc-end: 4;
+}
+
+.u-gc-3\/5 {
+    --gc-start: 3;
+    --gc-end: 5;
+}
+
+.u-gc-4\/1 {
+    --gc-start: 4;
+    --gc-end: 1;
+}
+
+.u-gc-4\/2 {
+    --gc-start: 4;
+    --gc-end: 2;
+}
+
+.u-gc-4\/3 {
+    --gc-start: 4;
+    --gc-end: 3;
+}
+
+.u-gc-4\/4 {
+    --gc-start: 4;
+    --gc-end: 4;
+}
+
+.u-gc-4\/5 {
+    --gc-start: 4;
+    --gc-end: 5;
+}
+
+.u-gc-5\/1 {
+    --gc-start: 5;
+    --gc-end: 1;
+}
+
+.u-gc-5\/2 {
+    --gc-start: 5;
+    --gc-end: 2;
+}
+
+.u-gc-5\/3 {
+    --gc-start: 5;
+    --gc-end: 3;
+}
+
+.u-gc-5\/4 {
+    --gc-start: 5;
+    --gc-end: 4;
+}
+
+.u-gc-5\/5 {
+    --gc-start: 5;
+    --gc-end: 5;
+}
+
+@media (--from-medium) {
+    .u-gc-1\/1\@from-medium {
+        --gc-start: 1;
+        --gc-end: 1;
+    }
+
+    .u-gc-1\/2\@from-medium {
+        --gc-start: 1;
+        --gc-end: 2;
+    }
+
+    .u-gc-1\/3\@from-medium {
+        --gc-start: 1;
+        --gc-end: 3;
+    }
+
+    .u-gc-1\/4\@from-medium {
+        --gc-start: 1;
+        --gc-end: 4;
+    }
+
+    .u-gc-1\/5\@from-medium {
+        --gc-start: 1;
+        --gc-end: 5;
+    }
+
+    .u-gc-2\/1\@from-medium {
+        --gc-start: 2;
+        --gc-end: 1;
+    }
+
+    .u-gc-2\/2\@from-medium {
+        --gc-start: 2;
+        --gc-end: 2;
+    }
+
+    .u-gc-2\/3\@from-medium {
+        --gc-start: 2;
+        --gc-end: 3;
+    }
+
+    .u-gc-2\/4\@from-medium {
+        --gc-start: 2;
+        --gc-end: 4;
+    }
+
+    .u-gc-2\/5\@from-medium {
+        --gc-start: 2;
+        --gc-end: 5;
+    }
+
+    .u-gc-3\/1\@from-medium {
+        --gc-start: 3;
+        --gc-end: 1;
+    }
+
+    .u-gc-3\/2\@from-medium {
+        --gc-start: 3;
+        --gc-end: 2;
+    }
+
+    .u-gc-3\/3\@from-medium {
+        --gc-start: 3;
+        --gc-end: 3;
+    }
+
+    .u-gc-3\/4\@from-medium {
+        --gc-start: 3;
+        --gc-end: 4;
+    }
+
+    .u-gc-3\/5\@from-medium {
+        --gc-start: 3;
+        --gc-end: 5;
+    }
+
+    .u-gc-4\/1\@from-medium {
+        --gc-start: 4;
+        --gc-end: 1;
+    }
+
+    .u-gc-4\/2\@from-medium {
+        --gc-start: 4;
+        --gc-end: 2;
+    }
+
+    .u-gc-4\/3\@from-medium {
+        --gc-start: 4;
+        --gc-end: 3;
+    }
+
+    .u-gc-4\/4\@from-medium {
+        --gc-start: 4;
+        --gc-end: 4;
+    }
+
+    .u-gc-4\/5\@from-medium {
+        --gc-start: 4;
+        --gc-end: 5;
+    }
+
+    .u-gc-5\/1\@from-medium {
+        --gc-start: 5;
+        --gc-end: 1;
+    }
+
+    .u-gc-5\/2\@from-medium {
+        --gc-start: 5;
+        --gc-end: 2;
+    }
+
+    .u-gc-5\/3\@from-medium {
+        --gc-start: 5;
+        --gc-end: 3;
+    }
+
+    .u-gc-5\/4\@from-medium {
+        --gc-start: 5;
+        --gc-end: 4;
+    }
+
+    .u-gc-5\/5\@from-medium {
+        --gc-start: 5;
+        --gc-end: 5;
+    }
+}
+
+@media (--to-medium) {
+    .u-gc-1\/1\@to-medium {
+        --gc-start: 1;
+        --gc-end: 1;
+    }
+
+    .u-gc-1\/2\@to-medium {
+        --gc-start: 1;
+        --gc-end: 2;
+    }
+
+    .u-gc-1\/3\@to-medium {
+        --gc-start: 1;
+        --gc-end: 3;
+    }
+
+    .u-gc-1\/4\@to-medium {
+        --gc-start: 1;
+        --gc-end: 4;
+    }
+
+    .u-gc-1\/5\@to-medium {
+        --gc-start: 1;
+        --gc-end: 5;
+    }
+
+    .u-gc-2\/1\@to-medium {
+        --gc-start: 2;
+        --gc-end: 1;
+    }
+
+    .u-gc-2\/2\@to-medium {
+        --gc-start: 2;
+        --gc-end: 2;
+    }
+
+    .u-gc-2\/3\@to-medium {
+        --gc-start: 2;
+        --gc-end: 3;
+    }
+
+    .u-gc-2\/4\@to-medium {
+        --gc-start: 2;
+        --gc-end: 4;
+    }
+
+    .u-gc-2\/5\@to-medium {
+        --gc-start: 2;
+        --gc-end: 5;
+    }
+
+    .u-gc-3\/1\@to-medium {
+        --gc-start: 3;
+        --gc-end: 1;
+    }
+
+    .u-gc-3\/2\@to-medium {
+        --gc-start: 3;
+        --gc-end: 2;
+    }
+
+    .u-gc-3\/3\@to-medium {
+        --gc-start: 3;
+        --gc-end: 3;
+    }
+
+    .u-gc-3\/4\@to-medium {
+        --gc-start: 3;
+        --gc-end: 4;
+    }
+
+    .u-gc-3\/5\@to-medium {
+        --gc-start: 3;
+        --gc-end: 5;
+    }
+
+    .u-gc-4\/1\@to-medium {
+        --gc-start: 4;
+        --gc-end: 1;
+    }
+
+    .u-gc-4\/2\@to-medium {
+        --gc-start: 4;
+        --gc-end: 2;
+    }
+
+    .u-gc-4\/3\@to-medium {
+        --gc-start: 4;
+        --gc-end: 3;
+    }
+
+    .u-gc-4\/4\@to-medium {
+        --gc-start: 4;
+        --gc-end: 4;
+    }
+
+    .u-gc-4\/5\@to-medium {
+        --gc-start: 4;
+        --gc-end: 5;
+    }
+
+    .u-gc-5\/1\@to-medium {
+        --gc-start: 5;
+        --gc-end: 1;
+    }
+
+    .u-gc-5\/2\@to-medium {
+        --gc-start: 5;
+        --gc-end: 2;
+    }
+
+    .u-gc-5\/3\@to-medium {
+        --gc-start: 5;
+        --gc-end: 3;
+    }
+
+    .u-gc-5\/4\@to-medium {
+        --gc-start: 5;
+        --gc-end: 4;
+    }
+
+    .u-gc-5\/5\@to-medium {
+        --gc-start: 5;
+        --gc-end: 5;
+    }
+}

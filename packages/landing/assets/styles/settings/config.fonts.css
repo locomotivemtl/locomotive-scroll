@@ -1,0 +1,43 @@
+/* ==========================================================================
+   Settings / Config / Fonts
+   ========================================================================== */
+
+/* Paths are relative to the compiled stylesheet, in `assets/styles/`. */
+@font-face {
+    font-display: swap;
+    font-family: "Helvetica Now Display";
+    src: url("../fonts/HelveticaNowDisplay-Medium.woff2") format("woff2"),
+         url("../fonts/HelveticaNowDisplay-Medium.woff") format("woff");
+    font-weight: 500;
+    font-style: normal;
+}
+
+@font-face {
+    font-display: swap;
+    font-family: "Helvetica Now Display";
+    src: url("../fonts/HelveticaNowDisplay-Regular.woff2") format("woff2"),
+         url("../fonts/HelveticaNowDisplay-Regular.woff") format("woff");
+    font-weight: 400;
+    font-style: normal;
+}
+
+@font-face {
+    font-display: swap;
+    font-family: "PP Locomotive New";
+    src: url("../fonts/PPLocomotiveNew-Light.woff2") format("woff2"),
+         url("../fonts/PPLocomotiveNew-Light.woff") format("woff");
+    font-weight: 300;
+    font-style: normal;
+}
+
+:root {
+    /* Retrieved from systemfontstack.com on 2022-05-31 */
+    --font-fallback-sans: -apple-system, BlinkMacSystemFont, avenir next, avenir, segoe ui, helvetica neue, helvetica, Cantarell, Ubuntu, roboto, noto, arial, sans-serif;
+
+    --font-display: "Helvetica Now Display", var(--font-fallback-sans);
+    --font-serif: "PP Locomotive New", var(--font-fallback-sans);
+
+    --font-weight-light: 300;
+    --font-weight-regular: 400;
+    --font-weight-medium: 500;
+}

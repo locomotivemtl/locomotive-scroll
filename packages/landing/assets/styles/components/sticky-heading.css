@@ -1,0 +1,67 @@
+/* ==========================================================================
+   Components / Sticky heading
+   ========================================================================== */
+
+.c-sticky-heading {
+    height: 300vh;
+
+    @media (max-aspect-ratio: 1.25 / 1) {
+        height: auto;
+        padding-top: var(--spacing-2xl);
+    }
+}
+
+.c-sticky-heading_inner {
+    position: sticky;
+    top: 0;
+    display: flex;
+    align-items: flex-end;
+    width: 100%;
+    height: calc(var(--vh, 1vh) * 100);
+    overflow: hidden;
+
+    @media (max-aspect-ratio: 1.25 / 1) {
+        align-items: start;
+        height: auto;
+        position: relative;
+        padding-top: var(--spacing-xs);
+    }
+}
+
+/* Repeats the `.c-heading-serif` styles. Sizes are 870px at 1740px and 1440px wide. */
+.c-sticky-heading_title {
+    font-family: var(--font-serif);
+    font-weight: var(--font-weight-light);
+    line-height: 0.85;
+    letter-spacing: -0.03em;
+    font-size: calc(870 / 1740 * 100 * var(--vw, 1vw));
+    width: auto;
+    padding-right: calc(var(--grid-margin) * 2);
+    transform: translate3d(calc(-1 * (var(--progress) * (100% - (var(--vw, 1vw) * 100)))), 0, 0);
+
+    @media (max-aspect-ratio: 1.25 / 1) {
+        font-size: calc(870 / 1440 * 49 * var(--vw, 1vw));
+        transform: none;
+    }
+}
+
+.c-sticky-heading_description {
+    margin-left: calc(100vw - 13.75rem - var(--grid-margin) * 2);
+    max-width: 13.75rem;
+    margin-bottom: var(--spacing-sm);
+
+    @media (--from-medium) {
+        max-width: 17.5rem;
+        margin-left: 50vw;
+        font-size: calc(870 / 1740 * 100 * var(--vw, 1vw));
+        margin-bottom: -.075em;
+    }
+}
+
+.c-sticky_scroll {
+    display: block;
+    position: absolute;
+    top: 0;
+    height: 100%;
+    width: 100%;
+}

@@ -14,20 +14,18 @@
 
 ## Styles
 
-[SCSS][Sass] is a superset of CSS that adds many helpful features to improve
-and modularize our styles.
+We write native CSS: custom properties, nesting and `@custom-media` queries
+(e.g. `@media (--from-medium)`, declared in `settings/config.breakpoints.css`).
 
-We use [node-sass] (LibSass) for processing and minifying SCSS into CSS.
-
-We also use [PostCSS] and [Autoprefixer] to parse our CSS and add
-vendor prefixes for experimental features.
+We use [PostCSS] to bundle the `@import` rules, resolve the custom media
+queries, flatten the nesting for older browsers and add vendor prefixes with
+[Autoprefixer].
 
 ### CSS Architecture
 
 The boilerplate's CSS architecture is based on [Inuit CSS][inuitcss] and [ITCSS].
 
-* `settings`: Global variables, site-wide settings, config switches, etc.
-* `tools`: Site-wide mixins and functions.
+* `settings`: Custom properties, custom media queries and font faces.
 * `generic`: Low-specificity, far-reaching rulesets (e.g. resets).
 * `elements`: Unclassed HTML elements (e.g. `a {}`, `blockquote {}`, `address {}`).
 * `objects`: Objects, abstractions, and design patterns (e.g. `.o-layout {}`).
@@ -72,18 +70,18 @@ Learn about [namespacing](https://csswizardry.com/2015/03/more-transparent-ui-co
 </div>
 ```
 
-```scss
+```css
 .c-block {
     &.-large {
-        padding: rem(60px);
+        padding: 3.75rem;
     }
 }
 
 .c-block_heading {
-    @media (max-width: $to-medium) {
+    @media (--to-medium) {
         .c-block.-large & {
-            margin-bottom: rem(40px);
-        } 
+            margin-bottom: 2.5rem;
+        }
     }
 }
 ```
@@ -195,9 +193,7 @@ Learn more about [Locomotive Scroll][locomotive-scroll].
 [locomotive-scroll]: https://npmjs.com/package/locomotive-scroll
 [modularJS]:         https://npmjs.com/package/modujs
 [modularLoad]:       https://npmjs.com/package/modularload
-[node-sass]:         https://npmjs.com/package/node-sass
 [PostCSS]:           https://npmjs.com/package/postcss
-[Sass]:              https://sass-lang.com/
 [svg-mixer]:         https://npmjs.com/package/svg-mixer
 [Node]:              https://nodejs.org/
 [NPM]:               https://npmjs.com/

@@ -10,7 +10,7 @@
 
 * Uses a custom [task runner](docs/development.md) for handling assets.
 * Uses [BrowserSync] for fast development and testing in browsers.
-* Uses [Sass] for a feature rich superset of CSS.
+* Uses [PostCSS] to bundle native CSS, with nesting and custom media queries.
 * Uses [ESBuild] for extremely fast processing of JS/ES modules.
 * Uses [SVG Mixer] for processing SVG files and generating spritesheets.
 * Uses [ITCSS] for a sane and scalable CSS architecture.
@@ -23,7 +23,7 @@ Learn more about [languages and technologies](docs/technologies.md).
 
 Make sure you have the following installed:
 
-* [Node] — at least 17.9, the latest LTS is recommended.
+* [Node] — 24, the version in the repository root `.nvmrc`.
 * [NPM] — at least 8.0, the latest LTS is recommended.
 
 > 💡 You can use [NVM] to install and use different versions of Node via the command-line.
@@ -62,7 +62,7 @@ Then update the following files to suit your project:
 ## Installation
 
 ```sh
-# Switch to recommended Node version from .nvmrc
+# Switch to the Node version from the repository root .nvmrc
 nvm use
 
 # Install dependencies from package.json
@@ -93,7 +93,7 @@ Learn more about [development and building](docs/development.md).
 [Locomotive Scroll]: https://npmjs.com/package/locomotive-scroll
 [modularJS]:         https://npmjs.com/package/modujs
 [modularLoad]:       https://npmjs.com/package/modularload
-[Sass]:              https://sass-lang.com/
+[PostCSS]:           https://postcss.org/
 [SVG Mixer]:         https://npmjs.com/package/svg-mixer
 [Node]:              https://nodejs.org/
 [NPM]:               https://npmjs.com/

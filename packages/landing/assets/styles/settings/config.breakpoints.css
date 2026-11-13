@@ -1,0 +1,25 @@
+/* ==========================================================================
+   Settings / Config / Breakpoints
+   ========================================================================== */
+
+/* `--to-*` stops 1px below the breakpoint, so `--from-*` and `--to-*` never overlap. */
+@custom-media --from-tiny (min-width: 500px);
+@custom-media --to-tiny (max-width: 499px);
+@custom-media --from-small (min-width: 700px);
+@custom-media --to-small (max-width: 699px);
+@custom-media --from-medium (min-width: 1000px);
+@custom-media --to-medium (max-width: 999px);
+@custom-media --from-large (min-width: 1200px);
+@custom-media --to-large (max-width: 1199px);
+@custom-media --from-big (min-width: 1400px);
+@custom-media --to-big (max-width: 1399px);
+@custom-media --from-figma (min-width: 1440px);
+@custom-media --to-figma (max-width: 1439px);
+@custom-media --from-huge (min-width: 1600px);
+@custom-media --to-huge (max-width: 1599px);
+@custom-media --from-enormous (min-width: 1800px);
+@custom-media --to-enormous (max-width: 1799px);
+@custom-media --from-gigantic (min-width: 2000px);
+@custom-media --to-gigantic (max-width: 1999px);
+@custom-media --from-colossal (min-width: 2400px);
+@custom-media --to-colossal (max-width: 2399px);

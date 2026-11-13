@@ -1,0 +1,35 @@
+/* ==========================================================================
+   Settings / Config / Spacers
+   ========================================================================== */
+
+/*
+ * Each spacer scales with the viewport between its mobile and desktop sizes,
+ * in pixels. The desktop size is reached at 1440px wide (1vw = 14.4px).
+ */
+:root {
+    --spacing-2xs-mobile: 6;
+    --spacing-2xs-desktop: 10;
+    --spacing-xs-mobile: 14;
+    --spacing-xs-desktop: 16;
+    --spacing-sm-mobile: 28;
+    --spacing-sm-desktop: 32;
+    --spacing-md-mobile: 42;
+    --spacing-md-desktop: 56;
+    --spacing-lg-mobile: 72;
+    --spacing-lg-desktop: 96;
+    --spacing-xl-mobile: 90;
+    --spacing-xl-desktop: 120;
+    --spacing-2xl-mobile: 96;
+    --spacing-2xl-desktop: 160;
+    --spacing-3xl-mobile: 112;
+    --spacing-3xl-desktop: 224;
+
+    --spacing-2xs: clamp(calc(0.0625rem * var(--spacing-2xs-mobile)), calc(var(--spacing-2xs-desktop) / 14.4 * 1vw), calc(0.0625rem * var(--spacing-2xs-desktop)));
+    --spacing-xs: clamp(calc(0.0625rem * var(--spacing-xs-mobile)), calc(var(--spacing-xs-desktop) / 14.4 * 1vw), calc(0.0625rem * var(--spacing-xs-desktop)));
+    --spacing-sm: clamp(calc(0.0625rem * var(--spacing-sm-mobile)), calc(var(--spacing-sm-desktop) / 14.4 * 1vw), calc(0.0625rem * var(--spacing-sm-desktop)));
+    --spacing-md: clamp(calc(0.0625rem * var(--spacing-md-mobile)), calc(var(--spacing-md-desktop) / 14.4 * 1vw), calc(0.0625rem * var(--spacing-md-desktop)));
+    --spacing-lg: clamp(calc(0.0625rem * var(--spacing-lg-mobile)), calc(var(--spacing-lg-desktop) / 14.4 * 1vw), calc(0.0625rem * var(--spacing-lg-desktop)));
+    --spacing-xl: clamp(calc(0.0625rem * var(--spacing-xl-mobile)), calc(var(--spacing-xl-desktop) / 14.4 * 1vw), calc(0.0625rem * var(--spacing-xl-desktop)));
+    --spacing-2xl: clamp(calc(0.0625rem * var(--spacing-2xl-mobile)), calc(var(--spacing-2xl-desktop) / 14.4 * 1vw), calc(0.0625rem * var(--spacing-2xl-desktop)));
+    --spacing-3xl: clamp(calc(0.0625rem * var(--spacing-3xl-mobile)), calc(var(--spacing-3xl-desktop) / 14.4 * 1vw), calc(0.0625rem * var(--spacing-3xl-desktop)));
+}

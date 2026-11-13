@@ -1,0 +1,85 @@
+/* ==========================================================================
+   Components / Buttons
+   ========================================================================== */
+
+.c-button {
+    --button-height: 3.5rem;
+    --button-padding: 1rem;
+    --button-gap: 1rem;
+
+    --button-color-text: var(--color-background);
+    --button-color-background: var(--color-text);
+    --button-color-stroke: var(--color-text);
+
+    --button-hover-color-text: var(--color-text);
+    --button-hover-color-background: var(--color-background);
+
+    position: relative;
+    overflow: hidden;
+    border-radius: 4px;
+    color: var(--button-color-text);
+    border: 1px solid var(--button-color-stroke);
+    background-color: var(--button-color-background);
+
+    &.-stroke {
+        --button-color-text: currentColor;
+        --button-color-background: transparent;
+
+        --button-hover-color-text: var(--color-background);
+        --button-hover-color-background: var(--color-text);
+    }
+}
+
+.c-button_wrap {
+    &:nth-child(2) {
+        position: absolute;
+        top: -1px;
+        left: -1px;
+        width: calc(100% + 2px);
+        height: calc(100% + 2px);
+        color: var(--button-hover-color-text);
+        background-color: var(--button-hover-color-background);
+        clip-path: inset(10% -100% 10% 100% round 4px 4px 4px 4px);
+        transition: clip-path var(--timing-normal) var(--ease-power3-in-out);
+
+        .c-button:hover & {
+            clip-path: inset(0 0 0 0 round 4px 4px 4px 4px);
+        }
+    }
+}
+
+.c-button_inner {
+    display: inline-flex;
+    align-items: center;
+    column-gap: var(--button-gap);
+    min-height: var(--button-height);
+    padding: 0 var(--button-padding);
+    transition: transform var(--timing-normal) var(--ease-power3-in-out);
+
+    .c-button:hover .c-button_wrap:nth-child(1) & {
+        transform: translate3d(calc(-1 * var(--icon-width) - var(--button-gap)), 0, 0);
+    }
+
+    .c-button_wrap:nth-child(2) & {
+        position: absolute;
+        top: -1px;
+        left: -1px;
+        width: calc(100% + 2px);
+        height: calc(100% + 2px);
+        flex-direction: row-reverse;
+        transform: translate3d(calc(var(--icon-width) + var(--button-gap)), 0, 0);
+    }
+
+    .c-button:hover .c-button_wrap:nth-child(2) & {
+        transform: translate3d(0, 0, 0);
+    }
+}
+
+/* Repeats the `.c-text` styles. */
+.c-button_label {
+    font-family: var(--font-display);
+    font-weight: var(--font-weight-medium);
+    line-height: 1.2;
+    letter-spacing: -0.01em;
+    font-size: var(--font-size-label);
+}

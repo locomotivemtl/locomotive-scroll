@@ -1,0 +1,44 @@
+/* ==========================================================================
+   Components / Rail
+   ========================================================================== */
+
+.c-rail {
+    position: relative;
+    overflow: hidden;
+    padding: var(--spacing-md) 0;
+}
+
+.c-rail_inner {
+    display: inline-flex;
+    align-items: center;
+    white-space: nowrap;
+}
+
+/* Repeats the `.c-heading-serif` styles. */
+.c-rail_item {
+    font-family: var(--font-serif);
+    font-weight: var(--font-weight-light);
+    line-height: 0.85;
+    letter-spacing: -0.03em;
+    font-size: var(--font-size-serif-medium);
+    padding-right: 0.5em;
+
+    .c-icon {
+        transform: translateY(-0.075em);
+    }
+}
+
+.c-rail_glyph {
+    display: inline-block;
+    padding-left: 0.5em;
+    width: 100px;
+    text-align: center;
+
+    @media (--from-medium) {
+        width: 140px;
+    }
+
+    @media (--from-large) {
+        width: 170px;
+    }
+}

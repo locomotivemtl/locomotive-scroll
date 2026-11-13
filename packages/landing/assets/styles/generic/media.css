@@ -1,0 +1,42 @@
+/* ==========================================================================
+   Generic / Media
+   ========================================================================== */
+
+/* Removes the whitespace under `img` dropped in as-is, safer than `display: block`. */
+audio,
+canvas,
+iframe,
+img,
+svg,
+video {
+    vertical-align: middle;
+}
+
+/* Add the correct display in iOS 4-7. */
+audio:not([controls]) {
+    display: none;
+    height: 0;
+}
+
+img,
+svg {
+    height: auto;
+}
+
+/* Explicit `width` or `height` attributes keep the media from being fluid. */
+img[width],
+img[height],
+svg[width],
+svg[height] {
+    max-width: none;
+}
+
+/* Offset `alt` text from surrounding copy. */
+img {
+    font-style: italic;
+}
+
+/* SVG elements fall back to their surrounding text color. */
+svg {
+    fill: currentColor;
+}

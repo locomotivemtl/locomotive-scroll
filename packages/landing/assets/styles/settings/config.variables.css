@@ -1,0 +1,20 @@
+/* ==========================================================================
+   Settings / Config / Variables
+   ========================================================================== */
+
+:root {
+    --grid-columns: 4;
+    --grid-gutter: 0.625rem;
+    --grid-margin: 0.625rem;
+    --container-width: calc(100% - 2 * var(--grid-margin));
+
+    @media (--to-small) {
+        --header-height: 2.125rem;
+    }
+
+    @media (--from-small) {
+        --grid-gutter: 1rem;
+        --grid-margin: 1.25rem;
+        --header-height: 3.75rem;
+    }
+}

@@ -1,6 +1,6 @@
 /**
- * @file If available, returns the PostCSS Processor creator and
- * any the Autoprefixer PostCSS plugin.
+ * @file Returns the PostCSS Processor creator and the plugins
+ * used to compile and minify the styles.
  */
 
 /**
@@ -12,7 +12,7 @@
  */
 
 /**
- * @typedef {import('postcss').Postcss} Postcss
+ * @typedef {import('postcss').PluginCreator<object>} PluginCreator
  */
 
 /**
@@ -28,7 +28,7 @@
  */
 
 /**
- * @typedef {object<string, AcceptedPlugin>} PluginMap
+ * @typedef {Record<string, PluginCreator>} PluginMap
  */
 
 /**
@@ -42,56 +42,43 @@
  * @property {AutoprefixerOptions} autoprefixer - The `autoprefixer()` options.
  */
 
-/**
- * @type {Postcss|undefined}        postcss      - The discovered PostCSS function.
- * @type {AcceptedPlugin|undefined} autoprefixer - The discovered Autoprefixer function.
- */
-let postcss, autoprefixer;
-
-try {
-    postcss = await import('postcss');
-    postcss = postcss.default;
-
-    autoprefixer = await import('autoprefixer');
-    autoprefixer = autoprefixer.default;
-} catch (err) {
-    // do nothing
-}
+import autoprefixer from 'autoprefixer';
+import cssnano from 'cssnano';
+import postcss from 'postcss';
+import postcssCustomMedia from 'postcss-custom-media';
+import postcssImport from 'postcss-import';
+import postcssNesting from 'postcss-nesting';
 
 /**
- * @type {boolean} Whether PostCSS was discovered (TRUE) or not (FALSE).
- */
-const supportsPostCSS = (typeof postcss === 'function');
-
-/**
- * @type {PluginList} A list of supported plugins.
- */
-const pluginsList = [
-    autoprefixer,
-];
-
-/**
- * @type {PluginMap} A map of supported plugins.
+ * @type {PluginMap} The compile plugins, in the order they run.
+ *     `postcss-import` comes first so the other plugins see a single file,
+ *     and the custom media queries are resolved before the nesting is flattened.
  */
 const pluginsMap = {
+    'postcss-import': postcssImport,
+    'postcss-custom-media': postcssCustomMedia,
+    'postcss-nesting': postcssNesting,
     'autoprefixer': autoprefixer,
 };
 
 /**
- * Attempts to create a PostCSS Processor with the given plugins and options.
+ * @type {PluginMap} The minify plugins, run after the purge.
+ */
+const minifyPluginsMap = {
+    'cssnano': cssnano,
+};
+
+/**
+ * Creates a PostCSS Processor with the given plugins and options.
  *
  * @param {PluginCollection} pluginsListOrMap - A list or map of plugins.
  *     If a map of plugins, the plugin name looks up `options`.
  * @param {PostCSSOptions}   options - The PostCSS wrapper options.
  *
- * @returns {Processor|null}
+ * @returns {Processor}
  */
 function createProcessor(pluginsListOrMap, options)
 {
-    if (!postcss) {
-        return null;
-    }
-
     const plugins = parsePlugins(pluginsListOrMap, options);
 
     return postcss(plugins);
@@ -112,28 +99,17 @@ function parsePlugins(pluginsListOrMap, options)
         return pluginsListOrMap;
     }
 
-    /** @type {PluginList} */
-    const plugins = [];
-
-    for (let [ name, plugin ] of Object.entries(pluginsListOrMap)) {
-        if (name in options) {
-            plugin = plugin[name](options[name]);
-        }
-
-        plugins.push(plugin);
-    }
-
-    return plugins;
+    return Object.entries(pluginsListOrMap).map(
+        ([ name, plugin ]) => plugin(options[name])
+    );
 }
 
 export default postcss;
 
 export {
-    autoprefixer,
     createProcessor,
+    minifyPluginsMap,
     parsePlugins,
-    pluginsList,
     pluginsMap,
     postcss,
-    supportsPostCSS,
 };
