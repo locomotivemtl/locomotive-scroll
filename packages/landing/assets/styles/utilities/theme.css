@@ -1,0 +1,29 @@
+/* ==========================================================================
+   Utilities / Theme
+   ========================================================================== */
+
+:root {
+    --color-text: var(--color-blue);
+    --color-background: var(--color-white);
+}
+
+[data-theme="white"] {
+    color: var(--color-text);
+    background-color: var(--color-background);
+}
+
+[data-theme="blue"] {
+    --color-text: var(--color-white);
+    --color-background: var(--color-blue);
+
+    color: var(--color-text);
+    background-color: var(--color-background);
+}
+
+[data-theme="black"] {
+    --color-text: var(--color-white);
+    --color-background: var(--color-black);
+
+    color: var(--color-text);
+    background-color: var(--color-background);
+}
