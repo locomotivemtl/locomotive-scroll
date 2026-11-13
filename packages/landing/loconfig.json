@@ -1,6 +1,5 @@
 {
     "paths": {
-        "url": "locomotive-scroll-website.test",
         "src": "./assets",
         "dest": "../../www/landing",
         "images": {
