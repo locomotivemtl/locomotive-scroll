@@ -43,19 +43,6 @@ export default function (eleventyConfig) {
         },
     });
 
-    twig.extendFilter('log', function (value) {
-        return '<pre>' + JSON.stringify(value) + '</pre>';
-    });
-
-    twig.extendFilter('slug', function (str) {
-        return str
-            .toLowerCase() // Convert the string to lowercase
-            .replace(/\s+/g, '-') // Replace spaces with dashes
-            .replace(/[^\w-]/g, '') // Remove non-word characters
-            .replace(/--+/g, '-') // Replace consecutive dashes with a single dash
-            .trim(); // Trim any leading or trailing dashes
-    });
-
     twig.extendFilter('asset', function (url) {
         const hash = assetHashes[url];
 

@@ -32,6 +32,8 @@ content: [
 ],
 ```
 
+> ⚠️ PurgeCSS reads the sources, not the rendered HTML, so the stylesheet hash is known before the templates render. Write every grid and spacing class in full: a class assembled in Twig, such as `u-gc-{{ start }}/{{ end }}`, never appears in a source and is purged without warning. Put the full class name in the view or in a `data/*.json` file instead.
+
 ## Usage
 
 The column layouts are set in [`objects/grid.css`](../assets/styles/objects/grid.css). You can create multiple column layouts depending on media queries:
