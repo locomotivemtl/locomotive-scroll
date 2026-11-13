@@ -1,3 +1,4 @@
+import { fileURLToPath } from 'node:url';
 import { defineConfig } from 'astro/config';
 import tailwindcss from '@tailwindcss/vite';
 import postcssTailwindShortcuts from '@locomotivemtl/postcss-tailwind-shortcuts';
@@ -25,11 +26,13 @@ export default defineConfig({
         css: {
             preprocessorOptions: {
                 scss: {
+                    // Sass ignores the tsconfig paths Astro 7 hands to Vite, so @styles can't resolve here
+                    loadPaths: [fileURLToPath(new URL('./src/styles', import.meta.url))],
                     additionalData: `
                         @use "sass:math";
                         @use "sass:list";
-                        @use "@styles/tools/maths" as *;
-                        @use "@styles/tools/functions" as *;
+                        @use "tools/maths" as *;
+                        @use "tools/functions" as *;
                     `
                 }
             },

@@ -27,7 +27,7 @@
     },
     "dependencies": {
         "@tailwindcss/vite": "^4.3.5",
-        "astro": "^5.18.1",
+        "astro": "^7.4.12",
         "locomotive-scroll": "*",
         "nanostores": "^0.10.3",
         "sass": "^1.77.4",
