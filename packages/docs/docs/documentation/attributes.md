@@ -108,13 +108,50 @@ Where:
 - Element moves in opposite direction
 - Total displacement = 0.6× container height
 
+### Triggers follow the displayed position
+
+On an element with `data-scroll-speed`, `is-inview`, [`data-scroll-css-progress`](#data-scroll-css-progress), [`data-scroll-event-progress`](#data-scroll-event-progress) and [`data-scroll-call`](#data-scroll-call) follow where the element is displayed, not its natural position in the page. The element enters and leaves when it actually appears and disappears, and its [`data-scroll-offset`](#data-scroll-offset) applies to its displayed edges.
+
+When the parallax is off (reduced motion, or a touch device without touch speed), they follow the natural position again.
+
+:::note
+Before 5.1, triggers followed the natural position: an element with `data-scroll-speed="0.5"` could become `is-inview` half a viewport before it appeared. To keep that behavior during a migration, set the [`legacyTriggers`](options.md#legacytriggers) option, deprecated and removed in 6.0.
+:::
+
 ### Touch devices
 
-Parallax is **automatically disabled on touch devices** by default for better native scrolling performance. To enable it on mobile/tablets, add the [`data-scroll-enable-touch-speed`](#data-scroll-enable-touch-speed) attribute.
+Parallax is **automatically disabled on touch devices** by default for better native scrolling performance. To enable it on mobile/tablets, add the [`data-scroll-enable-touch-speed`](#data-scroll-enable-touch-speed) attribute to an element, or set the [`enableTouchSpeed`](options.md#enabletouchspeed) option for every element.
+
+### Reduced motion
+
+When the user prefers reduced motion (`prefers-reduced-motion: reduce`), the parallax is turned off and elements stay on their natural position, even with `data-scroll-enable-touch-speed` or `enableTouchSpeed`. This follows Lenis's [`respectReducedMotion`](options.md#lenisoptions) option, `true` by default. Set it to `false` to keep the parallax.
 
 :::tip
 Start with small values like `0.1` to `0.5` for subtle effects. The value is now relative to container size, so effects scale naturally with viewport changes.
 :::
+
+## data-scroll-delay
+
+-   **Type:** `number`
+
+Makes the element trail behind the scroll, then land where it would be without delay. The value is a lerp factor between `0` and `1`, both excluded: the lower the value, the longer the trail. Start around `0.1`. Any other value is ignored.
+
+```html
+<!-- Trails behind the scroll -->
+<div data-scroll data-scroll-delay="0.1"></div>
+
+<!-- Delayed parallax -->
+<div data-scroll data-scroll-speed="0.3" data-scroll-delay="0.1"></div>
+```
+
+-   **With [`data-scroll-speed`](#data-scroll-speed)**, the parallax itself is delayed, as in v4.
+-   **Without `data-scroll-speed`**, or with a low or negative speed, the element still trails by a minimum amount, so the delay is always visible.
+-   **The trail is capped** at about a quarter of the viewport, on top of the parallax, so a fast scroll keeps it bounded.
+-   **The delay is frame-rate independent**: it feels the same at 60 Hz and 120 Hz.
+
+The delay only moves the element. `is-inview`, [`data-scroll-call`](#data-scroll-call), progress events and [`--progress`](#data-scroll-css-progress) ignore the trail: they follow the position the element lands on. Styles driven by the element's own `--progress` don't trail either.
+
+Like the parallax, the delay is turned off under [reduced motion](#reduced-motion) and on touch devices, unless [`data-scroll-enable-touch-speed`](#data-scroll-enable-touch-speed) or the [`enableTouchSpeed`](options.md#enabletouchspeed) option is set.
 
 ## data-scroll-call
 
@@ -182,7 +219,13 @@ Specifies the target for the `data-scroll-to` action. If the element is a link, 
 
 -   **Type:** `number`
 
-Specifies the scroll offset for the `data-scroll-to` action. The value is a number that represents the scroll padding top. It determines the vertical offset from the top of the target element when scrolling to it.
+Specifies the scroll offset for the `data-scroll-to` action, in pixels. The value is added to the target position: a negative value stops before the target, a positive one after it. For example, `-80` keeps the target below an 80px fixed header.
+
+The target's [`scroll-margin`](https://developer.mozilla.org/en-US/docs/Web/CSS/scroll-margin) and the scroll container's [`scroll-padding`](https://developer.mozilla.org/en-US/docs/Web/CSS/scroll-padding) are also taken into account. If you already set them, you don't need `data-scroll-to-offset` for the same gap: both offsets add up.
+
+```html
+<a href="#section" data-scroll-to data-scroll-to-offset="-80">Go to section</a>
+```
 
 ## data-scroll-to-duration
 
@@ -200,7 +243,9 @@ Please note that by using the `data-scroll-ignore-fold` attribute, the element's
 
 By default, the parallax effect (`data-scroll-speed`) is **automatically disabled on touch devices** to ensure smooth scrolling performance. Touch devices are detected using `'ontouchstart' in window || navigator.maxTouchPoints > 0`.
 
-If you want to enable the parallax effect on touch devices, add the `data-scroll-enable-touch-speed` attribute to the element.
+If you want to enable the parallax effect on touch devices, add the `data-scroll-enable-touch-speed` attribute to the element. It also enables [`data-scroll-delay`](#data-scroll-delay). To enable it for every element, use the [`enableTouchSpeed`](options.md#enabletouchspeed) option instead.
+
+Under [reduced motion](#reduced-motion), the parallax stays off even with this attribute.
 
 **Example:**
 
