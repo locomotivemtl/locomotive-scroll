@@ -48,8 +48,8 @@ Then update the following files to suit your project:
 * [`package-lock.json`](package-lock.json):
   * Package name: `@locomotivemtl/boilerplate`
 * [`loconfig.json`](loconfig.json):
-  * BrowserSync proxy URL: `locomotive-boilerplate.test`
-    Remove `paths.url` to use BrowserSync's built-in server which uses `paths.dest`.
+  * BrowserSync serves `paths.dest` with its built-in server.
+    Set `paths.url` to proxy an existing local server instead.
   * View path: `./views/boilerplate/template`
 * [`environment.js`](assets/scripts/utils/environment.js):
   * Application name: `Boilerplate`

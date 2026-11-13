@@ -65,20 +65,19 @@ If any configuration options vary depending on whether your project is
 running on your computer, a collaborator's computer, or on a web server,
 these values should be stored in a `loconfig.local.json` file.
 
-In fresh copy of the boilerplate, the root directory of your project
-will contain a [`loconfig.example.json`](../loconfig.example.json) file.
+It is merged over `loconfig.json`. For example, to proxy an existing
+local server instead of serving `paths.dest`:
 
-> 💡 The boilerplate's default example customizes the development server
-> to use a custom SSL certificate.
-
-That file can be copied to `loconfig.local.json` and customized to suit
-your local environment.
+```json
+{
+    "paths": {
+        "url": "localhost:8080"
+    }
+}
+```
 
 Your `loconfig.local.json` _should not_ be committed to your project's
 source control.
-
-> 💡 If you are developing with a team, you may wish to continue
-> including a `loconfig.example.json` file with your project.
 
 ### Development Configuration
 
@@ -118,13 +117,13 @@ automatically expanded when tasks process paths.
 
 The `paths.url` option defines the base URI of the project.
 
-By default, it is used by the development server as a proxy
-for an existing virtual host.
+It is not set by default. When set, the development server proxies it
+instead of serving [`paths.dest`](#pathsdest-option).
 
 ```json
 {
     "paths": {
-        "url": "locomotive-boilerplate.test"
+        "url": "localhost:8080"
     }
 }
 ```
@@ -181,10 +180,7 @@ the `server` option:
 {
     "server": {
         "open": true,
-        "https": {
-            "key": "~/.config/valet/Certificates/{% paths.url %}.key",
-            "cert": "~/.config/valet/Certificates/{% paths.url %}.crt"
-        }
+        "port": 3000
     }
 }
 ```
