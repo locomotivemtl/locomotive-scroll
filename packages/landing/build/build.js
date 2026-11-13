@@ -10,8 +10,6 @@ await compileScripts();
 await compileSVGs();
 await bumpVersions();
 
-// PurgeCSS reads the generated HTML, which inlines critical.css: styles, HTML, purge, then HTML again.
-await compileStyles(null, null, false);
+// PurgeCSS reads the generated HTML.
 await buildEleventy();
 await compileStyles();
-await buildEleventy();

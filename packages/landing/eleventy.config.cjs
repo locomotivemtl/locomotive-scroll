@@ -76,14 +76,6 @@ module.exports = function(eleventyConfig) {
         return version.split('.').slice(0, 2).join('.');
     });
 
-    twig.extendFunction("critical_css", function() {
-        try {
-            return fs.readFileSync('../../www/landing/assets/styles/critical.css', 'utf-8')
-        } catch(error) {
-            return '';
-        }
-    });
-
     // Configure and return Eleventy settings
     return {
         templateFormats: ['twig'],

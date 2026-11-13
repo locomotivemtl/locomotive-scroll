@@ -44,10 +44,6 @@
         ],
         "styles": [
             {
-                "infile": "{% paths.styles.src %}/critical.scss",
-                "outfile": "{% paths.styles.dest %}/critical.css"
-            },
-            {
                 "infile": "{% paths.styles.src %}/main.scss",
                 "outfile": "{% paths.styles.dest %}/main.css"
             }
