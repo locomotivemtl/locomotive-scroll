@@ -5,8 +5,12 @@ import { version } from './package.json';
 import type {
     ILenisScrollToOptions,
     ILocomotiveScrollOptions,
+    IScrollElementCallbacksValues,
     lenisTargetScrollTo,
 } from './types';
+
+/** Longest frame step in seconds, so a frame after a hidden tab doesn't jump */
+const MAX_DELTA_TIME = 0.1;
 
 /**
  * Locomotive Scroll
@@ -32,6 +36,8 @@ export default class LocomotiveScroll {
     private autoStart?: boolean;
     private enableTouchSpeed!: boolean;
     private isTouchDevice: boolean;
+    private callbacksValues: IScrollElementCallbacksValues;
+    private lastRenderTime: number | null = null;
     private scrollCallback?: ScrollCallback;
     private initCustomTicker?: (render: () => void) => void;
     private destroyCustomTicker?: (render: () => void) => void;
@@ -77,6 +83,14 @@ export default class LocomotiveScroll {
         // Detect if device has touch capability
         this.isTouchDevice =
             'ontouchstart' in window || navigator.maxTouchPoints > 0;
+
+        // Values passed to every scroll element, reused to avoid an allocation per frame
+        this.callbacksValues = {
+            currentScroll: 0,
+            smooth: !this.isTouchDevice,
+            reducedMotion: false,
+            deltaTime: 0,
+        };
 
         // Init
         this._init();
@@ -249,11 +263,8 @@ export default class LocomotiveScroll {
      * All dimension values are already up-to-date when this executes.
      */
     private _onResize() {
-        this.coreInstance?.onResize({
-            currentScroll: this.lenisInstance?.scroll ?? 0,
-            smooth: !this.isTouchDevice,
-            reducedMotion: this.lenisInstance?.prefersReducedMotion ?? false,
-        });
+        this._updateCallbacksValues();
+        this.coreInstance?.onResize(this.callbacksValues);
     }
 
     /**
@@ -262,11 +273,26 @@ export default class LocomotiveScroll {
     private _onRender() {
         this.lenisInstance?.raf(Date.now());
 
-        this.coreInstance?.onRender({
-            currentScroll: this.lenisInstance?.scroll ?? 0,
-            smooth: !this.isTouchDevice,
-            reducedMotion: this.lenisInstance?.prefersReducedMotion ?? false,
-        });
+        const now = performance.now();
+        this.callbacksValues.deltaTime =
+            this.lastRenderTime === null
+                ? 0
+                : Math.min((now - this.lastRenderTime) / 1000, MAX_DELTA_TIME);
+        this.lastRenderTime = now;
+
+        this._updateCallbacksValues();
+        this.coreInstance?.onRender(this.callbacksValues);
+    }
+
+    /**
+     * Sync the values shared with scroll elements from Lenis.
+     *
+     * @private
+     */
+    private _updateCallbacksValues() {
+        this.callbacksValues.currentScroll = this.lenisInstance?.scroll ?? 0;
+        this.callbacksValues.reducedMotion =
+            this.lenisInstance?.prefersReducedMotion ?? false;
     }
 
     /**
@@ -305,6 +331,8 @@ export default class LocomotiveScroll {
         this.lenisInstance?.start();
 
         this.rafPlaying = true;
+        // The first frame after a start has no previous frame to measure from
+        this.lastRenderTime = null;
         this.initCustomTicker
             ? this.initCustomTicker(this._onRenderBind)
             : this._raf();

@@ -74,6 +74,11 @@ describe('Core', () => {
             expect(core()._checkRafNeeded($el)).toBe(false);
         });
 
+        it('is true for a scroll delay', () => {
+            const $el = createElement($root, { scrollDelay: '0.1' });
+            expect(core()._checkRafNeeded($el)).toBe(true);
+        });
+
         it('is true for a custom offset', () => {
             const $el = createElement($root, { scrollOffset: '10%,0' });
             expect(core()._checkRafNeeded($el)).toBe(true);

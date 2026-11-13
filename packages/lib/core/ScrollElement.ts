@@ -13,6 +13,7 @@
  * - scrollSpeed - Add a scroll multiplicator to create a parallax effect
  * - scrollRepeat - Repeat the option to trigger animation each time the element is intersected
  * - scrollCall - Call a custom event when the element is intersected
+ * - scrollDelay - Lerp factor that makes the parallax lag behind the scroll
  */
 
 import type Lenis from 'lenis';
@@ -24,11 +25,35 @@ import type {
     IScrollElementOptions,
     scrollOrientation,
 } from '../types';
-import { clamp, closestNumber, mapRange, normalize } from '../utils/maths';
+import {
+    clamp,
+    closestNumber,
+    damp,
+    mapRange,
+    normalize,
+} from '../utils/maths';
 
 /** Constants */
 const INVIEW_CLASS = 'is-inview';
 const PROGRESS_CSS_VAR = '--progress';
+/** Distance in px under which a delayed element snaps to its target */
+const DELAY_SETTLE_EPSILON = 0.01;
+/** Minimum share of the element's screen motion that trails, so a delay works without data-scroll-speed */
+const DELAY_TRAIL_FLOOR = 0.25;
+/** Soft limit of the trail, as a fraction of the viewport */
+const DELAY_TRAIL_LIMIT = 0.25;
+
+/**
+ * Parse `data-scroll-delay` as a lerp factor.
+ *
+ * @param {string} [value] - Attribute value.
+ *
+ * @returns {?number} - Factor between 0 and 1 excluded, null otherwise.
+ */
+function parseScrollDelay(value?: string): number | null {
+    const delay = parseFloat(value ?? '');
+    return delay > 0 && delay < 1 ? delay : null;
+}
 
 export default class ScrollElement {
     public $el: HTMLElement;
@@ -42,12 +67,16 @@ export default class ScrollElement {
     private metrics: IScrollElementMetrics;
     private currentScroll: number;
     private translateValue: number;
+    private targetTranslateValue: number;
     private progress: number;
     private lastProgress: number | null;
     private isInview: boolean;
     private isInteractive: boolean;
     private isInFold: boolean;
     private isFirstResize: boolean;
+    private isFirstRender: boolean;
+    private isSettling: boolean;
+    private delayedScroll: number;
 
     private subscribeElementUpdateFn: (scrollElement: ScrollElement) => void;
     private unsubscribeElementUpdateFn: (scrollElement: ScrollElement) => void;
@@ -131,6 +160,7 @@ export default class ScrollElement {
             scrollEnableTouchSpeed:
                 enableTouchSpeed ||
                 this.$el.dataset['scrollEnableTouchSpeed'] !== undefined,
+            scrollDelay: parseScrollDelay(this.$el.dataset['scrollDelay']),
         };
 
         // Limits
@@ -149,8 +179,9 @@ export default class ScrollElement {
         // Scroll Values
         this.currentScroll = this.lenisInstance.scroll;
 
-        // Parallax
+        // Parallax: translateValue is the applied value, it trails targetTranslateValue with scrollDelay
         this.translateValue = 0;
+        this.targetTranslateValue = 0;
 
         // Progress
         this.progress = 0;
@@ -162,6 +193,12 @@ export default class ScrollElement {
         this.isAlreadyIntersected = false;
         this.isInFold = false;
         this.isFirstResize = true;
+        // The delay starts from the target, as v4 forced it on init, instead of sliding in from 0
+        this.isFirstRender = true;
+        // Out of the RAF margin but still subscribed until the delayed translation lands
+        this.isSettling = false;
+        // Scroll value the element follows with scrollDelay
+        this.delayedScroll = this.currentScroll;
 
         // Cache orientation-dependent functions to avoid repeated conditionals
         this.getWindowSize =
@@ -212,45 +249,46 @@ export default class ScrollElement {
         currentScroll,
         smooth,
         reducedMotion,
+        deltaTime,
     }: IScrollElementCallbacksValues) {
         const wSize = this.getWindowSize();
         this.currentScroll = currentScroll;
         this._computeProgress();
 
-        // Parallax
-        if (
-            this.attributes.scrollSpeed &&
-            !Number.isNaN(this.attributes.scrollSpeed)
-        ) {
-            // Reduced motion wins over data-scroll-enable-touch-speed
-            if (
-                reducedMotion ||
-                (!this.attributes.scrollEnableTouchSpeed && !smooth)
-            ) {
-                if (this.translateValue) {
-                    this.$el.style.transform = `translate3d(0, 0, 0)`;
-                }
-                this.translateValue = 0;
-
-                // if mousewheel or smooth enabled
-            } else {
-                // Check fold condition
-                if (this.isInFold) {
-                    const progress = Math.max(0, this.progress);
-                    this.translateValue =
-                        progress * wSize * this.attributes.scrollSpeed * -1;
-                } else {
-                    const progress = mapRange(0, 1, -1, 1, this.progress);
-                    this.translateValue =
-                        progress * wSize * this.attributes.scrollSpeed * -1;
-                }
-
-                this.$el.style.transform =
-                    this.scrollOrientation === 'vertical'
-                        ? `translate3d(0, ${this.translateValue}px, 0)`
-                        : `translate3d(${this.translateValue}px, 0, 0)`;
-            }
+        if (!this._getParallaxSpeed() && !this.attributes.scrollDelay) {
+            return;
         }
+
+        // Reduced motion wins over data-scroll-enable-touch-speed
+        if (
+            reducedMotion ||
+            (!this.attributes.scrollEnableTouchSpeed && !smooth)
+        ) {
+            if (this.translateValue) {
+                this.$el.style.transform = `translate3d(0, 0, 0)`;
+            }
+            this.translateValue = 0;
+            this.targetTranslateValue = 0;
+            this.isFirstRender = true;
+            this._stopSettling();
+            return;
+        }
+
+        this.targetTranslateValue = this._getParallaxTranslate(
+            this.progress,
+            wSize
+        );
+
+        if (this.attributes.scrollDelay) {
+            this._applyDelay(this.attributes.scrollDelay, wSize, deltaTime);
+        } else {
+            this.translateValue = this.targetTranslateValue;
+        }
+
+        this.$el.style.transform =
+            this.scrollOrientation === 'vertical'
+                ? `translate3d(0, ${this.translateValue}px, 0)`
+                : `translate3d(${this.translateValue}px, 0, 0)`;
     }
 
     /**
@@ -295,6 +333,13 @@ export default class ScrollElement {
         }
 
         this.isInteractive = true;
+
+        // A settling element is still subscribed
+        if (this.isSettling) {
+            this.isSettling = false;
+            return;
+        }
+
         this.subscribeElementUpdateFn(this);
     }
 
@@ -308,11 +353,151 @@ export default class ScrollElement {
         }
 
         this.isInteractive = false;
-        this.unsubscribeElementUpdateFn(this);
+
+        // Keep rendering until the delayed translation reaches its target
+        if (
+            this.attributes.scrollDelay &&
+            Math.abs(this.targetTranslateValue - this.translateValue) >
+                DELAY_SETTLE_EPSILON
+        ) {
+            this.isSettling = true;
+        } else {
+            this.unsubscribeElementUpdateFn(this);
+        }
 
         // Force progress to progress limit when the element is out
         this.lastProgress !== null &&
             this._computeProgress(closestNumber([0, 1], this.lastProgress));
+    }
+
+    /**
+     * Move translateValue toward targetTranslateValue by following a delayed scroll.
+     *
+     * The parallax is computed on the delayed scroll. When it trails less than
+     * DELAY_TRAIL_FLOOR of the screen motion, a share of the page scroll trails too.
+     *
+     * @private
+     *
+     * @param {number} factor    - Lerp factor from data-scroll-delay.
+     * @param {number} wSize     - Viewport size on the scroll axis.
+     * @param {number} deltaTime - Time elapsed since the last frame, in seconds.
+     */
+    private _applyDelay(factor: number, wSize: number, deltaTime: number) {
+        if (this.isFirstRender) {
+            this.isFirstRender = false;
+            this.delayedScroll = this.currentScroll;
+        } else {
+            this.delayedScroll = damp(
+                this.delayedScroll,
+                this.currentScroll,
+                factor,
+                deltaTime
+            );
+        }
+
+        const trailShare = Math.max(
+            0,
+            DELAY_TRAIL_FLOOR - this._getParallaxShare(wSize)
+        );
+        const trailLimit = DELAY_TRAIL_LIMIT * wSize;
+
+        // Bound the lag too, so the element never waits at the limit once the scroll stops
+        if (trailShare && trailLimit) {
+            const lagLimit = (1.5 * trailLimit) / trailShare;
+            this.delayedScroll =
+                this.currentScroll -
+                clamp(
+                    -lagLimit,
+                    lagLimit,
+                    this.currentScroll - this.delayedScroll
+                );
+        }
+
+        if (
+            Math.abs(this.currentScroll - this.delayedScroll) <=
+            DELAY_SETTLE_EPSILON
+        ) {
+            this.delayedScroll = this.currentScroll;
+            this.translateValue = this.targetTranslateValue;
+            this._stopSettling();
+            return;
+        }
+
+        const trail = trailShare * (this.currentScroll - this.delayedScroll);
+        const delayedProgress = clamp(
+            0,
+            1,
+            normalize(
+                this.intersection.start,
+                this.intersection.end,
+                this.delayedScroll
+            )
+        );
+        this.translateValue =
+            (trailLimit ? trailLimit * Math.tanh(trail / trailLimit) : trail) +
+            this._getParallaxTranslate(delayedProgress, wSize);
+    }
+
+    /**
+     * Parallax speed from data-scroll-speed, null when it sets no parallax.
+     *
+     * @private
+     */
+    private _getParallaxSpeed(): number | null {
+        const { scrollSpeed } = this.attributes;
+        return scrollSpeed && !Number.isNaN(scrollSpeed) ? scrollSpeed : null;
+    }
+
+    /**
+     * Parallax translation for a progress, 0 without data-scroll-speed.
+     *
+     * @private
+     *
+     * @param {number} progress - Element progress.
+     * @param {number} wSize    - Viewport size on the scroll axis.
+     */
+    private _getParallaxTranslate(progress: number, wSize: number): number {
+        const scrollSpeed = this._getParallaxSpeed();
+        if (!scrollSpeed) {
+            return 0;
+        }
+
+        if (this.isInFold) {
+            return Math.max(0, progress) * wSize * scrollSpeed * -1;
+        }
+        return mapRange(0, 1, -1, 1, progress) * wSize * scrollSpeed * -1;
+    }
+
+    /**
+     * Parallax px per scroll px, negative when the element moves slower than the page.
+     *
+     * @private
+     *
+     * @param {number} wSize - Viewport size on the scroll axis.
+     */
+    private _getParallaxShare(wSize: number): number {
+        const scrollSpeed = this._getParallaxSpeed();
+        if (!scrollSpeed) {
+            return 0;
+        }
+
+        const range = this.intersection.end - this.intersection.start;
+        const progressScale = this.isInFold ? 1 : 2;
+        return (progressScale * wSize * scrollSpeed) / range;
+    }
+
+    /**
+     * Unsubscribe a settling element from the RAF.
+     *
+     * @private
+     */
+    private _stopSettling() {
+        if (!this.isSettling) {
+            return;
+        }
+
+        this.isSettling = false;
+        this.unsubscribeElementUpdateFn(this);
     }
 
     /**

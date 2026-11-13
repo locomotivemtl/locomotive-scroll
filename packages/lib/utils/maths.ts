@@ -62,3 +62,24 @@ export function closestNumber(array: number[], target: number): number {
         return Math.abs(curr - target) < Math.abs(prev - target) ? curr : prev;
     });
 }
+
+/**
+ * Frame rate independent lerp (ex: damp(0, 100, 0.1, 1 / 60) --> 10).
+ *
+ * @param {number} current   - Current value.
+ * @param {number} target    - Target value.
+ * @param {number} factor    - Lerp factor applied per frame at 60 fps.
+ * @param {number} deltaTime - Time elapsed since the last frame, in seconds.
+ *
+ * @returns {number} - Value moved toward the target.
+ */
+export function damp(
+    current: number,
+    target: number,
+    factor: number,
+    deltaTime: number
+): number {
+    return (
+        current + (target - current) * (1 - (1 - factor) ** (deltaTime * 60))
+    );
+}

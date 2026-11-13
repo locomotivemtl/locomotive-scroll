@@ -40,6 +40,41 @@ import Layout from '@layouts/Layout.astro';
 
             <div class="c-scroll_section">
                 <div class="u-whitespace-nowrap">
+                    <h2 style="font-size: 3vw">data-scroll-delay</h2>
+                </div>
+            </div>
+            <div class="c-scroll_section -centered -row -full -parallax" style="font-size: 2vw">
+                <div class="c-scroll_box" style="background-color: var(--color-2)" data-scroll data-scroll-enable-touch-speed data-scroll-speed=".5">
+                    <p>.5</p>
+                </div>
+                <div class="c-scroll_box" style="background-color: var(--color-3); color:white;" data-scroll data-scroll-enable-touch-speed data-scroll-speed=".5" data-scroll-delay=".2">
+                    <p>.5 · .2</p>
+                </div>
+                <div class="c-scroll_box" style="background-color: var(--color-4); color:white;" data-scroll data-scroll-enable-touch-speed data-scroll-speed=".5" data-scroll-delay=".1">
+                    <p>.5 · .1</p>
+                </div>
+                <div class="c-scroll_box" style="background-color: var(--color-5); color:white;" data-scroll data-scroll-enable-touch-speed data-scroll-speed=".5" data-scroll-delay=".05">
+                    <p>.5 · .05</p>
+                </div>
+            </div>
+            <div class="c-scroll_section -centered -row -full -parallax" style="font-size: 2vw">
+                <div class="c-scroll_box" style="background-color: var(--color-2)" data-scroll data-scroll-enable-touch-speed>
+                    <p>0</p>
+                </div>
+                <div class="c-scroll_box" style="background-color: var(--color-3); color:white;" data-scroll data-scroll-enable-touch-speed data-scroll-delay=".2">
+                    <p>.2</p>
+                </div>
+                <div class="c-scroll_box" style="background-color: var(--color-4); color:white;" data-scroll data-scroll-enable-touch-speed data-scroll-delay=".1">
+                    <p>.1</p>
+                </div>
+                <div class="c-scroll_box" style="background-color: var(--color-5); color:white;" data-scroll data-scroll-enable-touch-speed data-scroll-delay=".05">
+                    <p>.05</p>
+                </div>
+            </div>
+
+
+            <div class="c-scroll_section">
+                <div class="u-whitespace-nowrap">
                     <h2 style="font-size: 3vw">data-scroll-class</h2>
                 </div>
             </div>

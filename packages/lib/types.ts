@@ -97,6 +97,7 @@ export interface IScrollElementOptions {
  *  @property {?string} scrollCall              - Call a custom event when the element is intersected.
  *  @property {boolean} scrollIgnoreFold        - Ignore fold progress remapping.
  *  @property {boolean} scrollEnableTouchSpeed  - Enable parallax on touch devices.
+ *  @property {?number} scrollDelay             - Lerp factor that delays the parallax, between 0 and 1 excluded.
  */
 export interface IScrollElementAttributes {
     scrollClass: string;
@@ -109,6 +110,7 @@ export interface IScrollElementAttributes {
     scrollCall: string | null;
     scrollIgnoreFold: boolean;
     scrollEnableTouchSpeed: boolean;
+    scrollDelay: number | null;
 }
 
 /**
@@ -141,11 +143,13 @@ export interface IScrollElementMetrics {
  *  @property {number}  currentScroll - Scroll value returned by Lenis.
  *  @property {boolean} smooth        - Whether parallax should be enabled (false on touch devices).
  *  @property {boolean} reducedMotion - Whether Lenis honors `prefers-reduced-motion: reduce`. Disables parallax.
+ *  @property {number}  deltaTime     - Time elapsed since the last frame, in seconds.
  */
 export interface IScrollElementCallbacksValues {
     currentScroll: number;
     smooth: boolean;
     reducedMotion: boolean;
+    deltaTime: number;
 }
 
 /**
