@@ -29,7 +29,6 @@ Locomotive Scroll v5 is simpler and more performant than v4, but it requires som
 -   ❌ **`data-scroll-section`** — No longer needed for performance
 -   ❌ **Custom scrollbar** — Use Lenis scrollbar or native scrollbar
 -   ❌ **`data-scroll-sticky`** — Use CSS `position: sticky` instead
--   ❌ **`data-scroll-delay`** — No longer available
 -   ❌ **`data-scroll-direction`** — Parallax follows scroll orientation
 -   ❌ **`data-scroll-target`** — No longer available
 
@@ -155,7 +154,6 @@ console.log(scroll.lenisInstance.velocity); // Get speed
 | `data-scroll-container` | ❌ Remove it (not needed)     |
 | `data-scroll-section`   | ❌ Remove it (not needed)     |
 | `data-scroll-sticky`    | Use CSS `position: sticky`    |
-| `data-scroll-delay`     | ❌ Not available              |
 | `data-scroll-direction` | ❌ Follows scroll orientation |
 | `data-scroll-target`    | ❌ Not available              |
 
@@ -167,6 +165,7 @@ console.log(scroll.lenisInstance.velocity); // Get speed
 | `data-scroll-call`     | Triggers ModularJS method             | Now triggers **native CustomEvent**                                    |
 | `data-scroll-offset`   | `"bottom,top"` format                 | ✅ Same format                                                         |
 | `data-scroll-position` | Based on window position              | Now based on **Lenis scroll container** position                       |
+| `data-scroll-delay`    | Lerp factor that delays the parallax  | ✅ **Back in 5.1** with the same lerp factor, frame-rate independent, also works without `data-scroll-speed` (see [`data-scroll-delay`](../documentation/attributes.md#data-scroll-delay)) |
 
 ### New Attributes
 
@@ -484,7 +483,7 @@ Elements only subscribe to RAF when:
 -   [ ] Remove all `data-scroll-container` attributes
 -   [ ] Remove all `data-scroll-section` attributes
 -   [ ] Remove `data-scroll-sticky` → use CSS `position: sticky`
--   [ ] Remove `data-scroll-delay` → no replacement
+-   [ ] Keep `data-scroll-delay` (5.1+) → same lerp factor, check the feel without `data-scroll-speed`
 -   [ ] Remove `data-scroll-direction` → follows scroll orientation
 -   [ ] Remove `data-scroll-target` → no replacement
 -   [ ] Update ModularJS `data-scroll-call` → use simple event names

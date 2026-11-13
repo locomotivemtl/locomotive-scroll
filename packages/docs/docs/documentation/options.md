@@ -8,22 +8,36 @@ sidebar_position: 1
 
 -   **Type:** `object`
 
-_(Optional)_ The `lenisOptions` parameter is an optional object that allows you to configure specific settings based on some of [Lenis's instance settings](https://github.com/darkroomengineering/lenis#instance-settings):
+_(Optional)_ The `lenisOptions` parameter is passed as is to Lenis 1.3.27. Locomotive Scroll does not override any of [Lenis's settings](https://github.com/darkroomengineering/lenis/tree/v1.3.27#settings):
 
--   `wrapper` (**HTMLElement|Window**): Specifies the element that will be used as the scroll container. Defaults to `window` for full-page scrolling. Can be set to a custom element for contained scrolling (e.g., `document.querySelector('.scroll-container')`).
--   `content` (**HTMLElement**): Specifies the element that contains the content that will be scrolled, usually `wrapper`'s direct child. Defaults to `document.documentElement`. Can be set to a custom element when using a custom wrapper.
--   `lerp` (**number**): Specifies the intensity of linear interpolation (lerp) between frames, ranging from 0 to 1.
--   `duration` (**number**): Specifies the duration of the animation.
--   `orientation` (**string**): Specifies whether the scrolling is `vertical` or `horizontal`. It adds a `data-scroll-orientation` attribute on the `<html>` tag.
--   `gestureOrientation` (**boolean**): Specifies the orientation of the gestures. It can be set to `vertical`, `horizontal`, or `both`.
--   `smoothWheel` (**boolean**): Specifies whether to enable smooth scrolling for mouse wheel events.
--   `smoothTouch` (**boolean**): Specifies whether to enable smooth scrolling for touch events. Note that it is disabled by default because it is impossible to mimic the native smoothness of touch devices.
--   `wheelMultiplier` (**number**): Specifies the multiplier to use for mouse wheel events.
--   `touchMultiplier` (**number**): Specifies the multiplier to use for touch events.
--   `normalizeWheel` (**boolean**): Specifies whether to normalize wheel inputs across different browsers.
--   `easing` (**function**): Specifies the rate of change of a specific value. Our default easing is custom, but you can choose one from [Easings.net](https://easings.net/).
+-   `wrapper` (**HTMLElement|Window**, default `window`): The element used as the scroll container. Set it to a custom element for contained scrolling (see [Custom Scroll Container](#custom-scroll-container)).
+-   `content` (**HTMLElement**, default `document.documentElement`): The element that contains the scrolled content, usually `wrapper`'s direct child.
+-   `eventsTarget` (**HTMLElement|Window**, default `wrapper`): The element that listens to `wheel` and `touch` events.
+-   `smoothWheel` (**boolean**, default `true`): Smooth the scroll initiated by `wheel` events.
+-   `syncTouch` (**boolean**, default `false`): Mimic touch device scroll while allowing scroll sync. It can feel less natural than native touch scrolling.
+-   `syncTouchLerp` (**number**, default `0.075`): Linear interpolation intensity used with `syncTouch`, between 0 and 1.
+-   `touchInertiaExponent` (**number**, default `1.7`): Strength of the `syncTouch` inertia.
+-   `lerp` (**number**, default `0.1`): Linear interpolation intensity between frames, between 0 and 1. Ignored when `duration` or `easing` is set.
+-   `duration` (**number**, no default): Scroll animation duration in seconds. Setting it switches from `lerp` to `easing`. Defaults to `1` when only `easing` is set.
+-   `easing` (**function**, no default): Easing function used with `duration`. Defaults to `(t) => Math.min(1, 1.001 - Math.pow(2, -10 * t))` when only `duration` is set. You can pick one from [Easings.net](https://easings.net/).
+-   `infinite` (**boolean**, default `false`): Enable infinite scrolling.
+-   `orientation` (**string**, default `'vertical'`): Scroll orientation, `vertical` or `horizontal`. Locomotive Scroll adds a matching `data-scroll-orientation` attribute on the `<html>` tag.
+-   `gestureOrientation` (**string**, default `'vertical'`, `'both'` when `orientation` is `horizontal`): Orientation of the gestures, `vertical`, `horizontal` or `both`.
+-   `wheelMultiplier` (**number**, default `1`): Multiplier applied to mouse wheel events.
+-   `touchMultiplier` (**number**, default `1`): Multiplier applied to touch events.
+-   `autoResize` (**boolean**, default `true`): Resize the instance automatically.
+-   `prevent` (**function**): `(node) => boolean`, return `true` to stop scroll smoothing for the events that traverse `node`.
+-   `virtualScroll` (**function**): `(data) => boolean`, modify the events before they are consumed, or return `false` to ignore them.
+-   `overscroll` (**boolean**, default `true`): Enable overscroll on a nested instance, similar to CSS [`overscroll-behavior`](https://developer.mozilla.org/en-US/docs/Web/CSS/overscroll-behavior).
+-   `anchors` (**boolean|object**, default `false`): Handle anchor links. Pass an object of [`scrollTo` options](methods.md#scrolltotarget-options) to configure the scroll.
+-   `autoToggle` (**boolean**, default `false`): Start and stop automatically based on the wrapper's `overflow` property.
+-   `allowNestedScroll` (**boolean**, default `false`): Allow nested scroll.
+-   `naiveDimensions` (**boolean**, default `false`): Use a naive dimensions calculation. It has a performance impact. Replaces the deprecated `__experimental__naiveDimensions`.
+-   `stopInertiaOnNavigate` (**boolean**, default `false`): Stop the inertia when an internal link is clicked.
+-   `respectReducedMotion` (**boolean**, default `true`): Honor `prefers-reduced-motion: reduce`. Smoothing is turned off, so scroll follows the input 1:1, and programmatic scrolls, including `scrollTo`, jump instantly. Locomotive Scroll also turns off the `data-scroll-speed` parallax and `data-scroll-delay`, including on elements with `data-scroll-enable-touch-speed`. Set it to `false` to keep smoothing and parallax under reduced motion.
+-   `autoRaf` (**boolean**, default `false`): Run Lenis's own `requestAnimationFrame` loop. Locomotive Scroll already calls `lenis.raf()` from its loop, or from your [custom ticker](#initcustomticker), so you don't need it.
 
-Here's an example of using `lenisOptions` with its default values:
+Here's an example of using `lenisOptions` with its main default values:
 
 ```js
 const locomotiveScroll = new LocomotiveScroll({
@@ -31,15 +45,13 @@ const locomotiveScroll = new LocomotiveScroll({
         wrapper: window,
         content: document.documentElement,
         lerp: 0.1,
-        duration: 1.2,
         orientation: 'vertical',
         gestureOrientation: 'vertical',
         smoothWheel: true,
-        smoothTouch: false,
+        syncTouch: false,
         wheelMultiplier: 1,
-        touchMultiplier: 2,
-        normalizeWheel: true,
-        easing: (t) => Math.min(1, 1.001 - Math.pow(2, -10 * t)), // https://www.desmos.com/calculator/brs54l4xou
+        touchMultiplier: 1,
+        respectReducedMotion: true,
     },
 });
 ```
@@ -118,6 +130,38 @@ const locomotiveScroll = new LocomotiveScroll({
 setTimeout(() => {
     locomotiveScroll.start();
 }, 2000)
+```
+
+## enableTouchSpeed
+
+-   **Type:** `boolean`
+-   **Default:** `false`
+
+_(Optional)_ Enable the `data-scroll-speed` parallax and `data-scroll-delay` on touch devices for every element, as [`data-scroll-enable-touch-speed`](attributes.md#data-scroll-enable-touch-speed) does for one element. Reduced motion still turns them off (see [`respectReducedMotion`](#lenisoptions)).
+
+```js
+const locomotiveScroll = new LocomotiveScroll({
+    enableTouchSpeed: true,
+});
+```
+
+**Note:** Parallax on touch devices may impact scrolling smoothness, especially on lower-end devices. Test it on your target devices.
+
+## legacyTriggers
+
+-   **Type:** `boolean`
+-   **Default:** `false`
+
+:::warning Deprecated
+`legacyTriggers` is a transition option. It will be removed in 6.0.
+:::
+
+_(Optional)_ Since 5.1, on elements with `data-scroll-speed`, `is-inview`, `--progress`, progress events and `data-scroll-call` follow where the element is displayed, so the element enters and leaves when it actually appears and disappears. Set `legacyTriggers` to `true` to compute them on the element's natural position, as in 5.0. The parallax itself is the same either way.
+
+```js
+const locomotiveScroll = new LocomotiveScroll({
+    legacyTriggers: true,
+});
 ```
 
 ## scrollCallback

@@ -93,15 +93,20 @@ The `scrollTo(target, options)` method allows you to scroll to a specific target
 
 -   **Parameters:**
     -   `target` (_optional, number / HTMLElement / string_): The target to scroll to. It can be a `number` (scroll position), `HTMLElement` (DOM element), or `string` (CSS selector or keyword: `top`, `left`, `start`, `bottom`, `right`, `end`).
-    -   `options` (_optional, ILenisScrollToOptions_): An options object that configures the scroll behavior. The available options are based on [Lenis's scroll-to options](https://github.com/darkroomengineering/lenis#instance-methods):
-        -   `offset` (_number_): A number equivalent to `scroll-padding-top`. Specifies the offset from the top of the target element.
-        -   `lerp` (_number_): Animation lerp intensity.
-        -   `duration` (_number_): The duration of the scroll animation in seconds.
-        -   `immediate` (_boolean_): If set to `true`, it ignores the duration and easing and performs an immediate scroll.
-        -   `lock` (_boolean_): Whether or not to prevent the user from scrolling until the target is reached.
-        -   `force` (_boolean_): Reach the target even if the instance is stopped.
-        -   `onComplete` (_function_): A callback function called when the target is reached.
-        -   `easing` (_function_): A smooth scroll easing function.
+    -   `options` (_optional, ILenisScrollToOptions_): An options object passed as is to [Lenis's `scrollTo`](https://github.com/darkroomengineering/lenis/tree/v1.3.27#methods):
+        -   `offset` (_number_, default `0`): Pixels added to the target position. A negative value stops before the target. When the target is an element or a selector, its [`scroll-margin`](https://developer.mozilla.org/en-US/docs/Web/CSS/scroll-margin) and the container's [`scroll-padding`](https://developer.mozilla.org/en-US/docs/Web/CSS/scroll-padding) are taken into account too, and add up with `offset`.
+        -   `immediate` (_boolean_, default `false`): Jump to the target without animation.
+        -   `lock` (_boolean_, default `false`): Prevent the user from scrolling until the target is reached.
+        -   `force` (_boolean_, default `false`): Reach the target even if the instance is stopped.
+        -   `lerp` (_number_, defaults to the instance's `lerp`): Linear interpolation intensity, between 0 and 1. Ignored when `duration` or `easing` is set.
+        -   `duration` (_number_, defaults to the instance's `duration`): Duration of the scroll animation in seconds. Defaults to `1` when only `easing` is set.
+        -   `easing` (_function_, defaults to the instance's `easing`): Easing function used with `duration`. Defaults to `(t) => Math.min(1, 1.001 - Math.pow(2, -10 * t))` when only `duration` is set.
+        -   `onStart` (_function_): Called with the Lenis instance when the animation starts. Not called for an `immediate` scroll.
+        -   `onComplete` (_function_): Called with the Lenis instance when the target is reached.
+        -   `programmatic` (_boolean_, default `true`): Treat the scroll as initiated from code. With `false`, Lenis handles it like a user scroll: the instance's `lerp`, `duration` and `easing` no longer apply, so without your own `lerp` or `duration` it jumps to the target in one frame.
+        -   `userData` (`Record<string, unknown>`): Data attached to this scroll, readable as `lenis.userData` in [`scrollCallback`](options.md#scrollcallback) until the scroll ends.
+
+Under reduced motion (Lenis's [`respectReducedMotion`](options.md#lenisoptions), `true` by default), a programmatic `scrollTo` jumps instantly, as with `immediate: true`.
 
 By calling `scrollTo(target, options)`, Locomotive Scroll will smoothly scroll to the specified target on the page, taking into account the provided options.
 

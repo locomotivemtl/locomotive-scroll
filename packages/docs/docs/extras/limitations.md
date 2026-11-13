@@ -18,6 +18,8 @@ Due to Locomotive Scroll's reliance on the window reference and Intersection Obs
 
 Some third-party JavaScript used on websites may inject popups or modals that require scrolling. In certain cases, conflicts can arise when the default Lenis `wrapper` (typically the `window`) captures the scroll event. Normally, we can [resolve this](https://github.com/darkroomengineering/lenis#use-the-data-lenis-prevent-attribute-on-nested-scroll-elements-in-addition-we-advise-you-to-add-overscroll-behavior-contain-on-this-element) by adding the `data-lenis-prevent` data attribute to the DOM element that requires inner scrolling, such as a popup. However, this solution cannot be used when the DOM is injected dynamically.
 
+To stop scroll smoothing on one axis only, use `data-lenis-prevent-vertical` or `data-lenis-prevent-horizontal` (Locomotive Scroll 5.1 and later, which ship Lenis 1.3.27). Lenis checks the dominant axis of each gesture: a native horizontal carousel inside a vertical page can take `data-lenis-prevent-horizontal` and keep the page's vertical scroll smooth. `data-lenis-prevent-touch` and `data-lenis-prevent-wheel` do the same for one input type.
+
 Since Lenis v1.1.0, you can use the `prevent` option to manually prevent scroll smoothing based on elements traversed by events. If the function returns `true`, it will prevent the scroll from being smoothed.
 
 HTML:
