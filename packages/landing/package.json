@@ -10,8 +10,8 @@
         "npm": ">=8.0"
     },
     "scripts": {
-        "start": "node --experimental-json-modules --no-warnings build/watch.js",
-        "build": "node --experimental-json-modules --no-warnings build/build.js"
+        "start": "eleventy --serve",
+        "build": "eleventy"
     },
     "dependencies": {
         "@vercel/analytics": "^1.6.1",
@@ -25,25 +25,13 @@
     "devDependencies": {
         "@11ty/eleventy": "^3.1.8",
         "autoprefixer": "^10.4.13",
-        "browser-sync": "^3.0.2",
         "cssnano": "^9.9.0",
         "esbuild": "^0.28.2",
-        "kleur": "^4.1.5",
-        "node-notifier": "^10.0.1",
         "postcss": "^8.4.21",
         "postcss-custom-media": "^12.0.3",
         "postcss-import": "^17.0.1",
         "postcss-nesting": "^14.0.3",
         "purgecss": "^5.0.0",
-        "svg-mixer": "~2.3.14",
         "twig": "^3.0.0"
-    },
-    "overrides": {
-        "browser-sync": {
-            "ua-parser-js": "~1.0.33"
-        },
-        "svg-mixer": {
-            "postcss": "^8.4.20"
-        }
     }
 }

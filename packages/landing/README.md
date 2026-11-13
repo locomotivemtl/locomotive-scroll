@@ -8,11 +8,10 @@
 
 ## Features
 
-* Uses a custom [task runner](docs/development.md) for handling assets.
-* Uses [BrowserSync] for fast development and testing in browsers.
+* Uses [Eleventy] to render Twig views, [build assets](docs/development.md) and serve them with live reload.
 * Uses [PostCSS] to bundle native CSS, with nesting and custom media queries.
 * Uses [ESBuild] for extremely fast processing of JS/ES modules.
-* Uses [SVG Mixer] for processing SVG files and generating spritesheets.
+* Generates an SVG spritesheet from `assets/images/sprite/`.
 * Uses [ITCSS] for a sane and scalable CSS architecture.
 * Uses [Locomotive Scroll] for smooth scrolling with parallax effects.
 * Uses a custom [grid system](docs/grid.md) for layout creation.
@@ -47,10 +46,6 @@ Then update the following files to suit your project:
   * Package title: `Locomotive Boilerplate`
 * [`package-lock.json`](package-lock.json):
   * Package name: `@locomotivemtl/boilerplate`
-* [`loconfig.json`](loconfig.json):
-  * BrowserSync serves `paths.dest` with its built-in server.
-    Set `paths.url` to proxy an existing local server instead.
-  * View path: `./views/boilerplate/template`
 * [`environment.js`](assets/scripts/utils/environment.js):
   * Application name: `Boilerplate`
 * [`site.webmanifest`](www/site.webmanifest):
@@ -72,7 +67,7 @@ npm install
 ## Development
 
 ```sh
-# Start development server, watch for changes, and compile assets
+# Start the development server on localhost:3000, rebuild and reload on changes
 npm start
 
 # Compile and minify assets
@@ -87,14 +82,13 @@ Learn more about [development and building](docs/development.md).
 * [Languages and technologies](docs/technologies.md)
 * [Grid system](docs/grid.md)
 
-[BrowserSync]:       https://npmjs.com/package/browser-sync
+[Eleventy]:          https://www.11ty.dev/
 [ESBuild]:           https://npmjs.com/package/esbuild
 [ITCSS]:             https://itcss.io/
 [Locomotive Scroll]: https://npmjs.com/package/locomotive-scroll
 [modularJS]:         https://npmjs.com/package/modujs
 [modularLoad]:       https://npmjs.com/package/modularload
 [PostCSS]:           https://postcss.org/
-[SVG Mixer]:         https://npmjs.com/package/svg-mixer
 [Node]:              https://nodejs.org/
 [NPM]:               https://npmjs.com/
 [NVM]:               https://github.com/nvm-sh/nvm

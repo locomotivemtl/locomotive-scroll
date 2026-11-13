@@ -186,7 +186,6 @@ Learn more about [Locomotive Scroll][locomotive-scroll].
 
 [Autoprefixer]:      https://npmjs.com/package/autoprefixer
 [BEM]:               https://bem.info/
-[BrowserSync]:       https://npmjs.com/package/browser-sync
 [esbuild]:           https://npmjs.com/package/esbuild
 [inuitcss]:          https://github.com/inuitcss/inuitcss
 [ITCSS]:             https://itcss.io/
@@ -194,7 +193,6 @@ Learn more about [Locomotive Scroll][locomotive-scroll].
 [modularJS]:         https://npmjs.com/package/modujs
 [modularLoad]:       https://npmjs.com/package/modularload
 [PostCSS]:           https://npmjs.com/package/postcss
-[svg-mixer]:         https://npmjs.com/package/svg-mixer
 [Node]:              https://nodejs.org/
 [NPM]:               https://npmjs.com/
 [NVM]:               https://github.com/nvm-sh/nvm

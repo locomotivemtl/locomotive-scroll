@@ -22,16 +22,14 @@ The columns in [`u-grid-columns`](../assets/styles/utilities/grid-column.css) ad
 
 Depending on your project, you will need to specify all the files that include CSS classes from the grid system. These files will be scanned by [PurgeCSS] to your compiled CSS files.
 
-Example of a Charcoal project:
+The landing scans its Twig views, data files and source scripts, set in the `purge()` function of [`build/assets.js`](../build/assets.js):
 
-```jsonc
-"purgeCSS": {
-    "content": [
-        "./views/app/template/**/*.mustache",
-        "./src/App/Template/*.php",
-        "./assets/scripts/**/*" // use case: `el.classList.add('u-gc-1/2')`
-    ]
-}
+```js
+content: [
+    join(root, 'views/**/*.twig'),
+    join(root, 'data/**/*.json'),
+    join(root, 'assets/scripts/**/*.js'), // use case: `el.classList.add('u-gc-1/2')`
+],
 ```
 
 ## Usage
