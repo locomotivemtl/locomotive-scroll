@@ -36,7 +36,7 @@ export default class LocomotiveScroll {
     private autoStart?: boolean;
     private enableTouchSpeed!: boolean;
     private legacyTriggers!: boolean;
-    private isTouchDevice: boolean;
+    private coarsePointerQuery: MediaQueryList;
     private callbacksValues: IScrollElementCallbacksValues;
     private lastRenderTime: number | null = null;
     private scrollCallback?: ScrollCallback;
@@ -45,8 +45,8 @@ export default class LocomotiveScroll {
     private _onRenderBind: () => void;
     private _onResizeBind: () => void;
     private _onScrollToBind: (event: MouseEvent) => void;
+    private _onPointerChangeBind: () => void;
     private _originalOnContentResize?: () => void;
-    private _originalOnWrapperResize?: () => void;
 
     constructor({
         lenisOptions = {},
@@ -79,18 +79,22 @@ export default class LocomotiveScroll {
         this._onRenderBind = this._onRender.bind(this);
         this._onScrollToBind = this._onScrollTo.bind(this);
         this._onResizeBind = this._onResize.bind(this);
+        this._onPointerChangeBind = this._onPointerChange.bind(this);
 
         // Data
         this.rafPlaying = false;
 
-        // Detect if device has touch capability
-        this.isTouchDevice =
-            'ontouchstart' in window || navigator.maxTouchPoints > 0;
+        // The primary pointer, not touch support: a touchscreen laptop used with a mouse keeps the parallax
+        this.coarsePointerQuery = window.matchMedia('(pointer: coarse)');
+        this.coarsePointerQuery.addEventListener(
+            'change',
+            this._onPointerChangeBind
+        );
 
         // Values passed to every scroll element, reused to avoid an allocation per frame
         this.callbacksValues = {
             currentScroll: 0,
-            smooth: !this.isTouchDevice,
+            smooth: !this.coarsePointerQuery.matches,
             reducedMotion: false,
             deltaTime: 0,
         };
@@ -161,6 +165,10 @@ export default class LocomotiveScroll {
         this.stop();
         // Unbind Events
         this._unbindEvents();
+        this.coarsePointerQuery.removeEventListener(
+            'change',
+            this._onPointerChangeBind
+        );
         // Destroy Lenis
         this.lenisInstance?.destroy();
 
@@ -177,26 +185,15 @@ export default class LocomotiveScroll {
     private _bindEvents() {
         this._bindScrollToEvents();
 
-        // Hook into Lenis dimensions resize callbacks
-        // onContentResize: called when content size changes (images load, dynamic content)
-        // onWrapperResize: called when wrapper size changes (window resize, layout changes)
+        // Lenis resize() always calls onWrapperResize then onContentResize: hooking the last one runs once with both sizes up to date
         if (this.lenisInstance) {
             this._originalOnContentResize =
                 this.lenisInstance.dimensions.onContentResize.bind(
                     this.lenisInstance.dimensions
                 );
-            this._originalOnWrapperResize =
-                this.lenisInstance.dimensions.onWrapperResize.bind(
-                    this.lenisInstance.dimensions
-                );
 
             this.lenisInstance.dimensions.onContentResize = () => {
                 this._originalOnContentResize?.();
-                this._onResizeBind();
-            };
-
-            this.lenisInstance.dimensions.onWrapperResize = () => {
-                this._originalOnWrapperResize?.();
                 this._onResizeBind();
             };
         }
@@ -213,10 +210,6 @@ export default class LocomotiveScroll {
             if (this._originalOnContentResize) {
                 this.lenisInstance.dimensions.onContentResize =
                     this._originalOnContentResize;
-            }
-            if (this._originalOnWrapperResize) {
-                this.lenisInstance.dimensions.onWrapperResize =
-                    this._originalOnWrapperResize;
             }
         }
     }
@@ -263,7 +256,7 @@ export default class LocomotiveScroll {
     /**
      * Callback - Resize callback.
      *
-     * Called synchronously after Lenis updates its dimensions via onContentResize/onWrapperResize.
+     * Called synchronously after Lenis updates its dimensions via onContentResize.
      * All dimension values are already up-to-date when this executes.
      */
     private _onResize() {
@@ -272,12 +265,20 @@ export default class LocomotiveScroll {
     }
 
     /**
+     * Callback - Primary pointer change, such as a tablet attached to a keyboard.
+     */
+    private _onPointerChange() {
+        this.callbacksValues.smooth = !this.coarsePointerQuery.matches;
+    }
+
+    /**
      * Callback - Render callback.
      */
     private _onRender() {
-        this.lenisInstance?.raf(Date.now());
-
+        // Not the rAF timestamp: custom tickers call this without one, or in seconds (GSAP)
         const now = performance.now();
+        this.lenisInstance?.raf(now);
+
         this.callbacksValues.deltaTime =
             this.lastRenderTime === null
                 ? 0

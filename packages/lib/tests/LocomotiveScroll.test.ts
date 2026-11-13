@@ -1,14 +1,26 @@
 import { afterEach, beforeEach, describe, expect, it, vi } from 'vitest';
 import LocomotiveScroll from '../index';
 
-const { LenisMock } = vi.hoisted(() => {
+const { LenisMock, CoreMock } = vi.hoisted(() => {
+    class DimensionsMock {
+        onWrapperResize() {}
+        onContentResize() {}
+
+        // Same sequence as Lenis Dimensions.resize
+        resize() {
+            this.onWrapperResize();
+            this.onContentResize();
+        }
+    }
+
     class LenisMock {
         static instances: LenisMock[] = [];
 
         rootElement = document.documentElement;
         options: { orientation: string; duration?: number };
-        dimensions = { onContentResize() {}, onWrapperResize() {} };
+        dimensions = new DimensionsMock();
         scrollTo = vi.fn();
+        raf = vi.fn();
 
         constructor(options: { duration?: number } = {}) {
             this.options = { orientation: 'vertical', ...options };
@@ -17,18 +29,31 @@ const { LenisMock } = vi.hoisted(() => {
 
         on() {}
 
+        start() {}
+
+        stop() {}
+
         destroy() {}
     }
 
-    return { LenisMock };
+    class CoreMock {
+        static instances: CoreMock[] = [];
+
+        onResize = vi.fn();
+        onRender = vi.fn();
+
+        constructor() {
+            CoreMock.instances.push(this);
+        }
+
+        destroy() {}
+    }
+
+    return { LenisMock, CoreMock };
 });
 
 vi.mock('lenis', () => ({ default: LenisMock }));
-vi.mock('../core/Core', () => ({
-    default: class {
-        destroy() {}
-    },
-}));
+vi.mock('../core/Core', () => ({ default: CoreMock }));
 
 function createScrollTo(dataset: Record<string, string>): HTMLAnchorElement {
     const $link = document.createElement('a');
@@ -81,5 +106,140 @@ describe('data-scroll-to', () => {
             '#target',
             expect.objectContaining({ duration: 0.8 })
         );
+    });
+});
+
+describe('resize', () => {
+    beforeEach(() => {
+        LenisMock.instances = [];
+        CoreMock.instances = [];
+        vi.stubGlobal(
+            'requestAnimationFrame',
+            (callback: FrameRequestCallback) => {
+                callback(0);
+                return 0;
+            }
+        );
+    });
+
+    afterEach(() => {
+        vi.unstubAllGlobals();
+    });
+
+    it('resizes the core once per Lenis resize', () => {
+        new LocomotiveScroll({ autoStart: false });
+
+        LenisMock.instances[0].dimensions.resize();
+
+        expect(CoreMock.instances[0].onResize).toHaveBeenCalledTimes(1);
+    });
+});
+
+describe('render', () => {
+    beforeEach(() => {
+        LenisMock.instances = [];
+        vi.stubGlobal(
+            'requestAnimationFrame',
+            (callback: FrameRequestCallback) => {
+                callback(0);
+                return 0;
+            }
+        );
+    });
+
+    afterEach(() => {
+        vi.unstubAllGlobals();
+        vi.restoreAllMocks();
+    });
+
+    it('drives Lenis with the monotonic clock', () => {
+        vi.spyOn(performance, 'now').mockReturnValue(1234);
+        vi.spyOn(Date, 'now').mockReturnValue(1_700_000_000_000);
+        let render = () => {};
+        new LocomotiveScroll({
+            initCustomTicker: (callback) => {
+                render = callback;
+            },
+            destroyCustomTicker: () => {},
+        });
+
+        render();
+
+        expect(LenisMock.instances[0].raf).toHaveBeenCalledWith(1234);
+    });
+});
+
+describe('primary pointer', () => {
+    class MediaQueryListStub extends EventTarget {
+        constructor(public matches: boolean) {
+            super();
+        }
+
+        change(matches: boolean) {
+            this.matches = matches;
+            this.dispatchEvent(new Event('change'));
+        }
+    }
+
+    let query: MediaQueryListStub;
+
+    function createScroll(matches: boolean) {
+        query = new MediaQueryListStub(matches);
+        vi.stubGlobal('matchMedia', (media: string) => {
+            expect(media).toBe('(pointer: coarse)');
+            return query;
+        });
+        return new LocomotiveScroll({ autoStart: false });
+    }
+
+    function smooth() {
+        const calls = CoreMock.instances[0].onResize.mock.calls;
+        return calls[calls.length - 1][0].smooth;
+    }
+
+    beforeEach(() => {
+        CoreMock.instances = [];
+        vi.stubGlobal(
+            'requestAnimationFrame',
+            (callback: FrameRequestCallback) => {
+                callback(0);
+                return 0;
+            }
+        );
+    });
+
+    afterEach(() => {
+        vi.unstubAllGlobals();
+    });
+
+    it('is smooth with a fine pointer', () => {
+        createScroll(false).resize();
+
+        expect(smooth()).toBe(true);
+    });
+
+    it('is not smooth with a coarse pointer', () => {
+        createScroll(true).resize();
+
+        expect(smooth()).toBe(false);
+    });
+
+    it('follows a change of the primary pointer', () => {
+        const scroll = createScroll(false);
+
+        query.change(true);
+        scroll.resize();
+
+        expect(smooth()).toBe(false);
+    });
+
+    it('stops following the pointer once destroyed', () => {
+        const scroll = createScroll(false);
+
+        scroll.destroy();
+        query.change(true);
+        scroll.resize();
+
+        expect(smooth()).toBe(true);
     });
 });

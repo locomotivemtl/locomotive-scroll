@@ -70,9 +70,19 @@ describe('Core', () => {
         it('is false for default offset and position values', () => {
             const $el = createElement($root, {
                 scrollOffset: '0%, 0%',
-                scrollPosition: 'top,bottom',
+                scrollPosition: 'start,end',
             });
             expect(core()._checkRafNeeded($el)).toBe(false);
+        });
+
+        it('is false for the default position with spaces', () => {
+            const $el = createElement($root, { scrollPosition: 'start, end' });
+            expect(core()._checkRafNeeded($el)).toBe(false);
+        });
+
+        it('is true for a position other than the default', () => {
+            const $el = createElement($root, { scrollPosition: 'top,bottom' });
+            expect(core()._checkRafNeeded($el)).toBe(true);
         });
 
         it('is true for a scroll delay', () => {

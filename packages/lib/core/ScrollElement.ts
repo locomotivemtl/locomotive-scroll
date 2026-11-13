@@ -77,6 +77,8 @@ export default class ScrollElement {
     private isFirstRender: boolean;
     private isSettling: boolean;
     private delayedScroll: number;
+    private isReturning: boolean;
+    private returnOffset: number;
     private legacyTriggers: boolean;
     private isTranslated: boolean;
 
@@ -207,6 +209,9 @@ export default class ScrollElement {
         this.isSettling = false;
         // Scroll value the element follows with scrollDelay
         this.delayedScroll = this.currentScroll;
+        // Back in the RAF margin: the stale delayed scroll would rebuild the trail at once, so the gap to the frozen translation fades out instead
+        this.isReturning = false;
+        this.returnOffset = 0;
         // Parallax applied on the last render, so triggers follow the displayed position
         this.isTranslated = false;
 
@@ -280,6 +285,8 @@ export default class ScrollElement {
             this.translateValue = 0;
             this.targetTranslateValue = 0;
             this.isFirstRender = true;
+            this.isReturning = false;
+            this.returnOffset = 0;
             this._stopSettling();
             return;
         }
@@ -350,6 +357,9 @@ export default class ScrollElement {
             return;
         }
 
+        // The first render snaps to the target, so there is no frozen translation to come back from
+        this.isReturning =
+            this.attributes.scrollDelay !== null && !this.isFirstRender;
         this.subscribeElementUpdateFn(this);
     }
 
@@ -423,10 +433,11 @@ export default class ScrollElement {
                 );
         }
 
-        if (
+        const isScrollSettled =
             Math.abs(this.currentScroll - this.delayedScroll) <=
-            DELAY_SETTLE_EPSILON
-        ) {
+            DELAY_SETTLE_EPSILON;
+
+        if (isScrollSettled && !this.isReturning && !this.returnOffset) {
             this.delayedScroll = this.currentScroll;
             this.translateValue = this.targetTranslateValue;
             this._stopSettling();
@@ -434,39 +445,66 @@ export default class ScrollElement {
         }
 
         const trail = trailShare * (this.currentScroll - this.delayedScroll);
-        this.translateValue =
+        const delayedTranslateValue =
             (trailLimit ? trailLimit * Math.tanh(trail / trailLimit) : trail) +
             this._getParallaxTranslate(
                 this._getParallaxProgress(this.delayedScroll),
                 wSize
             );
 
-        if (this.isSettling && this._canLandUnseen(wSize)) {
+        if (this.isReturning) {
+            this.isReturning = false;
+            // Without a trail the delayed translation is already continuous, and an unseen jump needs no fading
+            this.returnOffset =
+                trailShare &&
+                !this._canJumpUnseen(
+                    wSize,
+                    this.translateValue,
+                    delayedTranslateValue
+                )
+                    ? this.translateValue - delayedTranslateValue
+                    : 0;
+        }
+        this.translateValue = delayedTranslateValue + this.returnOffset;
+        this.returnOffset = damp(this.returnOffset, 0, factor, deltaTime);
+        if (Math.abs(this.returnOffset) <= DELAY_SETTLE_EPSILON) {
+            this.returnOffset = 0;
+        }
+
+        if (
+            this.isSettling &&
+            this._canJumpUnseen(
+                wSize,
+                this.translateValue,
+                this.targetTranslateValue
+            )
+        ) {
             this.delayedScroll = this.currentScroll;
             this.translateValue = this.targetTranslateValue;
+            this.returnOffset = 0;
             this._stopSettling();
         }
     }
 
     /**
-     * Whether the element can jump to its target without being seen.
+     * Whether the element can jump between two translations without being seen.
      *
      * Checks the displayed position rather than the RAF margin, which can be
-     * smaller than the trail. The target must be out of the viewport too, on the
-     * same side, so the jump never crosses it.
+     * smaller than the trail. Both translations must put the element out of the
+     * viewport, on the same side, so the jump never crosses it.
      *
      * @private
      *
      * @param {number} wSize - Viewport size on the scroll axis.
+     * @param {number} from  - Translation the element jumps from.
+     * @param {number} to    - Translation the element jumps to.
      */
-    private _canLandUnseen(wSize: number): boolean {
+    private _canJumpUnseen(wSize: number, from: number, to: number): boolean {
         const start = this.metrics.offsetStart - this.currentScroll;
         const end = start + this.getMetricsSize(this.metrics.bcr);
 
         return (
-            start + Math.min(this.translateValue, this.targetTranslateValue) >=
-                wSize ||
-            end + Math.max(this.translateValue, this.targetTranslateValue) <= 0
+            start + Math.min(from, to) >= wSize || end + Math.max(from, to) <= 0
         );
     }
 

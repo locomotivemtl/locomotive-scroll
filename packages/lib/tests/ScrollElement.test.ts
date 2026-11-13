@@ -486,6 +486,56 @@ describe('ScrollElement delay', () => {
         );
     });
 
+    // Lands above the viewport at 2500, then comes back into the RAF margin at 1700
+    function leaveAndComeBack(scrollElement: ScrollElement): number {
+        startTrailing(scrollElement);
+        render(scrollElement, 2500);
+        scrollElement.setInteractivityOff();
+        render(scrollElement, 2500);
+        const frozen = getTranslateY(scrollElement.$el);
+        scrollElement.setInteractivityOn();
+        render(scrollElement, 1700);
+        return frozen;
+    }
+
+    it('comes back without a jump without data-scroll-speed', () => {
+        const scrollElement = createMeasuredScrollElement({
+            scrollDelay: '0.1',
+        });
+        const frozen = leaveAndComeBack(scrollElement);
+
+        expect(
+            Math.abs(getTranslateY(scrollElement.$el) - frozen)
+        ).toBeLessThan(1);
+    });
+
+    it('comes back without a jump with a trailing parallax', () => {
+        const scrollElement = createMeasuredScrollElement({
+            scrollSpeed: '0.1',
+            scrollDelay: '0.1',
+        });
+        const frozen = leaveAndComeBack(scrollElement);
+
+        expect(
+            Math.abs(getTranslateY(scrollElement.$el) - frozen)
+        ).toBeLessThan(1);
+    });
+
+    it('lands on the target after coming back', () => {
+        const scrollElement = createMeasuredScrollElement({
+            scrollSpeed: '0.1',
+            scrollDelay: '0.1',
+        });
+        leaveAndComeBack(scrollElement);
+        renderUntil(
+            scrollElement,
+            1700,
+            () => getTranslateY(scrollElement.$el) === parallaxAt(1700, 0.1)
+        );
+
+        expect(getTranslateY(scrollElement.$el)).toBe(parallaxAt(1700, 0.1));
+    });
+
     it('resets and stops settling under reduced motion', () => {
         const unsubscribeElementUpdateFn = vi.fn();
         const scrollElement = createMeasuredScrollElement(

@@ -27,7 +27,7 @@ const RAF_ROOT_MARGIN = '100% 100% 100% 100%'; // Add 100vh top/bottom && 100vw 
 
 /** Default scroll attribute values */
 const DEFAULT_SCROLL_OFFSET = '0,0';
-const DEFAULT_SCROLL_POSITION = 'top,bottom';
+const DEFAULT_SCROLL_POSITION = 'start,end';
 
 export default class Core {
     private $scrollContainer!: HTMLElement;
@@ -381,7 +381,10 @@ export default class Core {
 
         // 2. Check scroll position values
         if ($scrollElement.dataset.scrollPosition) {
-            const value = $scrollElement.dataset.scrollPosition.trim();
+            const value = $scrollElement.dataset.scrollPosition
+                .split(',')
+                .map((position) => position.trim())
+                .join(',');
             if (value !== DEFAULT_SCROLL_POSITION) {
                 return true;
             } else {
