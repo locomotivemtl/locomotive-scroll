@@ -1,0 +1,48 @@
+/* ==========================================================================
+   Components / Headings
+   ========================================================================== */
+
+/* Each size reaches its maximum at 1440px wide (1vw = 14.4px). */
+:root {
+    --font-size-serif-large:  clamp(100px, calc(300 / 14.4 * var(--vw, 1vw)), 300px);
+    --font-size-serif-medium: clamp(40px, calc(120 / 14.4 * var(--vw, 1vw)), 120px);
+
+    --font-size-h1:     clamp(54px, calc(120 / 14.4 * var(--vw, 1vw)), 120px);
+    --font-size-h2:     clamp(32px, calc(90 / 14.4 * var(--vw, 1vw)), 90px);
+    --font-size-h3:     clamp(14px, calc(28 / 14.4 * var(--vw, 1vw)), 28px);
+}
+
+/* The heading styles are repeated in `rail.css`, `hero.css` and `sticky-heading.css`. */
+.c-heading {
+    font-family: var(--font-display);
+    font-weight: var(--font-weight-regular);
+    line-height: 1;
+    letter-spacing: -0.03em;
+
+    &.-h1 {
+        font-size: var(--font-size-h1);
+    }
+
+    &.-h2 {
+        font-size: var(--font-size-h2);
+    }
+
+    &.-h3 {
+        font-size: var(--font-size-h3);
+    }
+}
+
+.c-heading-serif {
+    font-family: var(--font-serif);
+    font-weight: var(--font-weight-light);
+    line-height: 0.85;
+    letter-spacing: -0.03em;
+
+    &.-large {
+        font-size: var(--font-size-serif-large);
+    }
+
+    &.-medium {
+        font-size: var(--font-size-serif-medium);
+    }
+}

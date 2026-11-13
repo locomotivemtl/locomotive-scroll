@@ -1,0 +1,185 @@
+/* ==========================================================================
+   Components / List
+   ========================================================================== */
+
+.c-list {
+    position: relative;
+
+    &::before {
+        content: "";
+        position: absolute;
+        top: 0;
+        left: 0;
+        width: 100%;
+        height: 1px;
+        background-color: currentColor;
+        transform-origin: top right;
+        transform: scale3d(0,1,1);
+    }
+
+    html.is-first-loaded & {
+        &::before {
+            transition: transform var(--timing-normal) var(--ease-power3-in-out);
+        }
+
+        &.is-inview::before {
+            transform: scale3d(1,1,1);
+        }
+    }
+
+    @media (--from-medium) {
+        display: grid;
+        grid-template-columns: repeat(4, 1fr);
+        column-gap: var(--grid-gutter);
+    }
+}
+
+.c-list *:focus-visible:not(input):not(textarea):not(select) {
+    outline: 2px solid currentColor;
+    outline-offset: 2px;
+    padding-inline: 0.5rem;
+}
+
+[data-theme="dark"] .c-list *:focus-visible:not(input):not(textarea):not(select),
+[data-theme="blue"] .c-list *:focus-visible:not(input):not(textarea):not(select) {
+    outline-color: #FFFFFF;
+    outline-offset: -4px;
+}
+
+[data-theme="white"] .c-list *:focus-visible:not(input):not(textarea):not(select) {
+    outline-color: #202ded;
+    outline-offset: -4px;
+}
+
+.c-list_inner {
+    font-size: 0;
+
+    @media (--from-medium) {
+        grid-column: 2/-1;
+    }
+}
+
+.c-list_item_inner {
+    position: relative;
+    clip-path: inset(0);
+    padding-block: 0.75rem;
+
+    &::before {
+        content: "";
+        position: absolute;
+        top: 0;
+        left: 0;
+        width: 100%;
+        height: 1px;
+        background-color: currentColor;
+        transform-origin: top right;
+        transform: scale3d(0,1,1);
+    }
+
+    html.is-first-loaded &::before {
+        transition: transform var(--timing-normal) var(--ease-power3-in-out);
+    }
+
+    html.is-first-loaded .c-list.is-inview &::before {
+        transform: scale3d(1,1,1);
+        transition-delay: calc((var(--index) + 1) * 0.08s);
+    }
+
+    @media (--to-small) {
+        display: flex;
+        flex-direction: column;
+
+        .-showcase & {
+            display: grid;
+            grid-template-columns: 1fr;
+            gap: 0.9375rem;
+            padding-right: 1.875rem;
+        }
+
+        .-perks & {
+            padding-block: 1.25rem;
+        }
+    }
+
+    @media (--from-small) {
+        display: grid;
+        align-items: center;
+    }
+
+    @media (--from-small) and (--to-medium) {
+        grid-template-columns: 1fr 1fr;
+
+        .c-list.-showcase & {
+            grid-template-columns: 4fr 2fr 1fr;
+        }
+    }
+
+    @media (--from-medium) {
+        grid-template-columns: 1fr 2fr;
+
+        .c-list.-showcase & {
+            grid-template-columns: 4fr 2fr 1fr;
+        }
+    }
+
+    .c-list-anchor {
+        text-align: end;
+
+        @media (--to-small) {
+            position: absolute;
+            right: 0;
+            bottom: 0;
+
+            .-showcase & {
+                top: 0.625rem;
+            }
+        }
+    }
+}
+
+.c-list_title {
+    @media (--to-small) {
+        &.-body-regular {
+            --font-size-body-regular: var(--font-size-body-medium);
+        }
+    }
+
+    @media (--from-medium) {
+        grid-column: 1/2;
+    }
+}
+
+.c-list_description {
+    @media (--to-small) {
+        margin-top: 0.5rem;
+
+        .-showcase & {
+            display: none;
+        }
+    }
+
+    @media (--from-medium) {
+        grid-column: 2/-1;
+
+        .c-list.-showcase & {
+            grid-column: auto;
+        }
+    }
+}
+
+.c-list_title,
+.c-list_description,
+.c-list-anchor {
+    opacity: 0;
+    transform: translate3d(0, 100%, 0);
+
+    html.is-first-loaded & {
+        transition: transform var(--timing-normal) var(--ease-power3-out), opacity var(--timing-normal) var(--ease-power3-out);
+    }
+
+    html.is-first-loaded .c-list.is-inview & {
+        opacity: 1;
+        transform: translate3d(0,0,0);
+        transition-delay: calc((var(--index) + 1) * 0.08s + .25s);
+    }
+}
