@@ -259,9 +259,10 @@ export default class LocomotiveScroll {
      * Callback - Render callback.
      */
     private _onRender() {
-        this.lenisInstance?.raf(Date.now());
-
+        // Not the rAF timestamp: custom tickers call this without one, or in seconds (GSAP)
         const now = performance.now();
+        this.lenisInstance?.raf(now);
+
         this.callbacksValues.deltaTime =
             this.lastRenderTime === null
                 ? 0

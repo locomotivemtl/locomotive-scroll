@@ -20,6 +20,7 @@ const { LenisMock, CoreMock } = vi.hoisted(() => {
         options: { orientation: string; duration?: number };
         dimensions = new DimensionsMock();
         scrollTo = vi.fn();
+        raf = vi.fn();
 
         constructor(options: { duration?: number } = {}) {
             this.options = { orientation: 'vertical', ...options };
@@ -28,6 +29,10 @@ const { LenisMock, CoreMock } = vi.hoisted(() => {
 
         on() {}
 
+        start() {}
+
+        stop() {}
+
         destroy() {}
     }
 
@@ -35,6 +40,7 @@ const { LenisMock, CoreMock } = vi.hoisted(() => {
         static instances: CoreMock[] = [];
 
         onResize = vi.fn();
+        onRender = vi.fn();
 
         constructor() {
             CoreMock.instances.push(this);
@@ -126,5 +132,39 @@ describe('resize', () => {
         LenisMock.instances[0].dimensions.resize();
 
         expect(CoreMock.instances[0].onResize).toHaveBeenCalledTimes(1);
+    });
+});
+
+describe('render', () => {
+    beforeEach(() => {
+        LenisMock.instances = [];
+        vi.stubGlobal(
+            'requestAnimationFrame',
+            (callback: FrameRequestCallback) => {
+                callback(0);
+                return 0;
+            }
+        );
+    });
+
+    afterEach(() => {
+        vi.unstubAllGlobals();
+        vi.restoreAllMocks();
+    });
+
+    it('drives Lenis with the monotonic clock', () => {
+        vi.spyOn(performance, 'now').mockReturnValue(1234);
+        vi.spyOn(Date, 'now').mockReturnValue(1_700_000_000_000);
+        let render = () => {};
+        new LocomotiveScroll({
+            initCustomTicker: (callback) => {
+                render = callback;
+            },
+            destroyCustomTicker: () => {},
+        });
+
+        render();
+
+        expect(LenisMock.instances[0].raf).toHaveBeenCalledWith(1234);
     });
 });
