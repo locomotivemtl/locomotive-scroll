@@ -27,13 +27,13 @@ Learn more about the boilerplate's [tasks](#tasks) below.
 
 Make sure you have the following installed:
 
-* [Node] — at least 14.17, the latest LTS is recommended.
+* [Node] — 24, the version in the repository root `.nvmrc`.
 * [NPM] — at least 8.0, the latest LTS is recommended.
 
 > 💡 You can use [NVM] to install and use different versions of Node via the command-line.
 
 ```sh
-# Switch to recommended Node version from .nvmrc
+# Switch to the Node version from the repository root .nvmrc
 nvm use
 
 # Install dependencies from package.json
