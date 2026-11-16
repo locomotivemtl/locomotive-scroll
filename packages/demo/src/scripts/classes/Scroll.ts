@@ -9,33 +9,26 @@ import type {
 export class Scroll {
     static locomotiveScroll: LocomotiveScroll;
     static lastProgress: number;
-    static scrollOrientation: number;
+    static scrollDirection: number;
 
     // =============================================================================
     // Lifecycle
     // =============================================================================
     static init() {
-        const scrollOrientation = document.documentElement.dataset.scrollOrientationSettings as 'vertical' | 'horizontal';
+        const { scrollOrientationSettings, scrollInfiniteSettings } = document.documentElement.dataset;
 
         this.locomotiveScroll = new LocomotiveScroll({
             lenisOptions: {
-                orientation: scrollOrientation,
+                orientation: scrollOrientationSettings as 'vertical' | 'horizontal',
+                infinite: scrollInfiniteSettings !== undefined,
             },
             scrollCallback: ({ progress }) => {
-                if (progress > this.lastProgress) {
-                    if (this.scrollOrientation != 1) {
-                        this.scrollOrientation = 1;
-                        document.documentElement.style.setProperty(
-                            '--scroll-direction',
-                            this.scrollOrientation.toString()
-                        );
-                    }
-                } else if (this.scrollOrientation != -1) {
-                    this.scrollOrientation = -1;
-                    document.documentElement.style.setProperty(
-                        '--scroll-direction',
-                        this.scrollOrientation.toString()
-                    );
+                const scrollDirection = progress > this.lastProgress ? 1 : -1;
+
+                if (scrollDirection !== this.scrollDirection) {
+                    this.scrollDirection = scrollDirection;
+                    document.documentElement.dataset.scrollDirection =
+                        scrollDirection === 1 ? 'forward' : 'backward';
                 }
 
                 this.lastProgress = progress as number;

@@ -1,24 +1,26 @@
 ---
 import '@styles/main.css';
+import helveticaRegular from '@src/assets/fonts/HelveticaNowDisplay-Regular.woff2?url';
+import helveticaMedium from '@src/assets/fonts/HelveticaNowDisplay-Medium.woff2?url';
+import locomotiveLight from '@src/assets/fonts/PPLocomotiveNew-Light.woff2?url';
 
 interface Props {
     title: string;
     scrollOrientation?: 'vertical' | 'horizontal';
+    infinite?: boolean;
 }
 
-const { title, scrollOrientation = 'vertical' } = Astro.props;
+const { title, scrollOrientation = 'vertical', infinite = false } = Astro.props;
 
 // public/ files are served under the base (/demo); BASE_URL may or may not end with a slash
 const base = import.meta.env.BASE_URL.replace(/\/$/, '');
 
-const FONTS: string[] = [
-    // 'WebfontRegular.woff2',
-    // 'WebfontBold.woff2',
-]
+// Same URLs as the @font-face rules in main.css, so the preloads are reused
+const FONTS: string[] = [helveticaRegular, helveticaMedium, locomotiveLight];
 ---
 
 <!doctype html>
-<html lang="en" data-scroll-orientation-settings={scrollOrientation}>
+<html lang="en" data-scroll-orientation-settings={scrollOrientation} data-scroll-infinite-settings={infinite ? "" : undefined}>
     <head>
         <meta charset="UTF-8" />
         <meta name="viewport" content="width=device-width" />
@@ -30,7 +32,7 @@ const FONTS: string[] = [
         {FONTS.map(font =>
             <link
                 rel="preload"
-                href={`${base}/fonts/${font}`}
+                href={font}
                 as="font"
                 type="font/woff2"
                 crossorigin

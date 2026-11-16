@@ -1,0 +1,84 @@
+---
+import Layout from '@layouts/Layout.astro';
+import ScrollToggler from '@components/ScrollToggler/ScrollToggler.astro';
+import Footer from '@components/Footer/Footer.astro';
+---
+
+<Layout title="Locomotive Scroll — Infinite demo" infinite>
+    <ScrollToggler />
+
+    <main id="top">
+        <div class="c-scroll_offset" style="--offset-start: 10%; --offset-end: 10%;"></div>
+
+        <div class="c-scroll_section -full -centered">
+            <h1 class="c-scroll_title" style="opacity: calc(1 - var(--progress));" data-scroll data-scroll-css-progress data-scroll-enable-touch-speed>Locomotive Scroll</h1>
+            <div style="display:flex; font-size: 10vw">
+                <p data-scroll data-scroll-enable-touch-speed data-scroll-speed="-.1">V</p>
+                <p data-scroll data-scroll-enable-touch-speed data-scroll-speed=".1">5</p>
+            </div>
+        </div>
+
+        <section class="c-scroll_group">
+            <div class="c-scroll_section">
+                <div class="o-container">
+                    <h2 class="c-scroll_heading">data-scroll-speed</h2>
+                </div>
+            </div>
+            <div class="c-scroll_section -centered -row -full">
+                <div class="c-scroll_box" style="background-color: var(--color-2)" data-scroll data-scroll-speed="-.1">
+                    <p>-.1</p>
+                </div>
+                <div class="c-scroll_box" style="background-color: var(--color-3);" data-scroll data-scroll-speed="0">
+                    <p>0</p>
+                </div>
+                <div class="c-scroll_box" style="background-color: var(--color-4);" data-scroll data-scroll-speed=".5">
+                    <p>.5</p>
+                </div>
+                <div class="c-scroll_box" style="background-color: var(--color-5);" data-scroll data-scroll-speed="-.2">
+                    <p>-.2</p>
+                </div>
+            </div>
+        </section>
+
+        <section class="c-scroll_group">
+            <div class="c-scroll_section">
+                <div class="o-container">
+                    <h2 class="c-scroll_heading">data-scroll-repeat</h2>
+                </div>
+            </div>
+            <div class="c-scroll_section -centered -row -full">
+                <div class="c-scroll_box" style="background-color: var(--color-5); opacity: 0;" data-scroll data-scroll-offset="10%, 10%" data-scroll-repeat data-scroll-class="c-scroll-opacity">
+                    <p>c-scroll-opacity</p>
+                    <p>REPEAT</p>
+                </div>
+            </div>
+        </section>
+
+        <section class="c-scroll_group">
+            <div class="c-scroll_section">
+                <div class="o-container">
+                    <h2 class="c-scroll_heading">data-scroll-css-progress</h2>
+                </div>
+            </div>
+            <div class="c-scroll_section -centered -row -full">
+                <div class="c-scroll_box" style="background-color: var(--color-4); opacity: var(--progress);" data-scroll data-scroll-css-progress data-scroll-offset="10%, 10%">
+                    <p>css progress variable</p>
+                </div>
+                <div class="c-scroll_box" style="background-color: var(--color-2); opacity: var(--progress);" data-scroll data-scroll-speed=".5" data-scroll-css-progress data-scroll-offset="10%, 10%">
+                    <p>speed .5</p>
+                </div>
+            </div>
+        </section>
+
+        <!-- Repeats the first screen at rest (in-fold elements don't move at scroll 0), so the wrap to the top can't be seen -->
+        <div class="c-scroll_section -full -centered" aria-hidden="true">
+            <p class="c-scroll_title">Locomotive Scroll</p>
+            <div style="display:flex; font-size: 10vw">
+                <p>V</p>
+                <p>5</p>
+            </div>
+        </div>
+    </main>
+
+    <Footer fixed />
+</Layout>

@@ -1,23 +1,66 @@
 @import 'tailwindcss';
 @import '../../../lib/bundled/locomotive-scroll.css';
 
+/* Relative paths let Vite add the /demo base in dev and build */
+@font-face {
+    font-display: swap;
+    font-family: 'Helvetica Now Display';
+    src: url('../assets/fonts/HelveticaNowDisplay-Regular.woff2') format('woff2');
+    font-weight: 400;
+    font-style: normal;
+}
+
+@font-face {
+    font-display: swap;
+    font-family: 'Helvetica Now Display';
+    src: url('../assets/fonts/HelveticaNowDisplay-Medium.woff2') format('woff2');
+    font-weight: 500;
+    font-style: normal;
+}
+
+@font-face {
+    font-display: swap;
+    font-family: 'PP Locomotive New';
+    src: url('../assets/fonts/PPLocomotiveNew-Light.woff2') format('woff2');
+    font-weight: 300;
+    font-style: normal;
+}
+
+/* Tokens shared with the landing (packages/landing/assets/styles/settings) */
 @theme {
-    --font-sans:
-        Arial, ui-sans-serif, system-ui, sans-serif, 'Apple Color Emoji', 'Segoe UI Emoji',
-        'Segoe UI Symbol', 'Noto Color Emoji';
+    --font-sans: 'Helvetica Now Display', ui-sans-serif, system-ui, sans-serif;
+    --font-serif: 'PP Locomotive New', ui-sans-serif, system-ui, sans-serif;
+    --color-blue: #202ded;
+    --color-red: #f4574d;
+    --color-grey: #282828;
     --ease-default: cubic-bezier(0.38, 0.005, 0.215, 1);
+    --ease-power3-in-out: cubic-bezier(0.77, 0, 0.175, 1);
 }
 
 @layer base {
     :root {
-        --color-primary: var(--color-black);
-        --color-secondary: var(--color-white);
+        --color-primary: var(--color-white);
+        --color-secondary: var(--color-blue);
 
-        --color-1: #f4f4ed;
-        --color-2: #6decaf;
-        --color-3: #357ded;
-        --color-4: #5e239d;
-        --color-5: #f61067;
+        /* Box colors stay readable on both section themes and under white text */
+        --color-2: var(--color-black);
+        --color-3: var(--color-red);
+        --color-4: var(--color-grey);
+        --color-5: color-mix(in srgb, var(--color-blue), var(--color-black) 45%);
+
+        --grid-margin: 0.625rem;
+
+        @media (min-width: 700px) {
+            --grid-margin: 1.25rem;
+        }
+    }
+
+    html {
+        font-family: var(--font-sans);
+        line-height: 1.2;
+        letter-spacing: -0.01em;
+        -webkit-font-smoothing: antialiased;
+        -moz-osx-font-smoothing: grayscale;
     }
 
     body {
@@ -52,6 +95,10 @@
 }
 
 @layer components {
+    .o-container {
+        padding-inline: var(--grid-margin);
+    }
+
     .c-scroll {
         position: absolute;
         top: 0;
@@ -74,14 +121,7 @@
             content: '';
             position: absolute;
             z-index: 1;
-        }
-
-        &:before {
-            background-color: rgb(217, 66, 66);
-        }
-
-        &:after {
-            background-color: rgb(74, 166, 215);
+            border: 0 dashed var(--color-red);
         }
 
         /* & can't stand for a pseudo-element, so the pseudo-element ends each selector */
@@ -89,7 +129,7 @@
             &:before,
             &:after {
                 width: 100%;
-                height: 1px;
+                border-top-width: 1px;
             }
             &:before {
                 bottom: var(--offset-start);
@@ -102,8 +142,8 @@
         html[data-scroll-orientation='horizontal'] & {
             &:before,
             &:after {
-                width: 1px;
                 height: 100%;
+                border-left-width: 1px;
             }
             &:before {
                 right: var(--offset-start);
@@ -114,9 +154,20 @@
         }
     }
 
+    .c-scroll_group {
+        html[data-scroll-orientation='horizontal'] & {
+            display: flex;
+            flex-shrink: 0;
+        }
+
+        &:nth-of-type(odd) {
+            background-color: var(--color-white);
+            color: var(--color-blue);
+        }
+    }
+
     .c-scroll_section {
         width: 100%;
-        background-color: var(--color-1);
 
         &.-full {
             height: calc(100 * var(--svh));
@@ -136,6 +187,7 @@
 
         &.-row {
             flex-direction: row;
+            gap: var(--grid-margin);
 
             html[data-scroll-orientation='horizontal'] & {
                 flex-direction: column;
@@ -154,6 +206,11 @@
         max-width: 300px;
         max-height: 300px;
         overflow: hidden;
+        border-radius: 8px;
+        color: var(--color-white);
+        font-size: 1.3125rem;
+        font-weight: 500;
+        text-align: center;
 
         html[data-scroll-orientation='horizontal'] & {
             width: 24vh;
@@ -170,6 +227,74 @@
         }
     }
 
+    .c-scroll_title {
+        font-family: var(--font-serif);
+        font-weight: 300;
+        font-size: 10vw;
+        line-height: 0.85;
+        letter-spacing: -0.03em;
+    }
+
+    .c-scroll_heading {
+        padding-block: var(--grid-margin);
+        font-size: clamp(24px, calc(56 / 14.4 * 1vw), 56px);
+        font-weight: 400;
+        line-height: 1;
+        letter-spacing: -0.03em;
+    }
+
+    .c-footer {
+        display: flex;
+        flex-wrap: wrap;
+        gap: var(--grid-margin);
+        padding: var(--grid-margin);
+
+        html[data-scroll-orientation='horizontal'] & {
+            flex-direction: column;
+            flex-wrap: nowrap;
+            justify-content: flex-end;
+            flex-shrink: 0;
+            height: calc(100 * var(--svh));
+        }
+
+        &.-fixed {
+            position: fixed;
+            bottom: 0;
+            left: 0;
+            z-index: 2;
+        }
+    }
+
+    .c-footer_link {
+        padding: 0.75rem 1rem;
+        border: 1px solid var(--color-white);
+        border-radius: 4px;
+        font-weight: 500;
+        text-align: left;
+        transition:
+            color 0.25s var(--ease-power3-in-out),
+            background-color 0.25s var(--ease-power3-in-out);
+
+        &:hover,
+        &[aria-current='page'] {
+            background-color: var(--color-white);
+            color: var(--color-blue);
+        }
+
+        /* Sits over both section themes, like the scroll toggler */
+        .c-footer.-fixed & {
+            border-color: var(--color-black);
+            background-color: var(--color-black);
+            color: var(--color-white);
+
+            &:hover,
+            &[aria-current='page'] {
+                background-color: var(--color-white);
+                color: var(--color-black);
+            }
+        }
+    }
+
     .c-scroll-opacity {
         opacity: 1 !important;
         transition: opacity 0.75s var(--ease-default);
@@ -181,20 +306,46 @@
     }
 
     .c-scroll-direction {
-        html[data-scroll-orientation='vertical'] & {
-            transform: scaleY(var(--scroll-direction));
+        font-family: var(--font-serif);
+        font-weight: 300;
+        font-size: 10vw;
+        line-height: 0.85;
+        letter-spacing: -0.03em;
+    }
+
+    .c-scroll-direction_backward {
+        display: none;
+    }
+
+    html[data-scroll-direction='backward'] {
+        .c-scroll-direction_forward {
+            display: none;
         }
-        html[data-scroll-orientation='horizontal'] & {
-            transform: scaleX(var(--scroll-direction)) rotate(-90deg);
+
+        .c-scroll-direction_backward {
+            display: inline;
         }
     }
 
     .c-scroll-toggler {
         position: fixed;
-        top: 0;
-        left: 0;
-        display: inline-block;
-        background-color: grey;
-        padding: 0.5em;
+        top: var(--grid-margin);
+        left: var(--grid-margin);
+        z-index: 2;
+        padding: 0.75rem 1rem;
+        border: 1px solid var(--color-black);
+        border-radius: 4px;
+        background-color: var(--color-black);
+        color: var(--color-white);
+        font-weight: 500;
+        cursor: pointer;
+        transition:
+            color 0.25s var(--ease-power3-in-out),
+            background-color 0.25s var(--ease-power3-in-out);
+
+        &:hover {
+            background-color: var(--color-white);
+            color: var(--color-black);
+        }
     }
 }
