@@ -364,6 +364,23 @@ export default class ScrollElement {
     }
 
     /**
+     * Switch interactivity on when the element lies within a viewport of the
+     * screen at this scroll, like the default RAF root margin, without waiting
+     * for the IntersectionObserver.
+     *
+     * @param {number} scroll - Scroll value of the frame about to render.
+     */
+    public syncInteractivity(scroll: number) {
+        const wSize = this.getWindowSize();
+        if (
+            this.metrics.offsetEnd > scroll - wSize &&
+            this.metrics.offsetStart < scroll + 2 * wSize
+        ) {
+            this.setInteractivityOn();
+        }
+    }
+
+    /**
      * Switch interactivity off to unsubscribe the instance to the RAF
      * and stop calculations.
      */
