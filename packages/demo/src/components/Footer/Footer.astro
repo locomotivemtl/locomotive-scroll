@@ -1,0 +1,29 @@
+---
+interface Props {
+    // An infinite page loops before reaching its end, so its footer stays on screen
+    fixed?: boolean;
+}
+
+const { fixed = false } = Astro.props;
+
+// BASE_URL may or may not end with a slash
+const base = import.meta.env.BASE_URL.replace(/\/$/, '');
+const currentPath = Astro.url.pathname.replace(/\/$/, '');
+
+const LINKS = [
+    { label: 'Vertical', href: base },
+    { label: 'Horizontal', href: `${base}/horizontal` },
+    { label: 'Infinite', href: `${base}/infinite` },
+];
+---
+
+<footer class:list={["c-footer", { "-fixed": fixed }]}>
+    {LINKS.map(({ label, href }) =>
+        <a class="c-footer_link" href={href} aria-current={currentPath === href ? 'page' : undefined}>
+            {label}
+        </a>
+    )}
+    <button class="c-footer_link" type="button" data-scroll-to data-scroll-to-href="#top">
+        Scroll to start
+    </button>
+</footer>
