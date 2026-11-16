@@ -4,6 +4,12 @@ All notable changes to this project are documented in this file.
 
 The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.1.0/), and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
+## [Unreleased]
+
+### Fixed
+
+- Elements with `data-scroll-speed` or `data-scroll-css-progress` no longer show a stale frame after a scroll jump of more than one viewport, such as the wrap of `infinite` or an immediate `scrollTo`. They used to keep the values they had when they left the viewport until the IntersectionObserver reported them, one frame after the jump. They are now rendered in the frame of the jump.
+
 ## [5.1.1] - 2026-11-13
 
 ### Fixed

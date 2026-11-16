@@ -40,6 +40,20 @@ function createElement(
     return $el;
 }
 
+function placeElement($el: HTMLElement, top: number, height: number) {
+    $el.getBoundingClientRect = () =>
+        ({ top, left: 0, width: 100, height }) as DOMRect;
+}
+
+function renderFrame(core: Core, currentScroll: number) {
+    core.onRender({
+        currentScroll,
+        smooth: true,
+        reducedMotion: false,
+        deltaTime: 1 / 60,
+    });
+}
+
 function createCore($root: HTMLElement): Core {
     return new Core({
         $el: $root,
@@ -145,6 +159,49 @@ describe('Core', () => {
             const [triggerObserver] = IntersectionObserverStub.instances;
             triggerObserver.intersect($removed);
             expect($removed.classList.contains('is-inview')).toBe(false);
+        });
+    });
+
+    describe('onRender after a scroll jump', () => {
+        // An infinite wrap or an immediate scrollTo lands before the IntersectionObserver reports
+        it('renders the elements of the new viewport in the same frame', () => {
+            const $top = createElement($root, { scrollCssProgress: '' });
+            const $end = createElement($root, { scrollCssProgress: '' });
+            placeElement($top, 0, 300);
+            placeElement($end, 1500, 300);
+            const core = createCore($root);
+            const [, rafObserver] = IntersectionObserverStub.instances;
+
+            rafObserver.intersect($end);
+            renderFrame(core, 1232);
+            expect($top.style.getPropertyValue('--progress')).toBe('');
+
+            renderFrame(core, 0);
+            expect($top.style.getPropertyValue('--progress')).not.toBe('');
+        });
+
+        it('leaves the elements away from the new viewport to the observer', () => {
+            const $far = createElement($root, { scrollCssProgress: '' });
+            const $end = createElement($root, { scrollCssProgress: '' });
+            placeElement($far, 1700, 300);
+            placeElement($end, 3000, 300);
+            const core = createCore($root);
+            const [, rafObserver] = IntersectionObserverStub.instances;
+
+            rafObserver.intersect($end);
+            renderFrame(core, 3000);
+            renderFrame(core, 0);
+            expect($far.style.getPropertyValue('--progress')).toBe('');
+        });
+
+        it('waits for the observer on a regular scroll', () => {
+            const $next = createElement($root, { scrollCssProgress: '' });
+            placeElement($next, 1000, 300);
+            const core = createCore($root);
+
+            renderFrame(core, 0);
+            renderFrame(core, 300);
+            expect($next.style.getPropertyValue('--progress')).toBe('');
         });
     });
 });

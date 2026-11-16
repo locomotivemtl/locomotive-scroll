@@ -43,6 +43,7 @@ export default class Core {
     private lenisInstance!: Lenis;
     private enableTouchSpeed!: boolean;
     private legacyTriggers!: boolean;
+    private lastScroll!: number | null;
 
     constructor({
         $el,
@@ -82,6 +83,8 @@ export default class Core {
         this.triggeredScrollElements = [];
         this.RAFScrollElements = [];
         this.scrollElementsToUpdate = [];
+
+        this.lastScroll = null;
 
         // Init
         this._init();
@@ -144,6 +147,23 @@ export default class Core {
      * Callback - RAF callback.
      */
     onRender(values: IScrollElementCallbacksValues) {
+        const { currentScroll } = values;
+        const wSize =
+            this.scrollOrientation === 'vertical'
+                ? this.lenisInstance.dimensions.height
+                : this.lenisInstance.dimensions.width;
+
+        // A jump past the default RAF margin (infinite wrap, immediate scrollTo) lands before the observer reports
+        if (
+            this.lastScroll !== null &&
+            Math.abs(currentScroll - this.lastScroll) > wSize
+        ) {
+            for (const scrollElement of this.RAFScrollElements) {
+                scrollElement.syncInteractivity(currentScroll);
+            }
+        }
+        this.lastScroll = currentScroll;
+
         for (const scrollElement of this.scrollElementsToUpdate) {
             scrollElement.onRender(values);
         }
